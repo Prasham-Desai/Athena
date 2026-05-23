@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/layout/sidebar";
 import { DataSeeder } from "@/components/data-seeder";
 import { Toaster } from "@/components/ui/toaster";
 import { FontSizeManager } from "@/components/font-size-manager";
+import { TutorialOverlay } from "@/components/tutorial-overlay";
 
 export const metadata: Metadata = {
   title: "Athena — Smart Study Management",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Providers>
           <FontSizeManager />
           <DataSeeder />
+          <TutorialOverlay />
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 min-h-screen lg:py-0 py-16">
