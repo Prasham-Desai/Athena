@@ -2,33 +2,71 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, GraduationCap, Calendar, Trash2, CheckCircle2, Clock, BookOpen, AlertCircle } from 'lucide-react';
+import { Plus, GraduationCap, Calendar, Trash2, CheckCircle2, Clock, BookOpen, AlertCircle, Edit2 } from 'lucide-react';
 import { format } from 'date-fns';
 
 import { useExamsStore } from '@/store/exams-store';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { PageHeader } from '@/components/shared/page-header';
 import { getRelativeDate, cn } from '@/lib/utils';
-import type { ExamType } from '@/types';
+import type { ExamType, ExamSubject } from '@/types';
 
 export default function ExamsPage() {
-  const { exams, fetchExams, addExam, deleteExam, isLoading } = useExamsStore();
+  const { exams, fetchExams, addExam, updateExam, deleteExam, isLoading } = useExamsStore();
   const subjects = useSubjectsStore((s) => s.subjects);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingExamId, setEditingExamId] = useState<string | null>(null);
+  
   const [title, setTitle] = useState('');
   const [type, setType] = useState<ExamType>('test');
   const [date, setDate] = useState('');
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<ExamSubject[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchExams();
   }, [fetchExams]);
 
+  const openModal = (examId?: string) => {
+    if (examId) {
+      const exam = exams.find(e => e.id === examId);
+      if (exam) {
+        setEditingExamId(examId);
+        setTitle(exam.title);
+        setType(exam.type);
+        setDate(exam.date);
+        setSelectedSubjects(exam.subjects || []);
+      }
+    } else {
+      setEditingExamId(null);
+      setTitle('');
+      setType('test');
+      setDate('');
+      setSelectedSubjects([]);
+    }
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditingExamId(null);
+  };
+
   const handleToggleSubject = (id: string) => {
+    setSelectedSubjects(prev => {
+      const exists = prev.find(s => s.id === id);
+      if (exists) {
+        return prev.filter(s => s.id !== id);
+      } else {
+        return [...prev, { id, date: '' }];
+      }
+    });
+  };
+
+  const handleSubjectDateChange = (id: string, newDate: string) => {
     setSelectedSubjects(prev => 
-      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+      prev.map(s => s.id === id ? { ...s, date: newDate } : s)
     );
   };
 
@@ -36,27 +74,32 @@ export default function ExamsPage() {
     if (selectedSubjects.length === subjects.length) {
       setSelectedSubjects([]);
     } else {
-      setSelectedSubjects(subjects.map(s => s.id));
+      setSelectedSubjects(subjects.map(s => {
+        const existing = selectedSubjects.find(es => es.id === s.id);
+        return existing ? existing : { id: s.id, date: '' };
+      }));
     }
   };
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !date || selectedSubjects.length === 0) return;
 
     try {
       setIsSubmitting(true);
-      await addExam({
+      const payload = {
         title: title.trim(),
         type,
         date,
-        subjectIds: selectedSubjects,
-      });
-      setIsModalOpen(false);
-      setTitle('');
-      setDate('');
-      setType('test');
-      setSelectedSubjects([]);
+        subjects: selectedSubjects,
+      };
+
+      if (editingExamId) {
+        await updateExam(editingExamId, payload);
+      } else {
+        await addExam(payload);
+      }
+      closeModal();
     } catch (error) {
       console.error(error);
     } finally {
@@ -74,7 +117,7 @@ export default function ExamsPage() {
           <tr>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Type</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Tentative Start Date</th>
+            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] w-40">Tentative Start Date</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Subjects</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] text-right">Actions</th>
           </tr>
@@ -88,22 +131,21 @@ export default function ExamsPage() {
             </tr>
           ) : (
             examList.map((exam) => {
-              const examSubjects = subjects.filter(s => exam.subjectIds.includes(s.id));
               return (
-                <tr key={exam.id} className="hover:bg-[hsl(var(--muted))]/30 transition-colors">
-                  <td className="px-4 py-3 font-medium">
-                    <div className="flex items-center gap-2">
+                <tr key={exam.id} className="hover:bg-[hsl(var(--muted))]/30 transition-colors group">
+                  <td className="px-4 py-3 font-medium align-top">
+                    <div className="flex items-start gap-2 mt-1">
                       {isPast ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                       ) : (
-                        <Clock className="w-4 h-4 text-indigo-500" />
+                        <Clock className="w-4 h-4 text-indigo-500 shrink-0" />
                       )}
-                      {exam.title}
+                      <span>{exam.title}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 align-top">
                     <span className={cn(
-                      "px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider",
+                      "px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider inline-block mt-0.5",
                       exam.type === 'exam' 
                         ? "bg-purple-500/10 text-purple-500" 
                         : "bg-blue-500/10 text-blue-500"
@@ -111,8 +153,8 @@ export default function ExamsPage() {
                       {exam.type}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-col">
+                  <td className="px-4 py-3 align-top">
+                    <div className="flex flex-col mt-0.5">
                       <span>{format(new Date(exam.date), 'MMM d, yyyy')}</span>
                       {!isPast && (
                         <span className="text-xs text-[hsl(var(--muted-foreground))]">
@@ -121,31 +163,49 @@ export default function ExamsPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {examSubjects.length === subjects.length ? (
-                        <span className="text-xs px-2 py-1 bg-[hsl(var(--accent))] rounded-md">All Subjects</span>
+                  <td className="px-4 py-3 align-top">
+                    <div className="flex flex-col gap-2">
+                      {(!exam.subjects || exam.subjects.length === 0) ? (
+                        <span className="text-xs text-[hsl(var(--muted-foreground))] italic">No subjects selected</span>
                       ) : (
-                        examSubjects.map(s => (
-                          <span 
-                            key={s.id} 
-                            className="text-[10px] px-1.5 py-0.5 rounded"
-                            style={{ backgroundColor: `${s.color}20`, color: s.color }}
-                          >
-                            {s.name}
-                          </span>
-                        ))
+                        exam.subjects.map(s => {
+                          const subjectData = subjects.find(sub => sub.id === s.id);
+                          if (!subjectData) return null;
+                          return (
+                            <div key={s.id} className="flex items-center gap-2">
+                              <span 
+                                className="text-[10px] px-2 py-0.5 rounded shrink-0 max-w-[150px] truncate"
+                                style={{ backgroundColor: `${subjectData.color}20`, color: subjectData.color }}
+                                title={subjectData.name}
+                              >
+                                {subjectData.name}
+                              </span>
+                              <span className="text-xs text-[hsl(var(--muted-foreground))]">
+                                {s.date ? format(new Date(s.date), 'MMM d, yyyy') : '—'}
+                              </span>
+                            </div>
+                          )
+                        })
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => deleteExam(exam.id)}
-                      className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors inline-flex"
-                      title="Delete Exam"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <td className="px-4 py-3 text-right align-top">
+                    <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => openModal(exam.id)}
+                        className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors"
+                        title="Edit Exam"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => deleteExam(exam.id)}
+                        className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                        title="Delete Exam"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )
@@ -164,7 +224,7 @@ export default function ExamsPage() {
           description="Manage your upcoming university exams and unit tests" 
         />
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => openModal()}
           className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" />
@@ -196,7 +256,7 @@ export default function ExamsPage() {
         </div>
       )}
 
-      {/* Add Exam Modal */}
+      {/* Add/Edit Exam Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -205,20 +265,20 @@ export default function ExamsPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsModalOpen(false)}
+              onClick={closeModal}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-[hsl(var(--card))] rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-xl bg-[hsl(var(--card))] rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden flex flex-col max-h-[90vh]"
             >
               <div className="p-5 border-b border-[hsl(var(--border))]">
-                <h2 className="text-lg font-semibold">Schedule Exam</h2>
+                <h2 className="text-lg font-semibold">{editingExamId ? 'Edit Exam' : 'Schedule Exam'}</h2>
               </div>
               
               <div className="p-5 overflow-y-auto">
-                <form id="exam-form" onSubmit={handleCreate} className="space-y-5">
+                <form id="exam-form" onSubmit={handleSave} className="space-y-5">
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium">Title</label>
                     <input
@@ -239,8 +299,8 @@ export default function ExamsPage() {
                         onChange={(e) => setType(e.target.value as ExamType)}
                         className="w-full px-3 py-2 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                       >
-                        <option value="test">Unit Test</option>
-                        <option value="exam">University Exam</option>
+                        <option value="exam">Exam</option>
+                        <option value="test">Test</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
@@ -255,7 +315,7 @@ export default function ExamsPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3 pt-2">
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium">Syllabus Subjects</label>
                       <button
@@ -267,27 +327,47 @@ export default function ExamsPage() {
                       </button>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2">
                       {subjects.map(subject => {
-                        const isSelected = selectedSubjects.includes(subject.id);
+                        const selectedState = selectedSubjects.find(s => s.id === subject.id);
+                        const isSelected = !!selectedState;
+                        
                         return (
                           <div
                             key={subject.id}
-                            onClick={() => handleToggleSubject(subject.id)}
                             className={cn(
-                              "flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors text-sm",
+                              "flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl border transition-colors",
                               isSelected 
-                                ? "border-indigo-500 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300"
+                                ? "border-indigo-500 bg-indigo-500/5"
                                 : "border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]/50"
                             )}
                           >
-                            <div className={cn(
-                              "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
-                              isSelected ? "border-indigo-500 bg-indigo-500" : "border-[hsl(var(--muted-foreground))]"
-                            )}>
-                              {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                            <div 
+                              onClick={() => handleToggleSubject(subject.id)}
+                              className="flex items-center gap-3 flex-1 cursor-pointer"
+                            >
+                              <div className={cn(
+                                "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
+                                isSelected ? "border-indigo-500 bg-indigo-500" : "border-[hsl(var(--muted-foreground))]"
+                              )}>
+                                {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                              </div>
+                              <span className="text-sm font-medium truncate" style={{ color: isSelected ? 'inherit' : 'var(--muted-foreground)' }}>
+                                {subject.name}
+                              </span>
                             </div>
-                            <span className="truncate">{subject.name}</span>
+
+                            {isSelected && (
+                              <div className="pl-7 sm:pl-0 shrink-0">
+                                <input
+                                  type="date"
+                                  value={selectedState.date || ''}
+                                  onChange={(e) => handleSubjectDateChange(subject.id, e.target.value)}
+                                  className="w-full sm:w-auto px-2 py-1 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                                  placeholder="Leave blank for Tentative"
+                                />
+                              </div>
+                            )}
                           </div>
                         )
                       })}
@@ -304,7 +384,7 @@ export default function ExamsPage() {
               <div className="p-5 border-t border-[hsl(var(--border))] flex justify-end gap-3 bg-[hsl(var(--muted))]/20 mt-auto">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={closeModal}
                   className="px-4 py-2 text-sm font-medium hover:bg-[hsl(var(--muted))] rounded-xl transition-colors"
                 >
                   Cancel
@@ -315,7 +395,7 @@ export default function ExamsPage() {
                   disabled={isSubmitting || !title.trim() || !date || selectedSubjects.length === 0}
                   className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl text-sm font-medium transition-colors"
                 >
-                  {isSubmitting ? 'Saving...' : 'Save Exam'}
+                  {isSubmitting ? 'Saving...' : (editingExamId ? 'Update Exam' : 'Save Exam')}
                 </button>
               </div>
             </motion.div>

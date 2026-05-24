@@ -34,6 +34,7 @@ import { useExamsStore } from '@/store/exams-store';
 
 import { ProgressRing } from '@/components/shared/progress-ring';
 import { StatCard } from '@/components/shared/stat-card';
+import { ExamTimer } from '@/components/shared/exam-timer';
 import { PageHeader } from '@/components/shared/page-header';
 
 import { useHydration } from '@/hooks/use-hydration';
@@ -294,9 +295,10 @@ export default function DashboardPage() {
                     Upcoming {nextExam.type === 'exam' ? 'University Exam' : 'Unit Test'}
                   </h3>
                   <p className="text-xl font-bold">{nextExam.title}</p>
-                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1">
-                    Tentative Start: {formatDate(nextExam.date)} • {daysToNextExam === 0 ? 'Starts Today!' : daysToNextExam === 1 ? 'Starts Tomorrow' : `In ${daysToNextExam} days`}
+                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1 mb-3">
+                    Tentative Start: {formatDate(nextExam.date)}
                   </p>
+                  <ExamTimer targetDate={nextExam.date} />
                 </div>
               </div>
               <Link

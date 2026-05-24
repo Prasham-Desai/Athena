@@ -35,6 +35,12 @@ export async function PATCH(
         .run();
     }
     
+    if (data.title !== undefined) {
+      await db.prepare('UPDATE exams SET title = ?, type = ?, date = ?, subject_ids = ? WHERE id = ?')
+        .bind(data.title, data.type, data.date, JSON.stringify(data.subjects || []), id)
+        .run();
+    }
+    
     return successResponse(null);
   } catch (error: any) {
     console.error('Error updating exam:', error);

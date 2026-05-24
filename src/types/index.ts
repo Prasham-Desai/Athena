@@ -95,12 +95,17 @@ export interface DailyLog {
 
 export type ExamType = 'test' | 'exam';
 
+export interface ExamSubject {
+  id: string;
+  date?: string; // YYYY-MM-DD
+}
+
 export interface Exam {
   id: string;
   title: string;
   type: ExamType;
   date: string;        // YYYY-MM-DD
-  subjectIds: string[]; // parsed from JSON
+  subjects: ExamSubject[]; // parsed from JSON
   completed: boolean;
   createdAt?: string;
 }
