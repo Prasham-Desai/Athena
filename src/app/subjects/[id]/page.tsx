@@ -403,7 +403,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
         </button>
 
         {/* Content */}
-        <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-2 w-full">
             <InlineEdit
               value={topic.name}
@@ -701,7 +701,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 space-y-2">
+            <div className="px-5 pb-5 pl-11 space-y-2">
               {/* Topic list */}
               <AnimatePresence mode="popLayout">
                 {chapter.topics.map((topic) => (
