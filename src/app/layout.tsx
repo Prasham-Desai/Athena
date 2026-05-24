@@ -8,7 +8,7 @@ import { FontSizeManager } from "@/components/font-size-manager";
 import { TutorialOverlay } from "@/components/tutorial-overlay";
 
 export const metadata: Metadata = {
-  title: "Athena — Smart Study Management",
+  title: "Athena",
   description: "A premium study management dashboard for tracking subjects, revisions, daily planning, and analytics. Wisdom in every session.",
   keywords: ["athena", "study tracker", "study planner", "revision tracker", "productivity", "student"],
 };
