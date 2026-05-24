@@ -295,18 +295,20 @@ export default function DashboardPage() {
                     Upcoming {nextExam.type === 'exam' ? 'University Exam' : 'Unit Test'}
                   </h3>
                   <p className="text-xl font-bold">{nextExam.title}</p>
-                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1 mb-3">
+                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1">
                     Tentative Start: {formatDate(nextExam.date)}
                   </p>
-                  <ExamTimer targetDate={nextExam.date} />
                 </div>
               </div>
-              <Link
-                href="/exams"
-                className="px-5 py-2.5 bg-white dark:bg-[hsl(var(--card))] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full sm:w-auto text-center"
-              >
-                View Details
-              </Link>
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <ExamTimer targetDate={nextExam.date} />
+                <Link
+                  href="/exams"
+                  className="px-5 py-2.5 bg-white dark:bg-[hsl(var(--card))] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-center w-full sm:w-auto"
+                >
+                  View Details
+                </Link>
+              </div>
             </div>
           </div>
         </motion.div>

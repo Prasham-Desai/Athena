@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, GraduationCap, Calendar, Trash2, CheckCircle2, Clock, BookOpen, AlertCircle, Edit2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -118,96 +118,114 @@ export default function ExamsPage() {
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Type</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] w-40">Tentative Start Date</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Subjects</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-[hsl(var(--border))]">
           {examList.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-4 py-8 text-center text-[hsl(var(--muted-foreground))]">
+              <td colSpan={4} className="px-4 py-8 text-center text-[hsl(var(--muted-foreground))]">
                 No {isPast ? 'past' : 'upcoming'} exams found.
               </td>
             </tr>
           ) : (
             examList.map((exam) => {
               return (
-                <tr key={exam.id} className="hover:bg-[hsl(var(--muted))]/30 transition-colors group">
-                  <td className="px-4 py-3 font-medium align-top">
-                    <div className="flex items-start gap-2 mt-1">
-                      {isPast ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                      ) : (
-                        <Clock className="w-4 h-4 text-indigo-500 shrink-0" />
-                      )}
-                      <span>{exam.title}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <span className={cn(
-                      "px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider inline-block mt-0.5",
-                      exam.type === 'exam' 
-                        ? "bg-purple-500/10 text-purple-500" 
-                        : "bg-blue-500/10 text-blue-500"
-                    )}>
-                      {exam.type}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="flex flex-col mt-0.5">
-                      <span>{format(new Date(exam.date), 'MMM d, yyyy')}</span>
-                      {!isPast && (
-                        <span className="text-xs text-[hsl(var(--muted-foreground))]">
-                          {getRelativeDate(exam.date)}
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="flex flex-col gap-2">
-                      {(!exam.subjects || exam.subjects.length === 0) ? (
-                        <span className="text-xs text-[hsl(var(--muted-foreground))] italic">No subjects selected</span>
-                      ) : (
-                        exam.subjects.map(s => {
-                          const subjectData = subjects.find(sub => sub.id === s.id);
-                          if (!subjectData) return null;
-                          return (
-                            <div key={s.id} className="flex items-center gap-2">
-                              <span 
-                                className="text-[10px] px-2 py-0.5 rounded shrink-0 max-w-[150px] truncate"
-                                style={{ backgroundColor: `${subjectData.color}20`, color: subjectData.color }}
-                                title={subjectData.name}
-                              >
-                                {subjectData.name}
-                              </span>
-                              <span className="text-xs text-[hsl(var(--muted-foreground))]">
-                                {s.date ? format(new Date(s.date), 'MMM d, yyyy') : '—'}
-                              </span>
-                            </div>
-                          )
-                        })
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-right align-top">
-                    <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => openModal(exam.id)}
-                        className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors"
-                        title="Edit Exam"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => deleteExam(exam.id)}
-                        className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                        title="Delete Exam"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                <React.Fragment key={exam.id}>
+                  {/* First Row: Main Exam Info */}
+                  <tr className="hover:bg-[hsl(var(--muted))]/30 transition-colors group">
+                    <td className="px-4 py-3 font-medium align-middle">
+                      <div className="flex items-center gap-2">
+                        {isPast ? (
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                        ) : (
+                          <Clock className="w-4 h-4 text-indigo-500 shrink-0" />
+                        )}
+                        <span>{exam.title}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 align-middle">
+                      <span className={cn(
+                        "px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider inline-block",
+                        exam.type === 'exam' 
+                          ? "bg-purple-500/10 text-purple-500" 
+                          : "bg-blue-500/10 text-blue-500"
+                      )}>
+                        {exam.type}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 align-middle">
+                      <div className="flex flex-col">
+                        <span>{format(new Date(exam.date), 'MMM d, yyyy')}</span>
+                        {!isPast && (
+                          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+                            {getRelativeDate(exam.date)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-right align-middle">
+                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => openModal(exam.id)}
+                          className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors"
+                          title="Edit Exam"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => deleteExam(exam.id)}
+                          className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                          title="Delete Exam"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {/* Second Row: Subject Tabular Data */}
+                  <tr>
+                    <td colSpan={4} className="p-0 border-t-0 border-b-4 border-b-[hsl(var(--background))]">
+                      <div className="px-4 pb-4 pt-2">
+                        <table className="w-full text-xs rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
+                          <thead className="bg-[hsl(var(--muted))]/40 text-[hsl(var(--muted-foreground))]">
+                            <tr>
+                              <th className="px-3 py-2 text-left font-medium">Subject</th>
+                              <th className="px-3 py-2 text-left font-medium w-40">Date</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-[hsl(var(--border))]/50">
+                            {(!exam.subjects || exam.subjects.length === 0) ? (
+                              <tr>
+                                <td colSpan={2} className="px-3 py-2 text-[hsl(var(--muted-foreground))] italic">No subjects selected</td>
+                              </tr>
+                            ) : (
+                              exam.subjects.map(s => {
+                                const subjectData = subjects.find(sub => sub.id === s.id);
+                                if (!subjectData) return null;
+                                return (
+                                  <tr key={s.id}>
+                                    <td className="px-3 py-2">
+                                      <span 
+                                        className="text-[11px] px-2 py-0.5 rounded inline-block"
+                                        style={{ backgroundColor: `${subjectData.color}20`, color: subjectData.color }}
+                                      >
+                                        {subjectData.name}
+                                      </span>
+                                    </td>
+                                    <td className="px-3 py-2 font-medium">
+                                      {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))]">Tentative</span>}
+                                    </td>
+                                  </tr>
+                                )
+                              })
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </React.Fragment>
               )
             })
           )}

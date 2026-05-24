@@ -5,7 +5,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "fc990e4e",
     "name": "Agad Tantra evam Vidhi Vaidyaka",
-    "color": "#f43f5e",
+    "color": "#FF3366",
     "icon": "Microscope",
     "details": {
       "Subject Code": "AyUG-AT",
@@ -2841,7 +2841,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "4622f185",
     "name": "Charak Samhita",
-    "color": "#6366f1",
+    "color": "#00D2D3",
     "icon": "BookOpen",
     "details": {
       "Subject Code": "AyUG-SA2",
@@ -4668,7 +4668,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "3d247981",
     "name": "Dravyaguna Vigyan",
-    "color": "#22c55e",
+    "color": "#FF9F43",
     "icon": "FlaskConical",
     "details": {
       "Subject Code": "AyUG-DG",
@@ -6430,7 +6430,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "277cab54",
     "name": "Rasashastra evam Bhaishajyakalpana",
-    "color": "#f97316",
+    "color": "#5F27CD",
     "icon": "Scale",
     "details": {
       "Subject Code": "AyUG-RB",
@@ -9619,7 +9619,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "0e303aee",
     "name": "Roga Nidan evam Vikriti Vigyan",
-    "color": "#a855f7",
+    "color": "#FF6B6B",
     "icon": "Brain",
     "details": {
       "Subject Code": "AyUG-RN",
@@ -12602,7 +12602,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "4ac5793d",
     "name": "Swasthavritta evam Yoga",
-    "color": "#3b82f6",
+    "color": "#54A0FF",
     "icon": "Lightbulb",
     "details": {
       "Subject Code": "AyUG-SW",
