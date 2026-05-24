@@ -1,8 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getEnv, successResponse, errorResponse } from '@/api/helpers';
 
-export const runtime = 'edge';
-
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

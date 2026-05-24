@@ -3,8 +3,6 @@ import { getEnv, successResponse, errorResponse } from '@/api/helpers';
 import type { Exam } from '@/types';
 import { generateId } from '@/lib/utils';
 
-export const runtime = 'edge';
-
 export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
