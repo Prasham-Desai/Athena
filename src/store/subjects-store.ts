@@ -1,296 +1,294 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import type { Subject, Chapter, Topic, TopicStatus, ImportanceTag } from '@/types';
 import { generateId, getSpacedRepetitionDate, getToday } from '@/lib/utils';
 import { INITIAL_SUBJECTS } from '@/lib/curriculum-data';
 
 interface SubjectsState {
   subjects: Subject[];
-  addSubject: (name: string, color: string, icon: string) => void;
-  updateSubject: (id: string, updates: Partial<Omit<Subject, 'id' | 'createdAt'>>) => void;
-  deleteSubject: (id: string) => void;
-  addChapter: (subjectId: string, name: string, paper?: string) => void;
-  updateChapter: (subjectId: string, chapterId: string, updates: Partial<Omit<Chapter, 'id' | 'topics' | 'order'>>) => void;
-  deleteChapter: (subjectId: string, chapterId: string) => void;
-  addTopic: (subjectId: string, chapterId: string, name: string) => void;
-  updateTopic: (subjectId: string, chapterId: string, topicId: string, updates: Partial<Topic>) => void;
-  deleteTopic: (subjectId: string, chapterId: string, topicId: string) => void;
-  setTopicStatus: (subjectId: string, chapterId: string, topicId: string, status: TopicStatus) => void;
-  setAllChapterTopicsStatus: (subjectId: string, chapterId: string, status: TopicStatus) => void;
-  markTopicRevised: (subjectId: string, chapterId: string, topicId: string) => void;
-  setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => void;
-  reorderSubjects: (subjects: Subject[]) => void;
+  fetchSubjects: () => Promise<void>;
+  addSubject: (name: string, color: string, icon: string) => Promise<void>;
+  updateSubject: (id: string, updates: Partial<Omit<Subject, 'id' | 'createdAt'>>) => Promise<void>;
+  deleteSubject: (id: string) => Promise<void>;
+  addChapter: (subjectId: string, name: string, paper?: string) => Promise<void>;
+  updateChapter: (subjectId: string, chapterId: string, updates: Partial<Omit<Chapter, 'id' | 'topics' | 'order'>>) => Promise<void>;
+  deleteChapter: (subjectId: string, chapterId: string) => Promise<void>;
+  addTopic: (subjectId: string, chapterId: string, name: string) => Promise<void>;
+  updateTopic: (subjectId: string, chapterId: string, topicId: string, updates: Partial<Topic>) => Promise<void>;
+  deleteTopic: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
+  setTopicStatus: (subjectId: string, chapterId: string, topicId: string, status: TopicStatus) => Promise<void>;
+  setAllChapterTopicsStatus: (subjectId: string, chapterId: string, status: TopicStatus) => Promise<void>;
+  markTopicRevised: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
+  setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => Promise<void>;
   setSubjects: (subjects: Subject[]) => void;
 }
 
-export const useSubjectsStore = create<SubjectsState>()(
-  persist(
-    (set) => ({
-      subjects: INITIAL_SUBJECTS,
+export const useSubjectsStore = create<SubjectsState>((set, get) => ({
+  subjects: [],
 
-      addSubject: (name, color, icon) =>
-        set((state) => ({
-          subjects: [
-            ...state.subjects,
-            {
-              id: generateId(),
-              name,
-              color,
-              icon,
-              chapters: [],
-              createdAt: new Date().toISOString(),
-              order: state.subjects.length,
-            },
-          ],
-        })),
-
-      updateSubject: (id, updates) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === id ? { ...s, ...updates } : s
-          ),
-        })),
-
-      deleteSubject: (id) =>
-        set((state) => ({
-          subjects: state.subjects.filter((s) => s.id !== id),
-        })),
-
-      addChapter: (subjectId, name, paper = "Paper 1") =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: [
-                    ...s.chapters,
-                    {
-                      id: generateId(),
-                      name,
-                      topics: [],
-                      order: s.chapters.length,
-                      tag: null,
-                      estimatedMarks: null,
-                      paper
-                    },
-                  ],
-                }
-              : s
-          ),
-        })),
-
-      updateChapter: (subjectId, chapterId, updates) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId ? { ...c, ...updates } : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      deleteChapter: (subjectId, chapterId) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? { ...s, chapters: s.chapters.filter((c) => c.id !== chapterId) }
-              : s
-          ),
-        })),
-
-      addTopic: (subjectId, chapterId, name) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          topics: [
-                            ...c.topics,
-                            {
-                              id: generateId(),
-                              name,
-                              status: 'not-started' as TopicStatus,
-                              revisionCount: 0,
-                              lastRevised: null,
-                              nextRevisionDue: null,
-                              order: c.topics.length,
-                              notes: '',
-                              completedAt: null,
-                            },
-                          ],
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      updateTopic: (subjectId, chapterId, topicId, updates) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          topics: c.topics.map((t) =>
-                            t.id === topicId ? { ...t, ...updates } : t
-                          ),
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      deleteTopic: (subjectId, chapterId, topicId) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? { ...c, topics: c.topics.filter((t) => t.id !== topicId) }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      setTopicStatus: (subjectId, chapterId, topicId, status) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          topics: c.topics.map((t) =>
-                            t.id === topicId
-                              ? {
-                                  ...t,
-                                  status,
-                                  completedAt:
-                                    status === 'completed' || status === 'revised'
-                                      ? new Date().toISOString()
-                                      : t.completedAt,
-                                  nextRevisionDue:
-                                    status === 'completed'
-                                      ? getSpacedRepetitionDate(0)
-                                      : t.nextRevisionDue,
-                                }
-                              : t
-                          ),
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      markTopicRevised: (subjectId, chapterId, topicId) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          topics: c.topics.map((t) =>
-                            t.id === topicId
-                              ? {
-                                  ...t,
-                                  status: 'revised' as TopicStatus,
-                                  revisionCount: t.revisionCount + 1,
-                                  lastRevised: getToday(),
-                                  nextRevisionDue: getSpacedRepetitionDate(t.revisionCount + 1),
-                                }
-                              : t
-                          ),
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      setAllChapterTopicsStatus: (subjectId, chapterId, status) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          topics: c.topics.map((t) => ({
-                            ...t,
-                            status,
-                            completedAt:
-                              (status === 'completed' || status === 'revised')
-                                ? (t.completedAt ?? new Date().toISOString())
-                                : null,
-                            nextRevisionDue:
-                              status === 'completed' && !t.nextRevisionDue
-                                ? getSpacedRepetitionDate(0)
-                                : status === 'not-started'
-                                ? null
-                                : t.nextRevisionDue,
-                          })),
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      setChapterTag: (subjectId, chapterId, tag) =>
-        set((state) => ({
-          subjects: state.subjects.map((s) =>
-            s.id === subjectId
-              ? {
-                  ...s,
-                  chapters: s.chapters.map((c) =>
-                    c.id === chapterId
-                      ? {
-                          ...c,
-                          tag,
-                        }
-                      : c
-                  ),
-                }
-              : s
-          ),
-        })),
-
-      reorderSubjects: (subjects) => set({ subjects }),
-
-      setSubjects: (subjects) => set({ subjects }),
-    }),
-    {
-      name: 'study-tracker-subjects-v2',
+  fetchSubjects: async () => {
+    try {
+      const response = await fetch('/api/subjects');
+      if (response.ok) {
+        const { data } = await response.json();
+        set({ subjects: data || [] });
+      }
+    } catch (error) {
+      console.error('Failed to fetch subjects', error);
     }
-  )
-);
+  },
+
+  addSubject: async (name, color, icon) => {
+    const newSubject = {
+      id: generateId(),
+      name,
+      color,
+      icon,
+      chapters: [],
+      createdAt: new Date().toISOString(),
+      order: get().subjects.length,
+    };
+    set((state) => ({ subjects: [...state.subjects, newSubject as any] }));
+    try {
+      await fetch('/api/subjects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSubject),
+      });
+    } catch (error) {
+      console.error('Failed to add subject', error);
+    }
+  },
+
+  updateSubject: async (id, updates) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) => (s.id === id ? { ...s, ...updates } : s)),
+    }));
+    try {
+      await fetch(`/api/subjects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (error) {
+      console.error('Failed to update subject', error);
+    }
+  },
+
+  deleteSubject: async (id) => {
+    set((state) => ({
+      subjects: state.subjects.filter((s) => s.id !== id),
+    }));
+    try {
+      await fetch(`/api/subjects/${id}`, { method: 'DELETE' });
+    } catch (error) {
+      console.error('Failed to delete subject', error);
+    }
+  },
+
+  addChapter: async (subjectId, name, paper = "Paper 1") => {
+    const newChapter = {
+      id: generateId(),
+      name,
+      topics: [],
+      order: get().subjects.find((s) => s.id === subjectId)?.chapters.length || 0,
+      tag: null,
+      estimatedMarks: null,
+      paper,
+      subject_id: subjectId,
+    };
+    
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId ? { ...s, chapters: [...s.chapters, newChapter as any] } : s
+      ),
+    }));
+
+    try {
+      await fetch('/api/chapters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newChapter),
+      });
+    } catch (error) {
+      console.error('Failed to add chapter', error);
+    }
+  },
+
+  updateChapter: async (subjectId, chapterId, updates) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId
+          ? {
+              ...s,
+              chapters: s.chapters.map((c) =>
+                c.id === chapterId ? { ...c, ...updates } : c
+              ),
+            }
+          : s
+      ),
+    }));
+
+    try {
+      await fetch(`/api/chapters/${chapterId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (error) {
+      console.error('Failed to update chapter', error);
+    }
+  },
+
+  deleteChapter: async (subjectId, chapterId) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId
+          ? { ...s, chapters: s.chapters.filter((c) => c.id !== chapterId) }
+          : s
+      ),
+    }));
+
+    try {
+      await fetch(`/api/chapters/${chapterId}`, { method: 'DELETE' });
+    } catch (error) {
+      console.error('Failed to delete chapter', error);
+    }
+  },
+
+  addTopic: async (subjectId, chapterId, name) => {
+    const newTopic = {
+      id: generateId(),
+      name,
+      status: 'not-started' as TopicStatus,
+      revisionCount: 0,
+      lastRevised: null,
+      nextRevisionDue: null,
+      order: get().subjects.find((s) => s.id === subjectId)?.chapters.find((c) => c.id === chapterId)?.topics.length || 0,
+      notes: '',
+      completedAt: null,
+      chapter_id: chapterId,
+    };
+
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId
+          ? {
+              ...s,
+              chapters: s.chapters.map((c) =>
+                c.id === chapterId
+                  ? { ...c, topics: [...c.topics, newTopic as any] }
+                  : c
+              ),
+            }
+          : s
+      ),
+    }));
+
+    try {
+      await fetch('/api/topics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTopic),
+      });
+    } catch (error) {
+      console.error('Failed to add topic', error);
+    }
+  },
+
+  updateTopic: async (subjectId, chapterId, topicId, updates) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId
+          ? {
+              ...s,
+              chapters: s.chapters.map((c) =>
+                c.id === chapterId
+                  ? {
+                      ...c,
+                      topics: c.topics.map((t) =>
+                        t.id === topicId ? { ...t, ...updates } : t
+                      ),
+                    }
+                  : c
+              ),
+            }
+          : s
+      ),
+    }));
+
+    try {
+      await fetch(`/api/topics/${topicId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+    } catch (error) {
+      console.error('Failed to update topic', error);
+    }
+  },
+
+  deleteTopic: async (subjectId, chapterId, topicId) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) =>
+        s.id === subjectId
+          ? {
+              ...s,
+              chapters: s.chapters.map((c) =>
+                c.id === chapterId
+                  ? { ...c, topics: c.topics.filter((t) => t.id !== topicId) }
+                  : c
+              ),
+            }
+          : s
+      ),
+    }));
+
+    try {
+      await fetch(`/api/topics/${topicId}`, { method: 'DELETE' });
+    } catch (error) {
+      console.error('Failed to delete topic', error);
+    }
+  },
+
+  setTopicStatus: async (subjectId, chapterId, topicId, status) => {
+    const updates = {
+      status,
+      completedAt: status === 'completed' || status === 'revised' ? new Date().toISOString() : null,
+      nextRevisionDue: status === 'completed' ? getSpacedRepetitionDate(0) : null,
+    };
+    get().updateTopic(subjectId, chapterId, topicId, updates);
+  },
+
+  markTopicRevised: async (subjectId, chapterId, topicId) => {
+    const subject = get().subjects.find((s) => s.id === subjectId);
+    const chapter = subject?.chapters.find((c) => c.id === chapterId);
+    const topic = chapter?.topics.find((t) => t.id === topicId);
+    
+    if (!topic) return;
+
+    const updates = {
+      status: 'revised' as TopicStatus,
+      revisionCount: (topic.revisionCount || 0) + 1,
+      lastRevised: getToday(),
+      nextRevisionDue: getSpacedRepetitionDate((topic.revisionCount || 0) + 1),
+    };
+    get().updateTopic(subjectId, chapterId, topicId, updates);
+  },
+
+  setAllChapterTopicsStatus: async (subjectId, chapterId, status) => {
+    const subject = get().subjects.find((s) => s.id === subjectId);
+    const chapter = subject?.chapters.find((c) => c.id === chapterId);
+    
+    if (!chapter) return;
+
+    chapter.topics.forEach((topic) => {
+      get().setTopicStatus(subjectId, chapterId, topic.id, status);
+    });
+  },
+
+  setChapterTag: async (subjectId, chapterId, tag) => {
+    get().updateChapter(subjectId, chapterId, { tag });
+  },
+
+  setSubjects: (subjects) => set({ subjects }),
+}));

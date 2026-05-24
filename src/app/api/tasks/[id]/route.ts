@@ -1,0 +1,51 @@
+import { NextRequest } from 'next/server';
+import { getEnv, successResponse, errorResponse } from '@/api/helpers';
+import { Database } from '@/db/client';
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const env = getEnv(request);
+    const db = new Database(env.DB);
+    const body = await request.json();
+    
+    const updates: string[] = [];
+    const values: any[] = [];
+
+    if (body.title !== undefined) { updates.push('title = ?'); values.push(body.title); }
+    if (body.category !== undefined) { updates.push('category = ?'); values.push(body.category); }
+    if (body.priority !== undefined) { updates.push('priority = ?'); values.push(body.priority); }
+    if (body.dueDate !== undefined) { updates.push('due_date = ?'); values.push(body.dueDate); }
+    if (body.completed !== undefined) { updates.push('completed = ?'); values.push(body.completed ? 1 : 0); }
+    if (body.completedAt !== undefined) { updates.push('completed_at = ?'); values.push(body.completedAt); }
+
+    if (updates.length > 0) {
+      values.push(params.id);
+      await db.run(
+        `UPDATE tasks SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+        values
+      );
+    }
+    
+    return successResponse({ id: params.id, updated: true });
+  } catch (err: any) {
+    return errorResponse(err.message, 500);
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const env = getEnv(request);
+    const db = new Database(env.DB);
+    
+    await db.run('DELETE FROM tasks WHERE id = ?', [params.id]);
+    return successResponse({ id: params.id, deleted: true });
+  } catch (err: any) {
+    return errorResponse(err.message, 500);
+  }
+}
