@@ -236,7 +236,7 @@ const IMPORTANCE_OPTIONS = [
   { value: 'Not Specified', label: 'Not Specified', bg: 'bg-blue-500/10', text: 'text-blue-500', color: 'rgb(59, 130, 246)' },
 ];
 
-function ImportanceSelect({ importance, onChange }: { importance?: string; onChange: (v: string) => void }) {
+function ImportanceSelect({ importance, onChange }: { importance?: string | null; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   
