@@ -42,21 +42,23 @@ for (const file of files) {
   let topicOrder = 0;
   let chapterOrder = 0;
 
+  const subjectName = file.replace('.md', '');
+  subjectId = generateId();
+  const color = SUBJECT_COLORS[colorIndex % SUBJECT_COLORS.length];
+  const icon = SUBJECT_ICONS[iconIndex % SUBJECT_ICONS.length];
+  colorIndex++;
+  iconIndex++;
+
+  sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}');\n`;
+  chapterOrder = 0;
+
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    // # Subject Name
+    // Ignore # Subject Name inside the file since we use the filename
     if (trimmed.startsWith('# ')) {
-      const subjectName = trimmed.replace('# ', '').trim();
-      subjectId = generateId();
-      const color = SUBJECT_COLORS[colorIndex % SUBJECT_COLORS.length];
-      const icon = SUBJECT_ICONS[iconIndex % SUBJECT_ICONS.length];
-      colorIndex++;
-      iconIndex++;
-
-      sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}');\n`;
-      chapterOrder = 0;
+      continue;
     }
     // ## Paper X
     else if (trimmed.startsWith('## ')) {
