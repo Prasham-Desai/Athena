@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const env = getEnv(request);
     const db = new Database(env.DB);
     const service = new TopicService(db);
-    const body = await request.json();
+    const body: any = await request.json();
     
     if (!body.chapter_id || !body.name || body.order_index === undefined) {
       return errorResponse('chapter_id, name, and order_index are required', 400);

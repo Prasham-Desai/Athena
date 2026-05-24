@@ -12,7 +12,7 @@ export async function PUT(
     const env = getEnv(request);
     const db = new Database(env.DB);
     const service = new TopicService(db);
-    const body = await request.json();
+    const body: any = await request.json();
     
     await service.update(id, body);
     return successResponse({ id, updated: true });

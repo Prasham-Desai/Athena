@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     const db = new Database(env.DB);
     const service = new SubjectService(db);
-    const body = await request.json();
+    const body: any = await request.json();
     
     if (!body.name) return errorResponse('Subject name is required', 400);
     

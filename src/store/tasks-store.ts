@@ -19,7 +19,7 @@ export const useTasksStore = create<TasksState>((set, get) => ({
     try {
       const response = await fetch('/api/tasks');
       if (response.ok) {
-        const { data } = await response.json();
+        const { data } = (await response.json()) as any;
         set({ tasks: data || [] });
       }
     } catch (error) {

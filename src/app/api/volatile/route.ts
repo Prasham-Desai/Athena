@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);
     const kvService = new KVService(env.KV);
-    const body = await request.json();
+    const body: any = await request.json();
     
     const { key, value, ttl } = body;
     if (!key || value === undefined) return errorResponse('Key and value are required', 400);

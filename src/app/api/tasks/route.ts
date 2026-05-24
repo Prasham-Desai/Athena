@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
-    const body = await request.json();
+    const body: any = await request.json();
     
     // Fallback to auto-generating an ID if the frontend doesn't provide one
     const id = body.id || generateId();

@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
-    const body = await request.json();
+    const body: any = await request.json();
     
     const id = body.id || generateId();
     await db.run(

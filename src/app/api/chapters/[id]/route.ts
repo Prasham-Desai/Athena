@@ -10,7 +10,7 @@ export async function PUT(
     const { id } = await params;
     const env = getEnv(request);
     const db = new Database(env.DB);
-    const body = await request.json();
+    const body: any = await request.json();
     
     const updates: string[] = [];
     const values: any[] = [];
