@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const db = new Database(env.DB);
     const service = new SubjectService(db);
     
-    const subjects = await service.getAll();
+    const subjects = await service.getAllWithHierarchy();
     return successResponse(subjects);
   } catch (err: any) {
     return errorResponse(err.message, 500);

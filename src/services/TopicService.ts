@@ -17,15 +17,17 @@ export class TopicService {
   async update(id: string, data: Partial<Topic>): Promise<void> {
     const updates: string[] = [];
     const values: any[] = [];
+    const d = data as any;
 
-    if (data.name !== undefined) { updates.push('name = ?'); values.push(data.name); }
-    if (data.status !== undefined) { updates.push('status = ?'); values.push(data.status); }
-    if ((data as any).order_index !== undefined) { updates.push('order_index = ?'); values.push((data as any).order_index); }
-    if ((data as any).revisionCount !== undefined) { updates.push('revision_count = ?'); values.push((data as any).revisionCount); }
-    if ((data as any).lastRevised !== undefined) { updates.push('last_revised = ?'); values.push((data as any).lastRevised); }
-    if ((data as any).nextRevisionDue !== undefined) { updates.push('next_revision_due = ?'); values.push((data as any).nextRevisionDue); }
-    if ((data as any).completedAt !== undefined) { updates.push('completed_at = ?'); values.push((data as any).completedAt); }
-    if ((data as any).notes !== undefined) { updates.push('notes = ?'); values.push((data as any).notes); }
+    if (d.name !== undefined) { updates.push('name = ?'); values.push(d.name); }
+    if (d.status !== undefined) { updates.push('status = ?'); values.push(d.status); }
+    if (d.order_index !== undefined) { updates.push('order_index = ?'); values.push(d.order_index); }
+    if (d.order !== undefined) { updates.push('order_index = ?'); values.push(d.order); }
+    if (d.revisionCount !== undefined) { updates.push('revision_count = ?'); values.push(d.revisionCount); }
+    if (d.lastRevised !== undefined) { updates.push('last_revised = ?'); values.push(d.lastRevised); }
+    if (d.nextRevisionDue !== undefined) { updates.push('next_revision_due = ?'); values.push(d.nextRevisionDue); }
+    if (d.completedAt !== undefined) { updates.push('completed_at = ?'); values.push(d.completedAt); }
+    if (d.notes !== undefined) { updates.push('notes = ?'); values.push(d.notes); }
 
     if (updates.length === 0) return;
 

@@ -2,8 +2,88 @@ import { Database } from '../db/client';
 import { Subject, ChapterWithTopics } from '../types';
 import { generateId } from '../api/helpers';
 
+/**
+ * Maps a DB topic row (snake_case) to the frontend Topic shape (camelCase).
+ */
+function mapTopic(row: any) {
+  return {
+    id: row.id,
+    chapter_id: row.chapter_id,
+    name: row.name,
+    status: row.status || 'not-started',
+    revisionCount: row.revision_count ?? 0,
+    lastRevised: row.last_revised ?? null,
+    nextRevisionDue: row.next_revision_due ?? null,
+    order: row.order_index ?? 0,
+    notes: row.notes ?? '',
+    completedAt: row.completed_at ?? null,
+  };
+}
+
+/**
+ * Maps a DB chapter row (snake_case) to the frontend Chapter shape (camelCase).
+ */
+function mapChapter(row: any, topics: any[]) {
+  return {
+    id: row.id,
+    subject_id: row.subject_id,
+    name: row.name,
+    order: row.order_index ?? 0,
+    tag: row.tag ?? null,
+    estimatedMarks: row.estimated_marks ?? null,
+    paper: row.paper ?? 'Paper 1',
+    topics: topics.map(mapTopic),
+  };
+}
+
 export class SubjectService {
   constructor(private db: Database) {}
+
+  /**
+   * Returns ALL subjects with their full nested hierarchy (chapters → topics).
+   * This is the primary data source for the frontend store.
+   */
+  async getAllWithHierarchy(): Promise<any[]> {
+    const subjects = await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
+    if (!subjects.length) return [];
+
+    const subjectIds = subjects.map(s => s.id);
+    const placeholders = subjectIds.map(() => '?').join(',');
+
+    // Fetch ALL chapters for ALL subjects in one query
+    const chapters = await this.db.query<any>(
+      `SELECT * FROM chapters WHERE subject_id IN (${placeholders}) ORDER BY order_index ASC`,
+      subjectIds
+    );
+
+    // Fetch ALL topics for ALL those chapters in one query
+    let topics: any[] = [];
+    if (chapters.length > 0) {
+      const chapterIds = chapters.map(c => c.id);
+      const chPlaceholders = chapterIds.map(() => '?').join(',');
+      topics = await this.db.query<any>(
+        `SELECT * FROM topics WHERE chapter_id IN (${chPlaceholders}) ORDER BY order_index ASC`,
+        chapterIds
+      );
+    }
+
+    // Reconstruct the full hierarchy with proper camelCase mapping
+    return subjects.map(subject => {
+      const subjectChapters = chapters.filter(c => c.subject_id === subject.id);
+      return {
+        id: subject.id,
+        name: subject.name,
+        color: subject.color,
+        icon: subject.icon,
+        createdAt: subject.created_at,
+        order: 0,
+        chapters: subjectChapters.map(ch => {
+          const chapterTopics = topics.filter(t => t.chapter_id === ch.id);
+          return mapChapter(ch, chapterTopics);
+        }),
+      };
+    });
+  }
 
   async getAll(): Promise<Subject[]> {
     return this.db.query<Subject>('SELECT * FROM subjects ORDER BY created_at DESC');
@@ -47,10 +127,9 @@ export class SubjectService {
 
   /**
    * Fetches a full nested subject hierarchy (Chapters -> Topics -> Subtopics)
-   * This handles joining all the data efficiently.
+   * for a single subject. Returns data with camelCase keys.
    */
   async getFullHierarchy(subjectId: string) {
-    // We fetch flat rows and construct the hierarchy in JS to avoid complex json_group_array SQLite limits
     const chapters = await this.db.query<any>(
       'SELECT * FROM chapters WHERE subject_id = ? ORDER BY order_index ASC',
       [subjectId]
@@ -66,27 +145,10 @@ export class SubjectService {
       chapterIds
     );
 
-    const topicIds = topics.map(t => t.id);
-    let subtopics: any[] = [];
-    
-    if (topicIds.length > 0) {
-      const topicPlaceholders = topicIds.map(() => '?').join(',');
-      subtopics = await this.db.query<any>(
-        `SELECT * FROM subtopics WHERE topic_id IN (${topicPlaceholders}) ORDER BY order_index ASC`,
-        topicIds
-      );
-    }
-
-    // Reconstruct hierarchy
+    // Reconstruct hierarchy with camelCase mapping
     return chapters.map(chapter => {
       const chapterTopics = topics.filter(t => t.chapter_id === chapter.id);
-      return {
-        ...chapter,
-        topics: chapterTopics.map(topic => ({
-          ...topic,
-          subtopics: subtopics.filter(s => s.topic_id === topic.id)
-        }))
-      };
+      return mapChapter(chapter, chapterTopics);
     });
   }
 }
