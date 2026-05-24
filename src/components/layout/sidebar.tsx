@@ -24,6 +24,7 @@ const navItems = [
   { href: '/planner', label: 'Daily Planner', icon: CalendarDays },
   { href: '/revisions', label: 'Revisions', icon: RotateCcw },
   { href: '/tasks', label: 'Tasks', icon: CheckSquare },
+  { href: '/exams', label: 'Exams', icon: GraduationCap },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];

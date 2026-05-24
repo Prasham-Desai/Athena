@@ -93,6 +93,18 @@ export interface DailyLog {
   revisionsCompleted: number;
 }
 
+export type ExamType = 'test' | 'exam';
+
+export interface Exam {
+  id: string;
+  title: string;
+  type: ExamType;
+  date: string;        // YYYY-MM-DD
+  subjectIds: string[]; // parsed from JSON
+  completed: boolean;
+  createdAt?: string;
+}
+
 export type FontSize = 'small' | 'medium' | 'large' | 'extra-large';
 
 export interface UserSettings {

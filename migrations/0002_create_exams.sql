@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS exams (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  type TEXT NOT NULL,
+  date TEXT NOT NULL,
+  subject_ids TEXT NOT NULL,
+  completed BOOLEAN DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

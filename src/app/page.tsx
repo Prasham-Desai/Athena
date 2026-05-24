@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { Variants } from "framer-motion";
@@ -30,6 +30,7 @@ import { useSubjectsStore } from '@/store/subjects-store';
 import { usePlannerStore } from '@/store/planner-store';
 import { useTasksStore } from '@/store/tasks-store';
 import { useActivityStore } from '@/store/activity-store';
+import { useExamsStore } from '@/store/exams-store';
 
 import { ProgressRing } from '@/components/shared/progress-ring';
 import { StatCard } from '@/components/shared/stat-card';
@@ -137,6 +138,13 @@ export default function DashboardPage() {
   const activities = useActivityStore((s) => s.activities);
   const dailyLogs = useActivityStore((s) => s.dailyLogs);
 
+  const { exams, fetchExams } = useExamsStore();
+
+  // Fetch exams on load
+  useEffect(() => {
+    fetchExams();
+  }, [fetchExams]);
+
   // -----------------------------------------------------------------------
   // Derived data
   // -----------------------------------------------------------------------
@@ -228,6 +236,18 @@ export default function DashboardPage() {
     [activities]
   );
 
+  // Next upcoming exam
+  const nextExam = useMemo(() => {
+    const upcoming = exams.filter(e => !e.completed).sort((a, b) => a.date > b.date ? 1 : -1);
+    return upcoming.length > 0 ? upcoming[0] : null;
+  }, [exams]);
+
+  const daysToNextExam = useMemo(() => {
+    if (!nextExam) return null;
+    const diff = new Date(nextExam.date).getTime() - new Date(today).getTime();
+    return Math.ceil(diff / (1000 * 3600 * 24));
+  }, [nextExam, today]);
+
   // -----------------------------------------------------------------------
   // Loading state
   // -----------------------------------------------------------------------
@@ -258,6 +278,37 @@ export default function DashboardPage() {
           description={`${getGreeting()}! Here's your study overview.`}
         />
       </motion.div>
+
+      {/* ---- Upcoming Exam Widget ---- */}
+      {nextExam && (
+        <motion.div variants={itemVariants}>
+          <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-5 shadow-sm">
+            <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-indigo-500/10 blur-3xl" />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+                  <BookOpen className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold tracking-tight text-indigo-500 flex items-center gap-2 mb-1">
+                    Upcoming {nextExam.type === 'exam' ? 'University Exam' : 'Unit Test'}
+                  </h3>
+                  <p className="text-xl font-bold">{nextExam.title}</p>
+                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1">
+                    {formatDate(nextExam.date)} • {daysToNextExam === 0 ? 'Today!' : daysToNextExam === 1 ? 'Tomorrow' : `In ${daysToNextExam} days`}
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/exams"
+                className="px-5 py-2.5 bg-white dark:bg-[hsl(var(--card))] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full sm:w-auto text-center"
+              >
+                View Details
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* ---- Motivational Quote ---- */}
       <motion.div variants={itemVariants}>

@@ -70,7 +70,7 @@ export const useActivityStore = create<ActivityState>()(
       setDailyLogs: (logs) => set({ dailyLogs: logs }),
     }),
     {
-      name: 'study-tracker-activity-v2',
+      name: 'study-tracker-activity-v3',
     }
   )
 );

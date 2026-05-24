@@ -55,7 +55,7 @@ export const usePlannerStore = create<PlannerState>()(
       setStudyBlocks: (blocks) => set({ studyBlocks: blocks }),
     }),
     {
-      name: 'study-tracker-planner-v2',
+      name: 'study-tracker-planner-v3',
     }
   )
 );
