@@ -44,7 +44,7 @@ for (const file of files) {
   let chapterOrder = 0;
   
   let currentTopicName = '';
-  let currentTopicImportance = null;
+  let currentTopicImportance: string | null = null;
   let currentTopicNotes = '';
 
   const subjectName = file.replace('.md', '');
