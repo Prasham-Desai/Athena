@@ -1,9 +1,9 @@
 import fs from 'fs';
 
 const colors = {
-  'Agad Tantra evam Vidhi Vaidyaka': { main: '#E11D48', glow: '#881337', text: '#FDA4AF' },
-  'Charak Samhita': { main: '#F59E0B', glow: '#78350F', text: '#FDE68A' },
-  'Dravyaguna Vigyan': { main: '#4F46E5', glow: '#312E81', text: '#C7D2FE' }
+  'Agad Tantra evam Vidhi Vaidyaka': { main: '#3B82F6', glow: '#1E3A8A', text: '#93C5FD' },
+  'Charak Samhita': { main: '#10B981', glow: '#064E3B', text: '#6EE7B7' },
+  'Dravyaguna Vigyan': { main: '#EC4899', glow: '#831843', text: '#F9A8D4' }
 };
 
 let content = fs.readFileSync('src/lib/curriculum-data.ts', 'utf-8');

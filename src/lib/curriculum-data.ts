@@ -5,11 +5,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "fc990e4e",
     "name": "Agad Tantra evam Vidhi Vaidyaka",
-    "color": "#E11D48",
+    "color": "#3B82F6",
     "icon": "Microscope",
     "details": {
-      "secondaryGlow": "#881337",
-      "textAccent": "#FDA4AF",
+      "secondaryGlow": "#1E3A8A",
+      "textAccent": "#93C5FD",
       "Subject Code": "AyUG-AT",
       "Total Teaching Hours": "300",
       "Lecture Hours (Theory)": "100",
@@ -2843,11 +2843,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "4622f185",
     "name": "Charak Samhita",
-    "color": "#F59E0B",
+    "color": "#10B981",
     "icon": "BookOpen",
     "details": {
-      "secondaryGlow": "#78350F",
-      "textAccent": "#FDE68A",
+      "secondaryGlow": "#064E3B",
+      "textAccent": "#6EE7B7",
       "Subject Code": "AyUG-SA2",
       "Total Teaching Hours": "240",
       "Lecture Hours (Theory)": "100",
@@ -4672,11 +4672,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "3d247981",
     "name": "Dravyaguna Vigyan",
-    "color": "#4F46E5",
+    "color": "#EC4899",
     "icon": "FlaskConical",
     "details": {
-      "secondaryGlow": "#312E81",
-      "textAccent": "#C7D2FE",
+      "secondaryGlow": "#831843",
+      "textAccent": "#F9A8D4",
       "Subject Code": "AyUG-DG",
       "Total Teaching Hours": "400",
       "Lecture Hours (Theory)": "150",
