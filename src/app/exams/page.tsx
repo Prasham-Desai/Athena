@@ -112,7 +112,7 @@ export default function ExamsPage() {
 
   const renderTable = (examList: typeof exams, isPast: boolean) => (
     <div className="overflow-x-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-      <table className="w-full text-left text-sm">
+      <table className="w-full text-left text-base">
         <thead className="bg-[hsl(var(--muted))]/50">
           <tr>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
@@ -144,9 +144,9 @@ export default function ExamsPage() {
                         <span>{exam.title}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 align-middle">
+                    <td className="px-4 py-4 align-middle">
                       <span className={cn(
-                        "px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider inline-block",
+                        "px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider inline-block",
                         exam.type === 'exam' 
                           ? "bg-purple-500/10 text-purple-500" 
                           : "bg-blue-500/10 text-blue-500"
@@ -154,11 +154,11 @@ export default function ExamsPage() {
                         {exam.type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 align-middle">
-                      <div className="flex flex-col">
-                        <span>{format(new Date(exam.date), 'MMM d, yyyy')}</span>
+                    <td className="px-4 py-4 align-middle">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-medium">{format(new Date(exam.date), 'MMM d, yyyy')}</span>
                         {!isPast && (
-                          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+                          <span className="text-sm text-[hsl(var(--muted-foreground))]">
                             {getRelativeDate(exam.date)}
                           </span>
                         )}
@@ -187,7 +187,7 @@ export default function ExamsPage() {
                   <tr>
                     <td colSpan={4} className="p-0 border-t-0 border-b-4 border-b-[hsl(var(--background))]">
                       <div className="px-4 pb-4 pt-2">
-                        <table className="w-full text-xs rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
+                        <table className="w-full text-sm sm:text-base rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
                           <thead className="bg-[hsl(var(--muted))]/40 text-[hsl(var(--muted-foreground))]">
                             <tr>
                               <th className="px-3 py-2 text-left font-medium">Subject</th>
@@ -205,15 +205,15 @@ export default function ExamsPage() {
                                 if (!subjectData) return null;
                                 return (
                                   <tr key={s.id}>
-                                    <td className="px-3 py-2">
+                                    <td className="px-4 py-3">
                                       <span 
-                                        className="text-[11px] px-2 py-0.5 rounded inline-block"
+                                        className="text-xs sm:text-sm px-3 py-1 rounded-md inline-block font-medium"
                                         style={{ backgroundColor: `${subjectData.color}20`, color: subjectData.color }}
                                       >
                                         {subjectData.name}
                                       </span>
                                     </td>
-                                    <td className="px-3 py-2 font-medium">
+                                    <td className="px-4 py-3 font-medium">
                                       {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))]">Tentative</span>}
                                     </td>
                                   </tr>

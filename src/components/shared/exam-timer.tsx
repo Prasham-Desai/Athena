@@ -54,14 +54,14 @@ export function ExamTimer({ targetDate }: ExamTimerProps) {
   const pad = (n: number) => n.toString().padStart(2, '0');
 
   return (
-    <div className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-mono text-sm tracking-widest font-bold shadow-sm", colorClass)}>
-      <span>{pad(timeLeft.d)}<span className="text-[10px] uppercase ml-0.5 opacity-70 tracking-normal font-sans">d</span></span>
+    <div className={cn("inline-flex items-center gap-2 md:gap-3 px-5 py-3 md:px-6 md:py-4 rounded-2xl border font-mono text-2xl md:text-3xl tracking-widest font-bold shadow-md", colorClass)}>
+      <span>{pad(timeLeft.d)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">d</span></span>
       <span className="opacity-50">:</span>
-      <span>{pad(timeLeft.h)}<span className="text-[10px] uppercase ml-0.5 opacity-70 tracking-normal font-sans">h</span></span>
+      <span>{pad(timeLeft.h)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">h</span></span>
       <span className="opacity-50">:</span>
-      <span>{pad(timeLeft.m)}<span className="text-[10px] uppercase ml-0.5 opacity-70 tracking-normal font-sans">m</span></span>
+      <span>{pad(timeLeft.m)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">m</span></span>
       <span className="opacity-50">:</span>
-      <span>{pad(timeLeft.s)}<span className="text-[10px] uppercase ml-0.5 opacity-70 tracking-normal font-sans">s</span></span>
+      <span>{pad(timeLeft.s)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">s</span></span>
     </div>
   );
 }
