@@ -57,25 +57,10 @@ export class SubjectService {
     const subjects = await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
     if (!subjects.length) return [];
 
-    const subjectIds = subjects.map(s => s.id);
-    const placeholders = subjectIds.map(() => '?').join(',');
-
-    // Fetch ALL chapters for ALL subjects in one query
-    const chapters = await this.db.query<any>(
-      `SELECT * FROM chapters WHERE subject_id IN (${placeholders}) ORDER BY order_index ASC`,
-      subjectIds
-    );
-
-    // Fetch ALL topics for ALL those chapters in one query
-    let topics: any[] = [];
-    if (chapters.length > 0) {
-      const chapterIds = chapters.map(c => c.id);
-      const chPlaceholders = chapterIds.map(() => '?').join(',');
-      topics = await this.db.query<any>(
-        `SELECT * FROM topics WHERE chapter_id IN (${chPlaceholders}) ORDER BY order_index ASC`,
-        chapterIds
-      );
-    }
+    // Fetch ALL chapters, topics, and subtopics directly to avoid SQLite's 100 variable limit in IN() clauses
+    const chapters = await this.db.query<any>('SELECT * FROM chapters ORDER BY order_index ASC');
+    const topics = await this.db.query<any>('SELECT * FROM topics ORDER BY order_index ASC');
+    const subtopics = await this.db.query<any>('SELECT * FROM subtopics ORDER BY order_index ASC');
 
     // Reconstruct the full hierarchy with proper camelCase mapping
     return subjects.map(subject => {
@@ -95,7 +80,7 @@ export class SubjectService {
         order: 0,
         chapters: subjectChapters.map(ch => {
           const chapterTopics = topics.filter(t => t.chapter_id === ch.id);
-          return mapChapter(ch, chapterTopics);
+          return mapChapter(ch, chapterTopics, subtopics);
         }),
       };
     });
@@ -153,23 +138,9 @@ export class SubjectService {
     
     if (!chapters.length) return [];
 
-    const chapterIds = chapters.map(c => c.id);
-    const placeholders = chapterIds.map(() => '?').join(',');
-
-    const topics = await this.db.query<any>(
-      `SELECT * FROM topics WHERE chapter_id IN (${placeholders}) ORDER BY order_index ASC`,
-      chapterIds
-    );
-
-    let subtopics: any[] = [];
-    if (topics.length > 0) {
-      const topicIds = topics.map(t => t.id);
-      const tPlaceholders = topicIds.map(() => '?').join(',');
-      subtopics = await this.db.query<any>(
-        `SELECT * FROM subtopics WHERE topic_id IN (${tPlaceholders}) ORDER BY order_index ASC`,
-        topicIds
-      );
-    }
+    // To avoid D1's 100-variable limit for IN(), we fetch all and filter in JS
+    const topics = await this.db.query<any>('SELECT * FROM topics ORDER BY order_index ASC');
+    const subtopics = await this.db.query<any>('SELECT * FROM subtopics ORDER BY order_index ASC');
 
     // Reconstruct hierarchy with camelCase mapping
     return chapters.map(chapter => {
