@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
     
     const id = body.id || generateId();
     await db.run(
-      'INSERT INTO chapters (id, subject_id, name, order_index) VALUES (?, ?, ?, ?)',
-      [id, body.subject_id, body.name, body.order || 0]
+      'INSERT INTO chapters (id, subject_id, name, order_index, paper, tag, estimated_marks) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [id, body.subject_id, body.name, body.order || 0, body.paper || 'Paper 1', body.tag || null, body.estimatedMarks || null]
     );
     
     return successResponse({ id, ...body }, 201);

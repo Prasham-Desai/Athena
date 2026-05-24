@@ -20,7 +20,12 @@ export class TopicService {
 
     if (data.name !== undefined) { updates.push('name = ?'); values.push(data.name); }
     if (data.status !== undefined) { updates.push('status = ?'); values.push(data.status); }
-    if (data.order_index !== undefined) { updates.push('order_index = ?'); values.push(data.order_index); }
+    if ((data as any).order_index !== undefined) { updates.push('order_index = ?'); values.push((data as any).order_index); }
+    if ((data as any).revisionCount !== undefined) { updates.push('revision_count = ?'); values.push((data as any).revisionCount); }
+    if ((data as any).lastRevised !== undefined) { updates.push('last_revised = ?'); values.push((data as any).lastRevised); }
+    if ((data as any).nextRevisionDue !== undefined) { updates.push('next_revision_due = ?'); values.push((data as any).nextRevisionDue); }
+    if ((data as any).completedAt !== undefined) { updates.push('completed_at = ?'); values.push((data as any).completedAt); }
+    if ((data as any).notes !== undefined) { updates.push('notes = ?'); values.push((data as any).notes); }
 
     if (updates.length === 0) return;
 
