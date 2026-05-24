@@ -366,15 +366,41 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             )}
           </div>
           
-          {/* Subtopics */}
+          {/* Subtopics (Checkpoints) */}
           {topic.subtopics && topic.subtopics.length > 0 && (
-            <ul className="subtopic-list">
-              {topic.subtopics.map((sub: any) => (
-                <li key={sub.id} className="subtopic-item">
-                  <span className="subtopic-bullet" />
-                  <span className="subtopic-name">{sub.name}</span>
-                </li>
-              ))}
+            <ul className="mt-3 space-y-2 pl-8 border-l-2 border-[hsl(var(--border))] ml-2 pb-2">
+              {topic.subtopics.map((sub: any) => {
+                const isSubCompleted = sub.status === 'completed';
+                return (
+                  <li key={sub.id} className="flex items-start gap-2.5 group/sub">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        useSubjectsStore.getState().setSubtopicStatus(
+                          subjectId,
+                          chapterId,
+                          topic.id,
+                          sub.id,
+                          isSubCompleted ? 'not-started' : 'completed'
+                        );
+                      }}
+                      className="shrink-0 mt-0.5 transition-transform hover:scale-110"
+                    >
+                      {isSubCompleted ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      ) : (
+                        <Circle className="w-4 h-4 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
+                      )}
+                    </button>
+                    <span className={cn(
+                      "text-sm",
+                      isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
+                    )}>
+                      {sub.name}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           )}
 

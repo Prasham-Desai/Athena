@@ -3,6 +3,8 @@ import { getEnv, successResponse, errorResponse } from '@/api/helpers';
 import { Database } from '@/db/client';
 import { TopicService } from '@/services/TopicService';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);

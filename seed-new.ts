@@ -46,6 +46,7 @@ for (const file of files) {
   let currentTopicName = '';
   let currentTopicImportance: string | null = null;
   let currentTopicNotes = '';
+  let currentSubtopics: string[] = [];
 
   const subjectName = file.replace('.md', '');
   subjectId = generateId();
@@ -60,11 +61,16 @@ for (const file of files) {
   function flushTopic() {
     if (topicId) {
       sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, ${currentTopicImportance ? `'${escapeSql(currentTopicImportance)}'` : 'NULL'}, '${escapeSql(currentTopicNotes)}');\n`;
+      let subOrder = 0;
+      for (const st of currentSubtopics) {
+        sql += `INSERT INTO subtopics (id, topic_id, name, content, status, order_index) VALUES ('${generateId()}', '${topicId}', '${escapeSql(st)}', '', 'not-started', ${subOrder++});\n`;
+      }
     }
     topicId = '';
     currentTopicName = '';
     currentTopicImportance = null;
     currentTopicNotes = '';
+    currentSubtopics = [];
   }
 
   for (const line of lines) {
@@ -106,8 +112,7 @@ for (const file of files) {
     }
     else if (trimmed.startsWith('* ')) {
       if (topicId) {
-        if (currentTopicNotes) currentTopicNotes += '\n';
-        currentTopicNotes += trimmed;
+        currentSubtopics.push(trimmed.replace(/^\*\s*/, '').trim());
       }
     }
     else if (trimmed.match(/\*\*Importance:\*\*\s*(.*)$/i) || trimmed.match(/Importance:\s*(.*)$/i)) {

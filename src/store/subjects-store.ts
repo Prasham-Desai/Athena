@@ -19,6 +19,7 @@ interface SubjectsState {
   setAllChapterTopicsStatus: (subjectId: string, chapterId: string, status: TopicStatus) => Promise<void>;
   markTopicRevised: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
   setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => Promise<void>;
+  setSubtopicStatus: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, status: string, skipParentUpdate?: boolean) => Promise<void>;
   setSubjects: (subjects: Subject[]) => void;
 }
 
@@ -256,6 +257,22 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
       completedAt: status === 'completed' || status === 'revised' ? new Date().toISOString() : null,
       nextRevisionDue: status === 'completed' ? getSpacedRepetitionDate(0) : null,
     };
+
+    // Auto check all children
+    if (status === 'completed' || status === 'not-started') {
+       const substatus = status;
+       const subject = get().subjects.find((s) => s.id === subjectId);
+       const chapter = subject?.chapters.find((c) => c.id === chapterId);
+       const topic = chapter?.topics.find((t) => t.id === topicId);
+       if (topic && topic.subtopics) {
+         topic.subtopics.forEach((sub) => {
+            if (sub.status !== substatus) {
+              get().setSubtopicStatus(subjectId, chapterId, topicId, sub.id, substatus, true);
+            }
+         });
+       }
+    }
+
     get().updateTopic(subjectId, chapterId, topicId, updates);
   },
 
@@ -288,6 +305,44 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
 
   setChapterTag: async (subjectId, chapterId, tag) => {
     get().updateChapter(subjectId, chapterId, { tag });
+  },
+
+  setSubtopicStatus: async (subjectId, chapterId, topicId, subtopicId, status, skipParentUpdate = false) => {
+    set((state) => ({
+      subjects: state.subjects.map((s) => s.id === subjectId ? {
+        ...s, chapters: s.chapters.map((c) => c.id === chapterId ? {
+          ...c, topics: c.topics.map((t) => t.id === topicId ? {
+            ...t, subtopics: t.subtopics?.map((sub: any) => sub.id === subtopicId ? {
+              ...sub, status
+            } : sub)
+          } : t)
+        } : c)
+      } : s)
+    }));
+
+    try {
+      await fetch(`/api/subtopics/${subtopicId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
+    if (!skipParentUpdate) {
+      const subject = get().subjects.find((s) => s.id === subjectId);
+      const chapter = subject?.chapters.find((c) => c.id === chapterId);
+      const topic = chapter?.topics.find((t) => t.id === topicId);
+      if (topic && topic.subtopics) {
+        const allCompleted = topic.subtopics.every((sub: any) => sub.status === 'completed');
+        if (allCompleted && topic.status !== 'completed') {
+           get().setTopicStatus(subjectId, chapterId, topicId, 'completed');
+        } else if (!allCompleted && topic.status === 'completed') {
+           get().setTopicStatus(subjectId, chapterId, topicId, 'in-progress');
+        }
+      }
+    }
   },
 
   setSubjects: (subjects) => set({ subjects }),

@@ -3,6 +3,8 @@ import { getEnv, successResponse, errorResponse } from '@/api/helpers';
 import { Database } from '@/db/client';
 import { SubjectService } from '@/services/SubjectService';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS subtopics (
   topic_id TEXT NOT NULL,
   name TEXT NOT NULL,
   content TEXT,
+  status TEXT DEFAULT 'not-started',
   order_index INTEGER NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
