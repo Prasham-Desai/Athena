@@ -25,6 +25,7 @@ export interface Topic {
   order: number;
   notes: string;
   completedAt: string | null;     // ISO date string
+  subtopics?: any[];
 }
 
 export interface Chapter {
