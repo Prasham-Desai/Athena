@@ -208,7 +208,11 @@ export default function ExamsPage() {
                                     <td className="px-4 py-3">
                                       <span 
                                         className="text-xs sm:text-sm px-3 py-1 rounded-md inline-block font-medium"
-                                        style={{ backgroundColor: `${subjectData.color}20`, color: subjectData.color }}
+                                        style={{ 
+                                          backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}20`, 
+                                          color: subjectData.details?.textAccent || subjectData.color,
+                                          boxShadow: subjectData.details?.secondaryGlow ? `0 0 10px ${subjectData.details.secondaryGlow}40` : 'none'
+                                        }}
                                       >
                                         {subjectData.name}
                                       </span>

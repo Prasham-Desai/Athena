@@ -5,9 +5,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "fc990e4e",
     "name": "Agad Tantra evam Vidhi Vaidyaka",
-    "color": "#1d4ed8",
+    "color": "#FF4D8D",
     "icon": "Microscope",
     "details": {
+      "secondaryGlow": "#7A1CAC",
+      "textAccent": "#FFB3C7",
       "Subject Code": "AyUG-AT",
       "Total Teaching Hours": "300",
       "Lecture Hours (Theory)": "100",
@@ -2841,9 +2843,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "4622f185",
     "name": "Charak Samhita",
-    "color": "#059669",
+    "color": "#00D1C7",
     "icon": "BookOpen",
     "details": {
+      "secondaryGlow": "#0061FF",
+      "textAccent": "#8FFFEF",
       "Subject Code": "AyUG-SA2",
       "Total Teaching Hours": "240",
       "Lecture Hours (Theory)": "100",
@@ -4668,9 +4672,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "3d247981",
     "name": "Dravyaguna Vigyan",
-    "color": "#7e22ce",
+    "color": "#F7B500",
     "icon": "FlaskConical",
     "details": {
+      "secondaryGlow": "#8A5A00",
+      "textAccent": "#FFE28A",
       "Subject Code": "AyUG-DG",
       "Total Teaching Hours": "400",
       "Lecture Hours (Theory)": "150",
@@ -6430,9 +6436,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "277cab54",
     "name": "Rasashastra evam Bhaishajyakalpana",
-    "color": "#be123c",
+    "color": "#A855F7",
     "icon": "Scale",
     "details": {
+      "secondaryGlow": "#4338CA",
+      "textAccent": "#D8B4FE",
       "Subject Code": "AyUG-RB",
       "Total Teaching Hours": "450",
       "Lecture Hours (Theory)": "150",
@@ -9619,9 +9627,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "0e303aee",
     "name": "Roga Nidan evam Vikriti Vigyan",
-    "color": "#ea580c",
+    "color": "#FF6B6B",
     "icon": "Brain",
     "details": {
+      "secondaryGlow": "#C44569",
+      "textAccent": "#FFC2C2",
       "Subject Code": "AyUG-RN",
       "Total Teaching Hours": "450",
       "Lecture Hours (Theory)": "150",
@@ -12602,9 +12612,11 @@ export const INITIAL_SUBJECTS: Subject[] = [
   {
     "id": "4ac5793d",
     "name": "Swasthavritta evam Yoga",
-    "color": "#0f766e",
+    "color": "#2DD4BF",
     "icon": "Lightbulb",
     "details": {
+      "secondaryGlow": "#0F766E",
+      "textAccent": "#99F6E4",
       "Subject Code": "AyUG-SW",
       "Total Teaching Hours": "400",
       "Lecture Hours (Theory)": "150",
