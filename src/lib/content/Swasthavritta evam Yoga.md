@@ -354,16 +354,42 @@
 11. Define Asana and explain the importance of asana. Distinguish between asana and physical exercise.
     **Importance:** Must Know
 
-12. Describe the procedure, benefits, indications, and contraindications of Standing Yoga Postures such as Ardhakatichakrasana, Padahastasana, Ardhachakrasana, and Trikonasana.
+12. Describe the procedure, benefits, indications, and contraindications of Standing Yoga Postures
+   * Ardhakatichakrasana
+   * Padahastasana
+   * Ardhachakrasana
+   * Trikonasana.
     **Importance:** Must Know
 
-13. Describe the procedure, benefits, indications and contraindications of Sitting Yoga postures such as Swasthikasana, Gomukhasana, Padmasana, Vajrasana, Bhadrasana, Shashankasana, Ushtrasana, Pashchimottanasana, Suptavajrasana, Ardhamatsyendrasana, and Siddhasana.
+13. Describe the procedure, benefits, indications and contraindications of Sitting Yoga postures
+   * Swasthikasana
+   * Gomukhasana
+   * Padmasana
+   * Vajrasana
+   * Bhadrasana
+   * Shashankasana
+   * Ushtrasana
+   * Pashchimottanasana
+   * Suptavajrasana
+   * Ardhamatsyendrasana
+   * Siddhasana.
     **Importance:** Must Know
 
-14. Decsribe the procedure, benefits, indications and contra indications of Supine Yoga postures such as Pavanamuktasana, Sarvangasana, Matsyasana, Halasana, Chakrasana, Shavasana and Setubandhasana.
+14. Decsribe the procedure, benefits, indications and contra indications of Supine Yoga postures
+   * Pavanamuktasana
+   * Sarvangasana
+   * Matsyasana
+   * Halasana
+   * Chakrasana
+   * Shavasana
+   * Setubandhasana.
     **Importance:** Must Know
 
-15. Describe the procedure, benefits, indications, and contraindications of Prone Yoga postures such as Bhujangasana, Shalabhasana, Dhanurasana, and Makarasana.
+15. Describe the procedure, benefits, indications, and contraindications of Prone Yoga postures
+   * Bhujangasana
+   * Shalabhasana
+   * Dhanurasana
+   * Makarasana.
     **Importance:** Must Know
 
 16. Describe the procedure, benefits and contraindications of Suryanamaskara.
@@ -472,19 +498,48 @@
 8. Explain Sankramaka roga as per Ayurveda.
    **Importance:** Must Know
 
-9. Explain Epidemiological determinants, brief pathology ,transmission, incubation period , clinical features, diagnosis and preventive measures of 1.Droplet Infections such as Chicken Pox, Measles, Rubella, Diphtheria, Pertussis, Mumps, Tuberculosis, SARS, Influenza, Pneumonia, Covid-19 and Leprosy
+9. Explain Epidemiological determinants, brief pathology ,transmission, incubation period , clinical features, diagnosis and preventive measures of 1.Droplet Infections
+   * Chicken Pox
+   * Measles
+   * Rubella
+   * Diphtheria
+   * Pertussis
+   * Mumps
+   * Tuberculosis
+   * SARS
+   * Influenza
+   * Pneumonia
+   * Covid-19
+   * Leprosy
    **Importance:** Must Know
 
-10. 2.Water borne Infections / intestinal infections - Cholera, Polio, Viral Hepatitis, Typhoid
+10. 2.Water borne Infections / intestinal infections
+   * Cholera
+   * Polio
+   * Viral Hepatitis
+   * Typhoid
     **Importance:** Must Know
 
-11. 3.Intestinal infestations — Ascariasis, Hook worm ,Tape worm4. Emerging and re-emerging diseases.Explain Role of Ayurveda in Epidemics like COVID-19, Zika Virus , HIN1,H3N2,etc
+11. 3.Intestinal infestations
+   * Ascariasis
+   * Hook worm
+   * Tape worm
+
+
+12. Emerging and re-emerging diseases. Explain Role of Ayurveda in Epidemics like COVID-19, Zika Virus , HIN1,H3N2,etc
     **Importance:** Must Know
 
-12. 5.Sxually transmitted diseases (STDs) with prevention and control - HIV/ AIDS, Syphilis and Gonorrhea.
+12. 5.Sexually transmitted diseases (STDs) with prevention and control
+   * HIV/ AIDS
+   * Syphilis
+   * Gonorrhea.
     **Importance:** Must Know
 
-13. Explain the role of Ayurveda inthe prevention and control with recent research updates of Lifestyle diseases such as DM, Obesity, Coronary artery disease (CAD) and Cancer
+13. Explain the role of Ayurveda inthe prevention and control with recent research updates of Lifestyle diseases
+   * DM
+   * Obesity
+   * Coronary artery disease (CAD)
+   * Cancer
     **Importance:** Must Know
 
 ---

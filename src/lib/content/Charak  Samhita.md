@@ -348,7 +348,11 @@
 2. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-3. Explain basic meaning and importance of key terms such as prakritisama samaveta, vikirti vishama samaveta, ahara vidhi visesha ayatana, satmya
+3. Explain basic meaning and importance of key terms
+   * prakritisama samaveta
+   * vikirti vishama samaveta
+   * ahara vidhi visesha ayatana
+   * satmya
    **Importance:** Must Know
 
 4. Explain the prakrutisamasamavet and vikrutivishamasamavet siddhanta with suitable examples. Ch Vi 1/9,10
@@ -394,7 +398,11 @@
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-2. Explain basic meaning of key terms such as trividha kukshi, matra-amatra ahara, amadosha, amavisha
+2. Explain basic meaning of key terms
+   * trividha kukshi
+   * matra-amatra ahara
+   * amadosha
+   * amavisha
    **Importance:** Must Know
 
 3. Explain aharamatra based on trividha kukshi Ch Vi 2/3
@@ -748,7 +756,15 @@
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
 
-2. Explain basic meaning and importance of key terms such as matrija, pitrija, sattvaja, satmyaja, rasaja, atmaja bhavas, beeja and beejabhaga
+2. Explain basic meaning and importance of key terms
+   * matrija
+   * pitrija
+   * sattvaja
+   * satmyaja
+   * rasaja
+   * atmaja bhavas
+   * beeja
+   * beejabhaga
    **Importance:** Must Know
 
 3. Enlist factors responsible for the formation, growth of the embryo Cha Sha 3/3
@@ -893,7 +909,12 @@
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-2. Explain the basic meaning and importance of key terms in the chapter such as chetanaadishtana, pranayathana, koshtanga, pratyanga, anjali pramana etc.
+2. Explain the basic meaning and importance of key terms in the chapter
+   * chetanaadishtana
+   * pranayathana
+   * koshtanga
+   * pratyanga
+   * anjali pramana etc.
    **Importance:** Must Know
 
 3. Explain paramanu bheda shariram Ch Sha 7/17
@@ -937,7 +958,11 @@
 2. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-3. Explain basic meaning and importance of key terms such as arishta, vikritibheda, varna, swara etc. related to rishta
+3. Explain basic meaning and importance of key terms
+   * arishta
+   * vikritibheda
+   * varna
+   * swara etc. related to rishta
    **Importance:** Must Know
 
 4. Enlist factors for assessing rishta Ref: Ch. In 1/3
@@ -1173,7 +1198,15 @@
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
 
-2. Explain basic meaning and importance of key terms such as matrija, pitrija, sattvaja, satmyaja, rasaja, atmaja bhavas, beeja and beejabhaga
+2. Explain basic meaning and importance of key terms
+   * matrija
+   * pitrija
+   * sattvaja
+   * satmyaja
+   * rasaja
+   * atmaja bhavas
+   * beeja
+   * beejabhaga
    **Importance:** Must Know
 
 3. Enlist factors responsible for the formation, growth of the embryo Cha Sha 3/3
@@ -1318,7 +1351,12 @@
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-2. Explain the basic meaning and importance of key terms in the chapter such as chetanaadishtana, pranayathana, koshtanga, pratyanga, anjali pramana etc.
+2. Explain the basic meaning and importance of key terms in the chapter
+   * chetanaadishtana
+   * pranayathana
+   * koshtanga
+   * pratyanga
+   * anjali pramana etc.
    **Importance:** Must Know
 
 3. Explain paramanu bheda shariram Ch Sha 7/17
@@ -1362,7 +1400,11 @@
 2. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
 
-3. Explain basic meaning and importance of key terms such as arishta, vikritibheda, varna, swara etc. related to rishta
+3. Explain basic meaning and importance of key terms
+   * arishta
+   * vikritibheda
+   * varna
+   * swara etc. related to rishta
    **Importance:** Must Know
 
 4. Enlist factors for assessing rishta Ref: Ch. In 1/3
