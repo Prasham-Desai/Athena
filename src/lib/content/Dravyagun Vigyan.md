@@ -88,40 +88,26 @@
 
 1. Define Karma. Importance: Must Know
 2. Discuss Karma lakshana. Importance: Must Know
-3. Explain Deepan karma in relation with Appetizers. Importance: Must Know
-4. Critically analyze Deepan dravyas with its gunas and application in various clinical conditions. Importance: Must Know
-5. Explain Pachan karma in relation with Digestives. Importance: Must Know
-6. Critically analyze Pachan dravyas with gunas and discuss its application in various clinical conditions. Importance: Must Know
-7. Explain Samshodhan karma in relation with contemporary pharmacological action. Importance: Must Know
-8. Discuss Samshohan karma and its clinical application. Importance: Must Know
-9. Explain Samshamana karma in relation with contemporary pharmacological action. Importance: Must Know
-10. Describe Samshamana karma and its clinical application. Importance: Must Know
-11. Explain Anuloman karma in relation with Carminative. Importance: Must Know
-12. Describe Anuloman karma and its clinical application. Importance: Must Know
-13. Explain Sransana karma in relation with contemporary pharmacological action. Importance: Must Know
-14. Discuss Sransan karma and its clinical application. Importance: Must Know
-15. Explain Bhedana karma in relation with strong laxative action Importance: Must Know
-16. Discuss Bhedan karma and its clinical application. Importance: Must Know
-17. Explain Rechan karma in relation with Purgative. Importance: Must Know
-18. Discuss Rechan karma and its clinical application. Importance: Must Know
-19. Discuss Chhedan karma and its clinical application. Importance: Must Know
-20. Explain Lekhan karma in relation with contemporary pharmacological action. Importance: Must Know
-21. Discuss Lekhan karma and its clinical application. Importance: Must Know
-22. Explain Grahi karma in relation with contemporary pharmacological action bowel binding. Importance: Must Know
-23. Discuss of Grahi karma and its clinical application. Importance: Must Know
-24. Explain Stambhan karma in relation with contemporary pharmacological action. Importance: Must Know
-25. Discuss Stambhan karma and its clinical application. Importance: Must Know
-26. Discuss Madakari karma with examples. Importance: Must Know
-27. Discuss Pramathi karma and its clinical application. Importance: Must Know
-28. Discuss Abhishyandi karma with examples. Importance: Must Know
-29. Discuss Vyavayi karma with examples. Importance: Must Know
-30. Discuss Vikashi karma with examples. Importance: Must Know
-31. Explain Rasayan karma in relation with Rejuvenators. Importance: Must Know
-32. Analyze types of Rasayan dravyas with its gunas and discuss its clinical application with research updates. Importance: Must Know
-33. Explain Vajeekaran karma in relation with Aphrodisiacs. Importance: Must Know
-34. Critically Analyze the types of Vajeekaran dravyas with their guna karmas and discuss its clinical application with research updates Importance: Must Know
-35. Explain Medhya karma in relation with contemporary pharmacological actions. Importance: Must Know
-36. Critically analyze Medhya dravya and discuss its clinical application with research updates. Importance: Must Know
+3. Deepana. Importance: Must Know
+4. Pachana. Importance: Must Know
+5. Samshodhana. Importance: Must Know
+6. Samshamana. Importance: Must Know
+7. Anulomana. Importance: Must Know
+8. Sransana. Importance: Must Know
+9. Bhedana. Importance: Must Know
+10. Rechana. Importance: Must Know
+11. Chhedana. Importance: Must Know
+12. Lekhana. Importance: Must Know
+13. Grahi. Importance: Must Know
+14. Sthambhana. Importance: Must Know
+15. Madakari. Importance: Must Know
+16. Pramathi. Importance: Must Know
+17. Abhishyandi. Importance: Must Know
+18. Vyavayi. Importance: Must Know
+19. Vikashi. Importance: Must Know
+20. Rasayana. Importance: Must Know
+21. Vajeekarana. Importance: Must Know
+22. Medhya. Importance: Must Know
 
 ---
 
@@ -268,24 +254,105 @@
 
 ### 2. Dravya (Drug) Nama-Guna-Karma Jnana
 
-1. Specify useful parts with its Rasapanchaka of following drugs. Importance: Must Know
-2. Describe karma,agryakarma and dosha karma of following drugs. Importance: Must Know
-3. Explain Amayikaprayoga used in Vyadhi (Disease) pertaining to various Srotas and Vyadhiavastha (Stage). Importance: Must Know
-4. Indicate the Kalpana (dosage form), Matra (Dose), Anupana (Vehicle), Marga(Route), Sevana kala (Time of administration), Kalavadhi (Duration) and Pathya-pathya ) of following drugs. Importance: Must Know
-5. Enlist active phyto-constituents & important formulations Discuss research updates of following drugs. Importance: Must Know
-6. Enlist botanical name & family. Explain main synonyms as per Bruhatryees and Bhavaprakasha. Vernacular name (Hindi,English and local name) of following drugs. Importance: Must Know
-7. Demonstrate external morphology-habit, root, leaf, stem, flower, inflorescence, fruit, seed and officinal useful parts of following drugs. Importance: Must Know
-8. Describe varieties, grahyagrahyatwa Adulterants, substitute and toxic effects of following drugs wherever applicable Importance: Must Know
+1. Amalaki. Importance: Must Know
+2. Aragwadha. Importance: Must Know
+3. Arjuna. Importance: Must Know
+4. Ashoka. Importance: Must Know
+5. Ashwagandha. Importance: Must Know
+6. Ativisha. Importance: Must Know
+7. Bala. Importance: Must Know
+8. Beejaka. Importance: Must Know
+9. Bhallataka. Importance: Must Know
+10. Bharangi. Importance: Must Know
+11. Bhrungaraja. Importance: Must Know
+12. Bhumyamalaki. Importance: Must Know
+13. Bilva. Importance: Must Know
+14. Brahmi. Importance: Must Know
+15. Chandana. Importance: Must Know
+16. Chitraka. Importance: Must Know
+17. Dadima. Importance: Must Know
+18. Dhataki. Importance: Must Know
+19. Dhamasa. Importance: Must Know
+20. Eranda. Importance: Must Know
+21. Gokshura. Importance: Must Know
+22. Guduchi. Importance: Must Know
+23. Guggulu. Importance: Must Know
+24. Haridra. Importance: Must Know
+25. Haritaki. Importance: Must Know
+26. Hingu. Importance: Must Know
+27. Jambu. Importance: Must Know
+28. Jatamansi. Importance: Must Know
+29. Jyotishmati. Importance: Must Know
+30. Kanchanara. Importance: Must Know
+31. Kantakari. Importance: Must Know
+32. Kapikachhu. Importance: Must Know
+33. Karkatshrungi. Importance: Must Know
+34. Katuki. Importance: Must Know
+35. Khadira. Importance: Must Know
+36. Kumari. Importance: Must Know
+37. Kutaja. Importance: Must Know
+38. Latakaranja. Importance: Must Know
+39. Lodhra. Importance: Must Know
+40. Agnimanth. Importance: Must Know
+41. Ahiphena (NK). Importance: Must Know
+42. Ajamoda (DK). Importance: Must Know
+43. Apamarga (DK). Importance: Must Know
+44. Asthishrunkhala. Importance: Must Know
+45. Bakuchi. Importance: Must Know
+46. Bruhati. Importance: Must Know
+47. Chakramarda. Importance: Must Know
+48. Dhanyaka. Importance: Must Know
+49. Ela. Importance: Must Know
+50. Gambhari. Importance: Must Know
+51. Japa. Importance: Must Know
+52. Jatiphala. Importance: Must Know
+53. Jeeraka (DK). Importance: Must Know
+54. Kalamegha. Importance: Must Know
+55. Kampillaka. Importance: Must Know
+56. Kulatha (NK). Importance: Must Know
+57. Kumkum. Importance: Must Know
+58. Lajjalu. Importance: Must Know
+59. Lavanga. Importance: Must Know
 
 ---
 
 ### 3. Dravya (Drugs) Nama-Guna-Karma-Jnana
 
-1. Specify useful parts with its Rasapanchaka of following drugs Importance: Must Know
-2. Describe karma, agryakarma and dosha karma of following drugs. Importance: Must Know
-3. Explain Amayikaprayoga used in Vyadhi (Disease) pertaining to various Srotas and vyadhiavastha (Stage). Importance: Must Know
-4. Indicate the Kalpana(dosage form), Matra (Dose), Anupana (Vehicle), Marga (Route), Sevana kala (Time of administration), Kalavadhi (Duration) and Pathya-pathya ) of following drugs. Importance: Must Know
-5. Enlist active phyto-constituents & important formulations. Discuss research updates of following drugs. Importance: Must Know
-6. Enlist botanical name & family. Explain main Synonyms as per Bruhatryees and Bhavaprakasha. Vernacular name (Hindi, English and local name) of following drugs. Importance: Must Know
-7. Demonstrate external morphology-habit, root, leaf, stem, flower, inflorescence, fruit, seed and officinal useful parts of following drugs. Importance: Must Know
-8. Describe varieties, grhyahrahyatwa, adulterants, substitute and toxic effects of following drugs wherever applicable. Importance: Must Know
+1. Madanphala. Importance: Must Know
+2. Mandukaparni. Importance: Must Know
+3. Manjishta. Importance: Must Know
+4. Maricha. Importance: Must Know
+5. Meshashrungi. Importance: Must Know
+6. Methika. Importance: Must Know
+7. Musta. Importance: Must Know
+8. Nagkeshar. Importance: Must Know
+9. Nimba. Importance: Must Know
+10. Nirgundi. Importance: Must Know
+11. Palasha. Importance: Must Know
+12. Pashanabheda. Importance: Must Know
+13. Patha. Importance: Must Know
+14. Pippali. Importance: Must Know
+15. Punarnava. Importance: Must Know
+16. Rasna. Importance: Must Know
+17. Rasona. Importance: Must Know
+18. Sarapagandha. Importance: Must Know
+19. Sairayak. Importance: Must Know
+20. Sariva. Importance: Must Know
+21. Shallaki. Importance: Must Know
+22. Shalmali(Mocharasa). Importance: Must Know
+23. Shankhapushpi. Importance: Must Know
+24. Shatavari. Importance: Must Know
+25. Shigru. Importance: Must Know
+26. Shunthi. Importance: Must Know
+27. Talisapatra (NK). Importance: Must Know
+28. Trivrut. Importance: Must Know
+29. Tulasi. Importance: Must Know
+30. Twak. Importance: Must Know
+31. Usheera. Importance: Must Know
+32. Vacha. Importance: Must Know
+33. Varuna. Importance: Must Know
+34. Vasa. Importance: Must Know
+35. Vatsanabha. Importance: Must Know
+36. Vibhitaki. Importance: Must Know
+37. Vidanga. Importance: Must Know
+38. Yashtimadhu. Importance: Must Know
