@@ -227,6 +227,71 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
 }
 
 // ---------------------------------------------------------------------------
+// Importance Select dropdown
+// ---------------------------------------------------------------------------
+const IMPORTANCE_OPTIONS = [
+  { value: 'Must Know', label: 'Must Know', bg: 'bg-red-500/10', text: 'text-red-500', color: 'rgb(239, 68, 68)' },
+  { value: 'Required to Know', label: 'Required to Know', bg: 'bg-orange-500/10', text: 'text-orange-500', color: 'rgb(249, 115, 22)' },
+  { value: 'Desirable to Know', label: 'Desirable to Know', bg: 'bg-amber-500/10', text: 'text-amber-500', color: 'rgb(245, 158, 11)' },
+  { value: 'Not Specified', label: 'Not Specified', bg: 'bg-blue-500/10', text: 'text-blue-500', color: 'rgb(59, 130, 246)' },
+];
+
+function ImportanceSelect({ importance, onChange }: { importance?: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  
+  const current = IMPORTANCE_OPTIONS.find(o => o.value === importance) || IMPORTANCE_OPTIONS[3];
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      <button
+        onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+        className={cn(
+          'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all hover:opacity-80 shrink-0 cursor-pointer',
+          current.bg, current.text
+        )}
+      >
+        {current.label}
+        <ChevronDown className="w-2.5 h-2.5" />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            className="absolute left-0 top-full mt-1 z-20 min-w-[150px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl overflow-hidden"
+          >
+            {IMPORTANCE_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={(e) => { e.stopPropagation(); onChange(opt.value); setOpen(false); }}
+                className={cn(
+                  'w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[hsl(var(--muted))] transition-colors',
+                  opt.value === current.value && 'bg-[hsl(var(--muted))]'
+                )}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: opt.color }} />
+                {opt.label}
+                {opt.value === current.value && <Check className="w-3 h-3 ml-auto" />}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Topic Row
 // ---------------------------------------------------------------------------
 interface TopicRowProps {
@@ -348,21 +413,10 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             />
             <div className="flex items-center gap-2 flex-wrap">
               {/* Importance */}
-              {topic.importance && (
-                <InlineEdit
-                  value={topic.importance}
-                  onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
-                  className={cn(
-                    'text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0 hover:opacity-80 transition-opacity',
-                    topic.importance.toLowerCase().includes('must') 
-                      ? 'bg-red-500/10 text-red-500' 
-                      : topic.importance.toLowerCase().includes('desirable')
-                      ? 'bg-amber-500/10 text-amber-500'
-                      : 'bg-blue-500/10 text-blue-500'
-                  )}
-                  inputClassName="min-w-[120px] text-[10px]"
-                />
-              )}
+              <ImportanceSelect
+                importance={topic.importance}
+                onChange={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
+              />
               {/* Revision count */}
               {topic.revisionCount > 0 && (
                 <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
@@ -374,7 +428,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
           
           {/* Subtopics (Checkpoints) */}
           {topic.subtopics && topic.subtopics.length > 0 && (
-            <ul className="mt-3 space-y-2 pl-10 border-l-2 border-[hsl(var(--border))] ml-6 pb-2">
+            <ul className="mt-3 space-y-2 pl-4 border-l-2 border-[hsl(var(--border))]/50 ml-2 pb-2">
               {topic.subtopics.map((sub: any) => {
                 const isSubCompleted = sub.status === 'completed';
                 return (
