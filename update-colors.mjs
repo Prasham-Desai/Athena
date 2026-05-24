@@ -1,12 +1,9 @@
 import fs from 'fs';
 
 const colors = {
-  'Agad Tantra evam Vidhi Vaidyaka': { main: '#FF4D8D', glow: '#7A1CAC', text: '#FFB3C7' },
-  'Charak Samhita': { main: '#00D1C7', glow: '#0061FF', text: '#8FFFEF' },
-  'Dravyaguna Vigyan': { main: '#F7B500', glow: '#8A5A00', text: '#FFE28A' },
-  'Rasashastra evam Bhaishajyakalpana': { main: '#A855F7', glow: '#4338CA', text: '#D8B4FE' },
-  'Roga Nidan evam Vikriti Vigyan': { main: '#FF6B6B', glow: '#C44569', text: '#FFC2C2' },
-  'Swasthavritta evam Yoga': { main: '#2DD4BF', glow: '#0F766E', text: '#99F6E4' },
+  'Agad Tantra evam Vidhi Vaidyaka': { main: '#E11D48', glow: '#881337', text: '#FDA4AF' },
+  'Charak Samhita': { main: '#F59E0B', glow: '#78350F', text: '#FDE68A' },
+  'Dravyaguna Vigyan': { main: '#4F46E5', glow: '#312E81', text: '#C7D2FE' }
 };
 
 let content = fs.readFileSync('src/lib/curriculum-data.ts', 'utf-8');
@@ -24,15 +21,11 @@ for (const [name, palette] of Object.entries(colors)) {
     const colorRegex = /"color": "#[A-Fa-f0-9]+"/;
     snippet = snippet.replace(colorRegex, `"color": "${palette.main}"`);
     
-    // Find details
-    const detailsIndex = snippet.indexOf('"details": {');
-    if (detailsIndex !== -1) {
-      let insertPos = detailsIndex + '"details": {'.length;
-      let newSnippet = snippet.slice(0, insertPos) + 
-        `\n      "secondaryGlow": "${palette.glow}",\n      "textAccent": "${palette.text}",` + 
-        snippet.slice(insertPos);
-      content = content.substring(0, index) + newSnippet + content.substring(nextChapters);
-    }
+    // Replace details secondaryGlow and textAccent
+    snippet = snippet.replace(/"secondaryGlow": "#[A-Fa-f0-9]+"/, `"secondaryGlow": "${palette.glow}"`);
+    snippet = snippet.replace(/"textAccent": "#[A-Fa-f0-9]+"/, `"textAccent": "${palette.text}"`);
+    
+    content = content.substring(0, index) + snippet + content.substring(nextChapters);
   }
 }
 
