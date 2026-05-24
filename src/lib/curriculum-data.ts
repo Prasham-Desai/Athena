@@ -14818,14 +14818,14 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "importance": "Must Know"
           },
           {
-            "id": "6fa7eb19",
-            "name": "Describe the parameters of Rogi bala Pareeksha - Prakruti, Sara, Samhanana, Pramana, Satmya, Satwa, Aahara shakti, Vyayama shakti, Vaya and other factors such as Aushadha kshama dehatva, Yuvajatva, Pumjatvam, Vishayanasakta indriyajatva, Padasampad bhavatvam, and Anukoola grahatva, etc.",
+            "id": "2e537ecd",
+            "name": "Describe the parameters of Rogi bala Pareeksha:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 1,
-            "notes": "",
+            "notes": "* Prakruti, Sara, Samhanana, Pramana, Satmya, Satwa, Aahara shakti, Vyayama shakti, Vaya\n* Other factors such as Aushadha kshama dehatva, Yuvajatva, Pumjatvam, Vishayanasakta indriyajatva, Padasampad bhavatvam, and Anukoola grahatva, etc.",
             "completedAt": null,
             "importance": "Must Know"
           }
@@ -15204,14 +15204,14 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "importance": "Desirable to Know"
           },
           {
-            "id": "4b228871",
-            "name": "Describe the parameters to be assessed for Vyadhi bala - Exposure to Nidana, Samprapti, Poorvaroopa, Roopa, Upadrava, Tulya dosha - dushyatvam, Atulya ritu, Number of dosha involved, Number of Rogamarga involved, Kala, Desha, Prakruti, Involvement of Marma and other factors",
+            "id": "807a7206",
+            "name": "Describe the parameters to be assessed for Vyadhi bala:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 1,
-            "notes": "",
+            "notes": "* Exposure to Nidana, Samprapti, Poorvaroopa, Roopa, Upadrava\n* Tulya dosha - dushyatvam, Atulya ritu\n* Number of dosha involved, Number of Rogamarga involved\n* Kala, Desha, Prakruti, Involvement of Marma and other factors",
             "completedAt": null,
             "importance": "Desirable to Know"
           }
@@ -17618,38 +17618,38 @@ export const INITIAL_SUBJECTS: Subject[] = [
         "estimatedMarks": null,
         "topics": [
           {
-            "id": "667c0d00",
-            "name": "Describe the clinical features of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis",
+            "id": "8239aa5f",
+            "name": "Describe the clinical features of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 0,
-            "notes": "",
+            "notes": "* Allergic disorders - Eczema, Urticaria\n* Squamous lesions - Psoriasis, Lichen planus\n* Bullous lesion — Pemphigus and Pemphigoid\n* Mycotic skin diseases\n* Leprosy\n* Vitiligo\n* Cellulitis",
             "completedAt": null,
             "importance": "Desirable to Know"
           },
           {
-            "id": "b35b81b2",
-            "name": "Perform relevant clinical examination of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis",
+            "id": "bf5e9592",
+            "name": "Perform relevant clinical examination of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 1,
-            "notes": "",
+            "notes": "* Allergic disorders - Eczema, Urticaria\n* Squamous lesions - Psoriasis, Lichen planus\n* Bullous lesion — Pemphigus and Pemphigoid\n* Mycotic skin diseases\n* Leprosy\n* Vitiligo\n* Cellulitis",
             "completedAt": null,
             "importance": "Desirable to Know"
           },
           {
-            "id": "7dcae9d1",
-            "name": "Order and interpret relevant investigations of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis",
+            "id": "423fc585",
+            "name": "Order and interpret relevant investigations of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 2,
-            "notes": "",
+            "notes": "* Allergic disorders - Eczema, Urticaria\n* Squamous lesions - Psoriasis, Lichen planus\n* Bullous lesion — Pemphigus and Pemphigoid\n* Mycotic skin diseases\n* Leprosy\n* Vitiligo\n* Cellulitis",
             "completedAt": null,
             "importance": "Desirable to Know"
           }
@@ -18388,38 +18388,38 @@ export const INITIAL_SUBJECTS: Subject[] = [
         "estimatedMarks": null,
         "topics": [
           {
-            "id": "6b6ab99c",
-            "name": "Describe the clinical features of Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy",
+            "id": "299e707c",
+            "name": "Describe the clinical features of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 0,
-            "notes": "",
+            "notes": "* Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome\n* Muscular diseases - Muscular Dystrophy",
             "completedAt": null,
             "importance": "Desirable to Know"
           },
           {
-            "id": "84826717",
-            "name": "Perform relevant clinical examination of Diseases of bone and Joints - Osteoarthritis, Osteoporosis. Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy",
+            "id": "dc18a720",
+            "name": "Perform relevant clinical examination of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 1,
-            "notes": "",
+            "notes": "* Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome\n* Muscular diseases - Muscular Dystrophy",
             "completedAt": null,
             "importance": "Desirable to Know"
           },
           {
-            "id": "5c26e849",
-            "name": "Order and interpret relevant investigations of Diseases of bone and Joints - Osteoarthritis, Osteoporosis. Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy",
+            "id": "e3a4583d",
+            "name": "Order and interpret relevant investigations of:",
             "status": "not-started",
             "revisionCount": 0,
             "lastRevised": null,
             "nextRevisionDue": null,
             "order": 2,
-            "notes": "",
+            "notes": "* Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome\n* Muscular diseases - Muscular Dystrophy",
             "completedAt": null,
             "importance": "Desirable to Know"
           }

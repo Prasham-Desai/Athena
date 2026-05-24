@@ -199,7 +199,10 @@
 ### 21. Rogi bala Pareeksha
 
 1. Describe the importance of Rogi bala Pareeksha Importance: Must Know
-2. Describe the parameters of Rogi bala Pareeksha - Prakruti, Sara, Samhanana, Pramana, Satmya, Satwa, Aahara shakti, Vyayama shakti, Vaya and other factors such as Aushadha kshama dehatva, Yuvajatva, Pumjatvam, Vishayanasakta indriyajatva, Padasampad bhavatvam, and Anukoola grahatva, etc. Importance: Must Know
+2. Describe the parameters of Rogi bala Pareeksha:
+   * Prakruti, Sara, Samhanana, Pramana, Satmya, Satwa, Aahara shakti, Vyayama shakti, Vaya
+   * Other factors such as Aushadha kshama dehatva, Yuvajatva, Pumjatvam, Vishayanasakta indriyajatva, Padasampad bhavatvam, and Anukoola grahatva, etc.
+   **Importance:** Must Know
 
 ### 22. Dhatu Paka
 
@@ -242,7 +245,12 @@
 ### 26. Vyadhi bala pareeksha
 
 1. Describe Vikrititaha Pareeksha with its importance Importance: Desirable to Know
-2. Describe the parameters to be assessed for Vyadhi bala - Exposure to Nidana, Samprapti, Poorvaroopa, Roopa, Upadrava, Tulya dosha - dushyatvam, Atulya ritu, Number of dosha involved, Number of Rogamarga involved, Kala, Desha, Prakruti, Involvement of Marma and other factors Importance: Desirable to Know
+2. Describe the parameters to be assessed for Vyadhi bala:
+   * Exposure to Nidana, Samprapti, Poorvaroopa, Roopa, Upadrava
+   * Tulya dosha - dushyatvam, Atulya ritu
+   * Number of dosha involved, Number of Rogamarga involved
+   * Kala, Desha, Prakruti, Involvement of Marma and other factors
+   **Importance:** Desirable to Know
 
 ### 27. Sadhyasadhyatva — Prognosis
 
@@ -523,9 +531,33 @@
 
 ### 33. Skin diseases
 
-1. Describe the clinical features of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis Importance: Desirable to Know
-2. Perform relevant clinical examination of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis Importance: Desirable to Know
-3. Order and interpret relevant investigations of Allergic disorders - Eczema, Urticaria; Squamous lesions - Psoriasis, Lichen planus; Bullous lesion — Pemphigus and Pemphigoid; Mycotic skin diseases; Leprosy; Vitiligo; Cellulitis Importance: Desirable to Know
+1. Describe the clinical features of:
+   * Allergic disorders - Eczema, Urticaria
+   * Squamous lesions - Psoriasis, Lichen planus
+   * Bullous lesion — Pemphigus and Pemphigoid
+   * Mycotic skin diseases
+   * Leprosy
+   * Vitiligo
+   * Cellulitis
+   **Importance:** Desirable to Know
+2. Perform relevant clinical examination of:
+   * Allergic disorders - Eczema, Urticaria
+   * Squamous lesions - Psoriasis, Lichen planus
+   * Bullous lesion — Pemphigus and Pemphigoid
+   * Mycotic skin diseases
+   * Leprosy
+   * Vitiligo
+   * Cellulitis
+   **Importance:** Desirable to Know
+3. Order and interpret relevant investigations of:
+   * Allergic disorders - Eczema, Urticaria
+   * Squamous lesions - Psoriasis, Lichen planus
+   * Bullous lesion — Pemphigus and Pemphigoid
+   * Mycotic skin diseases
+   * Leprosy
+   * Vitiligo
+   * Cellulitis
+   **Importance:** Desirable to Know
 
 ### 34. Galaganda
 
@@ -611,9 +643,18 @@
 
 ### 44. Diseases of bone, joints, and muscles
 
-1. Describe the clinical features of Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy Importance: Desirable to Know
-2. Perform relevant clinical examination of Diseases of bone and Joints - Osteoarthritis, Osteoporosis. Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy Importance: Desirable to Know
-3. Order and interpret relevant investigations of Diseases of bone and Joints - Osteoarthritis, Osteoporosis. Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome; Muscular diseases - Muscular Dystrophy Importance: Desirable to Know
+1. Describe the clinical features of:
+   * Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome
+   * Muscular diseases - Muscular Dystrophy
+   **Importance:** Desirable to Know
+2. Perform relevant clinical examination of:
+   * Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome
+   * Muscular diseases - Muscular Dystrophy
+   **Importance:** Desirable to Know
+3. Order and interpret relevant investigations of:
+   * Diseases of bone and Joints - Osteoarthritis, Osteoporosis, Frozen Shoulder, Calcaneal spur/ Plantar fasciitis, Tennis elbow, Carpel tunnel syndrome
+   * Muscular diseases - Muscular Dystrophy
+   **Importance:** Desirable to Know
 
 ### 45. Amavata
 

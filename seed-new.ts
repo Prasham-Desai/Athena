@@ -39,8 +39,13 @@ for (const file of files) {
   let subjectId = '';
   let currentPaper = 'Paper 1';
   let chapterId = '';
+  let topicId = '';
   let topicOrder = 0;
   let chapterOrder = 0;
+  
+  let currentTopicName = '';
+  let currentTopicImportance = null;
+  let currentTopicNotes = '';
 
   const subjectName = file.replace('.md', '');
   subjectId = generateId();
@@ -52,22 +57,30 @@ for (const file of files) {
   sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}');\n`;
   chapterOrder = 0;
 
+  function flushTopic() {
+    if (topicId) {
+      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, ${currentTopicImportance ? `'${escapeSql(currentTopicImportance)}'` : 'NULL'}, '${escapeSql(currentTopicNotes)}');\n`;
+    }
+    topicId = '';
+    currentTopicName = '';
+    currentTopicImportance = null;
+    currentTopicNotes = '';
+  }
+
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    // Ignore # Subject Name inside the file since we use the filename
     if (trimmed.startsWith('# ')) {
       continue;
     }
-    // ## Paper X
     else if (trimmed.startsWith('## ')) {
+      flushTopic();
       currentPaper = trimmed.replace('## ', '').trim();
     }
-    // ### Chapter (was previously Topic in markdown)
     else if (trimmed.startsWith('### ')) {
+      flushTopic();
       let chapterName = trimmed.replace('### ', '').trim();
-      // Remove leading number like "1. " and "Topic 1: " or "Topic 1 "
       chapterName = chapterName.replace(/^[0-9]+\.\s*/, '').replace(/^Topic\s+[0-9]+:?\s*/i, '');
       chapterId = generateId();
 
@@ -75,24 +88,38 @@ for (const file of files) {
       chapterOrder++;
       topicOrder = 0;
     }
-    // 1. Topic (was previously Subtopic in user terminology)
     else if (/^[0-9]+\.\s/.test(trimmed)) {
+      flushTopic();
       if (!chapterId) continue;
       
       let topicStr = trimmed.replace(/^[0-9]+\.\s*/, '').trim();
-      let importance = null;
       
       const match = topicStr.match(/(?:— |-\s*)?Importance:\s*(.*)$/i);
       if (match) {
-        importance = match[1].trim();
+        currentTopicImportance = match[1].trim();
         topicStr = topicStr.replace(/(?:— |-\s*)?Importance:\s*(.*)$/i, '').trim();
       }
 
-      const topicId = generateId();
-      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance) VALUES ('${topicId}', '${chapterId}', '${escapeSql(topicStr)}', ${topicOrder}, 'not-started', 0, ${importance ? `'${escapeSql(importance)}'` : 'NULL'});\n`;
+      topicId = generateId();
+      currentTopicName = topicStr;
       topicOrder++;
     }
+    else if (trimmed.startsWith('* ')) {
+      if (topicId) {
+        if (currentTopicNotes) currentTopicNotes += '\n';
+        currentTopicNotes += trimmed;
+      }
+    }
+    else if (trimmed.match(/\*\*Importance:\*\*\s*(.*)$/i) || trimmed.match(/Importance:\s*(.*)$/i)) {
+      if (topicId) {
+        const match = trimmed.match(/(?:\*\*Importance:\*\*|Importance:)\s*(.*)$/i);
+        if (match) {
+           currentTopicImportance = match[1].trim();
+        }
+      }
+    }
   }
+  flushTopic();
 }
 
 fs.writeFileSync(path.join(__dirname, 'seed-new.sql'), sql);
