@@ -1,1124 +1,291 @@
-# Dravyaguna Vigyan (AyUG-DG)
+# Dravyaguna
 
-## Subject Details
+## Paper 1
 
-| Field                         | Value             |
-| ----------------------------- | ----------------- |
-| Subject Name                  | Dravyaguna Vigyan |
-| Subject Code                  | AyUG-DG           |
-| Total Teaching Hours          | 400               |
-| Lecture Hours (Theory)        | 150               |
-| Paper I Lecture Hours         | 75                |
-| Paper II Lecture Hours        | 75                |
-| Non Lecture Hours (Theory)    | 75                |
-| Non Lecture Hours (Practical) | 175               |
-| Theory Marks                  | 200               |
-| Practical + Viva + IA         | 200               |
-| Total Marks                   | 400               |
+### 1. Dravyaguna Vigyana
 
-Source: 
+1. Define Dravyaguna Vigyana. Importance: Must Know
+2. Explain the role of Dravyaguna Vigyana in clinical practice. Importance: Must Know
 
 ---
 
-══════════════════════════════════════
-PAPER 1
-Fundamental Dravyaguna
-══════════════════════════════════════
+### 2. Dravya
+
+1. Classify Dravya based on Utpatti, Yonibheda, Prayogabheda & Prabhavbheda. Importance: Must Know
+2. Classify Dravya based on Doshaghnabheda, Rasabheda, Karmbheda (Dashemani & Sushrutokta Gana) Importance: Must Know
+3. Describe Panchabhoutikatwa of Dravya. Importance: Must Know
 
 ---
 
-# Chapter 1 — Dravyaguna Vigyana
+### 3. Guna
 
-**Expected Marks:** 1
-**Weightage:** Medium
-**Importance Type:** Must Know
-
-## 1.1 Definition of Dravyaguna Vigyana
-
-## 1.2 Role of Dravyaguna Vigyana in Clinical Practice
-
-### Learning Objectives
-
-* Define Dravyaguna Vigyana
-* Explain role in clinical practice
-
-Source: 
+1. Define Guna and describe its Panchabhoutikatva. Importance: Must Know
+2. State characteristics of Gurvadi Guna. Importance: Must Know
+3. Discuss Gurvadiguna in context to its Karma on Dosha, Dhatu and Mala with examples. Importance: Must Know
+4. Enumarate & Summarize, clinical application of Gurvadi Guna with research updates. Importance: Must Know
+5. Enlist Paradiguna with examples. Importance: Must Know
+6. Interpret clinical applications of Paradiguna. Importance: Must Know
+7. Discuss research updates of Paradiguna. Importance: Must Know
 
 ---
 
-# Chapter 2 — Dravya
+### 4. Rasa
 
-**Expected Marks:** 6
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 2.1 Panchabhoutikatwa of Dravya
-
-## 2.2 Classification of Dravya
-
-### Based on:
-
-* Utpattibheda
-* Yonibheda
-* Prayogabheda
-* Prabhavabheda
-* Doshaghnabheda
-* Rasabheda
-* Karmabheda
-
-### Includes
-
-* Dashemani Gana
-* Sushrutokta Gana
-
-### Learning Objectives
-
-* Classify Dravya according to different criteria
-* Describe Panchabhoutikatwa of Dravya
-
-Source: 
-
+1. Define Rasa and interpret Meaning of "Rasa" in various contexts. Importance: Must Know
+2. Classify and compare shadarasa in relative correlation with taste of chemical constituents. Importance: Must Know
+3. State Rasa Utpatti and Panchabhoutika constitution of Shadrasa. Importance: Must Know
+4. Discuss Rasopalabdhi. Importance: Must Know
+5. Interpret pathway of taste perception & sites of taste receptors in the body Importance: Must Know
+6. Describe Guna and Lakshana of each Rasa. Importance: Must Know
+7. Explain karma of each rasa on Dosha, Dhatu and Mala with examples. Importance: Must Know
+8. Discuss Atiyoga of each rasa. Importance: Must Know
+9. Interpret Clinical application of each rasa. Importance: Must Know
+10. Discuss research updates of Shadrasa. Importance: Must Know
+11. Define Anurasa. Importance: Must Know
+12. Interpret relevance of Anurarasa in clinical practice. Importance: Must Know
+13. Describe with justification Rasa sevanakrama as Aushadha. Importance: Must Know
 
 ---
 
-# Chapter 3 — Guna
+### 5. Vipaka
 
-**Expected Marks:** 11
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 3.1 Panchabhoutikatva of Guna
-
-## 3.2 Characteristics and Classification of Guna
-
-## 3.3 Gurvadi Guna
-
-### Includes
-
-* Karma on Dosha
-* Karma on Dhatu
-* Karma on Mala
-* Clinical Application
-* Research Updates
-
-## 3.4 Paradiguna
-
-### Includes
-
-* Examples
-* Clinical Applications
-* Research Updates
-
-### Learning Objectives
-
-* Define Guna
-* Describe Panchabhoutikatva
-* Discuss Gurvadi Guna
-* Interpret clinical applications of Paradiguna
-* Discuss research updates
-
-Source: 
-
+1. Define Vipaka. Importance: Must Know
+2. State Vipaka lakshana. Importance: Must Know
+3. Describe the action of Trividha Vipaka on Dosha, Dhatu and Mala with examples. Importance: Must Know
+4. Interpret clinical application of Vipaka. Importance: Must Know
+5. State Research updates of Vipaka. Importance: Must Know
+6. Explain Vipakopalabdhi (Determination of Vipaka) and Taratamya (Degree of variation). Importance: Must Know
 
 ---
 
-# Chapter 4 — Rasa
+### 6. Virya
 
-**Expected Marks:** 11
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 4.1 Meaning of “Rasa” in Various Contexts
-
-## 4.2 Shadrasa in Relative Correlation with Taste of Chemical Constituents
-
-## 4.3 Rasotpatti
-
-## 4.4 Panchabhoutika Constitution of Shadrasa
-
-## 4.5 Rasopalabdhi
-
-## 4.6 Pathway of Taste Perception
-
-## 4.7 Sites of Taste Receptors in Body
-
-## 4.8 Rasa Lakshana
-
-## 4.9 Guna of Each Rasa
-
-## 4.10 Karma of Each Rasa on:
-
-* Dosha
-* Dhatu
-* Mala
-
-## 4.11 Atiyoga Lakshana
-
-## 4.12 Clinical Application of Shadrasa
-
-## 4.13 Research Updates of Shadrasa
-
-## 4.14 Anurasa
-
-## 4.15 Rasa Sevanakrama of Aushadha
-
-### Learning Objectives
-
-* Define Rasa
-* Explain Rasopalabdhi
-* Interpret taste perception
-* Describe Lakshana and Karma of each Rasa
-* Discuss Atiyoga
-* Explain clinical applications
-* Explain research updates
-* Define Anurasa
-* Explain relevance of Anurasa in clinical practice
-* Describe Rasa Sevanakrama as Aushadha
-
-Source: 
-# Chapter 5 — Vipaka
-
-**Expected Marks:** 6
-**Weightage:** Very High
-**Importance Type:** Must Know
-
-## 5.1 Trividha Vipaka
-
-## 5.2 Vipaka Karma on:
-
-* Dosha
-* Dhatu
-* Mala
-
-## 5.3 Clinical Application of Vipaka
-
-## 5.4 Research Updates of Vipaka
-
-## 5.5 Vipakopalabdhi
-
-### Includes
-
-* Determination of Vipaka
-* Taratamya (Degree of Variation)
-
-### Learning Objectives
-
-* Define Vipaka
-* State Vipaka Lakshana
-* Describe action of Trividha Vipaka
-* Interpret clinical application
-* Explain Vipakopalabdhi
-* Explain Taratamya
-* Discuss research updates
-
-Source: 
-
+1. Define the lakshanas of Virya. Importance: Must Know
+2. Differentiate Guna and virya. Importance: Must Know
+3. Discuss Karma of Virya on Dosha, Dhatu and Mala. Importance: Must Know
+4. Explain clinical application of Virya. Importance: Must Know
+5. Discuss research updates of Virya. Importance: Must Know
+6. Discuss Viryaopalabdhi (Determination of Virya). Importance: Must Know
 
 ---
 
-# Chapter 6 — Virya
+### 7. Prabhava
 
-**Expected Marks:** 6
-**Weightage:** Very High
-**Importance Type:** Must Know
-
-## 6.1 Difference between Guna and Virya
-
-## 6.2 Karma of Virya on:
-
-* Dosha
-* Dhatu
-* Mala
-
-## 6.3 Clinical Application of Virya
-
-## 6.4 Research Updates of Virya
-
-## 6.5 Viryaopalabdhi
-
-### Includes
-
-* Determination of Virya
-* Understanding Virya with respect to actions of active constituents
-
-### Learning Objectives
-
-* Define Lakshanas of Virya
-* Differentiate Guna and Virya
-* Explain clinical application
-* Discuss Karma on Dosha, Dhatu and Mala
-* Discuss research updates
-* Discuss Viryaopalabdhi
-
-Source: 
-
+1. Define and explain Prabhava with examples. Importance: Must Know
+2. Describe Samanapratyayarabdha and Vichitrapratyayarabdha with examples. Importance: Must Know
+3. Explain clinical application of Prabhava. Importance: Must Know
+4. Discuss research updates of Prabhava. Importance: Must Know
 
 ---
 
-# Chapter 7 — Prabhava
+### 8. Interrelation of Rasa-Guna-Virya-Vipaka-Prabhava
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 7.1 Samanapratyayarabdha
-
-## 7.2 Vichitrapratyayarabdha
-
-## 7.3 Clinical Application of Prabhava
-
-## 7.4 Research Updates of Prabhava
-
-### Learning Objectives
-
-* Define Prabhava
-* Explain Prabhava with examples
-* Describe Samanapratyayarabdha
-* Describe Vichitrapratyayarabdha
-* Explain clinical application
-* Discuss research updates
-
-Source: 
-
+1. Interpret the interrelation of Rasa-Guna-Virya-Vipaka-Prabhava with respect to their strength- Pharmacodynamics. Importance: Must Know
 
 ---
 
-# Chapter 8 — Interrelation of Rasa-Guna-Virya-Vipaka-Prabhava
+### 9. Karma
 
-**Expected Marks:** 1
-**Weightage:** Medium
-**Importance Type:** Must Know
-
-## 8.1 Interrelation of:
-
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Prabhava
-
-## 8.2 Pharmacodynamics Based on Relative Strength
-
-### Learning Objectives
-
-* Interpret interrelation of:
-
-  * Rasa
-  * Guna
-  * Virya
-  * Vipaka
-  * Prabhava
-* Explain pharmacodynamic importance
-
-Source: 
-
-
----
-
-# Chapter 9 — Karma
-
-**Expected Marks:** 11
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 9.1 Individual Karma
-
-### Includes
-
-* Correlation with contemporary pharmacological action
-* Examples
-* Clinical applications
-* Research updates
+1. Define Karma. Importance: Must Know
+2. Discuss Karma lakshana. Importance: Must Know
+3. Explain Deepan karma in relation with Appetizers. Importance: Must Know
+4. Critically analyze Deepan dravyas with its gunas and application in various clinical conditions. Importance: Must Know
+5. Explain Pachan karma in relation with Digestives. Importance: Must Know
+6. Critically analyze Pachan dravyas with gunas and discuss its application in various clinical conditions. Importance: Must Know
+7. Explain Samshodhan karma in relation with contemporary pharmacological action. Importance: Must Know
+8. Discuss Samshohan karma and its clinical application. Importance: Must Know
+9. Explain Samshamana karma in relation with contemporary pharmacological action. Importance: Must Know
+10. Describe Samshamana karma and its clinical application. Importance: Must Know
+11. Explain Anuloman karma in relation with Carminative. Importance: Must Know
+12. Describe Anuloman karma and its clinical application. Importance: Must Know
+13. Explain Sransana karma in relation with contemporary pharmacological action. Importance: Must Know
+14. Discuss Sransan karma and its clinical application. Importance: Must Know
+15. Explain Bhedana karma in relation with strong laxative action Importance: Must Know
+16. Discuss Bhedan karma and its clinical application. Importance: Must Know
+17. Explain Rechan karma in relation with Purgative. Importance: Must Know
+18. Discuss Rechan karma and its clinical application. Importance: Must Know
+19. Discuss Chhedan karma and its clinical application. Importance: Must Know
+20. Explain Lekhan karma in relation with contemporary pharmacological action. Importance: Must Know
+21. Discuss Lekhan karma and its clinical application. Importance: Must Know
+22. Explain Grahi karma in relation with contemporary pharmacological action bowel binding. Importance: Must Know
+23. Discuss of Grahi karma and its clinical application. Importance: Must Know
+24. Explain Stambhan karma in relation with contemporary pharmacological action. Importance: Must Know
+25. Discuss Stambhan karma and its clinical application. Importance: Must Know
+26. Discuss Madakari karma with examples. Importance: Must Know
+27. Discuss Pramathi karma and its clinical application. Importance: Must Know
+28. Discuss Abhishyandi karma with examples. Importance: Must Know
+29. Discuss Vyavayi karma with examples. Importance: Must Know
+30. Discuss Vikashi karma with examples. Importance: Must Know
+31. Explain Rasayan karma in relation with Rejuvenators. Importance: Must Know
+32. Analyze types of Rasayan dravyas with its gunas and discuss its clinical application with research updates. Importance: Must Know
+33. Explain Vajeekaran karma in relation with Aphrodisiacs. Importance: Must Know
+34. Critically Analyze the types of Vajeekaran dravyas with their guna karmas and discuss its clinical application with research updates Importance: Must Know
+35. Explain Medhya karma in relation with contemporary pharmacological actions. Importance: Must Know
+36. Critically analyze Medhya dravya and discuss its clinical application with research updates. Importance: Must Know
 
 ---
 
-## 9.2 Deepana
+### 10. Karmas of Dashemani Gana
 
-### Includes
-
-* Relation with Appetizers
-* Deepana Dravyas
-* Clinical Application
+1. Discuss Charakokta Dashemani karmas with their rasa, guna, vipak, virya, dhosha karma, botanical identity & pharmaco therapeutic action of individual drugs. Importance: Must Know
 
 ---
 
-## 9.3 Pachana
+### 11. Principles of General Pharmacology
 
-### Includes
-
-* Relation with Digestives
-* Pachana Dravyas
-* Clinical Application
-
----
-
-## 9.4 Samshodhana
-
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
-
----
-
-## 9.5 Samshamana
-
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
+1. Define Pharmacology and discuss Principles of general Pharmacology. Importance: Must Know
+2. Discuss drug definition, drug dosage forms and route of drug administration. Importance: Must Know
+3. Explain pharmacokinetics (ADME) drug and pharmacodynamics. Importance: Must Know
+4. Discuss Drug dose, Principles of drug action, Mechanism of drug action & Bioavailability Importance: Must Know
+5. Define, Describe mode of action & Discuss types with examples of following drugs acting on CNS with examples of Anaesthetics, Sedative-Hypnotic, Antiepileptic, Antiparkinsonian, Antidepressants, Antianxiety and Opioid Analgesics Drugs Importance: Must Know
+6. Define, Describe mode of action & Discuss types with examples of following drugs acting on Peripheral (somatic) Nervous System with examples of Skeletal Muscle Relaxants and Local Anaesthetics Drugs. Importance: Must Know
+7. Define, Describe mode of action & Discuss types with examples of following drugs acting on Autacoids and Related of Nonsteroidal Antiinflammatory (NSAIDs), Antipyretic and Analgesics Drug Importance: Must Know
+8. Define, Describe mode of action & Discuss types with examples of following drugs acting on Respiratory Disorders - Bronchodialators, Aerosols/ Inhalants, Expectorants and Anti tussives Drugs Importance: Must Know
+9. Define, Describe mode of action & Discuss types with examples of following drugs acting on Cardiovascular Drugs as Antihypertensive and Antianginal Drugs Importance: Must Know
+10. Define, Describe mode of action & Discuss types with examples of following drugs acting on Kidney as Diuretics Importance: Must Know
+11. Define, Describe mode of action & Discuss types with examples of following drugs acting as Haematinics, Coagulants, Anticoagulants and Hypolipidaemic Drugs Importance: Must Know
+12. Define, Describe mode of action & Discuss types with examples of following drugs acting on Gastrointestinal tract as Antacid, Carminatives, Digestants, Antiemetics, Laxatives, Antidiarrhoeal and Hepatoprotective Drugs Importance: Must Know
+13. Define, Describe mode of action & Discuss types with examples of following drugs acting as Antibiotics and Antitubercular. Importance: Must Know
+14. Define, Describe mode of action & Discuss types with examples of following drugs acting as Antifungal, Antiviral, Antimalarial and Anthelmintic Drugs Importance: Must Know
+15. Define, Describe mode of action & Discuss types with examples of following drugs acting on Hormones and Related Drugs as Thyroid Hormone, Thyroid Inhibitors, Insulins, Oral Antidiabetic, Hormonal Contraceptives, Uterine Stimulants and Uterine Relaxants Drugs. Importance: Must Know
+16. Define, Describe mode of action & Discuss types with examples of following drugs acting on as Antiseptics , Disinfectants, Vaccines, Vitamins, Water imbalance and IV Importance: Must Know
 
 ---
 
-## 9.6 Anulomana
+### 12. Mishraka Gana
 
-### Includes
-
-* Relation with Carminatives
-* Clinical Application
-
----
-
-## 9.7 Sransana
-
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
-
----
-
-## 9.8 Bhedana
-
-### Includes
-
-* Strong Laxative Action
-* Clinical Application
-
----
-
-## 9.9 Rechana
-
-### Includes
-
-* Relation with Purgatives
-* Clinical Application
-
----
-
-## 9.10 Chhedana
-
-### Includes
-
-* Clinical Application
+1. Explain Brihatpanchamoola composition. Importance: Must Know
+2. Describe Guna karma and combined therapeutic effect of Brihatpanchamoola. Importance: Must Know
+3. Explain Laghupanchamoola composition. Importance: Must Know
+4. Describe Guna karma and combined therapeutic effect of Laghupanchamoola. Importance: Must Know
+5. Explain Vallipanchamoola composition. Importance: Must Know
+6. Describe Guna karma and combined therapeutic effect of Vallipanchamoola. Importance: Must Know
+7. Explain Kantakapanchamoola composition. Importance: Must Know
+8. Describe Guna karma and combined therapeutic effect of Kantakapanchamoola. Importance: Must Know
+9. Explain Trinapanchamoola composition. Importance: Must Know
+10. Describe Guna karma and combined therapeutic effect of Trinapanchamoola. Importance: Must Know
+11. Explain Panchavalkala composition. Importance: Must Know
+12. Describe Guna karma and combined therapeutic effect of Panchavalkala. Importance: Must Know
+13. Explain Triphala composition Importance: Must Know
+14. Describe Guna karma and combined therapeutic effect of Triphala. Importance: Must Know
+15. Explain Trikatu composition. Importance: Must Know
+16. Describe Guna karma and combined therapeutic effect of Trikatu Importance: Must Know
+17. Explain Trimada composition Importance: Must Know
+18. Describe Guna karma and combined therapeutic effect of Trimada. Importance: Must Know
+19. Explain Chaturusana composition. Importance: Must Know
+20. Describe Guna karma and combined therapeutic effect of Chaturusana. Importance: Must Know
+21. Explain Panchakola composition. Importance: Must Know
+22. Describe Guna karma and combined therapeutic effect of Panchakola. Importance: Must Know
+23. Explain Shadusana composition. Importance: Must Know
+24. Describe Guna karma and combined therapeutic effect of Shadusana Importance: Must Know
+25. Explain Chaturbeeja composition. Importance: Must Know
+26. Describe Guna karma and combined therapeutic effect of Chaturbeeja Importance: Must Know
+27. Explain Trijataka composition. Importance: Must Know
+28. Describe Guna karma and combined therapeutic effect of Trijataka Importance: Must Know
+29. Explain Chaturajataka composition. Importance: Must Know
+30. Describe Guna karma and combined therapeutic effect of Chaturajataka. Importance: Must Know
+31. Explain Panchatikta composition. Importance: Must Know
+32. Describe Guna karma and combined therapeutic effect of Panchatikta. Importance: Must Know
+33. Explain Chaturbhadra composition. Importance: Must Know
+34. Describe Guna karma and combined therapeutic effect of Chaturbhadra. Importance: Must Know
+35. Explain Trikarshika composition. Importance: Must Know
+36. Describe Guna karma and combined therapeutic effect of Trikarshika. Importance: Must Know
 
 ---
 
-## 9.11 Lekhana
+### 13. Nomenclature of dravya as per Nighantu, Vedic taxonomy and Botany
 
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
-
----
-
-## 9.12 Grahi
-
-### Includes
-
-* Bowel Binding Action
-* Clinical Application
+1. Describe the Nomenclature of dravya as per Raj Nighantu. Importance: Must Know
+2. Explain the Nomenclature of dravya as per Vedic taxonomy. Importance: Must Know
+3. Discuss the Nomenclature of dravya as per botany. Importance: Must Know
 
 ---
 
-## 9.13 Stambhana
+### 14. Prashasta Bheshaja, Bheshaja Pariksha and drug evaluation method with correlation as per Pharmacognosy
 
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
-
----
-
-## 9.14 Madakari
-
-### Includes
-
-* Examples
+1. Describe Prashasta Bheshaja. Importance: Must Know
+2. Explain Bheshaja Pariksha of Charaka samhita vimana sthana. Importance: Must Know
+3. Discuss drug evaluation method in correlation with Pharmacognosy. Importance: Must Know
 
 ---
 
-## 9.15 Pramathi
+### 15. Dravyasangrahana and Drug collection methods as per GFCP (Good Field collection practices)
 
-### Includes
-
-* Clinical Application
-
----
-
-## 9.16 Abhishyandi
-
-### Includes
-
-* Examples
+1. Discuss Dravyasangrahana and Drug collection methods as per GFCP (Good Field collection practices). Importance: Desirable to Know
+2. Discuss Drug collection methods as per GFCP (Good Field collection practices). Importance: Desirable to Know
 
 ---
 
-## 9.17 Vyavayi
+### 16. GCP (Good cultivation practices), seed bank, conservation of medicinal plants, knowledge about RET (Rear, Endangered & Threatened ) medicinal plants.
 
-### Includes
-
-* Examples
+1. Discuss good cultivation practices, seed bank, conservation of medicinal plants, knowledge about RET (Rear, Endangered & Threatened) medicinal plants. Importance: Desirable to Know
 
 ---
 
-## 9.18 Vikashi
+### 17. Abhava Pratinidhi Dravya (substitutes)
 
-### Includes
-
-* Examples
+1. Discuss the concept of Abhava pratinidhi dravya (substitutes) as per Bhavaprakasha. Importance: Must Know
 
 ---
 
-## 9.19 Rasayana
+### 18. Classifications and techniques of aqueous and alcoholic extracts
 
-### Includes
-
-* Relation with Rejuvenators
-* Types of Rasayana Dravyas
-* Clinical Application
-* Research Updates
+1. Appraise the techniques of aqueous and alcoholic extracts of medicinal plants. Importance: Desirable to Know
 
 ---
 
-## 9.20 Vajeekarana
+### 19. Adverse drug reaction and Pharmacovigilance with recent updates
 
-### Includes
-
-* Relation with Aphrodisiacs
-* Types of Vajeekarana Dravyas
-* Guna Karma
-* Clinical Application
-* Research Updates
+1. Explain adverse drug reaction and pharmacovigilance in ayurveda with recent updates. Importance: Must Know
 
 ---
 
-## 9.21 Medhya
+### 20. NMPB (National Medicinal Plant Board), CCRAS (Central Council of Research in Ayurveda Sciences), API ( Ayurvedic Pharmacopeia of India), GCTM ( Global Centre for Traditional Medicine), PCIMH ( Pharmacopeia Commission of Indian Medicine and Homeopathy)
 
-### Includes
-
-* Contemporary Pharmacological Correlation
-* Clinical Application
-* Research Updates
-
-### Learning Objectives
-
-* Define Karma
-* Explain Karma Lakshana
-* Correlate with contemporary pharmacology
-* Analyze Karma Dravyas
-* Explain therapeutic applications
-* Discuss research updates
-
-Source: 
-# Chapter 10 — Bhaishajya Kalpana
-
-**Expected Marks:** 6
-**Weightage:** Very High
-**Importance Type:** Must Know
-
-## 10.1 Definition of Bhaishajya Kalpana
-
-## 10.2 Importance of Bhaishajya Kalpana
-
-## 10.3 Basic Principles of Bhaishajya Kalpana
-
-## 10.4 Panchavidha Kashaya Kalpana
-
-### Includes
-
-* Swarasa
-* Kalka
-* Kwatha
-* Hima
-* Phanta
-
-## 10.5 Secondary Preparations
-
-### Includes
-
-* Churna
-* Vati
-* Avaleha
-* Ghrita
-* Taila
-* Asava
-* Arishta
-
-## 10.6 Factors Influencing Drug Action
-
-### Includes
-
-* Matra
-* Anupana
-* Kala
-* Roga Bala
-* Rogi Bala
-
-## 10.7 Shelf Life of Preparations
-
-## 10.8 Standardization of Herbal Drugs
-
-## 10.9 Pharmaceutical Processing Methods
-
-## 10.10 Research Updates in Bhaishajya Kalpana
-
-### Learning Objectives
-
-* Define Bhaishajya Kalpana
-* Explain Panchavidha Kashaya Kalpana
-* Discuss secondary dosage forms
-* Explain factors affecting drug action
-* Discuss standardization and shelf life
-* Explain pharmaceutical processing methods
-
-Source: 
-
+1. State NMPB (National Medicinal Plant Board), CCRAS (Central Council of Research in Ayurveda Sciences), API ( Ayurvedic Pharmacopeia of India), GCTM ( Global Centre for Traditional Medicine) and PCIMH (Pharmacopeia Commission of Indian Medicine and Homeopathy). Importance: Nice to Know
 
 ---
 
-# Chapter 11 — Introduction to Medicinal Plants
+### 21. Vrikshayurveda and Ethno-medicine
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 11.1 Definition of Medicinal Plants
-
-## 11.2 Sources of Drugs
-
-### Includes
-
-* Plant Origin
-* Animal Origin
-* Mineral Origin
-
-## 11.3 Classification of Medicinal Plants
-
-### Based On
-
-* Morphology
-* Habitat
-* Therapeutic Use
-
-## 11.4 Botanical Nomenclature
-
-## 11.5 Methods of Identification
-
-### Includes
-
-* Macroscopy
-* Microscopy
-* Organoleptic Evaluation
-
-## 11.6 Collection of Drugs
-
-## 11.7 Preservation of Drugs
-
-## 11.8 Storage of Crude Drugs
-
-## 11.9 Adulteration of Drugs
-
-## 11.10 Evaluation of Crude Drugs
-
-## 11.11 Quality Control of Herbal Drugs
-
-### Learning Objectives
-
-* Define medicinal plants
-* Explain classification systems
-* Describe identification methods
-* Discuss collection and preservation
-* Explain adulteration and evaluation
-
-Source: 
-
+1. Explain concept of Vrikshayurveda and Ethno medicine. Importance: Nice to Know
 
 ---
 
-# Chapter 12 — Pharmacological Basis of Dravyaguna
+### 22. Network pharmacology and Bioinformatics
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 12.1 Pharmacodynamics in Ayurveda
-
-## 12.2 Pharmacokinetics in Ayurveda
-
-## 12.3 Ayurvedic Pharmacology
-
-### Includes
-
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Prabhava
-
-## 12.4 Drug Receptor Interaction
-
-## 12.5 Bioavailability of Herbal Drugs
-
-## 12.6 Synergistic Drug Action
-
-## 12.7 Drug Toxicity
-
-## 12.8 Herb-Drug Interaction
-
-## 12.9 Clinical Pharmacology of Ayurvedic Drugs
-
-## 12.10 Research Methodology in Dravyaguna
-
-### Learning Objectives
-
-* Explain Ayurvedic pharmacology
-* Discuss pharmacodynamics and pharmacokinetics
-* Explain bioavailability and synergy
-* Discuss herb-drug interactions
-* Interpret research methodology
-
-Source: 
-
+1. Describe Network Pharmacology and Bioinformatics. Importance: Nice to Know
 
 ---
 
-# Chapter 13 — Research and Clinical Application in Dravyaguna
+## Paper 2
 
-**Expected Marks:** 3
-**Weightage:** Medium
-**Importance Type:** Must Know
+### 1. Bheshajavacharaniya (Criteria's to be considered for selection of drugs in vyadhis)
 
-## 13.1 Research Updates in Dravyaguna
-
-## 13.2 Evidence Based Ayurveda
-
-## 13.3 Clinical Trials in Herbal Medicine
-
-## 13.4 Safety Evaluation of Herbal Drugs
-
-## 13.5 Pharmacovigilance of Herbal Medicines
-
-## 13.6 Clinical Application of Classical Drugs
-
-## 13.7 Integrative Research Approaches
-
-## 13.8 Documentation and Standard Reporting
-
-### Learning Objectives
-
-* Discuss evidence based Ayurveda
-* Explain clinical research methods
-* Interpret safety evaluation
-* Discuss pharmacovigilance
-* Explain integrative approaches
-
-Source: 
-
+1. Interpret the selection of appropriate drugs in different vyadhis as per criteria's mentioned in Bheshajavacharantya (as per As. Sa. Su 23) Importance: Must Know
 
 ---
 
-# PAPER 1 COMPLETE
+### 2. Dravya (Drug) Nama-Guna-Karma Jnana
 
-══════════════════════════════════════
-PAPER 2
-Dravyaguna (Applied)
-══════════════════════════════════════
-
-Next part will continue from:
-
-# Chapter 14 onward (Paper 2)
-══════════════════════════════════════
-PAPER 2
-Dravyaguna (Applied)
-══════════════════════════════════════
-
-# Chapter 14 — Study of Medicinal Plants (A to H Group)
-
-**Expected Marks:** 20
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 14.1 Study Parameters for Each Drug
-
-### Includes
-
-* Sanskrit Name
-* Botanical Name
-* Family
-* Vernacular Names
-* Useful Part
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Prabhava
-* Karma
-* Indications
-* Dose
-* Formulations
-* Active Constituents
-* Pharmacological Actions
-* Research Updates
-* Therapeutic Applications
+1. Specify useful parts with its Rasapanchaka of following drugs. Importance: Must Know
+2. Describe karma,agryakarma and dosha karma of following drugs. Importance: Must Know
+3. Explain Amayikaprayoga used in Vyadhi (Disease) pertaining to various Srotas and Vyadhiavastha (Stage). Importance: Must Know
+4. Indicate the Kalpana (dosage form), Matra (Dose), Anupana (Vehicle), Marga(Route), Sevana kala (Time of administration), Kalavadhi (Duration) and Pathya-pathya ) of following drugs. Importance: Must Know
+5. Enlist active phyto-constituents & important formulations Discuss research updates of following drugs. Importance: Must Know
+6. Enlist botanical name & family. Explain main synonyms as per Bruhatryees and Bhavaprakasha. Vernacular name (Hindi,English and local name) of following drugs. Importance: Must Know
+7. Demonstrate external morphology-habit, root, leaf, stem, flower, inflorescence, fruit, seed and officinal useful parts of following drugs. Importance: Must Know
+8. Describe varieties, grahyagrahyatwa Adulterants, substitute and toxic effects of following drugs wherever applicable Importance: Must Know
 
 ---
 
-## 14.2 Drugs Included
-
-* Agnimantha
-* Arjuna
-* Aragwadha
-* Apamarga
-* Ashwagandha
-* Amalaki
-* Ativisha
-* Arka
-* Ashoka
-* Ahiphena
-* Eranda
-* Ela
-* Guduchi
-* Gokshura
-* Haridra
-* Haritaki
-* Hingu
-
-### Learning Objectives
-
-* Identify medicinal plants
-* Explain pharmacological properties
-* Discuss therapeutic uses
-* Correlate Ayurvedic and modern views
-* Discuss research updates
-
-Source: 
-
-
----
-
-# Chapter 15 — Study of Medicinal Plants (I to M Group)
-
-**Expected Marks:** 20
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 15.1 Study Parameters for Each Drug
-
-### Includes
-
-* Sanskrit Name
-* Botanical Name
-* Family
-* Useful Part
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Karma
-* Indications
-* Dose
-* Formulations
-* Active Constituents
-* Pharmacological Actions
-* Research Updates
-
----
-
-## 15.2 Drugs Included
-
-* Jatamansi
-* Jambu
-* Jeeraka
-* Kantakari
-* Kumari
-* Kutaja
-* Kiratatikta
-* Lashuna
-* Madanaphala
-* Mandukaparni
-* Maricha
-* Musta
-
-### Learning Objectives
-
-* Explain medicinal importance
-* Discuss pharmacological actions
-* Describe formulations and dosage
-* Interpret clinical applications
-
-Source: 
-
-
----
-
-# Chapter 16 — Study of Medicinal Plants (N to S Group)
-
-**Expected Marks:** 20
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 16.1 Study Parameters for Each Drug
-
-### Includes
-
-* Sanskrit Name
-* Botanical Name
-* Family
-* Useful Part
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Karma
-* Indications
-* Dose
-* Formulations
-* Active Constituents
-* Pharmacological Actions
-* Research Updates
-
----
-
-## 16.2 Drugs Included
-
-* Nimba
-* Nirgundi
-* Palasha
-* Pippali
-* Punarnava
-* Pushkarmoola
-* Sarpagandha
-* Shatavari
-* Shigru
-* Sunthi
-
-### Learning Objectives
-
-* Explain therapeutic importance
-* Discuss formulations and applications
-* Correlate traditional and modern pharmacology
-
-Source: 
-
-
----
-
-# Chapter 17 — Study of Medicinal Plants (T to Y Group)
-
-**Expected Marks:** 20
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 17.1 Study Parameters for Each Drug
-
-### Includes
-
-* Sanskrit Name
-* Botanical Name
-* Family
-* Useful Part
-* Rasa
-* Guna
-* Virya
-* Vipaka
-* Karma
-* Indications
-* Dose
-* Formulations
-* Active Constituents
-* Pharmacological Actions
-* Research Updates
-
----
-
-## 17.2 Drugs Included
-
-* Tulasi
-* Twak
-* Vacha
-* Vasaka
-* Vidanga
-* Yashtimadhu
-
-### Learning Objectives
-
-* Explain Ayurvedic properties
-* Discuss modern pharmacological actions
-* Explain therapeutic applications
-* Discuss formulations and dosage
-
-Source: 
-
-
----
-
-# Chapter 18 — Applied Dravyaguna and Therapeutics
-
-**Expected Marks:** 12
-**Weightage:** Extremely High
-**Importance Type:** Must Know
-
-## 18.1 Selection of Drugs According to:
-
-* Dosha
-* Dushya
-* Roga
-* Rogi Bala
-
-## 18.2 Polyherbal Formulations
-
-## 18.3 Drug Synergism
-
-## 18.4 Herb-Herb Interaction
-
-## 18.5 Herb-Drug Interaction
-
-## 18.6 Rational Use of Herbal Drugs
-
-## 18.7 Clinical Application of Dravyaguna Principles
-
-## 18.8 Evidence Based Therapeutics
-
-## 18.9 Research Updates in Applied Dravyaguna
-
-### Learning Objectives
-
-* Apply Dravyaguna principles clinically
-* Explain rational drug selection
-* Discuss evidence based therapeutics
-* Explain interactions and synergism
-
-Source: 
-
-# Chapter 19 — Toxicology and Safety of Medicinal Plants
-
-**Expected Marks:** 8
-**Weightage:** Very High
-**Importance Type:** Must Know
-
-## 19.1 Toxic Medicinal Plants
-
-### Includes
-
-* Identification
-* Toxic Principles
-* Signs and Symptoms
-* Management
-
-## 19.2 Adverse Effects of Herbal Drugs
-
-## 19.3 Herb-Drug Interaction
-
-## 19.4 Contraindications of Medicinal Plants
-
-## 19.5 Drug Allergy
-
-## 19.6 Idiosyncratic Reactions
-
-## 19.7 Overdose Toxicity
-
-## 19.8 Standardization and Safety Evaluation
-
-## 19.9 Pharmacovigilance in Herbal Medicine
-
-## 19.10 Research Updates in Herbal Toxicology
-
-### Learning Objectives
-
-* Identify toxic medicinal plants
-* Discuss safety evaluation
-* Explain adverse drug reactions
-* Discuss pharmacovigilance
-* Explain toxicity management
-
-Source: 
-
-
----
-
-# Chapter 20 — Conservation and Cultivation of Medicinal Plants
-
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 20.1 Importance of Medicinal Plant Conservation
-
-## 20.2 Threatened Medicinal Plants
-
-## 20.3 In-Situ Conservation
-
-## 20.4 Ex-Situ Conservation
-
-## 20.5 Herbal Gardens
-
-## 20.6 Good Agricultural Practices
-
-## 20.7 Cultivation Techniques
-
-### Includes
-
-* Soil
-* Irrigation
-* Climate
-* Harvesting
-
-## 20.8 Post-Harvest Processing
-
-## 20.9 Storage and Packaging
-
-## 20.10 Sustainable Utilization of Medicinal Plants
-
-## 20.11 National Policies on Medicinal Plants
-
-## 20.12 Research Updates in Cultivation Practices
-
-### Learning Objectives
-
-* Explain conservation strategies
-* Discuss cultivation techniques
-* Describe post-harvest processing
-* Explain sustainable utilization
-
-Source: 
-
-
----
-
-# Dravyaguna Vigyan Extraction Complete
-
-## PAPER 1
-
-### Fundamental Dravyaguna
-
-* Chapters 1–13
-
-## PAPER 2
-
-### Dravyaguna (Applied)
-
-* Chapters 14–20
-
-Includes:
-
-* all listed chapters
-* all medicinal plant groups
-* all listed drugs
-* all learning objectives
-* all pharmacological entities
-* all explicitly mentioned syllabus points
-* continuous numbering
-* paper separation
-* weightage and importance metadata
+### 3. Dravya (Drugs) Nama-Guna-Karma-Jnana
+
+1. Specify useful parts with its Rasapanchaka of following drugs Importance: Must Know
+2. Describe karma, agryakarma and dosha karma of following drugs. Importance: Must Know
+3. Explain Amayikaprayoga used in Vyadhi (Disease) pertaining to various Srotas and vyadhiavastha (Stage). Importance: Must Know
+4. Indicate the Kalpana(dosage form), Matra (Dose), Anupana (Vehicle), Marga (Route), Sevana kala (Time of administration), Kalavadhi (Duration) and Pathya-pathya ) of following drugs. Importance: Must Know
+5. Enlist active phyto-constituents & important formulations. Discuss research updates of following drugs. Importance: Must Know
+6. Enlist botanical name & family. Explain main Synonyms as per Bruhatryees and Bhavaprakasha. Vernacular name (Hindi, English and local name) of following drugs. Importance: Must Know
+7. Demonstrate external morphology-habit, root, leaf, stem, flower, inflorescence, fruit, seed and officinal useful parts of following drugs. Importance: Must Know
+8. Describe varieties, grhyahrahyatwa, adulterants, substitute and toxic effects of following drugs wherever applicable. Importance: Must Know

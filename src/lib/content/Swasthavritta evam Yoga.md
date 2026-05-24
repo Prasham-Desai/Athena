@@ -1,1213 +1,766 @@
-# Swasthavritta evam Yoga (AyUG-SW)
+# Swasthavritta, Yoga and Naturopathy
 
-## Subject Details
+## Paper 1
 
-| Field                         | Value                   |
-| ----------------------------- | ----------------------- |
-| Subject Name                  | Swasthavritta evam Yoga |
-| Subject Code                  | AyUG-SW                 |
-| Total Teaching Hours          | 400                     |
-| Lecture Hours (Theory)        | 150                     |
-| Non Lecture Hours (Theory)    | 75                      |
-| Non Lecture Hours (Practical) | 175                     |
-| Theory Marks                  | 200                     |
-| Practical Marks               | 100                     |
-| Viva                          | 60                      |
-| Elective                      | 10                      |
-| Internal Assessment           | 30                      |
-| Total Marks                   | 400                     |
+### Topic 1: Swastha and Swasthya
 
-Source: 
+1. Define Swasthavritta and describe its objective.
+   **Importance:** Must Know
 
----
+2. Describe and compare Swasthalakshanas Arogyalakshanas,Dhatusamyalakshanas. Describe Concept of Health & Operational definition of health.
+   **Importance:** Must Know
 
-# PAPER 1 — Principles of Swasthavritta, Yoga and Naturopathy
+3. Describe the Importance of Shodhana in Swastha in relation to Sanchita& Asanchitha Dosha & Classify Swastha purusha as Sanchita dosha and Asanchita Dosha.
+   **Importance:** Must Know
 
----
+4. Explain the Physical, Mental and Social dimensions of health.
+   **Importance:** Must Know
 
-# Chapter 1 — Swastha and Swasthya
+5. Describe the objective component of well-being - standard of living and level of living and subjective component of well-being - Quality of Life.
+   **Importance:** Must Know
 
-**Expected Marks:** 6
-**Weightage:** High
-**Importance Type:** Must Know
-
-## 1.1 Definition of Swasthavritta
-
-## 1.2 Objective of Swasthavritta
-
-## 1.3 Swastha Lakshanas
-
-## 1.4 Arogya Lakshanas
-
-## 1.5 Dhatu Samya Lakshanas
-
-## 1.6 Concept of Health
-
-## 1.7 Operational Definition of Health
-
-## 1.8 Importance of Shodhana in Swastha
-
-### Includes
-
-* Sanchita Dosha
-* Asanchita Dosha
-
-## 1.9 Classification of Swastha Purusha
-
-### Includes
-
-* Sanchita Dosha
-* Asanchita Dosha
-
-## 1.10 Dimensions of Health
-
-### Includes
-
-* Physical Health
-* Mental Health
-* Social Health
-
-## 1.11 Concept of Well-being
-
-### Objective Component
-
-* Standard of Living
-* Level of Living
-
-### Subjective Component
-
-* Quality of Life
-
-## 1.12 One Health Concept
-
-### Includes
-
-* Vasudhaiva Kutumbakam
-* One Earth One Family One Future
-
-Source: 
+6. Explain one health concept / Vasudhaiva Kutumbakam"' or "One Earth - One Family One Future"
+   **Importance:** Desirable to Know
 
 ---
 
-# Chapter 2 — Healthy Lifestyle – Dinacharya
+### Topic 2: Healthy Life style -Dinacharya (Daily regimen)
 
-**Expected Marks:** 38
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+1. Explain the Primordial, Primary, Secondary, and Tertiary Preventive measures in the context of Ayurveda with examples
+   **Importance:** Must Know
 
-## 2.1 Primordial Prevention
+2. Explain the importance of Ahara and Vihara as the health promotive and disease preventive measures.
+   **Importance:** Must Know
 
-## 2.2 Primary Prevention
+3. Describe the importance of Niyata kala vihara (Dinacharya, Ritucharya) and Aniyata kala Vihara (Vegadharana, Vegaudirana, Ritushodhana, Brumhana and Bhutadi asparshanaa ) for health promotion and disease prevention.
+   **Importance:** Must Know
 
-## 2.3 Secondary Prevention
+4. Explore and analyse the concept of waking up at 'Brahma muhurta'in the present scenario and the effect of early rise on health, sleep, alertness and memory
+   **Importance:** Desirable to Know
 
-## 2.4 Tertiary Prevention
+5. Describe the time, quantity and benefits of 'Usha Jalapana' (Drinking water in early morning).
+   **Importance:** Must Know
 
-## 2.5 Importance of Ahara and Vihara
+6. Explain the Importance of Malatyaga in vata kaala - early morning (Good Bowel Habits)
+   **Importance:** Must Know
 
-## 2.6 Niyata Kala Vihara
+7. Explain the procedure, dravyas and benefits of Mukhaprakshalana and face washes used currently.
+   **Importance:** Must Know
 
-### Includes
+8. Describe the time, procedure, benefits, contraindications and herbs used as per rasa for dantadhavana and modern-day brushing techniques and dentifrices.
+   **Importance:** Must Know
 
-* Dinacharya
-* Ritucharya
+9. Describe jihwanirlekhana, explain the tools used in today's era and their benefits.
+   **Importance:** Must Know
 
-## 2.7 Aniyata Kala Vihara
+10. Explain the Anjana dravyas for Swastha and their benefits
+    **Importance:** Must Know
 
-### Includes
+11. Describe the occupation /activity in which Anjana can be used as a health promotive measure
+    **Importance:** Nice to Know
 
-* Vegadharana
-* Vegaudirana
-* Ritushodhana
-* Brumhana
-* Bhutadi Asparshana
+12. Explain the dravyas used with their doses for Pratimarsha Nasya and their benefits.
+    **Importance:** Must Know
 
-## 2.8 Brahma Muhurta
+13. Describe the various kaal for administering Pratimarsha Nasya as per day and season (ritu)
+    **Importance:** Must Know
 
-### Includes
+14. Describe the occupation /activity in which Pratimarsha Nasya can be used as a health promotive measure.
+    **Importance:** Must Know
 
-* Early Rising
-* Effect on Sleep
-* Alertness
-* Memory
+15. Describe the ingredients, procedure and benefits of kavala and gandusha for oral hygiene including mouthwashes available in the market
+    **Importance:** Must Know
 
-## 2.9 Usha Jalapana
+16. Mention different snehas/oils to be used for daily abhyanga as per seasons and geographical variations.
+    **Importance:** Must Know
 
-## 2.10 Importance of Malatyaga
+17. Justify the importance of the classical tambula by comparing it with the present-day betel chewing.
+    **Importance:** Desirable to Know
 
-### Includes
+18. Explain the practical application of Prayogika Dhoomapana (inhalation of herbal fumes/ herbal inhalers) with their benefits and contraindications
+    **Importance:** Must Know
 
-* Good Bowel Habits
+19. Explain the ill effects of tobacco smoking of various sorts viz. beedi, cigarette, hookah on health
+    **Importance:** Must Know
 
-## 2.11 Mukhaprakshalana
+20. Describe the applied aspects of Sarvanga Abhyanga, Padabhyanga, Shiroabhyanga and
+    **Importance:** Must Know
 
-## 2.12 Dantadhavana
+21. Explain the application of Abhyanga according to different age groups and occupation/activity.
+    **Importance:** Desirable to Know
 
-### Includes
+22. Explain the indications, contraindications and benefits of Vyayama.
+    **Importance:** Must Know
 
-* Modern Brushing Techniques
-* Dentifrices
+23. Describe the types & benefits of vyayama and present-day practices such as aerobic exercises, muscle strengthening exercises etc.to be practiced as per prakriti, age and occupation.
+    **Importance:** Must Know
 
-## 2.13 Jihwanirlekhana
+24. Describe the assessment of ardhashakti lakshanas of vyayama and the consequences of ati vyayama.
+    **Importance:** Must Know
 
-## 2.14 Anjana
+25. Describe and compare the dravyas, benefits, and application of Udvartana, Udgharshana and Utsadana.
+    **Importance:** Must Know
 
-## 2.15 Kavala
+26. Explain the physiological effects of snana on body and mind and explain the reasons for contraindications of Snana.
+    **Importance:** Must Know
 
-## 2.16 Gandusha
+27. Explain the importance and benefits of Anulepana.
+    **Importance:** Must Know
 
-## 2.17 Abhyanga
+28. Describe the merits and demerits of present-day applications like face powder, face pack, balm, lotions, lipsticks, deodorants and perfumes.
+    **Importance:** Nice to Know
 
-## 2.18 Tambula
-
-## 2.19 Prayogika Dhoomapana
-
-### Includes
-
-* Herbal Inhalation
-* Herbal Fumes
-* Contraindications
-
-## 2.20 Ill Effects of Tobacco Smoking
-
-### Includes
-
-* Beedi
-* Cigarette
-* Hookah
-
-## 2.21 Sarvanga Abhyanga
-
-## 2.22 Padabhyanga
-
-## 2.23 Shiroabhyanga
-
-## 2.24 Application of Abhyanga According to:
-
-* Age
-* Occupation
-* Activity
-
-## 2.25 Snehas/Oils for Daily Abhyanga
-
-### According To
-
-* Seasons
-* Geographical Variations
-
-## 2.26 Vyayama
-
-## 2.27 Aerobic Exercises
-
-## 2.28 Muscle Strengthening Exercises
-
-## 2.29 Ardhashakti Lakshanas of Vyayama
-
-## 2.30 Ati Vyayama
-
-## 2.31 Udvartana
-
-## 2.32 Utsadana
-
-## 2.33 Udgharshana
-
-## 2.34 Snana
-
-### Includes
-
-* Types of Bath
-* Physiological Effects
-
-## 2.35 Anulepana
-
-## 2.36 Modern Applications
-
-### Includes
-
-* Face Powder
-* Face Pack
-* Balm
-* Lotions
-* Lipsticks
-* Deodorants
-* Perfumes
-
-## 2.37 Vastradharana
-
-Source: 
+29. Explain the importance of proper clothing (vastradharana) in social life.
+    **Importance:** Must Know
 
 ---
 
-# Chapter 3 — Ratricharya
+### Topic 3: Ratricharya
 
-**Expected Marks:** 6
-**Weightage:** Very High
-**Importance Type:** Must Know
+1. Describe ratri bhojanvidhi and its relation to health.
+   **Importance:** Must Know
 
-## 3.1 Ratri Bhojana Vidhi
+2. Describe ratri shayana vidhi in relation to the proper time of sleep.
+   **Importance:** Must Know
 
-## 3.2 Ratri Shayana Vidhi
+3. Explain the relation between Nidra and health.
+   **Importance:** Must Know
 
-## 3.3 Nidra and Health
+4. Describe effects of Yukta & Ayukta nidra.
+   **Importance:** Must Know
 
-## 3.4 Yukta Nidra
+5. Explain the effects of Ratri Jagarana, Diwaswapna, Anidra, Atinidra and Akala Nidra.
+   **Importance:** Must Know
 
-## 3.5 Ayukta Nidra
+6. Identify Ahara and Vihara Causing sound sleep as well as disturbed sleep.
+   **Importance:** Desirable to Know
 
-## 3.6 Ratri Jagarana
+7. Formulate the duration of sleep according to age, Sleep in healthy and ailing persons.
+   **Importance:** Desirable to Know
 
-## 3.7 Diwaswapna
+8. Explain various Aspects of Sleep like: a. Daytime Sleepiness and Alertness b. Sleep Deprivation cc. Sleep and Host Defense d. Master Circadian Clock and Master Circadian Rhythm e. Human Circadian Timing System and Sleep-Wake Regulation f. Circadian Rhythms in Sleepiness, Alertness, and Performance __ g. Circadian Disorders of the Sleep-Wake Cycle
+   **Importance:** Desirable to Know
 
-## 3.8 Anidra
+9. Explain Sleep apnoea , insomnia, narcolepsy and restless leg syndrome. Explain solutions to Asatmya jagarana (sleep disorders .)
+   **Importance:** Desirable to Know
 
-## 3.9 Atinidra
+10. Explain the importance of observing brahmacharya and abrahmacharya in relation to health
+    **Importance:** Must Know
 
-## 3.10 Akala Nidra
+11. Describe Brahmacharya with specail reference to lifestyle guidelines
+    **Importance:** Must Know
 
-## 3.11 Ahara and Vihara for Sound Sleep
-
-## 3.12 Duration of Sleep According to Age
-
-## 3.13 Sleep in Healthy and Ailing Persons
-
-## 3.14 Daytime Sleepiness and Alertness
-
-## 3.15 Sleep Deprivation
-
-## 3.16 Sleep and Host Defense
-
-## 3.17 Master Circadian Clock
-
-## 3.18 Master Circadian Rhythm
-
-## 3.19 Human Circadian Timing System
-
-## 3.20 Sleep-Wake Regulation
-
-## 3.21 Circadian Rhythms in:
-
-* Sleepiness
-* Alertness
-* Performance
-
-## 3.22 Circadian Disorders of Sleep-Wake Cycle
-
-## 3.23 Sleep Apnea
-
-## 3.24 Insomnia
-
-## 3.25 Narcolepsy
-
-## 3.26 Restless Leg Syndrome
-
-## 3.27 Solutions to Asatmya Jagarana
-
-## 3.28 Brahmacharya
-
-## 3.29 Abrahmacharya
-
-## 3.30 Reproductive and Sexual Health According to Ayurveda
-
-Source: 
+12. Describe reproductive and sexual health according to Ayurveda
+    **Importance:** Must Know
 
 ---
 
-# Chapter 4 — Ritucharya
+### Topic 4: Ritucharya
 
-**Expected Marks:** 5
-**Weightage:** Very High
-**Importance Type:** Must Know
+1. Explain classification of kaala , distinguish Adana kala and visarga kala , identification of seasons based on the ritu lakshanas in different geographical areas.
+   **Importance:** Must Know
 
-## 4.1 Classification of Kaala
+2. Analyse the Sanchaya- Prakopa- Prashamana of Dosha with their gunas in each ritu.
+   **Importance:** Must Know
 
-## 4.2 Adana Kala
+3. Describe the Relation of Agni , Bala and Ritu with its application.
+   **Importance:** Must Know
 
-## 4.3 Visarga Kala
+4. Explain ritu shodhana for the prevention of diseases.
+   **Importance:** Must Know
 
-## 4.4 Identification of Seasons
+5. Analyse Pathya - Apathya in regards to Ahara -Vihara in all six ritus in present scenario.
+   **Importance:** Must Know
 
-## 4.5 Ritu Lakshanas
+6. Explain the importance of ahara and vihara in ritu sandhi and yamadanshtra kala.
+   **Importance:** Must Know
 
-## 4.6 Sanchaya of Dosha
+7. Describe rituharitaki as a rasayana with research updates.
+   **Importance:** Desirable to Know
 
-## 4.7 Prakopa of Dosha
-
-## 4.8 Prashamana of Dosha
-
-## 4.9 Relation of:
-
-* Agni
-* Bala
-* Ritu
-
-## 4.10 Ritu Shodhana
-
-## 4.11 Pathya Ahara in All Six Ritus
-
-## 4.12 Apathya Ahara in All Six Ritus
-
-## 4.13 Ahara and Vihara in Ritu Sandhi
-
-## 4.14 Yamadanshtra Kala
-
-## 4.15 Rituharitaki as Rasayana
-
-## 4.16 Rituviparyaya
-
-## 4.17 Relation of Rituviparyaya with:
-
-* Janapadodhwamsa
-* Maraka Vyadhi
-
-Source: 
+8. Explain the effects of Rituviparyaya on health and its relation to janapadaudhwansa/maraka vyadhis with present day examples.
+   **Importance:** Must Know
 
 ---
 
-# Chapter 5 — Roganutpadaniya
+### Topic 5: Roga nutpadaniya
 
-**Expected Marks:** 13
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+1. Explain vegadharana and vega-udirana in relation to health and morbidity.
+   **Importance:** Must Know
 
-## 5.1 Vegadharana
+2. Compare the symptoms and management principles of adharaniya vega janya vyadhis from bruhattrayee.
+   **Importance:** Must Know
 
-## 5.2 Vega Udirana
+3. Explain with examples the concept of vega-udirana (viz. Use of snuffing powder, forcible evacuation of bowels & bladder etc.).
+   **Importance:** Must Know
 
-## 5.3 Relation of Vegadharana with:
-
-* Health
-* Morbidity
-
-## 5.4 Adharaniya Vega Janya Vyadhis
-
-## 5.5 Management Principles from Bruhattrayee
-
-## 5.6 Vega Udirana Examples
-
-### Includes
-
-* Snuffing Powder
-* Forcible Evacuation of Bowels
-* Forcible Evacuation of Bladder
-
-## 5.7 Dharaniya Vegas in Mental Health Promotion
-
-Source: 
-
-# Chapter 6 — Sadvritta
-
-**Expected Marks:** 2
-**Weightage:** Medium
-**Importance Type:** Must Know
-
-## 6.1 Sadvritta Measures
-
-### Includes
-
-* Personal Health
-* Social Health
-* Spiritual Health
-
-## 6.2 Prevention of Adharma through Sadvritta
-
-## 6.3 Achara Rasayana
-
-## 6.4 Role of Achara Rasayana in Prevention and Control of Disease
-
-## 6.5 Characteristics of Mentally Healthy Person
-
-## 6.6 Warning Signals of Poor Mental Health
-
-## 6.7 Types of Mental Illness
-
-## 6.8 Causes of Mental Ill Health
-
-## 6.9 Mental Health Services
-
-## 6.10 Comprehensive Mental Health Programme
-
-## 6.11 Role of Trigunas in Mental Health Promotion
-
-## 6.12 Satvavajaya
-
-## 6.13 Digital Health Promotion
-
-Source: 
+4. Explain the importance of dharantya vegas in promotion of mental health.
+   **Importance:** Must Know
 
 ---
 
-# Chapter 7 — Ahara
+### Topic 6: Sadvritta
 
-**Expected Marks:** 20
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+1. Describe digital health
+   **Importance:** Desirable to Know
 
-## 7.1 Significance of Ahara According to Ayurveda
+2. Explain Promotion of Digital health
+   **Importance:** Desirable to Know
 
-## 7.2 Significance of Ahara According to Contemporary Science
+3. Describe Digital health problems
+   **Importance:** Desirable to Know
 
-## 7.3 Classification of Aharadravyas
+4. Understand and adopt the Sadavritta measures for the maintenance of personal ,social and spiritual health.
+   **Importance:** Desirable to Know
 
-### According To
+5. Explain how the observance of Sadvritta helps for the prevention of Adharma.
+   **Importance:** Must Know
 
-* Ayurveda
-* Contemporary Science
+6. Describe 'Achara Rasayana" and its role in the prevention and control of diseases.
+   **Importance:** Must Know
 
-## 7.4 Ahara Vidhi Vidhana
+7. Explain characteristics of a mentally healthy person, warning signals of poor mental health, types of mental illness and causes of mental ill-health.
+   **Importance:** Must Know
 
-## 7.5 Ahara Sevana Kala
+8. Describe the mental health services and comprehensive mental health programme.
+   **Importance:** Must Know
 
-## 7.6 Dwadasha Ashana Pravicharana
-
-## 7.7 Pathyahara
-
-## 7.8 Apathyahara
-
-## 7.9 Samashana
-
-## 7.10 Adhyashana
-
-## 7.11 Vishamashana
-
-## 7.12 Ahara and Vihara Leading to:
-
-* Santarpanajanya Vyadhi
-* Apatarpanajanya Vyadhi
-
-## 7.13 Importance of Upavasa
-
-## 7.14 Intermittent Fasting
-
-## 7.15 Benefits of Shadrasa Bhojana
-
-## 7.16 Ashta Ahara Vidhi Visheshayatana
-
-## 7.17 Importance of Nitya Sevaniya Dravyas
+9. Explain the role of trigunas and satvavajaya in mental health promotion in present era.
+   **Importance:** Desirable to Know
 
 ---
 
-## 7.18 Dhanya Varga
+### Topic 7: Ahara
 
-### Includes
+1. Explain significance of Ahara for health and well-being according to Ayurveda & Contemporary science Explain significance of Ahara for health and well-being according to Ayurveda & Contemporary science
+   **Importance:** Must Know
 
-* Shuka Dhanya
-* Cereals
-* Millets
+2. Classify aharadravyas as per Ayurveda & Contemporary science
+   **Importance:** Must Know
 
-## 7.19 Shami Dhanya
+3. Enumerate and explain the features of Ahara vidhividhana, Ahara sevanakala &Dwadashashanapravicharana .
+   **Importance:** Must Know
 
-### Includes
+4. Discuss the applied aspect of Pathyahara, Apathyahara, Samashana, Adhyashana, Vishamashana. Discuss the Ahara &vihara leading to Santarpanajanya evam Apatarpanajanyavyadhi and importance of upavasa and effects of practice of intermittant fasting on health
+   **Importance:** Must Know
 
-* Pulses
+5. Explain the benefits of Shadrasabhojana
+   **Importance:** Must Know
 
-## 7.20 Shaka Varga
+6. Enumerate and explain the importance of Ashtaharavidhiviseshayatanani in present era
+   **Importance:** Must Know
 
-### Includes
+7. Explain the importance of Nityasevaniyadravyas in the maintenance of health
+   **Importance:** Must Know
 
-* Leafy Vegetables
-* Non Leafy Vegetables
+8. Explain the properties (Guna& karmas) of Ahara dravyas in the following vargas with their nutritive value:Dhanyavarga — Shuka Dhanya (Cereals and Millets), Shami Dhanya (Pulses), Shaka and Haritavarga (Leafy and Non leafy vegatables), Kanda varga (roots and tubers), Phalavarga (Fruits), Taila varga (Fats and Oils), Ikshuvarga (Sugarcane Products)&Madyavarga(Alcoholic Beverages), Dugdhavarga (Milk and Milk products), Ahara UpayogiVarga (Spices & Condiments), Kritannavarga(Prepared Food), Mamsavarga (Meat types) and JalaVarga
+   **Importance:** Must Know
 
-## 7.21 Harita Varga
+9. Define Pro-biotics and Pre-biotics and explain their utility
+   **Importance:** Desirable to Know
 
-## 7.22 Kanda Varga
+10. Explain the Proximate principles of Food, Recommended Daily Allowance according to various conditions, Sources, and deficiency diseases of Protein, Carbohydrate, Fats, Vitamins, and Minerals.
+    **Importance:** Must Know
 
-### Includes
+11. Define Balanced diet and explain diet for an individual depending on age, body weight and physiological status and explain the Social Aspects of Nutrition
+    **Importance:** Must Know
 
-* Roots
-* Tubers
+12. Explain Food hygiene, Sanitation of eating places, Preservation of food, Food handlers, Foodborne diseases, Food fortification, Food adulteration, and Food toxicants
+    **Importance:** Nice to Know
 
-## 7.23 Phala Varga
+13. Explain Milk Hygiene, Milk composition, Source of infection for Milk, Milk borne diseases, Clean and Safe milk and Pasteurization of milk
+    **Importance:** Desirable to Know
 
-### Includes
+14. Explain Meat Hygiene, Meat inspection, Slaughterhouse and Freshness of fish and egg
+    **Importance:** Desirable to Know
 
-* Fruits
+15. Explain safety and hygiene measures for Fruits and Vegetables
+    **Importance:** Nice to Know
 
-## 7.24 Taila Varga
+16. Formulate a Pathya-Apathya diet for prevention of lifestyle disorders such as Obesity, Diabetes mellitus,Cardiovascular diseases andAcid peptic diseases
+    **Importance:** Desirable to Know
 
-### Includes
+17. Describe Food safety and standards regulation( Ayurveda Ahara Regulations), 2022 and Food safety and standards Act, 2006.
+    **Importance:** Nice to Know
 
-* Fats
-* Oils
+18. Explain different Dietary Supplements and Ergogenic Aids
+    **Importance:** Nice to Know
 
-## 7.25 Ikshu Varga
+19. Explain the impact of different dietary patterns: Mediterranean diet, Keto Diet, DASH diet, the MIND diet, Vegan diet, Ovo-lacto-vegetarian, pesco-vegetarian, plant-based diet, Intermittent diet, the Nordic diet, importance of organic foods, merits and demerits of genetically modified foods
+    **Importance:** Nice to Know
 
-### Includes
+20. Describe the Slow and Fast foods . Explain the impact of cooking processes like boiling, steaming, sautéing, fermenting etc. (samskara) on health and effect of instant foods like Maggi etc...
+    **Importance:** Nice to Know
 
-* Sugarcane Products
+21. Define Nutraceuticals, Nutrigenomics, Nutrigenetics
+    **Importance:** Desirable to Know
 
-## 7.26 Madya Varga
-
-### Includes
-
-* Alcoholic Beverages
-
-## 7.27 Dugdha Varga
-
-### Includes
-
-* Milk
-* Milk Products
-
-## 7.28 Ahara Upayogi Varga
-
-### Includes
-
-* Spices
-* Condiments
-
-## 7.29 Kritanna Varga
-
-### Includes
-
-* Prepared Food
-
-## 7.30 Mamsa Varga
-
-### Includes
-
-* Meat Types
-
-## 7.31 Jala Varga
+22. Explain the concept of Viruddhaahara with classical and modernday examples and the application of this in the prevention of diseases
+    **Importance:** Must Know
 
 ---
 
-## 7.32 Probiotics
+### Topic 8: Rasayana for Swastha
 
-## 7.33 Prebiotics
+1. Explain the importance of lifestyle counselling with its methods
+   **Importance:** Nice to Know
 
-## 7.34 Proximate Principles of Food
+2. Define Rasayana and mention the benefits of Rasayana
+   **Importance:** Must Know
 
-### Includes
+3. Classify the types of Rasayana with examples
+   **Importance:** Must Know
 
-* Proteins
-* Carbohydrates
-* Fats
-* Vitamins
-* Minerals
+4. Explain Urjaskara Rasayanas as per age and occupations /Activities
+   **Importance:** Must Know
 
-## 7.35 Recommended Daily Allowance
-
-## 7.36 Sources and Deficiency Diseases
-
-## 7.37 Balanced Diet
-
-## 7.38 Diet According To:
-
-* Age
-* Body Weight
-* Physiological Status
-
-## 7.39 Social Aspects of Nutrition
-
-## 7.40 Food Hygiene
-
-## 7.41 Sanitation of Eating Places
-
-## 7.42 Preservation of Food
-
-## 7.43 Food Handlers
-
-## 7.44 Foodborne Diseases
-
-## 7.45 Food Fortification
-
-## 7.46 Food Adulteration
-
-## 7.47 Food Toxicants
+5. Explain the antioxidant&immunomodulatory effects of Rasayana with reference to research articles
+   **Importance:** Nice to Know
 
 ---
 
-## 7.48 Milk Hygiene
+### Topic 9: Yoga
 
-## 7.49 Milk Composition
+1. Describe adverse effects of improper Yoga practices
+   **Importance:** Desirable to Know
 
-## 7.50 Sources of Infection for Milk
+2. Describe Global importance of International Day of Yoga (DY)
+   **Importance:** Nice to Know
 
-## 7.51 Milk Borne Diseases
+3. Explain the etymology / derivation of the word "Yoga' .
+   **Importance:** Must Know
 
-## 7.52 Clean and Safe Milk
+4. Define Yoga according to Patanjali Yogasutras, Bhagavad Gita and Charaka Samhita.
+   **Importance:** Must Know
 
-## 7.53 Pasteurization of Milk
+5. Distinguish between Rajayoga, Hathayoga and Karmayoga.
+   **Importance:** Must Know
 
----
+6. Explain Yogabhyasa Pratibhandhakas and Yoga Siddhikarabhavas.
+   **Importance:** Must Know
 
-## 7.54 Meat Hygiene
+7. Describe Mitahara and Pathya-apathyas during Yogabhyasa.
+   **Importance:** Must Know
 
-## 7.55 Meat Inspection
+8. Explain Panchakosha theory.
+   **Importance:** Must Know
 
-## 7.56 Slaughterhouse
+9. List out the Ashtangas of Yoga.
+   **Importance:** Must Know
 
-## 7.57 Freshness of Fish and Egg
+10. Describe Yama and Niyama with meaning according to Yogasutras and Hathayogapradipika.
+    **Importance:** Must Know
 
-## 7.58 Safety and Hygiene Measures for Fruits and Vegetables
+11. Define Asana and explain the importance of asana. Distinguish between asana and physical exercise.
+    **Importance:** Must Know
 
----
+12. Describe the procedure, benefits, indications, and contraindications of Standing Yoga Postures such as Ardhakatichakrasana, Padahastasana, Ardhachakrasana, and Trikonasana.
+    **Importance:** Must Know
 
-## 7.59 Pathya-Apathya Diet for:
+13. Describe the procedure, benefits, indications and contraindications of Sitting Yoga postures such as Swasthikasana, Gomukhasana, Padmasana, Vajrasana, Bhadrasana, Shashankasana, Ushtrasana, Pashchimottanasana, Suptavajrasana, Ardhamatsyendrasana, and Siddhasana.
+    **Importance:** Must Know
 
-* Obesity
-* Diabetes Mellitus
-* Cardiovascular Diseases
-* Acid Peptic Diseases
+14. Decsribe the procedure, benefits, indications and contra indications of Supine Yoga postures such as Pavanamuktasana, Sarvangasana, Matsyasana, Halasana, Chakrasana, Shavasana and Setubandhasana.
+    **Importance:** Must Know
 
-## 7.60 Food Safety and Standards Regulation (Ayurveda Ahara Regulations), 2022
+15. Describe the procedure, benefits, indications, and contraindications of Prone Yoga postures such as Bhujangasana, Shalabhasana, Dhanurasana, and Makarasana.
+    **Importance:** Must Know
 
-## 7.61 Food Safety and Standards Act, 2006
+16. Describe the procedure, benefits and contraindications of Suryanamaskara.
+    **Importance:** Must Know
 
-## 7.62 Dietary Supplements
+17. Define pranayama and explain its types, benefits, time of practice, and avara-pravara-madhyamalakshanas.
+    **Importance:** Must Know
 
-## 7.63 Ergogenic Aids
+18. Describe the procedure of Nadishudhi Pranayama, its benefits, and Nadishudhilakshana.
+    **Importance:** Must Know
 
----
+19. Enumerate the Kumbhakabhedas.
+    **Importance:** Must Know
 
-## 7.64 Mediterranean Diet
+20. Describe the procedure and benefits of Suryabhedana, Ujjayi, Sheetali, Sitkari, Bhastrika, Bhramari,Murcha, and Plavini.
+    **Importance:** Must Know
 
-## 7.65 Keto Diet
+21. Enlist Shatkarmas of Yoga , indications and their importance.
+    **Importance:** Must Know
 
-## 7.66 DASH Diet
+22. Describe the procedure, benefits, indications, contraindications, and precautions of Dhauti, Basti, Neti, Trataka, Nauli, and Kapalabhati.
+    **Importance:** Must Know
 
-## 7.67 MIND Diet
+23. Explain the term bandha & Describe the procedure and benefits of Mulabandha, Jalandharabandha, and Uddiyanabandha.
+    **Importance:** Must Know
 
-## 7.68 Vegan Diet
+24. Describe Mudras and explain the benefits of Shanmukhi mudra andJnana mudra .
+    **Importance:** Desirable to Know
 
-## 7.69 Ovo-Lacto Vegetarian Diet
+25. Describe Shatchakras and explain their importance in Yoga practice.
+    **Importance:** Desirable to Know
 
-## 7.70 Pesco Vegetarian Diet
+26. Describe Ida-pingala-sushumna nadis and their importance in yoga practice.
+    **Importance:** Nice to Know
 
-## 7.71 Plant Based Diet
+27. Define Pratyahara and explain its importance in Yoga practice.
+    **Importance:** Must Know
 
-## 7.72 Intermittent Diet
+28. Define Dharana and explain its importance in Yoga practice.
+    **Importance:** Must Know
 
-## 7.73 Nordic Diet
+29. Define Dhyana and explain its importance in Yoga practice.
+    **Importance:** Must Know
 
-## 7.74 Organic Foods
+30. Describe Cyclic Meditation and Mindfulness meditation and their benefits.
+    **Importance:** Desirable to Know
 
-## 7.75 Genetically Modified Foods
+31. Define Samadhi and explain its types and importance.
+    **Importance:** Must Know
 
-## 7.76 Inflammatory Foods
-
-### Includes
-
-* Fried Foods
-* Cookies
-* Hot Dogs
-* Red Meat
-* Refined Grains
-* Pizza
-* Burger
-* Instant Foods
-* Maggi
-
-## 7.77 Slow Foods
-
-## 7.78 Fast Foods
-
-## 7.79 Cooking Processes (Samskara)
-
-### Includes
-
-* Boiling
-* Steaming
-* Sauteing
-* Fermenting
-
-## 7.80 Nutraceuticals
-
-## 7.81 Nutrigenomics
-
-## 7.82 Nutrigenetics
-
-## 7.83 Viruddha Ahara
-
-### Includes
-
-* Classical Examples
-* Modern Examples
-* Disease Prevention Applications
-
-Source: 
+32. Define Moksha according to Charaka and explain Muktatmalakshana and Moksha upayas.
+    **Importance:** Desirable to Know
 
 ---
 
-# Chapter 8 — Rasayana for Swastha
+### Topic 10: Naturopathy
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
+1. Explain the basic principles of Naturopathy.
+   **Importance:** Desirable to Know
 
-## 8.1 Definition of Rasayana
+2. Describe the concept of Panchabhutopasana.
+   **Importance:** Desirable to Know
 
-## 8.2 Benefits of Rasayana
+3. Explain the procedure and therapeutic effects of Mud therapy.
+   **Importance:** Must Know
 
-## 8.3 Classification of Rasayana
+4. Explain the procedure and therapeutic benefits of Sun bath.
+   **Importance:** Must Know
 
-## 8.4 Types of Rasayana
+5. Explain Fasting therapy and its types and benefits.
+   **Importance:** Must Know
 
-## 8.5 Urjaskara Rasayana
+6. Explain hydrotherapy, types of water used based on the temperature and therapeutic effects of Hydrotherapy.
+   **Importance:** Must Know
 
-### According To
-
-* Age
-* Occupation
-* Activities
-
-## 8.6 Antioxidant Effects of Rasayana
-
-## 8.7 Immunomodulatory Effects of Rasayana
-
-## 8.8 Lifestyle Counselling
-
-## 8.9 Methods of Lifestyle Counselling
-
-Source: 
+7. Describe types , methods and benefits of massage.
+   **Importance:** Must Know
 
 ---
 
-# Chapter 9 — Yoga
+## Paper 2
 
-**Expected Marks:** 18
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+### Topic 1: Janapadodhwamsa / Maraka Vyadhi
 
-## 9.1 Etymology of Yoga
+1. Understanding the Epidemic Diseases (Amendment) Ordinance Act,2020 ..
+   **Importance:** Must Know
 
-## 9.2 Definitions of Yoga
+2. Explain the causes of Janapadodhwamsa/ maraka vyadhi State the manifestation and control measures of Jnapadodhwamsa Explain the importance of Panchakarma and Rasayana in preventing Janapadodhwamsa
+   **Importance:** Must Know
 
-### According To
+3. Define Epidemiology, enumerate and describe the principles and uses of epidemiology.
+   **Importance:** Must Know
 
-* Patanjali Yoga Sutras
-* Bhagavad Gita
-* Charaka Samhita
+4. Describe the basic terms of epidemiology.Explain and discuss the dynamics of disease transmission.Explain the theory of disease causation, epidemiological triad and natural history of disease.
+   **Importance:** Must Know
 
-## 9.3 Raja Yoga
+5. Explain the concept of prevention, modes of intervention, risk factors, incidence and prevalence.
+   **Importance:** Must Know
 
-## 9.4 Hatha Yoga
+6. Explain Susceptible host and host defense.Describe Immunizing Agents.Explain the concept of vyadhikshamatwa.Enlist methods to improve Vyadhikshamatwa.Classify Bala, enlist factors of Bala vriddhikara bhava.
+   **Importance:** Must Know
 
-## 9.5 Karma Yoga
+7. Explain the investigation of an epidemic. Explain prevention and control of an epidemic.
+   **Importance:** Must Know
 
-## 9.6 Yogabhyasa Pratibandhakas
+8. Explain Sankramaka roga as per Ayurveda.
+   **Importance:** Must Know
 
-## 9.7 Yoga Siddhikara Bhavas
+9. Explain Epidemiological determinants, brief pathology ,transmission, incubation period , clinical features, diagnosis and preventive measures of 1.Droplet Infections such as Chicken Pox, Measles, Rubella, Diphtheria, Pertussis, Mumps, Tuberculosis, SARS, Influenza, Pneumonia, Covid-19 and Leprosy
+   **Importance:** Must Know
 
-## 9.8 Mitahara
+10. 2.Water borne Infections / intestinal infections - Cholera, Polio, Viral Hepatitis, Typhoid
+    **Importance:** Must Know
 
-## 9.9 Pathya During Yogabhyasa
+11. 3.Intestinal infestations — Ascariasis, Hook worm ,Tape worm4. Emerging and re-emerging diseases.Explain Role of Ayurveda in Epidemics like COVID-19, Zika Virus , HIN1,H3N2,etc
+    **Importance:** Must Know
 
-## 9.10 Apathya During Yogabhyasa
+12. 5.Sxually transmitted diseases (STDs) with prevention and control - HIV/ AIDS, Syphilis and Gonorrhea.
+    **Importance:** Must Know
 
-## 9.11 Panchakosha Theory
-
-## 9.12 Yama
-
-## 9.13 Niyama
-
-## 9.14 Asana
-
-## 9.15 Pranayama
-
-## 9.16 Pratyahara
-
-## 9.17 Dharana
-
-## 9.18 Dhyana
-
-## 9.19 Samadhi
-
-## 9.20 Surya Namaskara
-
-## 9.21 Dhauti
-
-## 9.22 Basti
-
-## 9.23 Neti
-
-## 9.24 Trataka
-
-## 9.25 Nauli
-
-## 9.26 Kapalabhati
-
-## 9.27 Mula Bandha
-
-## 9.28 Jalandhara Bandha
-
-## 9.29 Uddiyana Bandha
-
-## 9.30 Shanmukhi Mudra
-
-## 9.31 Jnana Mudra
-
-## 9.32 Shat Chakras
-
-## 9.33 Ida Nadi
-
-## 9.34 Pingala Nadi
-
-## 9.35 Sushumna Nadi
-
-## 9.36 Moksha According to Charaka
-
-## 9.37 Muktatma Lakshana
-
-## 9.38 Moksha Upayas
-
-## 9.39 International Day of Yoga
-
-## 9.40 Adverse Effects of Improper Yoga Practices
-
-Source: 
+13. Explain the role of Ayurveda inthe prevention and control with recent research updates of Lifestyle diseases such as DM, Obesity, Coronary artery disease (CAD) and Cancer
+    **Importance:** Must Know
 
 ---
 
-# Chapter 10 — Naturopathy
+### Topic 2: Environmental health
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
+1. Understanding the Environment protection Act,1986
+   **Importance:** Must Know
 
-## 10.1 Basic Principles of Naturopathy
+2. Describe the properties of Vayu and state the composition of air.
+   **Importance:** Desirable to Know
 
-## 10.2 Panchabhutopasana
+3. Specify the changes in air of the occupied room.
+   **Importance:** Desirable to Know
 
-## 10.3 Mud Therapy
+4. Explain comfort zone and indices of thermal comfort.
+   **Importance:** Desirable to Know
 
-## 10.4 Therapeutic Effects of Mud Therapy
+5. Comprehend the causes, prevention and control of air pollution. Discuss the effects of air pollution on health and social aspects
+   **Importance:** Desirable to Know
 
-## 10.5 Sun Bath
+6. Elaborate the effects of Global warming with recent updates
+   **Importance:** Desirable to Know
 
-## 10.6 Therapeutic Effects of Sun Bath
+7. Define ventilation and illustrate its types.
+   **Importance:** Desirable to Know
 
-## 10.7 Fasting Therapy
+8. Explain the effects of high altitude and mountain air on health.
+   **Importance:** Desirable to Know
 
-### Includes
+9. Explain safe and wholesome water and state water requirements.
+   **Importance:** Must Know
 
-* Types
-* Benefits
+10. Explain the properties of water from different sources.
+    **Importance:** Must Know
 
-## 10.8 Hydrotherapy
+11. Explain water pollution and health hazards.
+    **Importance:** Must Know
 
-### Includes
+12. Describe the contemporary methods of water purification along with Ayurvedic methods.
+    **Importance:** Must Know
 
-* Types of Water Based on Temperature
-* Therapeutic Effects
+13. Elucidate the effects of Hard Water on health and methods of removal of hardness.
+    **Importance:** Must Know
 
-## 10.9 Therapeutic Effects of Massage
+14. Describe the quality of water stored in different vessels as per classics.
+    **Importance:** Desirable to Know
 
-Source: 
+15. Explain the rain water harvesting methods and its importance
+    **Importance:** Nice to Know
 
----
+16. Enlist the types of soil.
+    **Importance:** Desirable to Know
 
-# PAPER 1 COMPLETE
+17. Interpret the relation between soil and health.
+    **Importance:** Desirable to Know
 
-Next: PAPER 2 — Public Health
+18. Explain Land pollution and its prevention and control
+    **Importance:** Desirable to Know
 
-# PAPER 2 — Public Health
+19. Explain land purification as per the classics.
+    **Importance:** Nice to Know
 
----
+20. Explain the Social goals of Housing and Housing standards. Understanding of The building and other construction workers Act,1996
+    **Importance:** Desirable to Know
 
-# Chapter 11 — Janapadodhwamsa
+21. Analyze the effects of housing on health.
+    **Importance:** Desirable to Know
 
-**Expected Marks:** 8
-**Weightage:** Very High
-**Importance Type:** Must Know
+22. Explain overcrowding and its impact on health
+    **Importance:** Desirable to Know
 
-## 11.1 Definition of Janapadodhwamsa
+23. Explain good lighting, natural lighting and artificial lighting
+    **Importance:** Desirable to Know
 
-## 11.2 Causes of Janapadodhwamsa
+24. Explain the biological effects of lighting.
+    **Importance:** Desirable to Know
 
-### Includes
+25. Define noise. Illustrate its sources, effects on health and control measures.
+    **Importance:** Desirable to Know
 
-* Vayu Dushti
-* Jala Dushti
-* Desha Dushti
-* Kala Dushti
+26. Enlist the sources of Radiation and explain its effects on health and describe control measures.
+    **Importance:** Desirable to Know
 
-## 11.3 Prevention of Janapadodhwamsa
+27. Enlist Different types of solid waste and Explain the Storage and collection of refuse.
+    **Importance:** Must Know
 
-## 11.4 Role of:
+28. Explain the Methods of disposal of solid waste (Rural & urban)
+    **Importance:** Must Know
 
-* Panchakarma
-* Rasayana
-* Sadvritta
+29. Describe Bio-medical waste management and Bio-Medical waste management rules, 2016
+    **Importance:** Must Know
 
-## 11.5 Concept of Epidemic
+30. Enlist excreta Disposal methods and explain Sanitary Latrines
+    **Importance:** Desirable to Know
 
-## 11.6 Pandemic
+31. Explain the Modern Sewage disposal method
+    **Importance:** Desirable to Know
 
-## 11.7 Endemic
-
-## 11.8 Outbreak Investigation
-
-## 11.9 Quarantine
-
-## 11.10 Isolation
-
-## 11.11 Surveillance
-
-## 11.12 Screening
-
-## 11.13 Contact Tracing
-
-## 11.14 Public Health Emergency Measures
-
-## 11.15 Emerging and Re-emerging Diseases
-
-## 11.16 National Health Programs
-
-## 11.17 Vaccination
-
-## 11.18 Immunization Schedule
-
-## 11.19 Cold Chain
-
-## 11.20 Herd Immunity
-
-## 11.21 Biomedical Waste Management
-
-## 11.22 Infection Prevention and Control
-
-Source: 
+32. Describe the disposal methods of Excreta during camps, fairs, and festivals
+    **Importance:** Desirable to Know
 
 ---
 
-# Chapter 12 — Environmental Health
+### Topic 3: Disaster management
 
-**Expected Marks:** 10
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+1. Define disaster and explain disaster management
+   **Importance:** Desirable to Know
 
-## 12.1 Environment
+2. Explain effects of natural and man-made disasters
+   **Importance:** Desirable to Know
 
-## 12.2 Components of Environment
-
-## 12.3 Environmental Health
-
-## 12.4 Air Pollution
-
-### Includes
-
-* Sources
-* Effects
-* Prevention
-
-## 12.5 Water Pollution
-
-### Includes
-
-* Sources
-* Purification
-* Waterborne Diseases
-
-## 12.6 Soil Pollution
-
-## 12.7 Noise Pollution
-
-## 12.8 Radiation Pollution
-
-## 12.9 Global Warming
-
-## 12.10 Climate Change
-
-## 12.11 Greenhouse Effect
-
-## 12.12 Ozone Layer Depletion
-
-## 12.13 Waste Disposal
-
-## 12.14 Sewage Disposal
-
-## 12.15 Solid Waste Management
-
-## 12.16 Biomedical Waste
-
-## 12.17 Housing Standards
-
-## 12.18 Ventilation
-
-## 12.19 Lighting
-
-## 12.20 Occupational Health Hazards
-
-## 12.21 Occupational Diseases
-
-## 12.22 Ergonomics
-
-## 12.23 Disaster Management
-
-## 12.24 Environmental Sanitation
-
-Source: 
+3. Explain epidemiologic surveillance and identify disease control measures
+   **Importance:** Desirable to Know
 
 ---
 
-# Chapter 13 — Demography and Health Statistics
+### Topic 4: Occupational Health
 
-**Expected Marks:** 8
-**Weightage:** Very High
-**Importance Type:** Must Know
+1. Understand the Merchant Shipping / Medical Examination Rules, 2000
+   **Importance:** Desirable to Know
 
-## 13.1 Demography
+2. Define Occupational Health and Ergonomics.
+   **Importance:** Must Know
 
-## 13.2 Census
+3. Explain occupational Hazards.
+   **Importance:** Must Know
 
-## 13.3 Population Explosion
+4. Enlist occupational diseases and explain their prevention & control.
+   **Importance:** Must Know
 
-## 13.4 Population Control
+5. Explain ESI Act, 1948 and The factories Act,1948
+   **Importance:** Must Know
 
-## 13.5 Fertility Indicators
-
-## 13.6 Mortality Indicators
-
-## 13.7 Morbidity Indicators
-
-## 13.8 Health Indicators
-
-## 13.9 Epidemiological Indicators
-
-## 13.10 Vital Statistics
-
-## 13.11 Birth Rate
-
-## 13.12 Death Rate
-
-## 13.13 Infant Mortality Rate
-
-## 13.14 Maternal Mortality Rate
-
-## 13.15 Morbidity Rate
-
-## 13.16 Disability Rate
-
-## 13.17 Biostatistics
-
-## 13.18 Collection of Data
-
-## 13.19 Presentation of Data
-
-## 13.20 Analysis of Data
-
-## 13.21 Measures of Central Tendency
-
-## 13.22 Measures of Dispersion
-
-## 13.23 Graphical Representation
-
-## 13.24 Sampling Methods
-
-## 13.25 Correlation
-
-## 13.26 Regression
-
-Source: 
+6. Describe the role of Ayurveda in various Occupational health problems.
+   **Importance:** Must Know
 
 ---
 
-# Chapter 14 — Health Education and Communication
+### Topic 5: School health services
 
-**Expected Marks:** 5
-**Weightage:** High
-**Importance Type:** Must Know
+1. State the Health problems of school children.
+   **Importance:** Must Know
 
-## 14.1 Health Education
+2. Mention the aspects of school health services.
+   **Importance:** Must Know
 
-## 14.2 Aims of Health Education
+3. Mention the duties of school medical officers.
+   **Importance:** Must Know
 
-## 14.3 Principles of Health Education
-
-## 14.4 Methods of Health Education
-
-## 14.5 Communication
-
-## 14.6 Types of Communication
-
-## 14.7 Barriers to Communication
-
-## 14.8 IEC (Information Education Communication)
-
-## 14.9 Behaviour Change Communication
-
-## 14.10 Counselling
-
-## 14.11 Public Awareness Campaigns
-
-## 14.12 School Health Education
-
-## 14.13 Community Participation
-
-Source: 
+4. Explain how to Maintain a healthy environment in the school.
+   **Importance:** Must Know
 
 ---
 
-# Chapter 15 — National Health Programs and Health Care Delivery
+### Topic 6: Disinfection
 
-**Expected Marks:** 10
-**Weightage:** Extremely High
-**Importance Type:** Must Know
+1. Define the term disinfection
+   **Importance:** Must Know
 
-## 15.1 Health Care Delivery System in India
+2. Enlist and explain the types of disinfection.
+   **Importance:** Must Know
 
-## 15.2 Primary Health Care
+3. Describe the Natural agents, Physical agents, and chemical agents of disinfection
+   **Importance:** Must Know
 
-## 15.3 Secondary Health Care
+4. Demonstrate the recommended disinfection procedures of feces & urine, sputum, and room.
+   **Importance:** Desirable to Know
 
-## 15.4 Tertiary Health Care
-
-## 15.5 Primary Health Centre
-
-## 15.6 Community Health Centre
-
-## 15.7 Sub Centre
-
-## 15.8 Referral System
-
-## 15.9 National Health Mission
-
-## 15.10 Ayushman Bharat
-
-## 15.11 Integrated Child Development Services (ICDS)
-
-## 15.12 Reproductive and Child Health Programme
-
-## 15.13 Universal Immunization Programme
-
-## 15.14 National Tuberculosis Elimination Programme
-
-## 15.15 National AIDS Control Programme
-
-## 15.16 National Programme for Prevention and Control of Cancer, Diabetes, Cardiovascular Diseases and Stroke
-
-## 15.17 National Mental Health Programme
-
-## 15.18 National Vector Borne Disease Control Programme
-
-## 15.19 School Health Programme
-
-## 15.20 Geriatric Health Care
-
-## 15.21 Adolescent Health
-
-## 15.22 Maternal and Child Health
-
-## 15.23 Family Welfare Programme
-
-## 15.24 Health Insurance
-
-## 15.25 Telemedicine
-
-## 15.26 Digital Health Mission
-
-Source: 
+5. Explain Ayurvedic disinfection methods.
+   **Importance:** Desirable to Know
 
 ---
 
-# Swasthavritta evam Yoga Extraction Complete
+### Topic 7: Primary health care
 
-This completes:
+1. Define Primary Health Care.
+   **Importance:** Must Know
 
-* Paper 1
-* Paper 2
-* All listed chapters
-* All listed subtopics
-* All explicitly mentioned curriculum entities from the PDF
+2. Describe the principles and elements of primary health care and the levels of health care.
+   **Importance:** Must Know
 
-Next subject PDF?
+3. Describe the Structure at village, sub-centre, PHC, CHC, Rural hospital levels
+   **Importance:** Must Know
+
+4. Describe primary health care in Health insurance, Private agencies, Voluntary health agencies, NGOs, and the AYUSH sector
+   **Importance:** Desirable to Know
+
+5. Describe the role of Ayurveda in Primary Health Care.
+   **Importance:** Must Know
+
+---
+
+### Topic 8: Mother and Child health care
+
+1. Describe the objectives of Maternal and Child Care services.
+   **Importance:** Must Know
+
+2. Explain the MCH problems & enlist the indicators of MCH care
+   **Importance:** Must Know
+
+---
+
+### Topic 9: Family welfare programme
+
+1. Define demography and enlist the sources of demographic statistics in India.
+   **Importance:** Must Know
+
+2. Describe the demographic cycle & define life expectancy.
+   **Importance:** Must Know
+
+3. Define family planning, eligible couple and target couple.Enlist & explain the objectives of family planning.
+   **Importance:** Must Know
+
+4. Explain the problems of population explosion and describe national population policy.
+   **Importance:** Must Know
+
+5. Classify and describe the Contraceptive methods (Fertility Regulating Methods).
+   **Importance:** Must Know
+
+---
+
+### Topic 10: Preventive Geriatrics
+
+1. Enlist the health problems of the aged and explain their prevention and control measures
+   **Importance:** Must Know
+
+2. Explain the relation between lifestyle and healthy aging.
+   **Importance:** Must Know
+
+3. Describe the role of rasayana in preventive geriatrics.
+   **Importance:** Must Know
+
+---
+
+### Topic 11: World Health Organization and International health agencies
+
+1. Define and describe the structure, regions, and works of the World Health Organization
+   **Importance:** Must Know
+
+2. Describe the functions of various international health agencies - United Nations health agencies, bilateral health agencies, and Non- Governmental agencies
+   **Importance:** Must Know
+
+3. Describe the contribution of the world health organization to the global acceptance of Ayurveda
+   **Importance:** Must Know
+
+---
+
+### Topic 12: Vital Statistics
+
+1. Understanding of Registration of Birth and Death Act, 1969
+   **Importance:** Must Know
+
+2. Define Vital Statistics. Enumerate the sources ofVital statistics
+   **Importance:** Must Know
+
+3. Describe Fertility , Morbidity and Mortality rates
+   **Importance:** Must Know
+
+---
+
+### Topic 13: Health Administration
+
+1. Describe the health administration including AYUSH at the Central, State, District, and Village levels
+   **Importance:** Desirable to Know
+
+---
+
+### Topic 14: National Health Programmes
+
+1. State the vision/objective and outline the goals, strategies and plan of action of National Health Programs - Leprosy(NLEP), AIDS (NACP), Blindness (NPCB), Polio , National TB Elimination Program , Vector born disease control program, RCH program, ICDS program, Universal Immunization Program, National mental health program , National Program for Prevention and Control of Cancer, Diabetes, Cardiovascular Diseases & Stroke (NPCDCS) , Swachha Bharat mission, Ayushman Bharat Yojana, Ayushman Bharat Digital Mission, National health mission (NRHM&NUHM), National AYUSH Mission (NAM). National nutrition programs- National Iodine Deficiency Disorders Control program, National Iron Plus Initiative for Anemia Control, National Vitamin A prophylaxis program, Mid-Day Meal program & Balwadi nutrition program.
+   **Importance:** Must Know
+
+---
+
+### Topic 15: National Health Policy
+
+1. Describe the National Health Policy (NHP) and the scope of Ayurveda in NHP.
+   **Importance:** Must Know

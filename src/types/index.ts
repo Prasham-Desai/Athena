@@ -25,6 +25,7 @@ export interface Topic {
   order: number;
   notes: string;
   completedAt: string | null;     // ISO date string
+  importance?: string | null;
   subtopics?: any[];
 }
 
@@ -138,6 +139,7 @@ export interface Subtopic {
   name: string;
   content: string | null;
   order_index: number;
+  importance: string | null;
   created_at: string;
 }
 

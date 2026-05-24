@@ -247,18 +247,30 @@ function SubjectCurriculum({
                                     <Lock className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] shrink-0" />
                                   )}
 
-                                  {/* Topic name */}
-                                  <span className={cn(
-                                    'text-xs flex-1 min-w-0 truncate',
+                                  {/* Topic name and importance */}
+                                  <div className={cn(
+                                    'flex-1 min-w-0 flex items-center gap-2',
                                     !isCompleted && 'italic'
                                   )}>
-                                    {topic.name}
+                                    <span className="text-xs truncate">{topic.name}</span>
+                                    {topic.importance && (
+                                      <span className={cn(
+                                        'text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0',
+                                        topic.importance.toLowerCase().includes('must') 
+                                          ? 'bg-red-500/10 text-red-500' 
+                                          : topic.importance.toLowerCase().includes('desirable')
+                                          ? 'bg-amber-500/10 text-amber-500'
+                                          : 'bg-blue-500/10 text-blue-500'
+                                      )}>
+                                        {topic.importance}
+                                      </span>
+                                    )}
                                     {!isCompleted && (
-                                      <span className="text-[9px] ml-1.5 text-[hsl(var(--muted-foreground))]">
+                                      <span className="text-[9px] text-[hsl(var(--muted-foreground))]">
                                         (complete in Subjects first)
                                       </span>
                                     )}
-                                  </span>
+                                  </div>
 
                                   {/* Revision count badge */}
                                   {hasRevisions && (

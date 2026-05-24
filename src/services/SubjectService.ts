@@ -12,6 +12,7 @@ function mapTopic(row: any, allSubtopics: any[] = []): any {
     name: s.name,
     content: s.content,
     order_index: s.order_index,
+    importance: s.importance,
     created_at: s.created_at,
   }));
 
@@ -26,6 +27,7 @@ function mapTopic(row: any, allSubtopics: any[] = []): any {
     nextRevisionDue: row.next_revision_due,
     completedAt: row.completed_at,
     notes: row.notes || '',
+    importance: row.importance || null,
     subtopics: topicSubtopics,
   };
 }

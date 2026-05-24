@@ -306,6 +306,19 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
               onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
               className={cn('text-sm font-medium')}
             />
+            {/* Importance */}
+            {topic.importance && (
+              <span className={cn(
+                'text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0',
+                topic.importance.toLowerCase().includes('must') 
+                  ? 'bg-red-500/10 text-red-500' 
+                  : topic.importance.toLowerCase().includes('desirable')
+                  ? 'bg-amber-500/10 text-amber-500'
+                  : 'bg-blue-500/10 text-blue-500'
+              )}>
+                {topic.importance}
+              </span>
+            )}
             {/* Revision count */}
             {topic.revisionCount > 0 && (
               <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
