@@ -43,6 +43,43 @@ import { cn, STATUS_CONFIG, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { TopicStatus, Topic, Chapter, ImportanceTag } from '@/types';
 
 // ---------------------------------------------------------------------------
+// Notes parser – extracts sub-sub-topics and metadata from topic.notes
+// ---------------------------------------------------------------------------
+interface ParsedNotes {
+  subSubTopics: string[];
+  metadata: { key: string; value: string }[];
+}
+
+function parseTopicNotes(notes: string | undefined | null): ParsedNotes {
+  if (!notes) return { subSubTopics: [], metadata: [] };
+
+  const subSubTopics: string[] = [];
+  const metadata: { key: string; value: string }[] = [];
+
+  const lines = notes.split('\n');
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    // Metadata lines: **Key:** Value
+    const metaMatch = trimmed.match(/^\*\*(.+?):\*\*\s*(.+)$/);
+    if (metaMatch) {
+      metadata.push({ key: metaMatch[1].trim(), value: metaMatch[2].trim() });
+      continue;
+    }
+
+    // Sub-sub-topic bullet lines: * Item
+    const bulletMatch = trimmed.match(/^\*\s+(.+)$/);
+    if (bulletMatch) {
+      subSubTopics.push(bulletMatch[1].trim());
+      continue;
+    }
+  }
+
+  return { subSubTopics, metadata };
+}
+
+// ---------------------------------------------------------------------------
 // Icon map
 // ---------------------------------------------------------------------------
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -265,6 +302,8 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
     );
   };
 
+  const parsedNotes = parseTopicNotes(topic.notes);
+
   return (
     <motion.div
       layout
@@ -299,12 +338,12 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
         </button>
 
         {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
+        <div className="flex-1 min-w-0 overflow-hidden">
+          <div className="flex items-center gap-2 flex-wrap">
             <InlineEdit
               value={topic.name}
               onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-              className={cn('text-sm font-medium')}
+              className={cn('text-sm font-medium topic-text-wrap')}
             />
             {/* Importance */}
             {topic.importance && (
@@ -329,14 +368,38 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
           
           {/* Subtopics */}
           {topic.subtopics && topic.subtopics.length > 0 && (
-            <ul className="mt-2 space-y-1">
+            <ul className="subtopic-list">
               {topic.subtopics.map((sub: any) => (
-                <li key={sub.id} className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-start gap-1.5">
-                  <span className="mt-1 w-1 h-1 rounded-full bg-[hsl(var(--muted-foreground))]/50 shrink-0" />
-                  <span className="leading-tight">{sub.name}</span>
+                <li key={sub.id} className="subtopic-item">
+                  <span className="subtopic-bullet" />
+                  <span className="subtopic-name">{sub.name}</span>
                 </li>
               ))}
             </ul>
+          )}
+
+          {/* Sub-sub-topics from notes */}
+          {parsedNotes.subSubTopics.length > 0 && (
+            <div className="sub-subtopic-section">
+              {parsedNotes.subSubTopics.map((item, idx) => (
+                <div key={idx} className="sub-subtopic-item">
+                  <span className="sub-subtopic-marker" />
+                  <span className="sub-subtopic-name">{item}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Metadata from notes (Expected Marks, Weightage, etc.) */}
+          {parsedNotes.metadata.length > 0 && (
+            <div className="topic-metadata">
+              {parsedNotes.metadata.map((meta, idx) => (
+                <span key={idx} className="topic-meta-tag">
+                  <span className="topic-meta-key">{meta.key}:</span>
+                  <span className="topic-meta-value">{meta.value}</span>
+                </span>
+              ))}
+            </div>
           )}
         </div>
 

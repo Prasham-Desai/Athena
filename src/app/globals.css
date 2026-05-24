@@ -171,3 +171,133 @@ html.font-extra-large { font-size: 19px; }
   transform: translateY(-2px);
   box-shadow: 0 8px 30px -8px hsl(var(--foreground) / 0.1);
 }
+
+/* ================================================================
+   Text wrapping — prevents content overflow in all topic elements
+   ================================================================ */
+.topic-text-wrap,
+.topic-text-wrap span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  white-space: normal;
+}
+
+/* ================================================================
+   Subtopic list — level 2 nesting (topics > subtopics)
+   ================================================================ */
+.subtopic-list {
+  margin-top: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid hsl(var(--primary) / 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.subtopic-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.5;
+}
+
+.subtopic-bullet {
+  margin-top: 0.375rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: hsl(var(--primary) / 0.35);
+  flex-shrink: 0;
+}
+
+.subtopic-name {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
+}
+
+/* ================================================================
+   Sub-sub-topic section — level 3 nesting (topics > sub-sub-topics)
+   Parsed from the `notes` field bullet points (* item)
+   ================================================================ */
+.sub-subtopic-section {
+  margin-top: 0.5rem;
+  padding: 0.375rem 0 0.375rem 1rem;
+  border-left: 2px solid hsl(243 75% 59% / 0.2);
+  border-radius: 0 4px 4px 0;
+  background: hsl(243 75% 59% / 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sub-subtopic-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.sub-subtopic-item:hover {
+  background: hsl(243 75% 59% / 0.05);
+}
+
+.sub-subtopic-marker {
+  margin-top: 0.375rem;
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
+  background: hsl(243 75% 59% / 0.4);
+  flex-shrink: 0;
+  transform: rotate(45deg);
+}
+
+.sub-subtopic-name {
+  font-size: 0.675rem;
+  line-height: 1.5;
+  color: hsl(var(--muted-foreground));
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
+}
+
+/* ================================================================
+   Topic metadata tags (Expected Marks, Weightage, Importance Type)
+   ================================================================ */
+.topic-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.topic-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  white-space: nowrap;
+}
+
+.topic-meta-key {
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.topic-meta-value {
+  font-weight: 500;
+}
