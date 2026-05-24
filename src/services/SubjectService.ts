@@ -11,8 +11,8 @@ function mapTopic(row: any, allSubtopics: any[] = []): any {
     topic_id: s.topic_id,
     name: s.name,
     content: s.content,
+    status: s.status || 'not-started',
     order_index: s.order_index,
-    importance: s.importance,
     created_at: s.created_at,
   }));
 
