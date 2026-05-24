@@ -5,34 +5,44 @@ import { generateId } from '../api/helpers';
 /**
  * Maps a DB topic row (snake_case) to the frontend Topic shape (camelCase).
  */
-function mapTopic(row: any) {
+function mapTopic(row: any, allSubtopics: any[] = []): any {
+  const topicSubtopics = allSubtopics.filter(s => s.topic_id === row.id).map(s => ({
+    id: s.id,
+    topic_id: s.topic_id,
+    name: s.name,
+    content: s.content,
+    order_index: s.order_index,
+    created_at: s.created_at,
+  }));
+
   return {
     id: row.id,
     chapter_id: row.chapter_id,
     name: row.name,
     status: row.status || 'not-started',
-    revisionCount: row.revision_count ?? 0,
-    lastRevised: row.last_revised ?? null,
-    nextRevisionDue: row.next_revision_due ?? null,
-    order: row.order_index ?? 0,
-    notes: row.notes ?? '',
-    completedAt: row.completed_at ?? null,
+    order: row.order_index,
+    revisionCount: row.revision_count || 0,
+    lastRevised: row.last_revised,
+    nextRevisionDue: row.next_revision_due,
+    completedAt: row.completed_at,
+    notes: row.notes || '',
+    subtopics: topicSubtopics,
   };
 }
 
 /**
  * Maps a DB chapter row (snake_case) to the frontend Chapter shape (camelCase).
  */
-function mapChapter(row: any, topics: any[]) {
+function mapChapter(row: any, topicRows: any[], allSubtopics: any[] = []): any {
   return {
     id: row.id,
     subject_id: row.subject_id,
     name: row.name,
-    order: row.order_index ?? 0,
-    tag: row.tag ?? null,
-    estimatedMarks: row.estimated_marks ?? null,
-    paper: row.paper ?? 'Paper 1',
-    topics: topics.map(mapTopic),
+    order: row.order_index,
+    paper: row.paper || 'Paper 1',
+    tag: row.tag,
+    estimatedMarks: row.estimated_marks,
+    topics: topicRows.map(t => mapTopic(t, allSubtopics)),
   };
 }
 
@@ -70,11 +80,17 @@ export class SubjectService {
     // Reconstruct the full hierarchy with proper camelCase mapping
     return subjects.map(subject => {
       const subjectChapters = chapters.filter(c => c.subject_id === subject.id);
+      let parsedDetails = {};
+      try {
+        parsedDetails = subject.details ? JSON.parse(subject.details) : {};
+      } catch (e) {}
+
       return {
         id: subject.id,
         name: subject.name,
         color: subject.color,
         icon: subject.icon,
+        details: parsedDetails,
         createdAt: subject.created_at,
         order: 0,
         chapters: subjectChapters.map(ch => {
@@ -145,10 +161,20 @@ export class SubjectService {
       chapterIds
     );
 
+    let subtopics: any[] = [];
+    if (topics.length > 0) {
+      const topicIds = topics.map(t => t.id);
+      const tPlaceholders = topicIds.map(() => '?').join(',');
+      subtopics = await this.db.query<any>(
+        `SELECT * FROM subtopics WHERE topic_id IN (${tPlaceholders}) ORDER BY order_index ASC`,
+        topicIds
+      );
+    }
+
     // Reconstruct hierarchy with camelCase mapping
     return chapters.map(chapter => {
       const chapterTopics = topics.filter(t => t.chapter_id === chapter.id);
-      return mapChapter(chapter, chapterTopics);
+      return mapChapter(chapter, chapterTopics, subtopics);
     });
   }
 }

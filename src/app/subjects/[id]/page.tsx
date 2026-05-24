@@ -278,11 +278,11 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
           : 'bg-[hsl(var(--background))] border-[hsl(var(--border))]'
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-3">
         {/* Completion checkbox */}
         <button
           onClick={handleToggleComplete}
-          className="shrink-0 transition-transform hover:scale-110"
+          className="shrink-0 transition-transform hover:scale-110 mt-0.5"
           title={isCompleted ? 'Unmark completed' : 'Mark as completed'}
         >
           {isCompleted ? (
@@ -298,44 +298,60 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
           )}
         </button>
 
-        {/* Name (editable) */}
+        {/* Content */}
         <div className="flex-1 min-w-0">
-          <InlineEdit
-            value={topic.name}
-            onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-            className={cn('text-sm font-medium')}
-          />
+          <div className="flex items-center gap-2">
+            <InlineEdit
+              value={topic.name}
+              onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
+              className={cn('text-sm font-medium')}
+            />
+            {/* Revision count */}
+            {topic.revisionCount > 0 && (
+              <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
+                ×{topic.revisionCount}
+              </span>
+            )}
+          </div>
+          
+          {/* Subtopics */}
+          {topic.subtopics && topic.subtopics.length > 0 && (
+            <ul className="mt-2 space-y-1">
+              {topic.subtopics.map((sub: any) => (
+                <li key={sub.id} className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-start gap-1.5">
+                  <span className="mt-1 w-1 h-1 rounded-full bg-[hsl(var(--muted-foreground))]/50 shrink-0" />
+                  <span className="leading-tight">{sub.name}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* Revision count */}
-        {topic.revisionCount > 0 && (
-          <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
-            ×{topic.revisionCount}
-          </span>
-        )}
+        {/* Controls */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Status selector */}
+          <StatusSelect status={topic.status} onChange={handleStatusChange} />
 
-        {/* Status selector */}
-        <StatusSelect status={topic.status} onChange={handleStatusChange} />
+          {/* Revise button */}
+          {isCompleted && (
+            <button
+              onClick={handleRevise}
+              className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-500/10 transition-colors shrink-0"
+              title="Mark as revised"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+          )}
 
-        {/* Revise button */}
-        {isCompleted && (
+          {/* Delete */}
           <button
-            onClick={handleRevise}
-            className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-500/10 transition-colors shrink-0"
-            title="Mark as revised"
+            onClick={handleDelete}
+            className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0"
+            title="Delete topic"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
-        )}
-
-        {/* Delete */}
-        <button
-          onClick={handleDelete}
-          className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0"
-          title="Delete topic"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
+        </div>
       </div>
     </motion.div>
   );
@@ -883,18 +899,27 @@ export default function SubjectDetailPage() {
       {/* Paper Tabs */}
       {availablePapers.length > 1 && (
         <div className="flex items-center gap-2 p-1.5 bg-[hsl(var(--muted))] rounded-2xl w-fit">
-          {availablePapers.map(paper => (
+          {availablePapers.map((paper) => (
             <button
               key={paper}
               onClick={() => setActivePaper(paper)}
               className={cn(
-                "px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300",
-                activePaper === paper 
-                  ? "bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm"
-                  : "text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--card))]/50"
+                'relative px-5 py-2.5 text-sm font-semibold rounded-xl transition-all',
+                activePaper === paper
+                  ? 'text-white shadow-md'
+                  : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
               )}
             >
-              {paper}
+              {activePaper === paper && (
+                <motion.div
+                  layoutId="paperTab"
+                  className="absolute inset-0 rounded-xl"
+                  style={{ backgroundColor: subject.color }}
+                  initial={false}
+                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{paper}</span>
             </button>
           ))}
         </div>
