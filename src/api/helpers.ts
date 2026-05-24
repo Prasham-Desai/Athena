@@ -1,3 +1,5 @@
+import { getCloudflareContext } from '@opennextjs/cloudflare';
+
 // Helper function to generate unique IDs
 export function generateId(): string {
   return crypto.randomUUID();
@@ -18,7 +20,12 @@ export function errorResponse(error: string, status = 400) {
  * Safely extracts environment variables in Next.js Cloudflare contexts
  */
 export function getEnv(request: Request): any {
-  // @opennextjs/cloudflare usually makes env available globally on process.env
-  // Or via context. Here we fallback safely.
+  try {
+    // OpenNext securely exposes the Cloudflare bindings here
+    const { env } = getCloudflareContext();
+    if (env && env.DB) return env;
+  } catch (err) {
+    // Fallback if not available
+  }
   return process.env as any;
 }
