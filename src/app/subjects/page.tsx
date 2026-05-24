@@ -331,18 +331,6 @@ function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
                 </h3>
                 <div className="flex flex-wrap items-center gap-2 text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5 font-medium">
                   <span>{subject.chapters.length} {subject.chapters.length === 1 ? 'chapter' : 'chapters'}</span>
-                  {subject.details && subject.details['Total Marks'] && (
-                    <>
-                      <span className="w-1 h-1 rounded-full bg-[hsl(var(--border))]" />
-                      <span>{subject.details['Total Marks']} Marks</span>
-                    </>
-                  )}
-                  {subject.details && subject.details['Total Teaching Hours'] && (
-                    <>
-                      <span className="w-1 h-1 rounded-full bg-[hsl(var(--border))]" />
-                      <span>{subject.details['Total Teaching Hours']} Hrs</span>
-                    </>
-                  )}
                 </div>
               </div>
             </div>
