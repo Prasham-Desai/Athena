@@ -95,16 +95,84 @@
 
 1. Choose and record contemporary machines used in Ayurvedic drug preparation.
    **Importance:** Desirable to Know
-2. Discuss the pharmaceutical use of Distillation apparatus, Ball Mill, Pulveriser, End Runner, Edge Runner, Tablet compression machine, Capsule filling machine, Pouch filling machine, Liquid filling machine in Ayurvediya Aushadhi Nirmana
-   **Importance:** Desirable to Know
-3. Describe the principles behind construction and working of the classical Yantras used for Ayurvediya Aushadhi nirmana.
+2. Dola Yantra
    **Importance:** Must Know
-4. Enlist categorical information about the following Yantras in the charts- Ulukhal Yantra, Patan Yantra, Jarana Yantra, Patala Yantra and Swedana Yantra.
-   **Importance:** Desirable to Know
-5. Interpret the mechanism and effect of Yantras / machines on the Physical and Chemical properties of the drug material.
-   **Importance:** Desirable to Know
-6. Enlist Ayurvedtya aushadhi kalpana and equipments/yantras/machines used for preparation of each kalpana.
-   **Importance:** Desirable to Know
+3. Valuka Yantra
+   **Importance:** Must Know
+4. Puta Yantra
+   **Importance:** Must Know
+5. Khalwa Yantra
+   **Importance:** Must Know
+6. Patana Yantra
+   **Importance:** Must Know
+7. Darvika Yantra
+   **Importance:** Must Know
+8. Ulukhala Yantra
+   **Importance:** Must Know
+9. Patala Yantra
+   **Importance:** Must Know
+10. Kupi Yantra
+   **Importance:** Must Know
+11. Arkapatana Yantra
+   **Importance:** Must Know
+12. Pithara Yantra
+   **Importance:** Must Know
+13. Sharava Yantra
+   **Importance:** Must Know
+14. Palika Yantra
+   **Importance:** Must Know
+15. Sthali Yantra
+   **Importance:** Must Know
+16. Swedana Yantra
+   **Importance:** Must Know
+17. Vidyadhara Yantra
+   **Importance:** Must Know
+18. Modern Machinery-Grinder
+   **Importance:** Must Know
+19. Disintegrator
+   **Importance:** Must Know
+20. Pulverizer
+   **Importance:** Must Know
+21. Powder Mixer
+   **Importance:** Must Know
+22. Mechanical sifter
+   **Importance:** Must Know
+23. Ball mill
+   **Importance:** Must Know
+24. Granulator
+   **Importance:** Must Know
+25. Dryer
+   **Importance:** Must Know
+26. Tablet compressing machine
+   **Importance:** Must Know
+27. Pills making machine
+   **Importance:** Must Know
+28. Coating pan
+   **Importance:** Must Know
+29. Polishing pan
+   **Importance:** Must Know
+30. End runner machine
+   **Importance:** Must Know
+31. Edge runner machine
+   **Importance:** Must Know
+32. Capsule filling machine
+   **Importance:** Must Know
+33. Ointment mixer
+   **Importance:** Must Know
+34. Tube filling machine
+   **Importance:** Must Know
+35. Sieves & Meshes
+   **Importance:** Must Know
+36. Liquid filling machine
+   **Importance:** Must Know
+37. Distillation plant
+   **Importance:** Must Know
+38. Strip packing machine
+   **Importance:** Must Know
+39. Pouch filling machine
+   **Importance:** Must Know
+40. Pyrometer
+   **Importance:** Must Know
 
 ---
 
@@ -114,44 +182,68 @@
    **Importance:** Desirable to Know
 2. Define the term Puta and recite its classical explanation.
    **Importance:** Must Know
-3. Produce categorical information( Size of Pit, Number of cowdunkcakes, use etc.) about following Putas viz. Mahaputa, Gajaputa, Varahputa, Kukkutaputa, Kapotputa, Lavakputa, Kumbhaputa, Bhandaputa, Valukaputa and Bhudharputa.
+3. Chandra Puta
    **Importance:** Must Know
-4. Recognise the principles behind construction and working of the classical Putas.
+4. Surya Puta
    **Importance:** Must Know
-5. Identify and enlist contemporary devices used in the preparation of Bhasma.
-   **Importance:** Desirable to Know
-6. Review the temperature pattern of various Putas by referring research articles.
-   **Importance:** Desirable to Know
-7. Compile names and significance of temperature measuring devices with reference to Puta.
-   **Importance:** Desirable to Know
-8. Enlist the specific Puta used for a particular Bhasma Nirmana.
-   **Importance:** Desirable to Know
-9. Enlist various devices used for heating during Ayurvediya Aushadhi nirmana.
-   **Importance:** Desirable to Know
-10. Enlist constituents needed for Samanya Musha Nirmana.
-    **Importance:** Desirable to Know
-11. Define the term Musha and describe uses of various types of Musha.
-    **Importance:** Desirable to Know
-12. Enlist and discuss the material used for Sandhi Bandhan ( while using Sharava and Kachakupi)
-    **Importance:** Not Specified
-13. Identify and record the types of Crucibles .
-    **Importance:** Not Specified
-14. Interpret the effect of heat transformation in the material subjected to heating through Musha.
-    **Importance:** Desirable to Know
-15. Recall Pakaj Utpatti Siddhant and interpret it for Agni Sannikarsha Sanskara.
-    **Importance:** Desirable to Know
-16. Explain the Pharmaceutical use of the Hot plate, heating mantle, induction stove, hot air oven, muffle furnace (horizontal and vertical type)
-    **Importance:** Not Specified
-17. Describe types of Koshthi and their uses
-    **Importance:** Desirable to Know
-18. Describe the Current trends in heat transfer device e.g. steam jacketed heating device, programmed muffle furnace, programmed furnace for Parpati / Pottali preparation.
-    **Importance:** Desirable to Know
-19. Assess and interpret the effect of fuel in quantum of heat given (time and temperature)
-    **Importance:** Desirable to Know
-20. Enlist various fuels used for heating for estimation of their heat value.
-    **Importance:** Not Specified
-21. Analyse and appraise use of proper heating device and fuels used for Ayurvediya Aushadhi Nirmana.
-    **Importance:** Desirable to Know
+5. Maha Puta
+   **Importance:** Must Know
+6. Gaja Puta
+   **Importance:** Must Know
+7. Varaha Puta
+   **Importance:** Must Know
+8. Kukkuta Puta
+   **Importance:** Must Know
+9. Kapota Puta
+   **Importance:** Must Know
+10. Lavak Puta
+   **Importance:** Must Know
+11. Budhar Puta
+   **Importance:** Must Know
+12. Gorvara Puta
+   **Importance:** Must Know
+13. Valuka Puta
+   **Importance:** Must Know
+14. Kumbha / Bhanda Puta
+   **Importance:** Must Know
+15. Musha
+   **Importance:** Must Know
+16. Samanya Musha
+   **Importance:** Must Know
+17. Crucibles- Silica
+   **Importance:** Must Know
+18. Mudra
+   **Importance:** Must Know
+19. Sandhi Bandhan Material
+   **Importance:** Must Know
+20. Koshthi-
+   **Importance:** Must Know
+21. Chullika
+   **Importance:** Must Know
+22. Angar Koshthi
+   **Importance:** Must Know
+23. Satwapatan Bhrashtri
+   **Importance:** Must Know
+24. Gas Stove
+   **Importance:** Must Know
+25. Hot Plate
+   **Importance:** Must Know
+26. Heating Mantle
+   **Importance:** Must Know
+27. Induction Stove
+   **Importance:** Must Know
+28. Hot Air Oven
+   **Importance:** Must Know
+29. Muffle Furnace- Horizontal and Vertical
+   **Importance:** Must Know
+30. Heating Material-
+   **Importance:** Must Know
+31. Solid- Kashtha, coal(wooden / stone), Kshara, Lavana, Valuka, Shakrit, Dhanya
+   **Importance:** Must Know
+32. Drava- Jala/ steam, Taila
+   **Importance:** Must Know
+33. Indirect heating- Dhanya Rashi, Bhugarbha sthapana
+   **Importance:** Must Know
 
 ---
 
@@ -205,15 +297,65 @@
    **Importance:** Must Know
 4. Explain Shodhan and Marana and other processing techniques of the Rasa- Dravya.
    **Importance:** Must Know
-5. Discuss probable physical, chemical changes occuring during process & after Shodhana and Marana of Parada, Haratala, Tamra and Shankha.
+5. Parada (mercury)
    **Importance:** Must Know
-6. Explain research updates about Shilajatu,Naga,Mukta and Kapardika.?
+6. Abhraka (Biotite Mica)
    **Importance:** Must Know
-7. Discuss probable physical, chemical changes occuring after Bhavana, Puta & whole process of Bhasma nirmana from Rasadravyas
+7. Makshika (Chalco-pyrite)
    **Importance:** Must Know
-8. Enlist Kalpas prepared from these Rasdravyas and therapeutic imortance of that Rasadravya
-   **Importance:** Desirable to Know
-9. Develop checklist for identification of genuine rasadravyas
+8. Shilajatu(Asphaltum Punjabianum)
+   **Importance:** Must Know
+9. Gandhaka (Sulfur)
+   **Importance:** Must Know
+10. Gairika(Red Ochre)
+   **Importance:** Must Know
+11. Kankshi (Alum)
+   **Importance:** Must Know
+12. Haratala (Orpiment)
+   **Importance:** Must Know
+13. Manahshila (Realgar)
+   **Importance:** Must Know
+14. Kampillaka(Mallotus Philippinensis)
+   **Importance:** Must Know
+15. Navasadara (Ammonium chloride)
+   **Importance:** Must Know
+16. Hingula (Red Cinnabar)
+   **Importance:** Must Know
+17. Swarna (Gold)
+   **Importance:** Must Know
+18. Rajata (Silver)
+   **Importance:** Must Know
+19. Tamra (Copper)
+   **Importance:** Must Know
+20. Loha (Iron)
+   **Importance:** Must Know
+21. Mandur (rust iron)
+   **Importance:** Must Know
+22. Vanga (Tin)
+   **Importance:** Must Know
+23. Naga (Lead)
+   **Importance:** Must Know
+24. Yashada (Zinc)
+   **Importance:** Must Know
+25. Mukta (Pearl)
+   **Importance:** Must Know
+26. Pravala (Coral)
+   **Importance:** Must Know
+27. Vajra (Diamond)
+   **Importance:** Must Know
+28. Kaparda (Cowries)
+   **Importance:** Must Know
+29. Shukti (Oyster Shell)
+   **Importance:** Must Know
+30. Shankh (Conch Shell)
+   **Importance:** Must Know
+31. Godanti (Gypsum)
+   **Importance:** Must Know
+32. Samudraphena (Cattle Fish bone)
+   **Importance:** Must Know
+33. Kukkutanda twak (Hen’s EggShell)
+   **Importance:** Must Know
+34. Tankana kshara (Borax)
    **Importance:** Must Know
 
 ---
@@ -224,16 +366,26 @@
    **Importance:** Desirable to Know
 2. Explain classical & Minerological identification and their Sources.
    **Importance:** Desirable to Know
-3. Elaborate types, Grahya-Agrahyata and Dosha of Rasadravyas
-   **Importance:** Desirable to Know
-4. Explain Shodhana, Marana & and other processing techniques with probable chemical reactions.
+3. Sasyaka (Peacock ore)
    **Importance:** Must Know
-5. Explain Shodhana, Marana & and other processing techniques with probable chemical reactions.
-   **Importance:** Desirable to Know
-6. Explain research updates of Kasisa,Gauripashana and Akika.
-   **Importance:** Desirable to Know
-7. Enlist names of rasadravyas and important kalpas prepared from respective dravya. Describe therapeutic importance of that Rasadravya.
-   **Importance:** Desirable to Know
+4. Kaseesa (Green Vitriol)
+   **Importance:** Must Know
+5. Gauri pashana (Arsenic oxide)
+   **Importance:** Must Know
+6. Trinakanta
+   **Importance:** Must Know
+7. Akika (Agate)
+   **Importance:** Must Know
+8. Sudha (Lime stone)
+   **Importance:** Must Know
+9. Khatika
+   **Importance:** Must Know
+10. Ajasthi
+    **Importance:** Must Know
+11. Jaharmohara (Serpentine)
+    **Importance:** Must Know
+12. Dugdhapashana (Talc)
+    **Importance:** Must Know
 
 ---
 
@@ -241,14 +393,52 @@
 
 1. Enlist Synonyms and sources.
    **Importance:** Not Specified
-2. Determine types, Grahya-Agrahya, properties & classical as well as Mineralogical Identification of Rasadravyas
-   **Importance:** Not Specified
-3. Explain Shodhana, Marana and Probable Chemical Changes.
-   **Importance:** Desirable to Know
-4. Explain research update of Badarashma.
-   **Importance:** Not Specified
-5. Enlist Rasadravyas from this group and describe important kalpas with their therapeutic utility
-   **Importance:** Desirable to Know
+2. Vaikrantha
+   **Importance:** Must Know
+3. Vimala (Iron Pyrite)
+   **Importance:** Must Know
+4. Chapala
+   **Importance:** Must Know
+5. Rasaka
+   **Importance:** Must Know
+6. Anjana
+   **Importance:** Must Know
+7. Kankustha
+   **Importance:** Must Know
+8. Agnijara
+   **Importance:** Must Know
+9. Giri Sindura (Red oxide of Hg)
+   **Importance:** Must Know
+10. Mriddara shringa (Litharge)
+    **Importance:** Must Know
+11. Kamsya (Bronze)
+    **Importance:** Must Know
+12. Pittala (Brass)
+    **Importance:** Must Know
+13. Vartaloha
+    **Importance:** Must Know
+14. Manikya (Ruby)
+    **Importance:** Must Know
+15. Tarkshya (Emerald)
+    **Importance:** Must Know
+16. Pushparaga (Topaz)
+    **Importance:** Must Know
+17. Nilam (Sapphire)
+    **Importance:** Must Know
+18. Gomeda (Zircon or Cinnamone stone)
+    **Importance:** Must Know
+19. Vaidurya (Cats eye)
+    **Importance:** Must Know
+20. Mriga shringa (Stag horn)
+    **Importance:** Must Know
+21. Sikata (Silica)
+    **Importance:** Must Know
+22. Vyomashma (Sangeyashab - Jade)
+    **Importance:** Must Know
+23. Kousheyashma (Asbestos)
+    **Importance:** Must Know
+24. Badarshama (silicate of lime)
+    **Importance:** Must Know
 
 ---
 
@@ -337,61 +527,241 @@
    **Importance:** Must Know
 2. Appreciate how the therapeutic efficacy varies depending on the dosage form
    **Importance:** Must Know
-3. Describe therapeutic efficacy of different formulations of Vishadrvya (Bhallataka), with its toxic effects and remedy.
-   **Importance:** Not Specified
-4. Describe therapeutic efficacy of different formulations of Guduchi, Gairika, Gandhaka
+3. Guduchi Swarasa (Sha.Sam.Ma. Kh. Chp1/7 page 138)
    **Importance:** Must Know
-5. Aappraise multiple factors considered for preparation of various dosage forms from a single drug and creat list of more such examples.
-   **Importance:** Desirable to Know
+4. Guduchyadi Churna (B.R. Pleehayakrut Rogdhikara)
+   **Importance:** Must Know
+5. Guduchi Kwatha (B.R. Jwaradhikara)
+   **Importance:** Must Know
+6. Guduchi Hima (B.R. Chardi Rogadhikara)
+   **Importance:** Must Know
+7. Guduchi Ghana- Samshamani Vati (AFI Part II Page 183)
+   **Importance:** Must Know
+8. Guduchi Satva (AFI-Part I, Page 205)
+   **Importance:** Must Know
+9. Amrutadi Guggulu (AFI-Part III, Page 107)
+   **Importance:** Must Know
+10. Amritarishta (AFI Part I page 6)
+    **Importance:** Must Know
+11. Amalaki Swarasa (Sha.Sam.Ma.Kha.)
+    **Importance:** Must Know
+12. Amalakyadi Churna (Sha.Sam.M.Kha. Churna kalpana)
+    **Importance:** Must Know
+13. Triphala Rasayana (Cha.Chi. Rasayana Adhyaya)
+    **Importance:** Must Know
+14. Chyavanaprasha (AFI Part I page 37)
+    **Importance:** Must Know
+15. Dhatri Lauha (AFI Part I Page 284)
+    **Importance:** Must Know
+16. Amalakyadi Gutika (Sha.Sam.Ma.Kha.Vati Kalpana)
+    **Importance:** Must Know
+17. Phalatrikadi Kwatha (Sha.Sam.Ma.Kha.Kwatha Kalpana)
+    **Importance:** Must Know
+18. Triphala Ghrita (Sha.Sam.Ma.Kha. Ghrita Kalpana)
+    **Importance:** Must Know
+19. Bhallataka Modaka (B.R. Pleeha-Yakrit Rogadhikara)
+    **Importance:** Must Know
+20. Bhallataka Ghrita (B.R. Gulma Rogadhikara)
+    **Importance:** Must Know
+21. Bhallataka Guda (B.R. Arsha Rogadhikara)
+    **Importance:** Must Know
+22. Bhallatakadi Taila (B.R. Nadivrina Rogadhikara)
+    **Importance:** Must Know
+23. Bhallataka Avaleha (B.R. Arsha Rogadhikara)
+    **Importance:** Must Know
+24. Bhallatakadi Lepa (B.R. Kushta Rogadhikara)
+    **Importance:** Must Know
+25. Bhallatakadi Kwatha (B.R. Urusthabha Rogadhikara)
+    **Importance:** Must Know
+26. Note: For Bhallataka additional ashuddha, avidhi sevanajanya vyadhi and their shantyupaya
+    **Importance:** Must Know
+27. Gandhaka churna (SY page 217)
+    **Importance:** Must Know
+28. Gandhaka Rasayana (AFI-Part II, Page 115)
+    **Importance:** Must Know
+29. Gandhaka Druti (RRR 3rd Chapter)
+    **Importance:** Must Know
+30. Gandhaka Taila (R.T. 8th Chapter)
+    **Importance:** Must Know
+31. Gandhakadya Malahara (AFI-Part II, Page 165)
+    **Importance:** Must Know
+32. Gandhakadi Lepa (RRS Shiroroga Chikitsa)
+    **Importance:** Must Know
+33. Gandhaka Vati (B.R. Agnimandya Rogadhikara)
+    **Importance:** Must Know
+34. Gairika Pradeha (Cha.Chi. Visarpa Rogadhyaya)
+    **Importance:** Must Know
+35. Laghusuta shekhara Rasa (AFI Part II Page 282)
+    **Importance:** Must Know
+36. Gairikadya Malahara (AFI-Part III, Page 224)
+    **Importance:** Must Know
+37. Gairikadya Gutikanjana (B.R. Netraroga)
+    **Importance:** Must Know
+38. Gairika rasakriya (Cha.Chi.26/235)
+    **Importance:** Must Know
+39. Varnakara lepa (Cha.Chi.25/117)
+    **Importance:** Must Know
 
 ---
 
 ### 3. Single drug(Bhasma, Shuddha & Pishti)
 
-1. Explain chemical form/composition, Pharmacodynamics and pharmacokinetics of Abhraka, Loha and Godanti Bhasma.
-   **Importance:** Desirable to Know
-2. Explain therapeutic properties, dosage, Anupana, Pathyapathya, duration of treatment, Sevana Kala, shelf life, important Yogas of each Bhasma.
+1. Abhraka Bhasma
    **Importance:** Must Know
-3. Describe Apakwa Ashuddha Avidhi Bhasma Sevanajanya Vyadhi and their Shanti-upaya.
-   **Importance:** Desirable to Know
-4. Describe in detail Amayika Prayoga (Therapeutic uses) of each Bhasma/Pishti with given references.
+2. Swarna Makshika Bhasma
    **Importance:** Must Know
-5. Explain research updates and clinical evidences of Swarna Bhasma, Makshika Bhasma and Shankha Bhasma.
-   **Importance:** Desirable to Know
+3. Swarna Bhasma
+   **Importance:** Must Know
+4. Rajata Bhasma
+   **Importance:** Must Know
+5. Lauha Bhasma
+   **Importance:** Must Know
+6. Tamra Bhasma
+   **Importance:** Must Know
+7. Vanga Bhasma
+   **Importance:** Must Know
+8. Naga Bhasma
+   **Importance:** Must Know
+9. Yashada Bhasma
+   **Importance:** Must Know
+10. Kasisa Bhasma
+    **Importance:** Must Know
+11. Shuddha Shilajatu
+    **Importance:** Must Know
+12. Shuddha Gandhaka
+    **Importance:** Must Know
+13. Shuddha Gairika
+    **Importance:** Must Know
+14. Shuddha Kankshi
+    **Importance:** Must Know
+15. Mukta Pishti & Bhasma
+    **Importance:** Must Know
+16. Pravala Pishti & Bhasma
+    **Importance:** Must Know
+17. Vajra Bhasma
+    **Importance:** Must Know
+18. Kaparda Bhasma
+    **Importance:** Must Know
+19. Shankh Bhasma
+    **Importance:** Must Know
+20. Godanti Bhasma
+    **Importance:** Must Know
+21. Shuddha Tankana
+    **Importance:** Must Know
 
 ---
 
 ### 4. Aushadhi Kalpa -I (Compound formulations)
 
-1. Describe reference, ingredients, therapeutic properties, dosage and all administration details alongwith Anupana of each formulation.
+1. Arogyavardhini Gutika : A.F.I. - I, Rasayoga, 20:4, R.R.S. Visarpa Chi. 20/106
    **Importance:** Must Know
-2. Explain Pathya Apathya, Sevana Avadhi (duration of treatment) and shelf-life of each formulation.
+2. Kumara Kalyana Rasa : A.F.I. - I, Rasayoga, 20:9, B.R. Balaroga / 163
    **Importance:** Must Know
-3. Interpret probable mode of action of each formulation as per Ayurveda.
-   **Importance:** Desirable to Know
-4. Explain research updates and clinical evidences of Arogyavardhini Gutika and Gandhaka Rasayana
-   **Importance:** Desirable to Know
-5. Critically analyse compound drugs for their therapeutic actions mentiond in the classics.
-   **Importance:** Desirable to Know
+3. Garbhapala Rasa : A.F.I. - II, Rasayoga, 16:14,R.T.Sa. Part - I, 140
+   **Importance:** Must Know
+4. Chandraprabha Vati : A.F.I. - I, Vati Gutika, 12:10,Sha.Sa.M.7/40
+   **Importance:** Must Know
+5. Pravala Panchamrita Rasa : A.F.I. - II, Rasayoga, 16:37,B.R. Gulma / 139
+   **Importance:** Must Know
+6. Anandbhairava Rasa : A.F.I. - I, Rasayoga, 20:3,R.Sa.Sa.Jwara 2/103
+   **Importance:** Must Know
+7. Yogendra Rasa : A.F.I. - I, Rasayoga, 20:31,B.R. Vatavyadhi / 506
+   **Importance:** Must Know
+8. Laxmivilas Rasa : A.F.I. - I, Rasayoga, 20:39, B.R. Rasayana / 55
+   **Importance:** Must Know
+9. Vasantakusumakara Rasa : A.F.I. - I, Rasayoga,20:42,R.Sa.Sa.Rasayana Vajikarana / 80
+   **Importance:** Must Know
+10. Vasantamalti Rasa : A.F.I. - I, Rasayoga, 20:41, Si.Bhai.Ma.Ma.Jwara / 60
+    **Importance:** Must Know
+11. Brihat Vata Chintamani Rasa : A.F.I. - I, Rasayoga, 20:26, B.R.,Vatavyadhi/502
+    **Importance:** Must Know
+12. Shankha Vati : A.F.I. - I,Vati Gutika, 12:32,B.R. Agnimandya / 182
+    **Importance:** Must Know
+13. Shwaskuthara Rasa : A.F.I. - I, Rasayoga, 20:49,Yo.Ra., Swasa / Page 373
+    **Importance:** Must Know
+14. Kamadudha Rasa : A.F.I. - II, Rasayoga, 16:9,R.Ta.Sa. Kharaliya Rasayana / 80
+    **Importance:** Must Know
+15. Sutashekhar Rasa : A.F.I. - II, Rasayoga, 16:63,Yo.Ra. Amlapita / Page 125
+    **Importance:** Must Know
+16. Navayasa Loha : A.F.I. - II, Lauha, 17:2,Cha.Sa.Chi.16/70
+    **Importance:** Must Know
+17. Ichchhabhedi Rasa : A.F.I. - I, Rasayoga, 20:5,B.Ra. Udararoga / 84
+    **Importance:** Must Know
+18. Krimikuthara Rasa : A.F.I. - II, Rasayoga, 16:12,R.Ta.Sa.Kharaliya Rasayana / P. 103
+    **Importance:** Must Know
+19. Parpati Rasayana
+    **Importance:** Must Know
+20. Panchamruta Parpati : A.F.I. - I, Parpati, 16:1, B.R.Grahani / 461
+    **Importance:** Must Know
+21. Bola Parpati : A.F.I. - I, Parpati, 16:2, Yo.R.,Pradara / P 842
+    **Importance:** Must Know
+22. Kupipakwa Rasayana
+    **Importance:** Must Know
+23. Swarna Vanga : A.F.I. - I, Kupipakva, 15:9, Rasamruta 3/ 95
+    **Importance:** Must Know
+24. Makaradhwaja : A.F.I. - I, Kupipakva, 15: 2, B. R. Vajikarana 2/ 237
+    **Importance:** Must Know
+25. Sameerpannaga Rasa : A.F.I. - I, Kupipakva, 15:8, A.A.G.S. Part - 4 Page 88
+    **Importance:** Must Know
+26. Pottali Rasayana
+    **Importance:** Must Know
+27. Hemagarbha Pottali : A.F.I. - II, Rasayoga, 16:66, Rasamruta Rasavigyaniya 9/218
+    **Importance:** Must Know
 
 ---
 
 ### 5. Aushadhi Kalpa-II (Compound Drugs/Formulations)
 
-1. Describe Ingredients, therapeutic importance, dose, anupana, pathya-pathya, duration of treatment, sevana kala, shelf life, research updates and clinical evidences of Dashamoola Kwatha, Pushyanuga Churna, Sanjivani Vati, Chitrakadi Gutika, Simhanada Guggulu, Yogaraja Guggulu, Chyavanaprashavaleha, Gandhakadya Malahara, Ashokarishta, Kutajarishta, Panchagavya Ghrita, Bilvadi Gutika.
+1. Dashamoola Kwatha (AFI Part I Page 55)
    **Importance:** Must Know
-2. Describe Ingredients, indications, dose, anupana, pathyapathya, duration of treatment, sevana kala, shelf life, and clinical evidences of Mahamanjistadi kwatha, Sudarshana Churna, Vyoshadi Vati, Bala Chaturbhadra Rasa, Lavana Bhaskara Churna, Narayana Taila,, Neeliringadi Taila Aravindasava, Kumaryasava.
-   **Importance:** Not Specified
-3. Describe Ingredients, indications, dose, anupana, pathyapathya, duration of treatment, sevana kala, shelf life, and clinical evidences of Panchaguna Taila, Dadimavaleha, Bramhi Ghrita
-   **Importance:** Desirable to Know
-4. Undersand & Recite following classical kalpas.Describe Amayika prayoga of each formulation.Understand probable mode of action as per AyurvedaSearch and Record relevant reaserch articles.Create charts describing details of these drugs.Review market avaibality & poplularities of these drugs among practicing vaidyas & near by population.
+2. Mahamanjistadi Kwatha (AFI Part I page 59)
    **Importance:** Must Know
-5. Explain ethical aspect of administration of compound drugs mainly regarding duration of the treatment given.
-   **Importance:** Desirable to Know
-6. Describe ingredients, with its dose, therapeutic importance, anupana and pathya-apathya along with its clinical evidences and Research upadates
+3. Pushyanuga Churna (AFI-Part I, Page 113)
    **Importance:** Must Know
-7. Enlist the formulations with its dose, anupana and indications
-   **Importance:** Not Specified
+4. Sudarshana Churna (AFI Part I Page 116)
+   **Importance:** Must Know
+5. Lavana Bhaskara Churna (AFI-Part I, Page 114)
+   **Importance:** Must Know
+6. Bilvadi Gutika (AFI Part I Page 188)
+   **Importance:** Must Know
+7. Chitrakadi Gutika (AFI-Part I, Page 186)
+   **Importance:** Must Know
+8. Sanjivani Vati (B.R. Jwaradhikara)
+   **Importance:** Must Know
+9. Vyoshadi Vati (AFI Part III Page 253)
+   **Importance:** Must Know
+10. Bala Chaturbhadra Rasa (B.R. Balarogadhikara)
+    **Importance:** Must Know
+11. Simhanada Guggulu (AFI-Part I, Page 71)
+    **Importance:** Must Know
+12. Yogaraja Guggulu (AFI-Part I, Page 69)
+    **Importance:** Must Know
+13. Chyavanaprashavaleha (AFI Part I page 37)
+    **Importance:** Must Know
+14. Dadimavaleha (Y.R. Jwaratisaradhyaya)
+    **Importance:** Must Know
+15. Panchagavya Ghrita (AFI Part I Page 90)
+    **Importance:** Must Know
+16. Brahmi Ghrita (AFI Part I Page 93)
+    **Importance:** Must Know
+17. Narayana Taila (AFI Part I Page 138)
+    **Importance:** Must Know
+18. Neelibhringadi Taila (AFI Part I Page 139)
+    **Importance:** Must Know
+19. Panchaguna Taila (AFI-Part II, Page 145)
+    **Importance:** Must Know
+20. Aravindasava (AFI Part I page 7)
+    **Importance:** Must Know
+21. Ashokarishta (AFI Part I page 8)
+    **Importance:** Must Know
+22. Kumaryasava (AFI Part I page 10)
+    **Importance:** Must Know
+23. Kutajarishta (AFI Part I page 10)
+    **Importance:** Must Know
+24. Gandhakadya Malahara (AFI-Part II, Page 165)
+    **Importance:** Must Know
+25. Lepa Guti (AFI Part III page 232)
+    **Importance:** Must Know
 
 ---
 

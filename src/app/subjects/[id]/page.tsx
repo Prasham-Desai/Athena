@@ -152,7 +152,7 @@ function InlineEdit({ value, onSave, className, inputClassName }: InlineEditProp
       onClick={(e) => { e.stopPropagation(); setDraft(value); setEditing(true); }}
       className={cn('group/edit inline-flex items-center gap-1.5 text-left', className)}
     >
-      <span className="truncate">{value}</span>
+      <span className={cn('truncate', inputClassName?.includes('w-full') && 'w-full')}>{value}</span>
       <Pencil className="w-3 h-3 text-[hsl(var(--muted-foreground))] opacity-0 group-hover/edit:opacity-100 transition-opacity shrink-0" />
     </button>
   );
@@ -339,36 +339,42 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
 
         {/* Content */}
         <div className="flex-1 min-w-0 overflow-hidden">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-col gap-2 w-full">
             <InlineEdit
               value={topic.name}
               onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-              className={cn('text-sm font-medium topic-text-wrap')}
+              className={cn('text-sm font-medium topic-text-wrap w-full block')}
+              inputClassName="w-full min-w-[300px]"
             />
-            {/* Importance */}
-            {topic.importance && (
-              <span className={cn(
-                'text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0',
-                topic.importance.toLowerCase().includes('must') 
-                  ? 'bg-red-500/10 text-red-500' 
-                  : topic.importance.toLowerCase().includes('desirable')
-                  ? 'bg-amber-500/10 text-amber-500'
-                  : 'bg-blue-500/10 text-blue-500'
-              )}>
-                {topic.importance}
-              </span>
-            )}
-            {/* Revision count */}
-            {topic.revisionCount > 0 && (
-              <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
-                ×{topic.revisionCount}
-              </span>
-            )}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Importance */}
+              {topic.importance && (
+                <InlineEdit
+                  value={topic.importance}
+                  onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
+                  className={cn(
+                    'text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shrink-0 hover:opacity-80 transition-opacity',
+                    topic.importance.toLowerCase().includes('must') 
+                      ? 'bg-red-500/10 text-red-500' 
+                      : topic.importance.toLowerCase().includes('desirable')
+                      ? 'bg-amber-500/10 text-amber-500'
+                      : 'bg-blue-500/10 text-blue-500'
+                  )}
+                  inputClassName="min-w-[120px] text-[10px]"
+                />
+              )}
+              {/* Revision count */}
+              {topic.revisionCount > 0 && (
+                <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
+                  ×{topic.revisionCount}
+                </span>
+              )}
+            </div>
           </div>
           
           {/* Subtopics (Checkpoints) */}
           {topic.subtopics && topic.subtopics.length > 0 && (
-            <ul className="mt-3 space-y-2 pl-8 border-l-2 border-[hsl(var(--border))] ml-2 pb-2">
+            <ul className="mt-3 space-y-2 pl-10 border-l-2 border-[hsl(var(--border))] ml-6 pb-2">
               {topic.subtopics.map((sub: any) => {
                 const isSubCompleted = sub.status === 'completed';
                 return (
