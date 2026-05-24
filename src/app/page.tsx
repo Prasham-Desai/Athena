@@ -295,7 +295,7 @@ export default function DashboardPage() {
                   </h3>
                   <p className="text-xl font-bold">{nextExam.title}</p>
                   <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1">
-                    {formatDate(nextExam.date)} • {daysToNextExam === 0 ? 'Today!' : daysToNextExam === 1 ? 'Tomorrow' : `In ${daysToNextExam} days`}
+                    Tentative Start: {formatDate(nextExam.date)} • {daysToNextExam === 0 ? 'Starts Today!' : daysToNextExam === 1 ? 'Starts Tomorrow' : `In ${daysToNextExam} days`}
                   </p>
                 </div>
               </div>

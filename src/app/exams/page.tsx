@@ -74,7 +74,7 @@ export default function ExamsPage() {
           <tr>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Type</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Date</th>
+            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Tentative Start Date</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Subjects</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] text-right">Actions</th>
           </tr>
@@ -244,7 +244,7 @@ export default function ExamsPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Date</label>
+                      <label className="text-sm font-medium">Tentative Start Date</label>
                       <input
                         type="date"
                         required

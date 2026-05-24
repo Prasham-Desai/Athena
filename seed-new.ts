@@ -67,8 +67,8 @@ for (const file of files) {
     // ### Chapter (was previously Topic in markdown)
     else if (trimmed.startsWith('### ')) {
       let chapterName = trimmed.replace('### ', '').trim();
-      // Remove leading number like "1. " or "Topic 1: " if present
-      chapterName = chapterName.replace(/^(?:[0-9]+\.|Topic\s+[0-9]+:)\s*/i, '');
+      // Remove leading number like "1. " and "Topic 1: " or "Topic 1 "
+      chapterName = chapterName.replace(/^[0-9]+\.\s*/, '').replace(/^Topic\s+[0-9]+:?\s*/i, '');
       chapterId = generateId();
 
       sql += `INSERT INTO chapters (id, subject_id, name, order_index, paper) VALUES ('${chapterId}', '${subjectId}', 'Topic ${chapterOrder + 1}: ${escapeSql(chapterName)}', ${chapterOrder}, '${escapeSql(currentPaper)}');\n`;
