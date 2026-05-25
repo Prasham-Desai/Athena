@@ -4,6 +4,23 @@ import { Database } from '@/db/client';
 
 export const dynamic = 'force-dynamic';
 
+async function ensureSettingsTable(db: Database) {
+  await db.run(
+    `CREATE TABLE IF NOT EXISTS user_settings (
+      id TEXT PRIMARY KEY DEFAULT 'global',
+      theme TEXT DEFAULT 'dark',
+      daily_study_goal_hours INTEGER DEFAULT 6,
+      show_welcome BOOLEAN DEFAULT TRUE,
+      pomodoro_minutes INTEGER DEFAULT 25,
+      break_minutes INTEGER DEFAULT 5,
+      font_size TEXT DEFAULT 'small',
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`
+  );
+
+  await db.run(`INSERT OR IGNORE INTO user_settings (id) VALUES ('global')`);
+}
+
 function camelToSnake(obj: any) {
   if (!obj) return obj;
   return {
@@ -32,6 +49,7 @@ export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
+    await ensureSettingsTable(db);
     let settings = await db.get('SELECT * FROM user_settings WHERE id = ?', ['global']);
     
     if (!settings) {
@@ -55,6 +73,7 @@ export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
+    await ensureSettingsTable(db);
     const body: any = await request.json();
     const mapped = camelToSnake(body);
     

@@ -42,11 +42,17 @@ export async function GET(request: NextRequest) {
     await ensureStudyTrackingTables(db);
     const progressRecords = await db.query('SELECT * FROM daily_progress');
     const sessions = await db.query('SELECT * FROM study_sessions');
+
+    const sessionMinutesByDate = sessions.reduce((acc: Record<string, number>, session: any) => {
+      const sessionDate = session.date;
+      acc[sessionDate] = (acc[sessionDate] || 0) + (Number(session.duration_minutes) || 0);
+      return acc;
+    }, {});
     
     const mappedLogs = progressRecords.map((log: any) => {
       return {
         date: log.date,
-        studyMinutes: log.study_minutes || 0,
+        studyMinutes: sessionMinutesByDate[log.date] || 0,
         topicsCompleted: log.topics_completed || 0,
         tasksCompleted: log.tasks_completed || 0,
         revisionsCompleted: log.revisions_completed || 0,
