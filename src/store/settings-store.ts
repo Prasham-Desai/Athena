@@ -58,7 +58,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
     set({ settings: nextSettings });
 
     try {
-      const saved = await saveSettings(updates);
+      const saved = await saveSettings(nextSettings);
       if (saved) {
         set({ settings: saved });
         return saved;
