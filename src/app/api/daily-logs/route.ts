@@ -4,10 +4,42 @@ import { Database } from '@/db/client';
 
 export const dynamic = 'force-dynamic';
 
+async function ensureStudyTrackingTables(db: Database) {
+  await db.run(
+    `CREATE TABLE IF NOT EXISTS daily_progress (
+      date TEXT PRIMARY KEY,
+      study_minutes INTEGER DEFAULT 0,
+      topics_completed INTEGER DEFAULT 0,
+      tasks_completed INTEGER DEFAULT 0,
+      revisions_completed INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`
+  );
+
+  await db.run(
+    `CREATE TABLE IF NOT EXISTS study_sessions (
+      id TEXT PRIMARY KEY,
+      date TEXT NOT NULL,
+      start_time DATETIME NOT NULL,
+      end_time DATETIME NOT NULL,
+      duration_minutes INTEGER NOT NULL,
+      type TEXT NOT NULL,
+      title TEXT,
+      task_id TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (date) REFERENCES daily_progress(date) ON DELETE CASCADE
+    )`
+  );
+
+  await db.run('CREATE INDEX IF NOT EXISTS idx_study_sessions_date ON study_sessions(date)');
+}
+
 export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
+    await ensureStudyTrackingTables(db);
     const progressRecords = await db.query('SELECT * FROM daily_progress');
     const sessions = await db.query('SELECT * FROM study_sessions');
     
@@ -40,6 +72,7 @@ export async function POST(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
+    await ensureStudyTrackingTables(db);
     const body: any = await request.json();
     const { date, updates } = body;
     

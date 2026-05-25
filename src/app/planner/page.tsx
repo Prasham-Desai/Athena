@@ -483,6 +483,90 @@ function EditStudyBlockModal({
   );
 }
 
+function TaskCompletionModal({
+  open,
+  taskTitle,
+  estimatedMinutes,
+  onClose,
+  onConfirm,
+}: {
+  open: boolean;
+  taskTitle: string;
+  estimatedMinutes: number;
+  onClose: () => void;
+  onConfirm: (actualMinutes: number) => void;
+}) {
+  const [actual, setActual] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      setActual(estimatedMinutes > 0 ? String(estimatedMinutes) : '');
+    }
+  }, [open, estimatedMinutes]);
+
+  if (!open) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = Number(actual);
+    if (Number.isNaN(value) || value < 0) return;
+    onConfirm(value);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-md rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"
+      >
+        <h3 className="text-lg font-semibold mb-1">Task Completed</h3>
+        <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
+          How much time did you spend on "{taskTitle}"?
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Actual Time (min)</label>
+            <input
+              autoFocus
+              type="number"
+              min="0"
+              value={actual}
+              onChange={(e) => setActual(e.target.value)}
+              className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-2.5 rounded-xl bg-[hsl(var(--muted))] text-sm font-medium hover:opacity-80 transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:opacity-90 transition shadow-lg shadow-emerald-500/20"
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 
 
@@ -496,11 +580,12 @@ export default function PlannerPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingBlock, setEditingBlock] = useState<any | null>(null);
+  const [completingTask, setCompletingTask] = useState<{ id: string; title: string; estimatedMinutes: number; date: string } | null>(null);
 
   const { studyBlocks, addStudyBlock, toggleStudyBlock, deleteStudyBlock, updateStudyBlock } = usePlannerStore();
   const subjects = useSubjectsStore((s) => s.subjects);
-  const { tasks, addTask, toggleTask, deleteTask } = useTasksStore();
-  const { addActivity } = useActivityStore();
+  const { tasks, addTask, toggleTask, deleteTask, updateTask } = useTasksStore();
+  const { addActivity, addStudySession, removeStudySession, dailyLogs } = useActivityStore();
 
   const dateStr = format(selectedDate, 'yyyy-MM-dd');
 
@@ -538,13 +623,65 @@ export default function PlannerPage() {
     }
   }, [toggleStudyBlock, studyBlocks, addActivity]);
 
-  const handleToggleTask = useCallback((id: string) => {
-    toggleTask(id);
-    const task = tasks.find(t => t.id === id);
-    if (task && !task.completed) {
-      addActivity({ type: 'task-completed', description: `Completed "${task.title}"`, color: '#22c55e' });
+  const handleConfirmTaskCompletion = useCallback(async (actualMinutes: number) => {
+    if (!completingTask) return;
+
+    const now = new Date();
+    const nowIso = now.toISOString();
+    const sessionDate = completingTask.date || getToday();
+    const endAt = new Date(`${sessionDate}T${now.toTimeString().slice(0, 8)}`);
+    const endTime = endAt.toISOString();
+    const startTime = new Date(endAt.getTime() - actualMinutes * 60000).toISOString();
+
+    await updateTask(completingTask.id, {
+      completed: true,
+      completedAt: nowIso,
+      actualMinutes,
+    });
+
+    if (actualMinutes > 0) {
+      await addStudySession(sessionDate, {
+        startTime,
+        endTime,
+        durationMinutes: actualMinutes,
+        type: 'task',
+        title: `Task: ${completingTask.title}`,
+        taskId: completingTask.id,
+      });
     }
-  }, [toggleTask, tasks, addActivity]);
+
+    await addActivity({ type: 'task-completed', description: `Completed "${completingTask.title}"`, color: '#22c55e' });
+    setCompletingTask(null);
+    window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Task completed and study time logged!', type: 'success' } }));
+  }, [completingTask, updateTask, addStudySession, addActivity]);
+
+  const handleToggleTask = useCallback(async (id: string) => {
+    const task = tasks.find((t) => t.id === id);
+    if (!task) return;
+
+    if (!task.completed) {
+      setCompletingTask({
+        id: task.id,
+        title: task.title,
+        estimatedMinutes: Number(task.estimatedMinutes) || 0,
+        date: task.date || dateStr,
+      });
+      return;
+    }
+
+    await updateTask(id, { completed: false, completedAt: null, actualMinutes: null });
+
+    const sessionMatch = dailyLogs
+      .flatMap((log) => (log.sessions || []).map((session) => ({ date: log.date, session })))
+      .filter((item) => item.session.type === 'task' && item.session.taskId === id)
+      .sort((a, b) => b.session.startTime.localeCompare(a.session.startTime))[0];
+
+    if (sessionMatch) {
+      await removeStudySession(sessionMatch.date, sessionMatch.session.id);
+    }
+
+    window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Task marked incomplete', type: 'info' } }));
+  }, [tasks, dateStr, updateTask, dailyLogs, removeStudySession]);
 
   if (!hydrated) {
     return (
@@ -803,6 +940,14 @@ export default function PlannerPage() {
         subjects={subjects.map((s) => ({ id: s.id, name: s.name, color: s.color }))}
         onClose={() => setEditingBlock(null)}
         onSave={(id, updates) => updateStudyBlock(id, updates)}
+      />
+
+      <TaskCompletionModal
+        open={completingTask !== null}
+        taskTitle={completingTask?.title || 'Task'}
+        estimatedMinutes={completingTask?.estimatedMinutes || 0}
+        onClose={() => setCompletingTask(null)}
+        onConfirm={handleConfirmTaskCompletion}
       />
     </>
   );
