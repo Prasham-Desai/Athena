@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -497,9 +497,11 @@ function TaskCompletionModal({
   onConfirm: (actualMinutes: number) => void;
 }) {
   const [actual, setActual] = useState('');
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     if (open) {
+      submittingRef.current = false;
       setActual(estimatedMinutes > 0 ? String(estimatedMinutes) : '');
     }
   }, [open, estimatedMinutes]);
@@ -508,9 +510,14 @@ function TaskCompletionModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (submittingRef.current) return;
     const value = Number(actual);
     if (Number.isNaN(value) || value < 0) return;
-    onConfirm(value);
+    submittingRef.current = true;
+    onClose();
+    Promise.resolve(onConfirm(value)).finally(() => {
+      submittingRef.current = false;
+    });
   };
 
   return (

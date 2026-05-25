@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckSquare, Plus, Trash2, Calendar, Filter, ListTodo, X, Clock, Repeat as RepeatIcon, CheckCircle2, Edit2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -597,16 +597,24 @@ function CompletionModal({
   onConfirm: (actualMinutes: number) => void;
 }) {
   const [actual, setActual] = useState('');
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     if (open) {
+      submittingRef.current = false;
       setActual(estimatedMinutes ? String(estimatedMinutes) : '');
     }
   }, [open, estimatedMinutes]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onConfirm(actual ? parseInt(actual) : 0);
+    if (submittingRef.current) return;
+
+    submittingRef.current = true;
+    onClose();
+    Promise.resolve(onConfirm(actual ? parseInt(actual) : 0)).finally(() => {
+      submittingRef.current = false;
+    });
   };
 
   if (!open) return null;
