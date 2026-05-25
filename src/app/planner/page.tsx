@@ -341,89 +341,214 @@ function AddItemModal({
   );
 }
 
+import { useSettingsStore } from '@/store/settings-store';
+
 // ==========================================================================
-// Time Studied Today widget
+// Time Studied Widget (Dual Timer)
 // ==========================================================================
 
 function TimeStudiedWidget({ date }: { date: string }) {
   const { dailyLogs, updateDailyLog } = useActivityStore();
+  const { settings } = useSettingsStore();
+  
   const log = dailyLogs.find((l) => l.date === date);
-  const minutes = log?.studyMinutes ?? 0;
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
+  const totalMinutes = log?.studyMinutes ?? 0;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const totalMins = totalMinutes % 60;
 
+  // Manual Edit State
   const [editing, setEditing] = useState(false);
-  const [inputHours, setInputHours] = useState(String(hours));
-  const [inputMins, setInputMins] = useState(String(mins));
+  const [inputHours, setInputHours] = useState(String(totalHours));
+  const [inputMins, setInputMins] = useState(String(totalMins));
 
-  const handleSave = () => {
-    const totalMins = Math.max(0, Number(inputHours) * 60 + Number(inputMins));
-    updateDailyLog(date, { studyMinutes: totalMins });
+  // Main Timer State
+  const [isMainRunning, setIsMainRunning] = useState(false);
+  const [mainSeconds, setMainSeconds] = useState(0);
+
+  // Pomodoro State
+  const [pomoMode, setPomoMode] = useState<'study' | 'break'>('study');
+  const [isPomoRunning, setIsPomoRunning] = useState(false);
+  const [pomoSecondsLeft, setPomoSecondsLeft] = useState(settings.pomodoroMinutes * 60);
+
+  // Sync initial pomodoro time if settings change
+  useEffect(() => {
+    if (!isPomoRunning && mainSeconds === 0) {
+      setPomoSecondsLeft(pomoMode === 'study' ? settings.pomodoroMinutes * 60 : settings.breakMinutes * 60);
+    }
+  }, [settings.pomodoroMinutes, settings.breakMinutes, isPomoRunning, mainSeconds, pomoMode]);
+
+  // Main Timer Tick
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isMainRunning) {
+      interval = setInterval(() => {
+        setMainSeconds((s) => s + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isMainRunning]);
+
+  // Pomodoro Timer Tick
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isPomoRunning) {
+      interval = setInterval(() => {
+        setPomoSecondsLeft((prev) => {
+          if (prev <= 1) {
+            // Reached zero
+            if (pomoMode === 'study') {
+              window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study session complete! Take a break.', type: 'info' } }));
+              setPomoMode('break');
+              setIsPomoRunning(false); // auto-pause
+              return settings.breakMinutes * 60;
+            } else {
+              window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Break is over! Time to focus.', type: 'info' } }));
+              setPomoMode('study');
+              setIsPomoRunning(false); // auto-pause
+              return settings.pomodoroMinutes * 60;
+            }
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isPomoRunning, pomoMode, settings.pomodoroMinutes, settings.breakMinutes]);
+
+  const handleMainToggle = () => {
+    const nextState = !isMainRunning;
+    setIsMainRunning(nextState);
+    
+    // Automatically toggle pomodoro with main timer if we're starting
+    if (nextState && !isPomoRunning) {
+      setIsPomoRunning(true);
+    }
+  };
+
+  const handleMainSave = () => {
+    const minsToSave = Math.floor(mainSeconds / 60);
+    if (minsToSave > 0) {
+      updateDailyLog(date, { studyMinutes: totalMinutes + minsToSave });
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: `Added ${minsToSave} minutes to today's total!`, type: 'success' } }));
+    }
+    setMainSeconds(0);
+    setIsMainRunning(false);
+  };
+
+  const handleManualSave = () => {
+    const newTotalMins = Math.max(0, Number(inputHours) * 60 + Number(inputMins));
+    updateDailyLog(date, { studyMinutes: newTotalMins });
     setEditing(false);
-    window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Study time updated!', type: 'success' } }));
+    window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
+  };
+
+  const formatSecs = (s: number) => {
+    const m = Math.floor(s / 60);
+    const secs = s % 60;
+    return `${m.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-5">
-      <div className="flex items-center gap-3 mb-3">
-        <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-          <Timer className="w-5 h-5 text-emerald-500" />
+    <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm space-y-5">
+      {/* Total Time Studied Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-[hsl(var(--border))]">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+            <Timer className="w-5 h-5 text-emerald-500" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
+            <p className="text-[11px] text-[hsl(var(--muted-foreground))]">{format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold">Time Studied</h3>
-          <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}</p>
-        </div>
+
+        {editing ? (
+          <div className="flex items-center gap-2">
+            <input
+              type="number" min={0} value={inputHours} onChange={(e) => setInputHours(e.target.value)}
+              className="w-12 px-2 py-1.5 rounded-lg border bg-[hsl(var(--background))] text-sm text-center"
+            />
+            <span className="text-xs">h</span>
+            <input
+              type="number" min={0} max={59} value={inputMins} onChange={(e) => setInputMins(e.target.value)}
+              className="w-12 px-2 py-1.5 rounded-lg border bg-[hsl(var(--background))] text-sm text-center"
+            />
+            <span className="text-xs">m</span>
+            <button onClick={handleManualSave} className="px-2 py-1 rounded bg-emerald-600 text-white text-xs">Save</button>
+            <button onClick={() => setEditing(false)} className="px-2 py-1 rounded bg-[hsl(var(--muted))] text-xs">Cancel</button>
+          </div>
+        ) : (
+          <button onClick={() => { setInputHours(String(totalHours)); setInputMins(String(totalMins)); setEditing(true); }} className="text-right group">
+            <div className="flex items-baseline gap-0.5 justify-end">
+              <span className="text-2xl font-bold text-emerald-500">{totalHours}</span>
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">h</span>
+              <span className="text-2xl font-bold text-emerald-500 ml-1">{totalMins.toString().padStart(2, '0')}</span>
+              <span className="text-xs text-[hsl(var(--muted-foreground))]">m</span>
+            </div>
+            <span className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100 transition block">click to edit</span>
+          </button>
+        )}
       </div>
 
-      {editing ? (
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            <input
-              type="number"
-              min={0}
-              max={24}
-              value={inputHours}
-              onChange={(e) => setInputHours(e.target.value)}
-              className="w-16 px-2.5 py-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-              autoFocus
-            />
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">h</span>
+      {/* Dual Timers Section */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* Main User Timer */}
+        <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 flex flex-col items-center">
+          <span className="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-2">Main Stopwatch</span>
+          <div className="text-3xl font-bold font-mono tracking-tight mb-4">
+            {formatSecs(mainSeconds)}
           </div>
-          <div className="flex items-center gap-1.5">
-            <input
-              type="number"
-              min={0}
-              max={59}
-              value={inputMins}
-              onChange={(e) => setInputMins(e.target.value)}
-              className="w-16 px-2.5 py-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm text-center focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-              onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-            />
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">m</span>
+          <div className="flex gap-2">
+            <button
+              onClick={handleMainToggle}
+              className={cn("px-4 py-1.5 rounded-lg text-sm font-medium transition text-white shadow-sm", isMainRunning ? "bg-amber-500 hover:bg-amber-600" : "bg-indigo-600 hover:bg-indigo-700")}
+            >
+              {isMainRunning ? 'Pause' : 'Start'}
+            </button>
+            {mainSeconds > 0 && (
+              <button
+                onClick={handleMainSave}
+                className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition shadow-sm"
+              >
+                Save
+              </button>
+            )}
           </div>
-          <button onClick={handleSave} className="px-3 py-2 rounded-xl bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition">
-            Save
-          </button>
-          <button onClick={() => setEditing(false)} className="px-3 py-2 rounded-xl bg-[hsl(var(--muted))] text-xs font-medium hover:bg-[hsl(var(--accent))] transition">
-            Cancel
-          </button>
+          <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3 text-center leading-tight">
+            Tracks actual study time.<br/>Saves to total when stopped.
+          </p>
         </div>
-      ) : (
-        <button
-          onClick={() => {
-            setInputHours(String(hours));
-            setInputMins(String(mins));
-            setEditing(true);
-          }}
-          className="group flex items-baseline gap-1 hover:opacity-80 transition"
-        >
-          <span className="text-3xl font-bold text-emerald-500">{hours}</span>
-          <span className="text-sm text-[hsl(var(--muted-foreground))]">h</span>
-          <span className="text-3xl font-bold text-emerald-500 ml-1">{mins.toString().padStart(2, '0')}</span>
-          <span className="text-sm text-[hsl(var(--muted-foreground))]">m</span>
-          <span className="text-[10px] text-[hsl(var(--muted-foreground))] ml-2 opacity-0 group-hover:opacity-100 transition">click to edit</span>
-        </button>
-      )}
+
+        {/* Pomodoro Timer */}
+        <div className={cn("rounded-xl border p-4 flex flex-col items-center transition-colors", pomoMode === 'study' ? "border-rose-500/20 bg-rose-500/5" : "border-emerald-500/20 bg-emerald-500/5")}>
+          <span className={cn("text-xs font-semibold uppercase tracking-wider mb-2", pomoMode === 'study' ? "text-rose-500" : "text-emerald-500")}>
+            {pomoMode === 'study' ? 'Pomodoro (Focus)' : 'Pomodoro (Break)'}
+          </span>
+          <div className="text-3xl font-bold font-mono tracking-tight mb-4">
+            {formatSecs(pomoSecondsLeft)}
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsPomoRunning(!isPomoRunning)}
+              className={cn("px-4 py-1.5 rounded-lg text-sm font-medium transition text-white shadow-sm", pomoMode === 'study' ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700")}
+            >
+              {isPomoRunning ? 'Pause' : 'Start'}
+            </button>
+            <button
+              onClick={() => {
+                setIsPomoRunning(false);
+                setPomoSecondsLeft(pomoMode === 'study' ? settings.pomodoroMinutes * 60 : settings.breakMinutes * 60);
+              }}
+              className="px-3 py-1.5 rounded-lg bg-[hsl(var(--muted))] text-sm font-medium hover:opacity-80 transition"
+            >
+              Reset
+            </button>
+          </div>
+          <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3 text-center leading-tight">
+            Ideal rhythm guide.<br/>Auto-pauses on completion.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

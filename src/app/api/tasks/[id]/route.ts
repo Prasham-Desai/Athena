@@ -18,7 +18,9 @@ export async function PUT(
     if (body.title !== undefined) { updates.push('title = ?'); values.push(body.title); }
     if (body.category !== undefined) { updates.push('category = ?'); values.push(body.category); }
     if (body.priority !== undefined) { updates.push('priority = ?'); values.push(body.priority); }
-    if (body.dueDate !== undefined) { updates.push('due_date = ?'); values.push(body.dueDate); }
+    if (body.dueDate !== undefined || body.date !== undefined) { updates.push('date = ?'); values.push(body.date || body.dueDate); }
+    if (body.estimatedMinutes !== undefined) { updates.push('estimated_minutes = ?'); values.push(body.estimatedMinutes); }
+    if (body.actualMinutes !== undefined) { updates.push('actual_minutes = ?'); values.push(body.actualMinutes); }
     if (body.completed !== undefined) { updates.push('completed = ?'); values.push(body.completed ? 1 : 0); }
     if (body.completedAt !== undefined) { updates.push('completed_at = ?'); values.push(body.completedAt); }
 

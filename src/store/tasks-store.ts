@@ -34,6 +34,7 @@ export const useTasksStore = create<TasksState>((set, get) => ({
       completed: false,
       createdAt: new Date().toISOString(),
       completedAt: null,
+      actualMinutes: null,
     };
 
     // Optimistic update
@@ -81,29 +82,14 @@ export const useTasksStore = create<TasksState>((set, get) => ({
   },
 
   toggleTask: async (id) => {
-    const { tasks } = get();
+    const { tasks, updateTask } = get();
     const task = tasks.find(t => t.id === id);
     if (!task) return;
 
     const isCompleted = !task.completed;
     const completedAt = isCompleted ? new Date().toISOString() : null;
 
-    // Optimistic update
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
-        t.id === id ? { ...t, completed: isCompleted, completedAt } : t
-      ),
-    }));
-
-    try {
-      await fetch(`/api/tasks/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed: isCompleted, completedAt }),
-      });
-    } catch (error) {
-      console.error('Failed to toggle task', error);
-    }
+    updateTask(id, { completed: isCompleted, completedAt });
   },
 
   setTasks: (tasks) => set({ tasks }),

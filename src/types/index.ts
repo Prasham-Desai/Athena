@@ -71,7 +71,9 @@ export interface Task {
   category: TaskCategory;
   priority: Priority;
   completed: boolean;
-  dueDate: string | null;  // YYYY-MM-DD
+  date: string;            // YYYY-MM-DD
+  estimatedMinutes?: number | null;
+  actualMinutes?: number | null;
   createdAt: string;       // ISO date string
   completedAt: string | null;
 }

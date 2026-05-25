@@ -2,14 +2,16 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckSquare, Plus, Trash2, Calendar, Filter, ListTodo, X } from 'lucide-react';
+import { CheckSquare, Plus, Trash2, Calendar, Filter, ListTodo, X, Clock, Repeat as RepeatIcon } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useTasksStore } from '@/store/tasks-store';
+import { useActivityStore } from '@/store/activity-store';
 import { useHydration } from '@/hooks/use-hydration';
-import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday } from '@/lib/utils';
+import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday, getToday } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmptyState } from '@/components/shared/empty-state';
 import type { TaskCategory, Priority } from '@/types';
+import { addDays, format } from 'date-fns';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -56,15 +58,17 @@ function TaskItem({
     category: TaskCategory;
     priority: Priority;
     completed: boolean;
-    dueDate: string | null;
+    date: string;
+    estimatedMinutes?: number | null;
+    actualMinutes?: number | null;
     createdAt: string;
   };
-  onToggle: (id: string) => void;
+  onToggle: (id: string, isCurrentlyCompleted: boolean, estimatedMinutes: number) => void;
   onDelete: (id: string) => void;
 }) {
   const pCfg = PRIORITY_CONFIG[task.priority];
-  const overdue = !task.completed && isOverdue(task.dueDate);
-  const dueToday = !task.completed && isToday(task.dueDate);
+  const overdue = !task.completed && isOverdue(task.date);
+  const dueToday = !task.completed && isToday(task.date);
 
   return (
     <motion.div
@@ -80,7 +84,7 @@ function TaskItem({
     >
       {/* Checkbox */}
       <button
-        onClick={() => onToggle(task.id)}
+        onClick={() => onToggle(task.id, task.completed, task.estimatedMinutes || 0)}
         className={cn(
           'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300',
           task.completed
@@ -126,6 +130,18 @@ function TaskItem({
           <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium capitalize', CATEGORY_COLORS[task.category])}>
             {task.category.replace('-', ' ')}
           </span>
+          {task.estimatedMinutes && (
+            <span className="flex items-center gap-1 text-[10px] font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-2 py-0.5 rounded-full">
+              <Clock className="w-3 h-3" />
+              {task.estimatedMinutes}m est.
+            </span>
+          )}
+          {task.completed && task.actualMinutes && (
+            <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+              <CheckSquare className="w-3 h-3" />
+              {task.actualMinutes}m actual
+            </span>
+          )}
         </div>
 
         {task.description && (
@@ -134,7 +150,7 @@ function TaskItem({
           </p>
         )}
 
-        {task.dueDate && (
+        {task.date && (
           <div className="mt-2 flex items-center gap-1">
             <Calendar className="h-3 w-3 text-[hsl(var(--muted-foreground))]" />
             <span
@@ -145,7 +161,7 @@ function TaskItem({
                 !overdue && !dueToday && 'text-[hsl(var(--muted-foreground))]',
               )}
             >
-              {getRelativeDate(task.dueDate)}
+              {getRelativeDate(task.date)}
             </span>
           </div>
         )}
@@ -173,31 +189,60 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<TaskCategory>('study');
   const [priority, setPriority] = useState<Priority>('medium');
-  const [dueDate, setDueDate] = useState('');
+  const [date, setDate] = useState(getToday());
+  const [estimatedMinutes, setEstimatedMinutes] = useState('');
+  
+  // Repeating state
+  const [isRepeating, setIsRepeating] = useState(false);
+  const [repeatCount, setRepeatCount] = useState('1');
+  const [repeatType, setRepeatType] = useState<'days'>('days'); // simple: repeat every day for N days
 
   const reset = () => {
     setTitle('');
     setDescription('');
     setCategory('study');
     setPriority('medium');
-    setDueDate('');
+    setDate(getToday());
+    setEstimatedMinutes('');
+    setIsRepeating(false);
+    setRepeatCount('1');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || !date) return;
 
-    addTask({
+    const baseTask = {
       title: title.trim(),
       description: description.trim(),
       category,
       priority,
-      dueDate: dueDate || null,
-    });
+      estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes) : null,
+    };
 
-    window.dispatchEvent(
-      new CustomEvent('toast', { detail: { message: 'Task added!', type: 'success' } }),
-    );
+    if (isRepeating && parseInt(repeatCount) > 1) {
+      const count = parseInt(repeatCount);
+      const startDate = new Date(date + 'T00:00:00');
+      
+      for (let i = 0; i < count; i++) {
+        const nextDate = addDays(startDate, i);
+        addTask({
+          ...baseTask,
+          date: format(nextDate, 'yyyy-MM-dd'),
+        });
+      }
+      window.dispatchEvent(
+        new CustomEvent('toast', { detail: { message: `Added ${count} repeating tasks!`, type: 'success' } }),
+      );
+    } else {
+      addTask({
+        ...baseTask,
+        date,
+      });
+      window.dispatchEvent(
+        new CustomEvent('toast', { detail: { message: 'Task added!', type: 'success' } }),
+      );
+    }
 
     reset();
     onClose();
@@ -222,7 +267,7 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"
           >
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold">Add Task</h2>
@@ -290,22 +335,70 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
 
-              {/* Due Date */}
-              <div>
-                <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Due Date</label>
-                <input
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                {/* Date */}
+                <div>
+                  <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Date</label>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                    className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                </div>
+                {/* Estimated Time */}
+                <div>
+                  <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Est. Time (min)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={estimatedMinutes}
+                    onChange={(e) => setEstimatedMinutes(e.target.value)}
+                    placeholder="e.g. 30"
+                    className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                </div>
+              </div>
+
+              {/* Repeater */}
+              <div className="pt-2">
+                <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isRepeating}
+                    onChange={(e) => setIsRepeating(e.target.checked)}
+                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <RepeatIcon className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
+                  Repeat this task
+                </label>
+                
+                {isRepeating && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="mt-3 flex items-center gap-3 bg-[hsl(var(--muted))] p-3 rounded-xl"
+                  >
+                    <span className="text-sm">Create this task for</span>
+                    <input
+                      type="number"
+                      min="2"
+                      max="30"
+                      value={repeatCount}
+                      onChange={(e) => setRepeatCount(e.target.value)}
+                      className="w-16 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-2 py-1 text-sm text-center"
+                    />
+                    <span className="text-sm">consecutive days</span>
+                  </motion.div>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition"
+                className="w-full mt-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition"
               >
-                Add Task
+                {isRepeating ? 'Add Repeating Tasks' : 'Add Task'}
               </button>
             </form>
           </motion.div>
@@ -316,17 +409,99 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
 }
 
 // ---------------------------------------------------------------------------
+// Completion Modal
+// ---------------------------------------------------------------------------
+function CompletionModal({
+  open,
+  taskId,
+  estimatedMinutes,
+  onClose,
+  onConfirm
+}: {
+  open: boolean;
+  taskId: string | null;
+  estimatedMinutes: number;
+  onClose: () => void;
+  onConfirm: (actualMinutes: number) => void;
+}) {
+  const [actual, setActual] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      setActual(estimatedMinutes ? String(estimatedMinutes) : '');
+    }
+  }, [open, estimatedMinutes]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onConfirm(actual ? parseInt(actual) : 0);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-sm rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"
+      >
+        <h3 className="text-lg font-semibold mb-2">Task Completed! 🎉</h3>
+        <p className="text-sm text-[hsl(var(--muted-foreground))] mb-5">
+          How much time did you actually spend on this task? This will be added to your total study time today.
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Actual Time (min)</label>
+            <input
+              autoFocus
+              type="number"
+              min="0"
+              value={actual}
+              onChange={(e) => setActual(e.target.value)}
+              placeholder="e.g. 25"
+              className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            />
+          </div>
+          
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-2.5 rounded-xl bg-[hsl(var(--muted))] text-sm font-medium hover:opacity-80 transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:opacity-90 transition shadow-lg shadow-emerald-500/20"
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
 export default function TasksPage() {
   const hydrated = useHydration();
-  const { tasks, toggleTask, deleteTask } = useTasksStore();
+  const { tasks, toggleTask, deleteTask, updateTask } = useTasksStore();
+  const { updateDailyLog, dailyLogs } = useActivityStore();
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [categoryFilter, setCategoryFilter] = useState<TaskCategory | 'all'>('all');
   const [showModal, setShowModal] = useState(false);
   const [prevAllDone, setPrevAllDone] = useState(false);
+
+  // Completion state
+  const [completingTask, setCompletingTask] = useState<{ id: string, est: number } | null>(null);
 
   // Filtered tasks
   const filteredTasks = useMemo(() => {
@@ -338,11 +513,22 @@ export default function TasksPage() {
       })
       .filter((t) => (categoryFilter === 'all' ? true : t.category === categoryFilter))
       .sort((a, b) => {
-        // Incomplete first, then by creation date desc
+        // Sort by date ascending, then completed status
+        if (a.date !== b.date) return a.date.localeCompare(b.date);
         if (a.completed !== b.completed) return a.completed ? 1 : -1;
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
   }, [tasks, statusFilter, categoryFilter]);
+
+  // Group by date
+  const groupedTasks = useMemo(() => {
+    const groups: Record<string, typeof filteredTasks> = {};
+    for (const t of filteredTasks) {
+      if (!groups[t.date]) groups[t.date] = [];
+      groups[t.date].push(t);
+    }
+    return groups;
+  }, [filteredTasks]);
 
   // Progress
   const completedCount = filteredTasks.filter((t) => t.completed).length;
@@ -359,12 +545,33 @@ export default function TasksPage() {
     setPrevAllDone(allDone);
   }, [allDone, prevAllDone]);
 
-  const handleToggle = useCallback(
-    (id: string) => {
+  const handleToggleRequest = useCallback((id: string, isCompleted: boolean, est: number) => {
+    if (!isCompleted) {
+      // Trying to complete the task
+      setCompletingTask({ id, est });
+    } else {
+      // Trying to un-complete
       toggleTask(id);
-    },
-    [toggleTask],
-  );
+    }
+  }, [toggleTask]);
+
+  const handleConfirmCompletion = useCallback((actualMinutes: number) => {
+    if (!completingTask) return;
+    const { id } = completingTask;
+    
+    // 1. Mark task completed with actualMinutes
+    updateTask(id, { completed: true, completedAt: new Date().toISOString(), actualMinutes });
+    
+    // 2. Add time to today's log
+    if (actualMinutes > 0) {
+      const today = getToday();
+      const currentLog = dailyLogs.find(l => l.date === today);
+      const currentMins = currentLog?.studyMinutes || 0;
+      updateDailyLog(today, { studyMinutes: currentMins + actualMinutes });
+    }
+
+    setCompletingTask(null);
+  }, [completingTask, updateTask, updateDailyLog, dailyLogs]);
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -473,7 +680,7 @@ export default function TasksPage() {
         </motion.div>
       )}
 
-      {/* Task list */}
+      {/* Task list grouped by date */}
       {filteredTasks.length === 0 ? (
         <EmptyState
           icon={ListTodo}
@@ -487,22 +694,39 @@ export default function TasksPage() {
           onAction={() => setShowModal(true)}
         />
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-6">
           <AnimatePresence mode="popLayout">
-            {filteredTasks.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onToggle={handleToggle}
-                onDelete={handleDelete}
-              />
+            {Object.entries(groupedTasks).map(([date, dateTasks]) => (
+              <motion.div key={date} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <h3 className="text-sm font-semibold tracking-tight text-[hsl(var(--muted-foreground))] mb-3 px-1 border-b border-[hsl(var(--border))] pb-2">
+                  {getRelativeDate(date)} <span className="font-normal text-xs ml-2">({formatDate(date)})</span>
+                </h3>
+                <div className="space-y-2">
+                  {dateTasks.map((task) => (
+                    <TaskItem
+                      key={task.id}
+                      task={task}
+                      onToggle={handleToggleRequest}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             ))}
           </AnimatePresence>
         </div>
       )}
 
-      {/* Modal */}
+      {/* Modals */}
       <AddTaskModal open={showModal} onClose={() => setShowModal(false)} />
+      
+      <CompletionModal 
+        open={completingTask !== null} 
+        taskId={completingTask?.id || null}
+        estimatedMinutes={completingTask?.est || 0}
+        onClose={() => setCompletingTask(null)}
+        onConfirm={handleConfirmCompletion}
+      />
     </>
   );
 }

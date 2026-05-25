@@ -7,7 +7,16 @@ export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
-    const tasks = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    const rows = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    const tasks = (rows as any[]).map(row => ({
+      ...row,
+      dueDate: undefined, // remove legacy
+      date: row.date || row.due_date,
+      estimatedMinutes: row.estimated_minutes,
+      actualMinutes: row.actual_minutes,
+      completedAt: row.completed_at,
+      createdAt: row.created_at,
+    }));
     return successResponse(tasks);
   } catch (err: any) {
     return errorResponse(err.message, 500);
@@ -24,13 +33,15 @@ export async function POST(request: NextRequest) {
     const id = body.id || generateId();
     
     await db.run(
-      'INSERT INTO tasks (id, title, category, priority, due_date, completed, completed_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO tasks (id, title, category, priority, date, estimated_minutes, actual_minutes, completed, completed_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         id, 
         body.title, 
         body.category, 
         body.priority, 
-        body.dueDate || null, 
+        body.date || null,
+        body.estimatedMinutes || null,
+        body.actualMinutes || null,
         body.completed ? 1 : 0, 
         body.completedAt || null,
         body.createdAt || new Date().toISOString()
