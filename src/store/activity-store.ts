@@ -106,15 +106,18 @@ export const useActivityStore = create<ActivityState>()(
           if (!sessionToRemove) return state;
 
           return {
-            dailyLogs: state.dailyLogs.map((l) =>
-              l.date === date
-                ? {
-                    ...l,
-                    studyMinutes: Math.max(0, l.studyMinutes - sessionToRemove.durationMinutes),
-                    sessions: l.sessions!.filter(s => s.id !== sessionId),
-                  }
-                : l
-            ),
+            dailyLogs: state.dailyLogs.map((l) => {
+              if (l.date === date) {
+                const currentTotal = Number(l.studyMinutes) || 0;
+                const deduct = Number(sessionToRemove.durationMinutes) || 0;
+                return {
+                  ...l,
+                  studyMinutes: Math.max(0, currentTotal - deduct),
+                  sessions: l.sessions!.filter(s => s.id !== sessionId),
+                };
+              }
+              return l;
+            }),
           };
         }),
 

@@ -25,6 +25,9 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   const totalHours = Math.floor(totalMinutes / 60);
   const totalMins = totalMinutes % 60;
 
+  const goalMinutes = (settings.dailyStudyGoalHours || 8) * 60;
+  const progressPct = Math.min(100, Math.round((totalMinutes / goalMinutes) * 100));
+
   // Manual Edit State
   const [editing, setEditing] = useState(false);
   const [inputHours, setInputHours] = useState(String(totalHours));
@@ -98,8 +101,21 @@ export function TimeStudiedWidget({ date }: { date: string }) {
             <Timer className="w-5 h-5 text-emerald-500" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
-            <p className="text-[11px] text-[hsl(var(--muted-foreground))]">{format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}</p>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
+              {goalMinutes > 0 && (
+                <span className={cn(
+                  "text-[10px] font-medium px-1.5 py-0.5 rounded-full",
+                  progressPct >= 100 ? "bg-emerald-500/10 text-emerald-500" : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]"
+                )}>
+                  {progressPct}% of Goal
+                </span>
+              )}
+            </div>
+            <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
+              {format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}
+              {settings.dailyStudyGoalHours ? ` • Goal: ${settings.dailyStudyGoalHours}h` : ''}
+            </p>
           </div>
         </div>
 
