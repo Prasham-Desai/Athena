@@ -94,6 +94,7 @@ export interface StudySession {
   durationMinutes: number;
   type: 'manual' | 'timer' | 'task';
   title?: string;
+  taskId?: string;
 }
 
 export interface DailyLog {

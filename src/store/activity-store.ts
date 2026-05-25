@@ -11,6 +11,7 @@ interface ActivityState {
   updateDailyLog: (date: string, updates: Partial<DailyLog>) => void;
   getDailyLog: (date: string) => DailyLog | undefined;
   addStudySession: (date: string, session: Omit<StudySession, 'id'>) => void;
+  removeStudySession: (date: string, sessionId: string) => void;
   setActivities: (activities: ActivityEntry[]) => void;
   setDailyLogs: (logs: DailyLog[]) => void;
 }
@@ -93,6 +94,27 @@ export const useActivityStore = create<ActivityState>()(
                 sessions: [newSession],
               },
             ],
+          };
+        }),
+
+      removeStudySession: (date, sessionId) =>
+        set((state) => {
+          const existing = state.dailyLogs.find((l) => l.date === date);
+          if (!existing || !existing.sessions) return state;
+
+          const sessionToRemove = existing.sessions.find(s => s.id === sessionId);
+          if (!sessionToRemove) return state;
+
+          return {
+            dailyLogs: state.dailyLogs.map((l) =>
+              l.date === date
+                ? {
+                    ...l,
+                    studyMinutes: Math.max(0, l.studyMinutes - sessionToRemove.durationMinutes),
+                    sessions: l.sessions!.filter(s => s.id !== sessionId),
+                  }
+                : l
+            ),
           };
         }),
 

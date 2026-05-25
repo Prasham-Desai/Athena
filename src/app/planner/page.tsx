@@ -569,6 +569,10 @@ export default function PlannerPage() {
         </button>
       </PageHeader>
 
+      <div className="mb-8">
+        <TimeStudiedWidget date={dateStr} />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6">
         {/* Left: Calendar + Time Studied */}
         <div className="space-y-4">
@@ -578,7 +582,6 @@ export default function PlannerPage() {
             studyBlocks={studyBlocks}
             tasks={tasks}
           />
-          <TimeStudiedWidget date={dateStr} />
         </div>
 
         {/* Right: Day detail */}

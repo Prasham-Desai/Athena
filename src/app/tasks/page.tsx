@@ -739,7 +739,8 @@ export default function TasksPage() {
         endTime: now,
         durationMinutes: actualMinutes,
         type: 'task',
-        title: taskObj?.title ? `Task: ${taskObj.title}` : 'Completed Task'
+        title: taskObj?.title ? `Task: ${taskObj.title}` : 'Completed Task',
+        taskId: id
       });
     }
 

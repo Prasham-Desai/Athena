@@ -1,16 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Timer, Clock } from 'lucide-react';
+import { Timer, Clock, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useActivityStore } from '@/store/activity-store';
 import { useSettingsStore } from '@/store/settings-store';
 import { useTimerStore } from '@/store/timer-store';
+import { useTasksStore } from '@/store/tasks-store';
 
 export function TimeStudiedWidget({ date }: { date: string }) {
-  const { dailyLogs, updateDailyLog, addStudySession } = useActivityStore();
+  const { dailyLogs, updateDailyLog, addStudySession, removeStudySession } = useActivityStore();
   const { settings } = useSettingsStore();
+  const updateTask = useTasksStore(s => s.updateTask);
   
   const { 
     isMainRunning, mainSeconds, mainStartTime, toggleMain, resetMain,
@@ -70,6 +72,14 @@ export function TimeStudiedWidget({ date }: { date: string }) {
     
     setEditing(false);
     window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
+  };
+
+  const handleDeleteSession = (sessionId: string, type: 'manual' | 'timer' | 'task', taskId?: string) => {
+    removeStudySession(date, sessionId);
+    if (type === 'task' && taskId) {
+      updateTask(taskId, { completed: false, completedAt: null, actualMinutes: null });
+    }
+    window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Session deleted', type: 'info' } }));
   };
 
   const formatSecs = (s: number | null) => {
@@ -186,16 +196,25 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           <h4 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-3">Today's Sessions</h4>
           <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
             {[...sessions].reverse().map((session) => (
-              <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
+              <div key={session.id} className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
                 <div>
                   <p className="font-medium">{session.title || 'Study Session'}</p>
                   <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
                     {format(new Date(session.startTime), 'h:mm a')} - {format(new Date(session.endTime), 'h:mm a')}
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 mt-2 sm:mt-0">
-                  <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="font-medium text-emerald-600 dark:text-emerald-400">{session.durationMinutes} min</span>
+                <div className="flex items-center gap-3 mt-2 sm:mt-0">
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-emerald-500" />
+                    <span className="font-medium text-emerald-600 dark:text-emerald-400">{session.durationMinutes} min</span>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteSession(session.id, session.type, session.taskId)}
+                    className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-500 transition opacity-0 group-hover:opacity-100"
+                    title="Delete session"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
             ))}
