@@ -2,13 +2,14 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckSquare, Plus, Trash2, Calendar, Filter, ListTodo, X, Clock, Repeat as RepeatIcon } from 'lucide-react';
+import { CheckSquare, Plus, Trash2, Calendar, Filter, ListTodo, X, Clock, Repeat as RepeatIcon, CheckCircle2, Edit2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useTasksStore } from '@/store/tasks-store';
 import { useActivityStore } from '@/store/activity-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday, getToday } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
+import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 import { EmptyState } from '@/components/shared/empty-state';
 import type { TaskCategory, Priority } from '@/types';
 import { addDays, format } from 'date-fns';
@@ -43,6 +44,190 @@ const CATEGORY_COLORS: Record<TaskCategory, string> = {
 };
 
 // ---------------------------------------------------------------------------
+// Edit Task Modal
+// ---------------------------------------------------------------------------
+
+function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => void; task: Task | null }) {
+  const updateTask = useTasksStore((s) => s.updateTask);
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<TaskCategory>('study');
+  const [priority, setPriority] = useState<Priority>('medium');
+  const [date, setDate] = useState('');
+  const [estimatedMinutes, setEstimatedMinutes] = useState('');
+
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description || '');
+      setCategory(task.category);
+      setPriority(task.priority);
+      setDate(task.date || '');
+      setEstimatedMinutes(task.estimatedMinutes ? String(task.estimatedMinutes) : '');
+    }
+  }, [task]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!task || !title.trim() || !date) return;
+
+    updateTask(task.id, {
+      title: title.trim(),
+      description: description.trim(),
+      category,
+      priority,
+      date,
+      estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes, 10) : undefined,
+    });
+    
+    window.dispatchEvent(
+      new CustomEvent('toast', { detail: { message: 'Task updated successfully', type: 'success' } }),
+    );
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="w-full max-w-md overflow-hidden rounded-2xl bg-[hsl(var(--background))] border border-[hsl(var(--border))] shadow-2xl pointer-events-auto"
+            >
+              <div className="flex items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))/30] px-6 py-4">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <ListTodo className="h-5 w-5 text-indigo-500" />
+                  Edit Task
+                </h2>
+                <button
+                  onClick={onClose}
+                  className="rounded-full p-2 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                      Title <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      required
+                      autoFocus
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="e.g., Read Chapter 4"
+                      className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                      Description <span className="text-[10px] lowercase normal-case opacity-70">(optional)</span>
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Add some details..."
+                      rows={2}
+                      className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                        Date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                        Est. Mins
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={estimatedMinutes}
+                        onChange={(e) => setEstimatedMinutes(e.target.value)}
+                        placeholder="e.g. 45"
+                        className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                        Category
+                      </label>
+                      <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value as TaskCategory)}
+                        className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm capitalize transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      >
+                        {['study', 'assignment', 'revision', 'exam-prep', 'other'].map((c) => (
+                          <option key={c} value={c}>
+                            {c.replace('-', ' ')}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
+                        Priority
+                      </label>
+                      <select
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value as Priority)}
+                        className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2.5 text-sm capitalize transition-colors focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      >
+                        {(['high', 'medium', 'low', 'urgent'] as Priority[]).map((p) => (
+                          <option key={p} value={p}>
+                            {p}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full mt-6 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition"
+                >
+                  Save Changes
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Task Item
 // ---------------------------------------------------------------------------
 
@@ -50,6 +235,7 @@ function TaskItem({
   task,
   onToggle,
   onDelete,
+  onEdit,
 }: {
   task: {
     id: string;
@@ -65,10 +251,9 @@ function TaskItem({
   };
   onToggle: (id: string, isCurrentlyCompleted: boolean, estimatedMinutes: number) => void;
   onDelete: (id: string) => void;
+  onEdit: (task: any) => void;
 }) {
   const pCfg = PRIORITY_CONFIG[task.priority];
-  const overdue = !task.completed && isOverdue(task.date);
-  const dueToday = !task.completed && isToday(task.date);
 
   return (
     <motion.div
@@ -78,15 +263,14 @@ function TaskItem({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -40, transition: { duration: 0.2 } }}
       className={cn(
-        'group relative flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--ring))]',
+        'group relative flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--ring))]',
         task.completed && 'opacity-60',
       )}
     >
-      {/* Checkbox */}
       <button
         onClick={() => onToggle(task.id, task.completed, task.estimatedMinutes || 0)}
         className={cn(
-          'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300',
+          'flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300',
           task.completed
             ? 'border-emerald-500 bg-emerald-500'
             : 'border-[hsl(var(--border))] hover:border-indigo-400',
@@ -113,67 +297,64 @@ function TaskItem({
         </motion.svg>
       </button>
 
-      {/* Content */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <p
-            className={cn(
-              'text-sm font-medium leading-tight transition-all duration-300',
-              task.completed && 'line-through text-[hsl(var(--muted-foreground))]',
-            )}
-          >
-            {task.title}
-          </p>
-          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider', pCfg.bg, pCfg.text)}>
-            {pCfg.label}
-          </span>
-          <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium capitalize', CATEGORY_COLORS[task.category])}>
-            {task.category.replace('-', ' ')}
-          </span>
-          {task.estimatedMinutes && (
-            <span className="flex items-center gap-1 text-[10px] font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-2 py-0.5 rounded-full">
-              <Clock className="w-3 h-3" />
-              {task.estimatedMinutes}m est.
-            </span>
+      <div className="flex-1 flex flex-col justify-center overflow-hidden">
+        <h4
+          className={cn(
+            'text-[15px] font-medium leading-tight truncate',
+            task.completed
+              ? 'text-[hsl(var(--muted-foreground))] line-through'
+              : 'text-[hsl(var(--foreground))]',
           )}
-          {task.completed && task.actualMinutes && (
-            <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-              <CheckSquare className="w-3 h-3" />
-              {task.actualMinutes}m actual
-            </span>
-          )}
-        </div>
-
+        >
+          {task.title}
+        </h4>
         {task.description && (
-          <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))] line-clamp-1">
+          <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))] truncate">
             {task.description}
           </p>
         )}
-
-        {task.date && (
-          <div className="mt-2 flex items-center gap-1">
-            <Calendar className="h-3 w-3 text-[hsl(var(--muted-foreground))]" />
-            <span
-              className={cn(
-                'text-xs',
-                overdue && 'font-medium text-red-500',
-                dueToday && !overdue && 'font-medium text-amber-500',
-                !overdue && !dueToday && 'text-[hsl(var(--muted-foreground))]',
-              )}
-            >
-              {getRelativeDate(task.date)}
-            </span>
-          </div>
-        )}
       </div>
 
-      {/* Delete */}
-      <button
-        onClick={() => onDelete(task.id)}
-        className="shrink-0 rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] opacity-0 transition-all hover:bg-red-500/10 hover:text-red-500 group-hover:opacity-100"
-      >
-        <Trash2 className="h-3.5 w-3.5" />
-      </button>
+      <div className="flex items-center gap-3 shrink-0 ml-4">
+        <div className="flex items-center gap-2">
+          {task.estimatedMinutes && task.estimatedMinutes > 0 && (
+            <div className="flex items-center gap-1 text-[11px] font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-2 py-0.5 rounded-full">
+              <Clock className="w-3 h-3" />
+              <span>Est: {task.estimatedMinutes}m</span>
+            </div>
+          )}
+          {task.completed && task.actualMinutes && (
+            <div className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>Act: {task.actualMinutes}m</span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider', pCfg.bg, pCfg.text)}>
+            {pCfg.label}
+          </span>
+          <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-medium capitalize', CATEGORY_COLORS[task.category])}>
+            {task.category.replace('-', ' ')}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => onEdit(task)}
+            className="shrink-0 rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition-all hover:bg-indigo-500/10 hover:text-indigo-500"
+          >
+            <Edit2 className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="shrink-0 rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition-all hover:bg-red-500/10 hover:text-red-500"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -192,10 +373,8 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
   const [date, setDate] = useState(getToday());
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
   
-  // Repeating state
   const [isRepeating, setIsRepeating] = useState(false);
   const [repeatCount, setRepeatCount] = useState('1');
-  const [repeatType, setRepeatType] = useState<'days'>('days'); // simple: repeat every day for N days
 
   const reset = () => {
     setTitle('');
@@ -277,7 +456,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Title */}
               <div>
                 <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Title</label>
                 <input
@@ -290,7 +468,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                 />
               </div>
 
-              {/* Description */}
               <div>
                 <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Description</label>
                 <textarea
@@ -303,7 +480,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {/* Category */}
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Category</label>
                   <select
@@ -319,7 +495,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                   </select>
                 </div>
 
-                {/* Priority */}
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Priority</label>
                   <select
@@ -336,7 +511,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {/* Date */}
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Date</label>
                   <input
@@ -347,7 +521,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                     className="mt-1.5 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                   />
                 </div>
-                {/* Estimated Time */}
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Est. Time (min)</label>
                   <input
@@ -361,7 +534,6 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
 
-              {/* Repeater */}
               <div className="pt-2">
                 <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
                   <input
@@ -498,12 +670,11 @@ export default function TasksPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [categoryFilter, setCategoryFilter] = useState<TaskCategory | 'all'>('all');
   const [showModal, setShowModal] = useState(false);
+  const [editTask, setEditTask] = useState<Task | null>(null);
   const [prevAllDone, setPrevAllDone] = useState(false);
 
-  // Completion state
   const [completingTask, setCompletingTask] = useState<{ id: string, est: number } | null>(null);
 
-  // Filtered tasks
   const filteredTasks = useMemo(() => {
     return tasks
       .filter((t) => {
@@ -513,14 +684,12 @@ export default function TasksPage() {
       })
       .filter((t) => (categoryFilter === 'all' ? true : t.category === categoryFilter))
       .sort((a, b) => {
-        // Sort by date ascending, then completed status
         if (a.date !== b.date) return (a.date || '').localeCompare(b.date || '');
         if (a.completed !== b.completed) return a.completed ? 1 : -1;
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
   }, [tasks, statusFilter, categoryFilter]);
 
-  // Group by date
   const groupedTasks = useMemo(() => {
     const groups: Record<string, typeof filteredTasks> = {};
     for (const t of filteredTasks) {
@@ -531,12 +700,10 @@ export default function TasksPage() {
     return groups;
   }, [filteredTasks]);
 
-  // Progress
   const completedCount = filteredTasks.filter((t) => t.completed).length;
   const totalCount = filteredTasks.length;
   const progressPct = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
 
-  // Confetti when all visible tasks are done
   const allDone = totalCount > 0 && completedCount === totalCount;
 
   useEffect(() => {
@@ -548,10 +715,8 @@ export default function TasksPage() {
 
   const handleToggleRequest = useCallback((id: string, isCompleted: boolean, est: number) => {
     if (!isCompleted) {
-      // Trying to complete the task
       setCompletingTask({ id, est });
     } else {
-      // Trying to un-complete
       toggleTask(id);
     }
   }, [toggleTask]);
@@ -560,16 +725,13 @@ export default function TasksPage() {
     if (!completingTask) return;
     const { id } = completingTask;
     
-    // 1. Mark task completed with actualMinutes
     const now = new Date().toISOString();
     updateTask(id, { completed: true, completedAt: now, actualMinutes });
     
-    // 2. Add time to today's log as a distinct session
     if (actualMinutes > 0) {
       const today = getToday();
       const taskObj = tasks.find(t => t.id === id);
       
-      // Calculate a rough start time (now - actualMinutes)
       const startTime = new Date(Date.now() - actualMinutes * 60000).toISOString();
       
       addStudySession(today, {
@@ -594,7 +756,6 @@ export default function TasksPage() {
     [deleteTask],
   );
 
-  // Loading skeleton
   if (!hydrated) {
     return (
       <div className="space-y-4 animate-pulse">
@@ -619,14 +780,16 @@ export default function TasksPage() {
         </button>
       </PageHeader>
 
-      {/* Filters */}
+      <div className="mb-8">
+        <TimeStudiedWidget date={getToday()} />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
         className="mb-6 space-y-3"
       >
-        {/* Status tabs */}
         <div className="flex items-center gap-1 rounded-xl bg-[hsl(var(--muted))] p-1 w-fit">
           {STATUS_TABS.map((tab) => (
             <button
@@ -644,7 +807,6 @@ export default function TasksPage() {
           ))}
         </div>
 
-        {/* Category filter */}
         <div className="flex items-center gap-2 flex-wrap">
           <Filter className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
           {CATEGORY_OPTIONS.map((opt) => (
@@ -664,7 +826,6 @@ export default function TasksPage() {
         </div>
       </motion.div>
 
-      {/* Progress bar */}
       {totalCount > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -691,7 +852,6 @@ export default function TasksPage() {
         </motion.div>
       )}
 
-      {/* Task list grouped by date */}
       {filteredTasks.length === 0 ? (
         <EmptyState
           icon={ListTodo}
@@ -719,6 +879,7 @@ export default function TasksPage() {
                       task={task}
                       onToggle={handleToggleRequest}
                       onDelete={handleDelete}
+                      onEdit={(t) => setEditTask(t)}
                     />
                   ))}
                 </div>
@@ -730,6 +891,7 @@ export default function TasksPage() {
 
       {/* Modals */}
       <AddTaskModal open={showModal} onClose={() => setShowModal(false)} />
+      <EditTaskModal open={!!editTask} onClose={() => setEditTask(null)} task={editTask} />
       
       <CompletionModal 
         open={completingTask !== null} 

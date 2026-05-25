@@ -6,6 +6,7 @@ import { DataSeeder } from "@/components/data-seeder";
 import { Toaster } from "@/components/ui/toaster";
 import { FontSizeManager } from "@/components/font-size-manager";
 import { TutorialOverlay } from "@/components/tutorial-overlay";
+import { TimerProvider } from "@/components/providers/timer-provider";
 
 export const metadata: Metadata = {
   title: "Athena",
@@ -25,6 +26,7 @@ export default function RootLayout({
           <FontSizeManager />
           <DataSeeder />
           <TutorialOverlay />
+          <TimerProvider />
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 min-h-screen lg:py-0 py-16">
