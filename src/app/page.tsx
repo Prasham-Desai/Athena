@@ -173,7 +173,7 @@ export default function DashboardPage() {
 
   const today = getToday();
   const tasksDueToday = useMemo(
-    () => tasks.filter((t) => !t.completed && t.dueDate === today).length,
+    () => tasks.filter((t) => !t.completed && t.date === today).length,
     [tasks, today]
   );
 
@@ -225,8 +225,8 @@ export default function DashboardPage() {
   const upcomingTasks = useMemo(
     () =>
       tasks
-        .filter((t) => !t.completed && t.dueDate)
-        .sort((a, b) => (a.dueDate! > b.dueDate! ? 1 : -1))
+        .filter((t) => !t.completed && t.date)
+        .sort((a, b) => (a.date! > b.date! ? 1 : -1))
         .slice(0, 5),
     [tasks]
   );
@@ -567,10 +567,10 @@ export default function DashboardPage() {
                       />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{task.title}</p>
-                        {task.dueDate && (
+                        {task.date && (
                           <p className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1 mt-0.5">
                             <Calendar className="w-3 h-3" />
-                            {getRelativeDate(task.dueDate)}
+                            {getRelativeDate(task.date)}
                           </p>
                         )}
                       </div>
