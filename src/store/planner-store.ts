@@ -25,7 +25,7 @@ async function saveStudyBlock(block: StudyBlock, method: 'POST' | 'PUT' = 'POST'
     throw new Error('Failed to save study block');
   }
 
-  const payload = await response.json();
+  const payload = (await response.json()) as { data?: StudyBlock };
   return payload.data as StudyBlock;
 }
 
@@ -37,7 +37,7 @@ export const usePlannerStore = create<PlannerState>()((set, get) => ({
       const response = await fetch('/api/study-blocks');
       if (!response.ok) return;
 
-      const payload = await response.json();
+      const payload = (await response.json()) as { data?: StudyBlock[] };
       if (payload?.data) {
         set({ studyBlocks: payload.data as StudyBlock[] });
       }

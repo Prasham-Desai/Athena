@@ -29,7 +29,7 @@ async function saveSettings(updates: Partial<UserSettings>) {
     throw new Error('Failed to save settings');
   }
 
-  const payload = await response.json();
+  const payload = (await response.json()) as { data?: UserSettings };
   return payload.data as UserSettings;
 }
 
@@ -41,7 +41,7 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
       const response = await fetch('/api/settings');
       if (!response.ok) return null;
 
-      const payload = await response.json();
+      const payload = (await response.json()) as { data?: UserSettings };
       if (payload?.data) {
         set({ settings: payload.data });
         return payload.data as UserSettings;
