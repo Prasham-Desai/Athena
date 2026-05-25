@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ActivityEntry, DailyLog } from '@/types';
+import type { ActivityEntry, DailyLog, StudySession } from '@/types';
 import { generateId, getToday } from '@/lib/utils';
 
 interface ActivityState {
@@ -10,6 +10,7 @@ interface ActivityState {
   addDailyLog: (log: DailyLog) => void;
   updateDailyLog: (date: string, updates: Partial<DailyLog>) => void;
   getDailyLog: (date: string) => DailyLog | undefined;
+  addStudySession: (date: string, session: Omit<StudySession, 'id'>) => void;
   setActivities: (activities: ActivityEntry[]) => void;
   setDailyLogs: (logs: DailyLog[]) => void;
 }
@@ -57,6 +58,39 @@ export const useActivityStore = create<ActivityState>()(
                 tasksCompleted: 0,
                 revisionsCompleted: 0,
                 ...updates,
+              },
+            ],
+          };
+        }),
+
+      addStudySession: (date, session) =>
+        set((state) => {
+          const newSession: StudySession = { ...session, id: generateId() };
+          const existing = state.dailyLogs.find((l) => l.date === date);
+
+          if (existing) {
+            return {
+              dailyLogs: state.dailyLogs.map((l) =>
+                l.date === date
+                  ? {
+                      ...l,
+                      studyMinutes: l.studyMinutes + newSession.durationMinutes,
+                      sessions: [...(l.sessions || []), newSession],
+                    }
+                  : l
+              ),
+            };
+          }
+          return {
+            dailyLogs: [
+              ...state.dailyLogs,
+              {
+                date,
+                studyMinutes: newSession.durationMinutes,
+                topicsCompleted: 0,
+                tasksCompleted: 0,
+                revisionsCompleted: 0,
+                sessions: [newSession],
               },
             ],
           };

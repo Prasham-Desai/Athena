@@ -493,7 +493,7 @@ function CompletionModal({
 export default function TasksPage() {
   const hydrated = useHydration();
   const { tasks, toggleTask, deleteTask, updateTask } = useTasksStore();
-  const { updateDailyLog, dailyLogs } = useActivityStore();
+  const { addStudySession, dailyLogs } = useActivityStore();
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [categoryFilter, setCategoryFilter] = useState<TaskCategory | 'all'>('all');
@@ -560,18 +560,28 @@ export default function TasksPage() {
     const { id } = completingTask;
     
     // 1. Mark task completed with actualMinutes
-    updateTask(id, { completed: true, completedAt: new Date().toISOString(), actualMinutes });
+    const now = new Date().toISOString();
+    updateTask(id, { completed: true, completedAt: now, actualMinutes });
     
-    // 2. Add time to today's log
+    // 2. Add time to today's log as a distinct session
     if (actualMinutes > 0) {
       const today = getToday();
-      const currentLog = dailyLogs.find(l => l.date === today);
-      const currentMins = currentLog?.studyMinutes || 0;
-      updateDailyLog(today, { studyMinutes: currentMins + actualMinutes });
+      const taskObj = tasks.find(t => t.id === id);
+      
+      // Calculate a rough start time (now - actualMinutes)
+      const startTime = new Date(Date.now() - actualMinutes * 60000).toISOString();
+      
+      addStudySession(today, {
+        startTime,
+        endTime: now,
+        durationMinutes: actualMinutes,
+        type: 'task',
+        title: taskObj?.title ? `Task: ${taskObj.title}` : 'Completed Task'
+      });
     }
 
     setCompletingTask(null);
-  }, [completingTask, updateTask, updateDailyLog, dailyLogs]);
+  }, [completingTask, updateTask, addStudySession, tasks]);
 
   const handleDelete = useCallback(
     (id: string) => {

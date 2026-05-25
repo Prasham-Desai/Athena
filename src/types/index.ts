@@ -87,12 +87,22 @@ export interface ActivityEntry {
   color?: string;
 }
 
+export interface StudySession {
+  id: string;
+  startTime: string; // ISO date string
+  endTime: string;   // ISO date string
+  durationMinutes: number;
+  type: 'manual' | 'timer' | 'task';
+  title?: string;
+}
+
 export interface DailyLog {
   date: string;        // YYYY-MM-DD
   studyMinutes: number;
   topicsCompleted: number;
   tasksCompleted: number;
   revisionsCompleted: number;
+  sessions?: StudySession[];
 }
 
 export type ExamType = 'test' | 'exam';

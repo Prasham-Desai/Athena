@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -39,7 +39,7 @@ function Calendar({
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
   studyBlocks: { date: string }[];
-  tasks: { dueDate: string | null }[];
+  tasks: { date: string }[];
 }) {
   const [viewMonth, setViewMonth] = useState(new Date(selectedDate));
 
@@ -54,7 +54,7 @@ function Calendar({
   function getDotCount(day: Date) {
     const dateStr = format(day, 'yyyy-MM-dd');
     const blockCount = studyBlocks.filter((b) => b.date === dateStr).length;
-    const taskCount = tasks.filter((t) => t.dueDate === dateStr).length;
+    const taskCount = tasks.filter((t) => t.date === dateStr).length;
     return blockCount + taskCount;
   }
 
@@ -192,7 +192,7 @@ function AddItemModal({
         description,
         category,
         priority,
-        dueDate: date,
+        date,
       });
     }
     onClose();
@@ -348,11 +348,12 @@ import { useSettingsStore } from '@/store/settings-store';
 // ==========================================================================
 
 function TimeStudiedWidget({ date }: { date: string }) {
-  const { dailyLogs, updateDailyLog } = useActivityStore();
+  const { dailyLogs, updateDailyLog, addStudySession } = useActivityStore();
   const { settings } = useSettingsStore();
   
   const log = dailyLogs.find((l) => l.date === date);
   const totalMinutes = log?.studyMinutes ?? 0;
+  const sessions = log?.sessions ?? [];
   const totalHours = Math.floor(totalMinutes / 60);
   const totalMins = totalMinutes % 60;
 
@@ -415,29 +416,51 @@ function TimeStudiedWidget({ date }: { date: string }) {
     return () => clearInterval(interval);
   }, [isPomoRunning, pomoMode, settings.pomodoroMinutes, settings.breakMinutes]);
 
+  const [mainStartTime, setMainStartTime] = useState<string | null>(null);
+
   const handleMainToggle = () => {
     const nextState = !isMainRunning;
     setIsMainRunning(nextState);
     
-    // Automatically toggle pomodoro with main timer if we're starting
-    if (nextState && !isPomoRunning) {
-      setIsPomoRunning(true);
+    if (nextState) {
+      if (!mainStartTime) setMainStartTime(new Date().toISOString());
+      if (!isPomoRunning) setIsPomoRunning(true);
     }
   };
 
   const handleMainSave = () => {
     const minsToSave = Math.floor(mainSeconds / 60);
     if (minsToSave > 0) {
-      updateDailyLog(date, { studyMinutes: totalMinutes + minsToSave });
+      addStudySession(date, {
+        startTime: mainStartTime || new Date(Date.now() - minsToSave * 60000).toISOString(),
+        endTime: new Date().toISOString(),
+        durationMinutes: minsToSave,
+        type: 'timer',
+        title: 'Stopwatch Session'
+      });
       window.dispatchEvent(new CustomEvent('toast', { detail: { message: `Added ${minsToSave} minutes to today's total!`, type: 'success' } }));
     }
     setMainSeconds(0);
     setIsMainRunning(false);
+    setMainStartTime(null);
   };
 
   const handleManualSave = () => {
     const newTotalMins = Math.max(0, Number(inputHours) * 60 + Number(inputMins));
-    updateDailyLog(date, { studyMinutes: newTotalMins });
+    const difference = newTotalMins - totalMinutes;
+    
+    if (difference > 0) {
+      addStudySession(date, {
+        startTime: new Date(Date.now() - difference * 60000).toISOString(),
+        endTime: new Date().toISOString(),
+        durationMinutes: difference,
+        type: 'manual',
+        title: 'Manual Entry'
+      });
+    } else {
+      updateDailyLog(date, { studyMinutes: newTotalMins });
+    }
+    
     setEditing(false);
     window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
   };
@@ -549,6 +572,29 @@ function TimeStudiedWidget({ date }: { date: string }) {
           </p>
         </div>
       </div>
+
+      {/* Individual Sessions List */}
+      {sessions.length > 0 && (
+        <div className="pt-4 border-t border-[hsl(var(--border))]">
+          <h4 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-3">Today's Sessions</h4>
+          <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+            {[...sessions].reverse().map((session) => (
+              <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
+                <div>
+                  <p className="font-medium">{session.title || 'Study Session'}</p>
+                  <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
+                    {format(new Date(session.startTime), 'h:mm a')} - {format(new Date(session.endTime), 'h:mm a')}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 mt-2 sm:mt-0">
+                  <Clock className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="font-medium text-emerald-600 dark:text-emerald-400">{session.durationMinutes} min</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -576,7 +622,7 @@ export default function PlannerPage() {
   );
 
   const dayTasks = useMemo(
-    () => tasks.filter((t) => t.dueDate === dateStr),
+    () => tasks.filter((t) => t.date === dateStr),
     [tasks, dateStr]
   );
 
