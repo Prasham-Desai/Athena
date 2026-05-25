@@ -95,23 +95,13 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   return (
     <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm space-y-5">
       {/* Total Time Studied Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[hsl(var(--border))] gap-3 sm:gap-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/10 flex items-center justify-center">
             <Timer className="w-5 h-5 text-emerald-500" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
-              {goalMinutes > 0 && (
-                <span className={cn(
-                  "text-[10px] font-medium px-1.5 py-0.5 rounded-full",
-                  progressPct >= 100 ? "bg-emerald-500/10 text-emerald-500" : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]"
-                )}>
-                  {progressPct}% of Goal
-                </span>
-              )}
-            </div>
+            <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
             <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
               {format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}
               {settings.dailyStudyGoalHours ? ` • Goal: ${settings.dailyStudyGoalHours}h` : ''}
@@ -148,6 +138,24 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           </button>
         )}
       </div>
+
+      {/* Prominent Daily Goal Progress Bar */}
+      {goalMinutes > 0 && (
+        <div className="pb-5 border-b border-[hsl(var(--border))] space-y-2.5">
+          <div className="flex justify-between items-center text-xs font-medium">
+            <span className="text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]">Daily Goal Progress</span>
+            <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold", progressPct >= 100 ? "bg-emerald-500/10 text-emerald-500" : "bg-indigo-500/10 text-indigo-500")}>
+              {progressPct}%
+            </span>
+          </div>
+          <div className="h-2.5 w-full bg-[hsl(var(--muted))] rounded-full overflow-hidden">
+            <div 
+              className={cn("h-full rounded-full transition-all duration-1000 ease-out", progressPct >= 100 ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-purple-500")}
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Dual Timers Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
