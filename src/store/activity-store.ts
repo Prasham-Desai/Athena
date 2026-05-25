@@ -21,7 +21,7 @@ async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void) {
   const response = await fetch('/api/daily-logs');
   if (!response.ok) return;
 
-  const payload = await response.json();
+  const payload = (await response.json()) as { data?: DailyLog[] };
   if (payload?.data) {
     setDailyLogs(payload.data as DailyLog[]);
   }
@@ -36,7 +36,7 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
       const response = await fetch('/api/activities');
       if (!response.ok) return;
 
-      const payload = await response.json();
+      const payload = (await response.json()) as { data?: ActivityEntry[] };
       if (payload?.data) {
         set({ activities: payload.data as ActivityEntry[] });
       }
