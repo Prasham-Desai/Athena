@@ -514,7 +514,7 @@ export default function TasksPage() {
       .filter((t) => (categoryFilter === 'all' ? true : t.category === categoryFilter))
       .sort((a, b) => {
         // Sort by date ascending, then completed status
-        if (a.date !== b.date) return a.date.localeCompare(b.date);
+        if (a.date !== b.date) return (a.date || '').localeCompare(b.date || '');
         if (a.completed !== b.completed) return a.completed ? 1 : -1;
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
@@ -524,8 +524,9 @@ export default function TasksPage() {
   const groupedTasks = useMemo(() => {
     const groups: Record<string, typeof filteredTasks> = {};
     for (const t of filteredTasks) {
-      if (!groups[t.date]) groups[t.date] = [];
-      groups[t.date].push(t);
+      const d = t.date || 'No Date';
+      if (!groups[d]) groups[d] = [];
+      groups[d].push(t);
     }
     return groups;
   }, [filteredTasks]);
