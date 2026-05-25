@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Sun, Moon, Monitor, Download, Upload, Trash2, Clock, Target, Type } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useSettingsStore } from '@/store/settings-store';
+import { defaultSettings, useSettingsStore } from '@/store/settings-store';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { usePlannerStore } from '@/store/planner-store';
 import { useTasksStore } from '@/store/tasks-store';
@@ -129,7 +129,7 @@ export default function SettingsPage() {
   };
 
   // ---- Reset ----
-  const handleReset = () => {
+  const handleReset = async () => {
     const confirmed = window.confirm(
       'This will permanently delete ALL your data including subjects, tasks, planner entries, and activity logs. This cannot be undone.\n\nAre you sure?',
     );
@@ -140,7 +140,9 @@ export default function SettingsPage() {
     setTasks([]);
     setActivities([]);
     setDailyLogs([]);
-    resetSettings();
+    await resetSettings();
+    await fetch('/api/reset', { method: 'POST' });
+    setTheme(defaultSettings.theme);
 
     window.dispatchEvent(
       new CustomEvent('add-toast', { detail: { message: 'All data has been reset', type: 'info' } }),
@@ -176,7 +178,10 @@ export default function SettingsPage() {
             {themeOptions.map(({ value, label, icon: Icon }) => (
               <button
                 key={value}
-                onClick={() => setTheme(value)}
+                onClick={() => {
+                  updateSettings({ theme: value });
+                  setTheme(value);
+                }}
                 className={cn(
                   'flex items-center gap-2.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all',
                   theme === value
@@ -337,7 +342,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex justify-between">
               <span>Storage</span>
-              <span className="font-mono text-xs">LocalStorage (Zustand persist)</span>
+              <span className="font-mono text-xs">Database sync (server-backed)</span>
             </div>
           </div>
         </SettingsSection>

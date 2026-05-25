@@ -1,135 +1,211 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import type { ActivityEntry, DailyLog, StudySession } from '@/types';
 import { generateId, getToday } from '@/lib/utils';
 
 interface ActivityState {
   activities: ActivityEntry[];
   dailyLogs: DailyLog[];
-  addActivity: (activity: Omit<ActivityEntry, 'id' | 'timestamp'>) => void;
-  addDailyLog: (log: DailyLog) => void;
-  updateDailyLog: (date: string, updates: Partial<DailyLog>) => void;
+  fetchActivities: () => Promise<void>;
+  fetchDailyLogs: () => Promise<void>;
+  addActivity: (activity: Omit<ActivityEntry, 'id' | 'timestamp'>) => Promise<void>;
+  addDailyLog: (log: DailyLog) => Promise<void>;
+  updateDailyLog: (date: string, updates: Partial<DailyLog>) => Promise<void>;
   getDailyLog: (date: string) => DailyLog | undefined;
-  addStudySession: (date: string, session: Omit<StudySession, 'id'>) => void;
-  removeStudySession: (date: string, sessionId: string) => void;
+  addStudySession: (date: string, session: Omit<StudySession, 'id'>) => Promise<void>;
+  removeStudySession: (date: string, sessionId: string) => Promise<void>;
   setActivities: (activities: ActivityEntry[]) => void;
   setDailyLogs: (logs: DailyLog[]) => void;
 }
 
-export const useActivityStore = create<ActivityState>()(
-  persist(
-    (set, get) => ({
-      activities: [],
-      dailyLogs: [],
+async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void) {
+  const response = await fetch('/api/daily-logs');
+  if (!response.ok) return;
 
-      addActivity: (activity) =>
-        set((state) => ({
-          activities: [
-            {
-              ...activity,
-              id: generateId(),
-              timestamp: new Date().toISOString(),
-            },
-            ...state.activities,
-          ].slice(0, 100), // Keep last 100 activities
-        })),
+  const payload = await response.json();
+  if (payload?.data) {
+    setDailyLogs(payload.data as DailyLog[]);
+  }
+}
 
-      addDailyLog: (log) =>
-        set((state) => ({
-          dailyLogs: [...state.dailyLogs.filter(l => l.date !== log.date), log],
-        })),
+export const useActivityStore = create<ActivityState>()((set, get) => ({
+  activities: [],
+  dailyLogs: [],
 
-      updateDailyLog: (date, updates) =>
-        set((state) => {
-          const existing = state.dailyLogs.find(l => l.date === date);
-          if (existing) {
-            return {
-              dailyLogs: state.dailyLogs.map(l =>
-                l.date === date ? { ...l, ...updates } : l
-              ),
-            };
-          }
-          return {
-            dailyLogs: [
-              ...state.dailyLogs,
-              {
-                date,
-                studyMinutes: 0,
-                topicsCompleted: 0,
-                tasksCompleted: 0,
-                revisionsCompleted: 0,
-                ...updates,
-              },
-            ],
-          };
-        }),
+  fetchActivities: async () => {
+    try {
+      const response = await fetch('/api/activities');
+      if (!response.ok) return;
 
-      addStudySession: (date, session) =>
-        set((state) => {
-          const newSession: StudySession = { ...session, id: generateId() };
-          const existing = state.dailyLogs.find((l) => l.date === date);
-
-          if (existing) {
-            return {
-              dailyLogs: state.dailyLogs.map((l) =>
-                l.date === date
-                  ? {
-                      ...l,
-                      studyMinutes: l.studyMinutes + newSession.durationMinutes,
-                      sessions: [...(l.sessions || []), newSession],
-                    }
-                  : l
-              ),
-            };
-          }
-          return {
-            dailyLogs: [
-              ...state.dailyLogs,
-              {
-                date,
-                studyMinutes: newSession.durationMinutes,
-                topicsCompleted: 0,
-                tasksCompleted: 0,
-                revisionsCompleted: 0,
-                sessions: [newSession],
-              },
-            ],
-          };
-        }),
-
-      removeStudySession: (date, sessionId) =>
-        set((state) => {
-          const existing = state.dailyLogs.find((l) => l.date === date);
-          if (!existing || !existing.sessions) return state;
-
-          const sessionToRemove = existing.sessions.find(s => s.id === sessionId);
-          if (!sessionToRemove) return state;
-
-          return {
-            dailyLogs: state.dailyLogs.map((l) => {
-              if (l.date === date) {
-                const currentTotal = Number(l.studyMinutes) || 0;
-                const deduct = Number(sessionToRemove.durationMinutes) || 0;
-                return {
-                  ...l,
-                  studyMinutes: Math.max(0, currentTotal - deduct),
-                  sessions: l.sessions!.filter(s => s.id !== sessionId),
-                };
-              }
-              return l;
-            }),
-          };
-        }),
-
-      getDailyLog: (date) => {
-        return get().dailyLogs.find(l => l.date === date);
-      },
-
-      setActivities: (activities) => set({ activities }),
-      setDailyLogs: (logs) => set({ dailyLogs: logs }),
-    }),
-    {
-      name: 'study-tracker-activity-v3',
+      const payload = await response.json();
+      if (payload?.data) {
+        set({ activities: payload.data as ActivityEntry[] });
+      }
+    } catch (error) {
+      console.error('Failed to fetch activities', error);
     }
-  )
-);
+  },
+
+  fetchDailyLogs: async () => {
+    try {
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+    } catch (error) {
+      console.error('Failed to fetch daily logs', error);
+    }
+  },
+
+  addActivity: async (activity) => {
+    const optimisticActivity: ActivityEntry = {
+      ...activity,
+      id: generateId(),
+      timestamp: new Date().toISOString(),
+    };
+
+    set((state) => ({
+      activities: [optimisticActivity, ...state.activities].slice(0, 100),
+    }));
+
+    try {
+      await fetch('/api/activities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(optimisticActivity),
+      });
+    } catch (error) {
+      console.error('Failed to save activity', error);
+    }
+  },
+
+  addDailyLog: async (log) => {
+    set((state) => ({
+      dailyLogs: [...state.dailyLogs.filter((entry) => entry.date !== log.date), log],
+    }));
+
+    try {
+      await fetch('/api/daily-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: log.date, updates: log }),
+      });
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+    } catch (error) {
+      console.error('Failed to save daily log', error);
+    }
+  },
+
+  updateDailyLog: async (date, updates) => {
+    const current = get().dailyLogs.find((entry) => entry.date === date);
+    const merged = current
+      ? { ...current, ...updates }
+      : {
+          date,
+          studyMinutes: 0,
+          topicsCompleted: 0,
+          tasksCompleted: 0,
+          revisionsCompleted: 0,
+          ...updates,
+        };
+
+    set((state) => {
+      const existing = state.dailyLogs.find((entry) => entry.date === date);
+      if (existing) {
+        return {
+          dailyLogs: state.dailyLogs.map((entry) => (entry.date === date ? merged : entry)),
+        };
+      }
+
+      return {
+        dailyLogs: [...state.dailyLogs, merged],
+      };
+    });
+
+    try {
+      await fetch('/api/daily-logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date, updates }),
+      });
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+    } catch (error) {
+      console.error('Failed to update daily log', error);
+    }
+  },
+
+  addStudySession: async (date, session) => {
+    const newSession: StudySession = { ...session, id: generateId() };
+    const existing = get().dailyLogs.find((entry) => entry.date === date);
+
+    set((state) => {
+      const nextLogs = state.dailyLogs.filter((entry) => entry.date !== date);
+      const nextLog = existing
+        ? {
+            ...existing,
+            studyMinutes: (Number(existing.studyMinutes) || 0) + newSession.durationMinutes,
+            sessions: [...(existing.sessions || []), newSession],
+          }
+        : {
+            date,
+            studyMinutes: newSession.durationMinutes,
+            topicsCompleted: 0,
+            tasksCompleted: 0,
+            revisionsCompleted: 0,
+            sessions: [newSession],
+          };
+
+      return {
+        dailyLogs: [...nextLogs, nextLog].sort((a, b) => a.date.localeCompare(b.date)),
+      };
+    });
+
+    try {
+      await fetch('/api/study-sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date, session: newSession }),
+      });
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+    } catch (error) {
+      console.error('Failed to save study session', error);
+    }
+  },
+
+  removeStudySession: async (date, sessionId) => {
+    const existing = get().dailyLogs.find((entry) => entry.date === date);
+    const sessionToRemove = existing?.sessions?.find((session) => session.id === sessionId);
+
+    if (!existing || !sessionToRemove) return;
+
+    set((state) => ({
+      dailyLogs: state.dailyLogs.map((entry) => {
+        if (entry.date !== date) return entry;
+
+        const currentTotal = Number(entry.studyMinutes) || 0;
+        const deduct = Number(sessionToRemove.durationMinutes) || 0;
+
+        return {
+          ...entry,
+          studyMinutes: Math.max(0, currentTotal - deduct),
+          sessions: (entry.sessions || []).filter((session) => session.id !== sessionId),
+        };
+      }),
+    }));
+
+    try {
+      const response = await fetch(`/api/study-sessions?id=${encodeURIComponent(sessionId)}&date=${encodeURIComponent(date)}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete study session');
+      }
+
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+    } catch (error) {
+      console.error('Failed to delete study session', error);
+    }
+  },
+
+  getDailyLog: (date) => get().dailyLogs.find((entry) => entry.date === date),
+
+  setActivities: (activities) => set({ activities }),
+  setDailyLogs: (logs) => set({ dailyLogs: logs }),
+}));

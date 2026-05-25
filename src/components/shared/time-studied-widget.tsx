@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { Timer, Clock, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { ProgressRing } from '@/components/shared/progress-ring';
 import { useActivityStore } from '@/store/activity-store';
 import { useSettingsStore } from '@/store/settings-store';
 import { useTimerStore } from '@/store/timer-store';
 import { useTasksStore } from '@/store/tasks-store';
+import { getToday } from '@/lib/utils';
 
 export function TimeStudiedWidget({ date }: { date: string }) {
   const { dailyLogs, updateDailyLog, addStudySession, removeStudySession } = useActivityStore();
@@ -27,6 +29,13 @@ export function TimeStudiedWidget({ date }: { date: string }) {
 
   const goalMinutes = (settings.dailyStudyGoalHours || 8) * 60;
   const progressPct = Math.min(100, Math.round((totalMinutes / goalMinutes) * 100));
+  const isToday = date === getToday();
+  const title = isToday
+    ? 'Total Time Studied Today'
+    : `Time Studied on ${format(new Date(date + 'T00:00:00'), 'EEE, MMM d')}`;
+  const subtitle = isToday
+    ? `Resets at 12:00 AM • ${settings.dailyStudyGoalHours || 8}h daily goal`
+    : `${settings.dailyStudyGoalHours || 8}h daily goal • date-specific progress`;
 
   // Manual Edit State
   const [editing, setEditing] = useState(false);
@@ -93,69 +102,106 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   };
 
   return (
-    <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm space-y-5">
-      {/* Total Time Studied Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 shrink-0 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-            <Timer className="w-5 h-5 text-emerald-500" />
+    <div className="relative overflow-hidden rounded-3xl border border-emerald-500/15 bg-gradient-to-br from-emerald-500/12 via-[hsl(var(--card))] to-indigo-500/10 p-5 shadow-sm sm:p-6">
+      <div className="absolute -right-14 -top-16 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div className="absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-indigo-500/10 blur-3xl" />
+
+      <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1.45fr)_auto] lg:items-center">
+        <div className="space-y-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15">
+                <Timer className="h-5 w-5 text-emerald-500" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold tracking-tight sm:text-base">{title}</h3>
+                <p className="text-[11px] text-[hsl(var(--muted-foreground))]">{subtitle}</p>
+              </div>
+            </div>
+
+            {editing ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  type="number"
+                  min={0}
+                  value={inputHours}
+                  onChange={(e) => setInputHours(e.target.value)}
+                  className="w-14 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-2 py-1.5 text-center text-sm focus:ring-1 focus:ring-emerald-500"
+                />
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">h</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={59}
+                  value={inputMins}
+                  onChange={(e) => setInputMins(e.target.value)}
+                  className="w-14 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-2 py-1.5 text-center text-sm focus:ring-1 focus:ring-emerald-500"
+                />
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">m</span>
+                <div className="flex gap-1">
+                  <button onClick={handleManualSave} className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-emerald-700">Save</button>
+                  <button onClick={() => setEditing(false)} className="rounded-lg bg-[hsl(var(--muted))] px-3 py-1.5 text-xs font-medium transition hover:bg-[hsl(var(--accent))]">Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setInputHours(String(totalHours)); setInputMins(String(totalMins)); setEditing(true); }}
+                className="group text-left"
+              >
+                <div className="flex items-end gap-2">
+                  <span className="text-5xl font-black tracking-tight text-emerald-500 sm:text-6xl">{totalHours}</span>
+                  <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))]">h</span>
+                  <span className="text-5xl font-black tracking-tight text-emerald-500 sm:text-6xl">{totalMins.toString().padStart(2, '0')}</span>
+                  <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))]">m</span>
+                </div>
+                <span className="mt-1 block text-[10px] text-[hsl(var(--muted-foreground))] opacity-0 transition group-hover:opacity-100">click to edit</span>
+              </button>
+            )}
           </div>
-          <div>
-            <h3 className="text-sm font-semibold">Total Time Studied Today</h3>
-            <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
-              {format(new Date(date + 'T00:00:00'), 'EEEE, MMM d')}
-              {settings.dailyStudyGoalHours ? ` • Goal: ${settings.dailyStudyGoalHours}h` : ''}
-            </p>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">Goal</p>
+              <p className="mt-1 text-xl font-bold text-[hsl(var(--foreground))]">{settings.dailyStudyGoalHours || 8}h</p>
+            </div>
+            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">Reached</p>
+              <p className="mt-1 text-xl font-bold text-emerald-500">{progressPct}%</p>
+            </div>
+            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">Reset</p>
+              <p className="mt-1 text-sm font-semibold text-[hsl(var(--foreground))]">{isToday ? '12:00 AM' : 'Today only'}</p>
+            </div>
           </div>
+
+          {goalMinutes > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-medium">
+                <span className="uppercase tracking-wider text-[10px] text-[hsl(var(--muted-foreground))]">Daily Goal Progress</span>
+                <span className={cn("rounded-full px-2 py-0.5 text-[10px] font-bold", progressPct >= 100 ? "bg-emerald-500/10 text-emerald-500" : "bg-indigo-500/10 text-indigo-500")}>{progressPct}%</span>
+              </div>
+              <div className="h-3 w-full overflow-hidden rounded-full bg-[hsl(var(--muted))]">
+                <div
+                  className={cn("h-full rounded-full transition-all duration-1000 ease-out", progressPct >= 100 ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-emerald-500")}
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {editing ? (
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              type="number" min={0} value={inputHours} onChange={(e) => setInputHours(e.target.value)}
-              className="w-14 px-2 py-1.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm text-center focus:ring-1 focus:ring-emerald-500"
-            />
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">h</span>
-            <input
-              type="number" min={0} max={59} value={inputMins} onChange={(e) => setInputMins(e.target.value)}
-              className="w-14 px-2 py-1.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm text-center focus:ring-1 focus:ring-emerald-500"
-            />
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">m</span>
-            <div className="flex gap-1">
-              <button onClick={handleManualSave} className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition">Save</button>
-              <button onClick={() => setEditing(false)} className="px-3 py-1.5 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] text-xs font-medium transition">Cancel</button>
-            </div>
-          </div>
-        ) : (
-          <button onClick={() => { setInputHours(String(totalHours)); setInputMins(String(totalMins)); setEditing(true); }} className="text-left sm:text-right group">
-            <div className="flex items-baseline gap-0.5 sm:justify-end">
-              <span className="text-3xl font-bold text-emerald-500">{totalHours}</span>
-              <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">h</span>
-              <span className="text-3xl font-bold text-emerald-500 ml-1">{totalMins.toString().padStart(2, '0')}</span>
-              <span className="text-xs font-medium text-[hsl(var(--muted-foreground))]">m</span>
-            </div>
-            <span className="text-[10px] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100 transition block">click to edit</span>
-          </button>
-        )}
+        <div className="relative flex items-center justify-center rounded-3xl border border-[hsl(var(--border))] bg-white/50 p-4 shadow-inner backdrop-blur dark:bg-[hsl(var(--card))]/50">
+          <ProgressRing
+            value={progressPct}
+            size={170}
+            strokeWidth={12}
+            color={progressPct >= 100 ? '#22c55e' : '#10b981'}
+            bgColor="hsl(var(--muted))"
+            label={`${progressPct}%`}
+            sublabel="of daily goal"
+          />
+        </div>
       </div>
-
-      {/* Prominent Daily Goal Progress Bar */}
-      {goalMinutes > 0 && (
-        <div className="pb-5 border-b border-[hsl(var(--border))] space-y-2.5">
-          <div className="flex justify-between items-center text-xs font-medium">
-            <span className="text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]">Daily Goal Progress</span>
-            <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold", progressPct >= 100 ? "bg-emerald-500/10 text-emerald-500" : "bg-indigo-500/10 text-indigo-500")}>
-              {progressPct}%
-            </span>
-          </div>
-          <div className="h-2.5 w-full bg-[hsl(var(--muted))] rounded-full overflow-hidden">
-            <div 
-              className={cn("h-full rounded-full transition-all duration-1000 ease-out", progressPct >= 100 ? "bg-emerald-500" : "bg-gradient-to-r from-indigo-500 to-purple-500")}
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-        </div>
-      )}
 
       {/* Dual Timers Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
