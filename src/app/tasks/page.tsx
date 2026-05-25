@@ -11,7 +11,7 @@ import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday, g
 import { PageHeader } from '@/components/shared/page-header';
 import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 import { EmptyState } from '@/components/shared/empty-state';
-import type { TaskCategory, Priority } from '@/types';
+import type { TaskCategory, Priority, Task } from '@/types';
 import { addDays, format } from 'date-fns';
 
 // ---------------------------------------------------------------------------
