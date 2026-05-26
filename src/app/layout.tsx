@@ -12,6 +12,16 @@ export const metadata: Metadata = {
   title: "Athena",
   description: "A premium study management dashboard for tracking subjects, revisions, daily planning, and analytics. Wisdom in every session.",
   keywords: ["athena", "study tracker", "study planner", "revision tracker", "productivity", "student"],
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.svg",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Athena",
+  },
 };
 
 export default function RootLayout({
