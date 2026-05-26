@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
   Trash2,
+  Pencil,
   X,
   BookOpen,
   Calculator,
@@ -60,27 +61,45 @@ function getIcon(name: string): LucideIcon {
 }
 
 // ---------------------------------------------------------------------------
-// Add-Subject Dialog
 // ---------------------------------------------------------------------------
-interface AddSubjectDialogProps {
+// Subject Dialog (Add & Edit)
+// ---------------------------------------------------------------------------
+interface SubjectDialogProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (name: string, color: string, icon: string) => void;
+  onSave: (name: string, color: string, icon: string) => void;
+  initialName?: string;
+  initialColor?: string;
+  initialIcon?: string;
+  isEdit?: boolean;
 }
 
-function AddSubjectDialog({ open, onClose, onAdd }: AddSubjectDialogProps) {
-  const [name, setName] = useState('');
-  const [color, setColor] = useState(SUBJECT_COLORS[0]);
-  const [icon, setIcon] = useState(SUBJECT_ICONS[0]);
+function SubjectDialog({ 
+  open, 
+  onClose, 
+  onSave, 
+  initialName = '', 
+  initialColor = SUBJECT_COLORS[0], 
+  initialIcon = SUBJECT_ICONS[0], 
+  isEdit = false 
+}: SubjectDialogProps) {
+  const [name, setName] = useState(initialName);
+  const [color, setColor] = useState(initialColor);
+  const [icon, setIcon] = useState(initialIcon);
+
+  useEffect(() => {
+    if (open) {
+      setName(initialName);
+      setColor(initialColor);
+      setIcon(initialIcon);
+    }
+  }, [open, initialName, initialColor, initialIcon]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    onAdd(trimmed, color, icon);
-    setName('');
-    setColor(SUBJECT_COLORS[0]);
-    setIcon(SUBJECT_ICONS[0]);
+    onSave(trimmed, color, icon);
     onClose();
   };
 
@@ -110,7 +129,7 @@ function AddSubjectDialog({ open, onClose, onAdd }: AddSubjectDialogProps) {
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold">Add Subject</h2>
+              <h2 className="text-lg font-semibold">{isEdit ? 'Edit Subject' : 'Add Subject'}</h2>
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
@@ -204,7 +223,7 @@ function AddSubjectDialog({ open, onClose, onAdd }: AddSubjectDialogProps) {
                   disabled={!name.trim()}
                   className="px-5 py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg shadow-indigo-500/20 hover:opacity-90 transition disabled:opacity-50"
                 >
-                  Add Subject
+                  {isEdit ? 'Save Changes' : 'Add Subject'}
                 </button>
               </div>
             </form>
@@ -277,9 +296,10 @@ interface SubjectCardProps {
   subject: ReturnType<typeof useSubjectsStore.getState>['subjects'][number];
   index: number;
   onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 }
 
-function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
+function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
   const Icon = getIcon(subject.icon);
 
   const stats = useMemo(() => {
@@ -335,17 +355,29 @@ function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
               </div>
             </div>
 
-            {/* Delete button */}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onDelete(subject.id);
-              }}
-              className="p-1.5 rounded-lg sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {/* Actions */}
+            <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onEdit(subject.id);
+                }}
+                className="p-1.5 rounded-lg hover:bg-indigo-500/10 hover:text-indigo-500 transition-all"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDelete(subject.id);
+                }}
+                className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-all"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Topic stats pills */}
@@ -409,10 +441,13 @@ export default function SubjectsPage() {
   const subjects = useSubjectsStore((s) => s.subjects);
   const addSubject = useSubjectsStore((s) => s.addSubject);
   const deleteSubject = useSubjectsStore((s) => s.deleteSubject);
+  const updateSubject = useSubjectsStore((s) => s.updateSubject);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
+  const [editTarget, setEditTarget] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
+  const subjectToEdit = editTarget ? subjects.find((s) => s.id === editTarget) : null;
   const subjectToDelete = deleteTarget ? subjects.find((s) => s.id === deleteTarget) : null;
 
   const handleAdd = (name: string, color: string, icon: string) => {
@@ -429,6 +464,15 @@ export default function SubjectsPage() {
     setDeleteTarget(null);
     window.dispatchEvent(
       new CustomEvent('add-toast', { detail: { message: `"${name}" deleted.`, type: 'success' } })
+    );
+  };
+
+  const handleEdit = (name: string, color: string, icon: string) => {
+    if (!editTarget) return;
+    updateSubject(editTarget, { name, color, icon });
+    setEditTarget(null);
+    window.dispatchEvent(
+      new CustomEvent('add-toast', { detail: { message: `"${name}" updated successfully!`, type: 'success' } })
     );
   };
 
@@ -478,6 +522,7 @@ export default function SubjectsPage() {
                 subject={subject}
                 index={idx}
                 onDelete={(id) => setDeleteTarget(id)}
+                onEdit={(id) => setEditTarget(id)}
               />
             ))}
           </AnimatePresence>
@@ -485,10 +530,21 @@ export default function SubjectsPage() {
       )}
 
       {/* Add dialog */}
-      <AddSubjectDialog
+      <SubjectDialog
         open={showAddDialog}
         onClose={() => setShowAddDialog(false)}
-        onAdd={handleAdd}
+        onSave={handleAdd}
+      />
+
+      {/* Edit dialog */}
+      <SubjectDialog
+        open={!!editTarget}
+        onClose={() => setEditTarget(null)}
+        onSave={handleEdit}
+        initialName={subjectToEdit?.name}
+        initialColor={subjectToEdit?.color}
+        initialIcon={subjectToEdit?.icon}
+        isEdit={true}
       />
 
       {/* Delete confirmation */}
