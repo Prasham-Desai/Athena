@@ -105,7 +105,7 @@ for (const file of files) {
         topicStr = topicStr.replace(/(?:— |-\s*)?Importance:\s*(.*)$/i, '').trim();
       }
 
-      topicId = generateId('topic:' + chapterId + ':' + currentTopicName);
+      topicId = generateId('topic:' + chapterId + ':' + topicStr);
       currentTopicName = topicStr;
       topicOrder++;
     }

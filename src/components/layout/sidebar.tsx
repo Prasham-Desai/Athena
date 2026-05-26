@@ -43,8 +43,8 @@ export function Sidebar() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-[hsl(var(--border))]">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
-          <GraduationCap className="w-5 h-5 text-white" />
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20 overflow-hidden">
+          <img src="/logo.svg" alt="Athena Logo" className="w-6 h-6 object-contain" />
         </div>
         <AnimatePresence>
           {!collapsed && (
