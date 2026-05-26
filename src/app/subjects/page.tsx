@@ -335,21 +335,21 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
         {/* Accent top bar */}
         <div className="h-1.5 w-full" style={{ backgroundColor: subject.color }} />
 
-        <div className="p-3.5 sm:p-5">
+        <div className="p-3 sm:p-4">
           {/* Header row */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-start justify-between mb-3 gap-2">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <div
-                className="flex items-center justify-center w-10 h-10 rounded-xl text-white shadow-lg shrink-0"
+                className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl text-white shadow-lg shrink-0"
                 style={{ backgroundColor: subject.color }}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0 pr-2">
-                <h3 className="font-semibold text-base group-hover:text-[hsl(var(--primary))] transition-colors truncate">
+              <div className="min-w-0 pr-1">
+                <h3 className="font-semibold text-sm sm:text-base group-hover:text-[hsl(var(--primary))] transition-colors truncate">
                   {subject.name}
                 </h3>
-                <div className="flex flex-wrap items-center gap-2 text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5 font-medium">
+                <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5 font-medium">
                   <span>{subject.chapters.length} {subject.chapters.length === 1 ? 'chapter' : 'chapters'}</span>
                 </div>
               </div>
@@ -382,23 +382,23 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
 
           {/* Topic stats pills */}
           {stats.totalTopics > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-4">
+            <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
               {stats.completed > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] sm:text-[11px] font-medium">
                   ✓ {stats.completed}
                 </span>
               )}
               {stats.revised > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-500 text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-500 text-[10px] sm:text-[11px] font-medium">
                   ↻ {stats.revised}
                 </span>
               )}
               {stats.inProgress > 0 && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[11px] font-medium">
+                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] sm:text-[11px] font-medium">
                   ◐ {stats.inProgress}
                 </span>
               )}
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] text-[11px] font-medium">
+              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] text-[10px] sm:text-[11px] font-medium">
                 {stats.totalTopics} topics
               </span>
             </div>
@@ -406,7 +406,7 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
 
           {/* Progress bar */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-[10px] sm:text-xs">
               <span className="text-[hsl(var(--muted-foreground))]">Progress</span>
               <span className="font-semibold" style={{ color: subject.color }}>
                 {stats.percent}%
