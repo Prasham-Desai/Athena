@@ -490,10 +490,11 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             </div>
           )}
         </div>
+      </div>
 
-        {/* Controls */}
-        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto w-full sm:w-auto justify-end border-t sm:border-0 pt-3 sm:pt-0 mt-1 sm:mt-0 border-[hsl(var(--border))]/50">
-          {/* Status selector */}
+      {/* Controls */}
+      <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto w-full sm:w-auto justify-end border-t sm:border-0 pt-3 sm:pt-0 mt-1 sm:mt-0 border-[hsl(var(--border))]/50">
+        {/* Status selector */}
           <StatusSelect status={topic.status} onChange={handleStatusChange} />
 
           {/* Revise button */}
