@@ -2,7 +2,643 @@
 
 ## Paper 1
 
-### Topic 1: Cha.Ni.01-Jwara nidana Adhyaya
+### Topic 1: Cha.Su.1- Sneha Adhyaya
+
+1. Justify the position of the chapter title Snehana and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of dravya, sneha and its relationship with body and mind
+   **Importance:** Must Know
+
+3. Explain guna and importance of sneha and purvakarma
+   **Importance:** Must Know
+
+4. Explain classification and importance of Ch.Su.13/11
+   **Importance:** Must Know
+
+5. Explain sneha kala and prayoga
+   **Importance:** Must Know
+
+6. Define and enlist 24 types of vicharana sneha and their types
+   **Importance:** Must Know
+
+7. Explain vicharana and its importance
+   **Importance:** Must Know
+
+8. Enlist types of Snehana
+   **Importance:** Must Know
+
+9. Mention role of fat during digestion
+   **Importance:** Must Know
+
+10. Mention yoga and ayoga lakshana for sneha
+    **Importance:** Desirable to Know
+
+11. Summarize sneha kalpana, sneha lakshana and anupana lakshana
+    **Importance:** Desirable to Know
+
+---
+
+### Topic 2: Cha.Su.14- Sweda Adhyaya
+
+1. Justify the position of the chapter title Swedana and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of sweda and swedakarma
+   **Importance:** Must Know
+
+3. Explain samyak, ayoga and atiyoga lakshana
+   **Importance:** Must Know
+
+4. Explain sweda and contraindications for sweda
+   **Importance:** Must Know
+
+5. Explain indications and contraindications of sweda
+   **Importance:** Must Know
+
+6. Explain indications and contraindications of sweda karma
+   **Importance:** Must Know
+
+7. Explain types and importance of sweda karma
+   **Importance:** Must Know
+
+8. Explain contraindications and precautions in sweda karma
+   **Importance:** Must Know
+
+9. Explain complications and management of sweda
+   **Importance:** Must Know
+
+10. Mention some examples for types of swedana
+    **Importance:** Must Know
+
+11. Interpret effect of swedana
+    **Importance:** Must Know
+
+12. Review sweda karma
+    **Importance:** Nice to Know
+
+13. Summarize classification mentioned in Ch.Su.11 with reference to dravya classification mentioned in Ch.Su
+    **Importance:** Must Know
+
+---
+
+### Topic 3: Cha.Su.15- Upakalpaniya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of virechana
+   **Importance:** Must Know
+
+3. Explain samshodhana and shodhananga
+   **Importance:** Must Know
+
+4. Explain vamanopaga and virechanopaga dravya
+   **Importance:** Must Know
+
+5. Explain indications and contraindications for vamana
+   **Importance:** Must Know
+
+6. Explain indications and contraindications for virechana
+   **Importance:** Must Know
+
+7. Explain management approach in virechana vyapat
+   **Importance:** Must Know
+
+8. Enlist types of vamana dravya
+   **Importance:** Must Know
+
+9. Explain role of vamana in dosha nirharana
+   **Importance:** Must Know
+
+10. Explain vamanopaga and virechanopaga dravya
+    **Importance:** Must Know
+
+11. Explain role of vamanopaga and virechanopaga dravya in treatment
+    **Importance:** Must Know
+
+---
+
+### Topic 4: Cha.Su.16- Chikitsaprabhritiya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of virechana karma and virechana upaga dravya
+   **Importance:** Must Know
+
+3. Explain vamana karma
+   **Importance:** Must Know
+
+4. Explain indications and contraindications of Ch.Su.16/16-19
+   **Importance:** Must Know
+
+5. Identify contraindications in patients
+   **Importance:** Desirable to Know
+
+6. Explain role of virechana in treatment
+   **Importance:** Must Know
+
+7. Identify contraindications in patients
+   **Importance:** Desirable to Know
+
+8. Explain role of vamana in treatment
+   **Importance:** Must Know
+
+9. Define chikitsa and classify swedana
+   **Importance:** Must Know
+
+10. Explain role of vega, anila and agni during vamana
+    **Importance:** Must Know
+
+11. Define chikitsa and classify swedana in detail
+    **Importance:** Must Know
+
+---
+
+### Topic 5: Cha.Su.17- Mahasneha Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of sneha and sneha yoga
+   **Importance:** Must Know
+
+3. Explain types of sneha and their importance in life
+   **Importance:** Must Know
+
+4. Explain types of snehana and swedana
+   **Importance:** Must Know
+
+5. Explain classification of sneha dravya with examples
+   **Importance:** Must Know
+
+6. Explain importance of vasa majja and meda
+   **Importance:** Must Know
+
+7. Explain types of sneha and contraindications of sneha
+   **Importance:** Must Know
+
+8. Explain types of visha and management
+   **Importance:** Must Know
+
+9. Compare lavana, tikshna, ushna, sukshma and vyavayi qualities mentioned in Ch.Su
+   **Importance:** Must Know
+
+10. Compare various types of dosha, dhatu and malas with examples
+    **Importance:** Must Know
+
+11. Explain management approach in sneha vyapat
+    **Importance:** Must Know
+
+12. Explain indications and contraindications of snehana
+    **Importance:** Must Know
+
+---
+
+### Topic 6: Cha.Su.18- Trishothiya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of visha and roga
+   **Importance:** Must Know
+
+3. Mention and explain pathogenesis involved in shotha
+   **Importance:** Must Know
+
+4. Explain trividha shotha
+   **Importance:** Must Know
+
+5. Explain aggravating causes of diseases
+   **Importance:** Must Know
+
+6. Review treatment of shotha
+   **Importance:** Nice to Know
+
+7. Summarize the chapter
+   **Importance:** Nice to Know
+
+---
+
+### Topic 7: Cha.Su.19- Ashtodariya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of udara roga with samprapti
+   **Importance:** Must Know
+
+3. Explain causes of udara
+   **Importance:** Must Know
+
+4. Explain management of udara रोग
+   **Importance:** Must Know
+
+5. Explain complications of chhidrodara
+   **Importance:** Must Know
+
+6. Explain causes of udara with reference to Ch.Su.19/49-61
+   **Importance:** Must Know
+
+7. Explain symptoms and management
+   **Importance:** Must Know
+
+8. Describe srotas involved in udara roga
+   **Importance:** Must Know
+
+9. Explain nidana and lakshana of udara
+   **Importance:** Must Know
+
+10. Define udara and explain types
+    **Importance:** Must Know
+
+---
+
+### Topic 8: Cha.Su.20- Maharoga Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of visha roga and viruddha ahara
+   **Importance:** Must Know
+
+3. Explain relation of dosha and diseases
+   **Importance:** Must Know
+
+4. Define and explain dhatu samyata
+   **Importance:** Must Know
+
+5. Describe nidana and samprapti of diseases
+   **Importance:** Must Know
+
+6. Explain symptoms of different diseases
+   **Importance:** Must Know
+
+7. Explain treatment modalities
+   **Importance:** Must Know
+
+8. Explain principles of management
+   **Importance:** Must Know
+
+9. Explain diseases caused due to agnimandya
+   **Importance:** Must Know
+
+10. Explain role of viruddha ahara in disease manifestation
+    **Importance:** Must Know
+
+11. Explain pathogenesis of diseases caused by viruddha ahara
+    **Importance:** Must Know
+
+---
+
+### Topic 9: Cha.Su.21- Ashtau Ninditiya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of ashta nindita purusha
+   **Importance:** Must Know
+
+3. Explain causes and management of ati sthula and ati krisha
+   **Importance:** Must Know
+
+4. Explain symptoms and management of ati sthula and ati krisha
+   **Importance:** Must Know
+
+5. Explain etiology and samprapti of obesity
+   **Importance:** Must Know
+
+6. Explain obesity and its complications
+   **Importance:** Must Know
+
+7. Explain role of meda dhatu in obesity
+   **Importance:** Must Know
+
+8. Explain causative factors for obesity
+   **Importance:** Must Know
+
+9. Explain management of obesity
+   **Importance:** Must Know
+
+10. Explain complications and preventive aspects
+    **Importance:** Must Know
+
+---
+
+### Topic 10: Cha.Su.22- Langhanabrimhaniya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of langhana and brimhana
+   **Importance:** Must Know
+
+3. Explain samprapti and treatment approach in karshya
+   **Importance:** Must Know
+
+4. Explain samprapti and treatment approach in sthaulya
+   **Importance:** Must Know
+
+5. Explain management principles in obesity
+   **Importance:** Must Know
+
+6. Explain importance of langhana and brimhana in treatment
+   **Importance:** Must Know
+
+7. Explain role of ahara and vihara in nourishment
+   **Importance:** Must Know
+
+8. Explain importance of exercise and diet
+   **Importance:** Must Know
+
+9. Explain role of langhana and brimhana in disease management
+   **Importance:** Must Know
+
+10. Explain treatment principles for obesity and karshya
+    **Importance:** Must Know
+
+11. Summarize the chapter
+    **Importance:** Nice to Know
+
+12. Explain management approach in obesity and karshya
+    **Importance:** Must Know
+
+---
+
+### Topic 11: Cha.Su.23- Santarpaniya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of santarpana and apatarpana
+   **Importance:** Must Know
+
+3. Explain causes of santarpanottha vikara
+   **Importance:** Must Know
+
+4. Explain samprapti of santarpanottha vikara
+   **Importance:** Must Know
+
+5. Explain management of santarpanottha vikara
+   **Importance:** Must Know
+
+6. Explain apatarpana chikitsa
+   **Importance:** Must Know
+
+7. Explain role of ahara in santarpana
+   **Importance:** Must Know
+
+8. Explain preventive aspects of santarpanottha vikara
+   **Importance:** Must Know
+
+9. Explain significance of apatarpana
+   **Importance:** Must Know
+
+10. Summarize the chapter
+    **Importance:** Nice to Know
+
+---
+
+### Topic 12: Cha.Su.24- Vidhishonitiya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of rakta and raktamokshana
+   **Importance:** Must Know
+
+3. Explain indications and contraindications of raktamokshana
+   **Importance:** Must Know
+
+4. Explain siravyadha vidhi
+   **Importance:** Must Know
+
+5. Explain jalaukavacharana
+   **Importance:** Must Know
+
+6. Explain treatment approach in rakta dushti
+   **Importance:** Must Know
+
+7. Explain methods of raktamokshana
+   **Importance:** Must Know
+
+8. Explain complications and management of raktamokshana
+   **Importance:** Must Know
+
+9. Explain preventive measures and precautions
+   **Importance:** Must Know
+
+10. Explain therapeutic importance of raktamokshana
+    **Importance:** Must Know
+
+---
+
+### Topic 13: Cha.Su.25- Yajjah Purusheeya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning of yajjah purusha
+   **Importance:** Must Know
+
+3. Explain tridosha and their importance
+   **Importance:** Must Know
+
+4. Explain trividha ayatana
+   **Importance:** Must Know
+
+5. Explain panchabhautika siddhanta
+   **Importance:** Must Know
+
+6. Explain indriya and their role
+   **Importance:** Must Know
+
+7. Explain importance of atma and mana
+   **Importance:** Must Know
+
+8. Explain purusha concept
+   **Importance:** Must Know
+
+9. Explain sharira and indriya sambandha
+   **Importance:** Must Know
+
+10. Explain physiological concepts
+    **Importance:** Must Know
+
+---
+
+### Topic 14: Cha.Su.26- Annapanavidhi Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of anna and pana
+   **Importance:** Must Know
+
+3. Explain ahara vidhi vidhana
+   **Importance:** Must Know
+
+4. Explain viruddhahara
+   **Importance:** Must Know
+
+5. Explain ahara matra
+   **Importance:** Must Know
+
+6. Explain dietetics and food combinations
+   **Importance:** Must Know
+
+7. Explain role of ahara in health and disease
+   **Importance:** Must Know
+
+8. Explain dietary incompatibilities
+   **Importance:** Must Know
+
+9. Explain pathogenesis of viruddhahara
+   **Importance:** Must Know
+
+10. Explain food classifications
+    **Importance:** Must Know
+
+---
+
+### Topic 15: Cha.Su.27- Annapana Vidhi Vishesha Ayatana Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of ahara dravya
+   **Importance:** Must Know
+
+3. Explain classifications of food articles
+   **Importance:** Must Know
+
+4. Explain qualities of food substances
+   **Importance:** Must Know
+
+5. Explain dietary utility and effects
+   **Importance:** Must Know
+
+6. Explain nutritional importance of food articles
+   **Importance:** Must Know
+
+7. Explain ahara sevana vidhi
+   **Importance:** Must Know
+
+8. Explain pathya and apathya
+   **Importance:** Must Know
+
+9. Explain effects of food combinations
+   **Importance:** Must Know
+
+10. Explain diet planning principles
+    **Importance:** Must Know
+
+---
+
+### Topic 16: Cha.Su.28- Vividhashitapitiya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of ahara paka
+   **Importance:** Must Know
+
+3. Explain concept of ahara rasa
+   **Importance:** Must Know
+
+4. Explain dhatu poshana nyaya
+   **Importance:** Must Know
+
+5. Explain relation between ahara and dhatu
+   **Importance:** Must Know
+
+6. Explain metabolism and nourishment
+   **Importance:** Must Know
+
+7. Explain ahara parinama
+   **Importance:** Must Know
+
+8. Explain role of agni in digestion
+   **Importance:** Must Know
+
+9. Explain dietary importance in tissue nourishment
+   **Importance:** Must Know
+
+10. Explain physiological significance of digestion
+    **Importance:** Must Know
+
+---
+
+### Topic 17: Cha.Su.29- Dashapranayataniya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of prana
+   **Importance:** Must Know
+
+3. Explain ten vital factors
+   **Importance:** Must Know
+
+4. Explain pranayatana
+   **Importance:** Must Know
+
+5. Explain role of hridaya
+   **Importance:** Must Know
+
+6. Explain marma and its importance
+   **Importance:** Must Know
+
+7. Explain physiological significance of vital organs
+   **Importance:** Must Know
+
+8. Explain relation of prana with life
+   **Importance:** Must Know
+
+9. Explain preventive importance
+   **Importance:** Must Know
+
+10. Explain role of sharira components in sustenance of life
+    **Importance:** Must Know
+
+---
+
+### Topic 18: Ch.Su.30- Arthedashamahamuliya Adhyaya
+
+1. Justify the position of the chapter title and its importance
+   **Importance:** Must Know
+
+2. Explain basic meaning and importance of Ayurveda
+   **Importance:** Must Know
+
+3. Explain ten roots of Ayurveda
+   **Importance:** Must Know
+
+4. Explain chikitsa chatushpada
+   **Importance:** Must Know
+
+5. Explain physician qualities
+   **Importance:** Must Know
+
+6. Explain patient qualities
+   **Importance:** Must Know
+
+7. Explain drug and attendant qualities
+   **Importance:** Must Know
+
+8. Explain importance of proper treatment
+   **Importance:** Must Know
+
+9. Explain treatment success factors
+   **Importance:** Must Know
+
+10. Explain foundations of Ayurveda
+    **Importance:** Must Know
+
+---
+
+### Topic 19: Cha.Ni.01-Jwara nidana Adhyaya
 
 1. Describe the sthana adhikarana (objectives) of Nidanasthana Ch.Ni.1/15
    **Importance:** Must Know
@@ -57,7 +693,7 @@
 
 ---
 
-### Topic 2: Cha.Ni.02-Raktapitta nidana Adhyaya
+### Topic 20: Cha.Ni.02-Raktapitta nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -94,7 +730,7 @@
 
 ---
 
-### Topic 3: Cha.Ni.03-Gulma nidana Adhyaya
+### Topic 21: Cha.Ni.03-Gulma nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -125,7 +761,7 @@
 
 ---
 
-### Topic 4: Cha.Ni.04-Prameha nidana adhyaya
+### Topic 22: Cha.Ni.04-Prameha nidana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -171,7 +807,7 @@
 
 ---
 
-### Topic 5: Cha.Ni.05-Kushta nidana Adhyaya
+### Topic 23: Cha.Ni.05-Kushta nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -211,7 +847,7 @@
 
 ---
 
-### Topic 6: Cha.Ni.06-Shosha nidana Adhyaya
+### Topic 24: Cha.Ni.06-Shosha nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -245,7 +881,7 @@
 
 ---
 
-### Topic 7: Cha.Ni.07-Unmada nidana Adhyaya
+### Topic 25: Cha.Ni.07-Unmada nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance'
    **Importance:** Must Know
@@ -291,7 +927,7 @@
 
 ---
 
-### Topic 8: Cha.Ni.08-Apasmara nidana adhyaya
+### Topic 26: Cha.Ni.08-Apasmara nidana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -340,7 +976,7 @@
 
 ---
 
-### Topic 9: Cha.Vi.01- Rasa vimana Adhyayam
+### Topic 27: Cha.Vi.01- Rasa vimana Adhyayam
 
 1. Explain sthana adhikarana of (objectives) of Vimanasthana Ch Vi 1/3
    **Importance:** Must Know
@@ -393,7 +1029,7 @@
 
 ---
 
-### Topic 10: Cha.Vi.02-Trividha kuksheeya Adhyayam
+### Topic 28: Cha.Vi.02-Trividha kuksheeya Adhyayam
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -434,7 +1070,7 @@
 
 ---
 
-### Topic 11: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya
+### Topic 29: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -489,7 +1125,7 @@
 
 ---
 
-### Topic 12: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya
+### Topic 30: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -508,7 +1144,7 @@
 
 ---
 
-### Topic 13: Cha.Vi. 05- Sroto vimana Adhyaya
+### Topic 31: Cha.Vi. 05- Sroto vimana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -536,7 +1172,7 @@
 
 ---
 
-### Topic 14: Cha.Vi. 06-Roganika vimana adhyaya
+### Topic 32: Cha.Vi. 06-Roganika vimana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -573,7 +1209,7 @@
 
 ---
 
-### Topic 15: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya
+### Topic 33: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -601,7 +1237,7 @@
 
 ---
 
-### Topic 16: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam
+### Topic 34: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -644,7 +1280,7 @@
 
 ---
 
-### Topic 17: Cha.Sha.01-Katithapurusheeya Adhyaya
+### Topic 35: Cha.Sha.01-Katithapurusheeya Adhyaya
 
 1. Describe the sthana adhikarana (objectives) of sharirasthana Cha.Sha 8/69
    **Importance:** Must Know
@@ -711,7 +1347,7 @@
 
 ---
 
-### Topic 18: Cha.Sha.02-Atulyagothreeyam Adhyaaya
+### Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -751,7 +1387,7 @@
 
 ---
 
-### Topic 19: Cha.Sha.03-Khuddika garbhavakranti Adhyaya
+### Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -787,7 +1423,7 @@
 
 ---
 
-### Topic 20: Cha.Sha.04-Mahatee garbhavakranti Adhyaya
+### Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -830,7 +1466,7 @@
 
 ---
 
-### Topic 21: Cha.Sha.05-Purushavichaya Shareera Adhyaya
+### Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -861,7 +1497,7 @@
 
 ---
 
-### Topic 22: Cha.Sha.06-Sareeravichaya adhyaya
+### Topic 40: Cha.Sha.06-Sareeravichaya adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -904,7 +1540,7 @@
 
 ---
 
-### Topic 23: Cha.Sha.07- Sareerasankhya sareera Adhyaya
+### Topic 41: Cha.Sha.07- Sareerasankhya sareera Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -928,7 +1564,7 @@
 
 ---
 
-### Topic 24: Cha.Sha.08-Jathisutreeya Adhyaya
+### Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -950,7 +1586,7 @@
 
 ---
 
-### Topic 25: Cha.In.1-Varnasvariyam Indriya Adhyaya
+### Topic 43: Cha.In.1-Varnasvariyam Indriya Adhyaya
 
 1. Describe sthana adhikarana (objectives) of Indriyasthana
    **Importance:** Must Know
@@ -991,7 +1627,7 @@
 
 ---
 
-### Topic 26: Cha.In.2-Pushpitakam Indriya Adhyaya
+### Topic 44: Cha.In.2-Pushpitakam Indriya Adhyaya
 
 1. Justify the position of the chapter in the sequence
    **Importance:** Must Know
@@ -1010,448 +1646,6 @@
 
 ---
 
-### Topic 27: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Enlist Sparshagamya bhava (palpable signs) in arishta Ch In 3/4
-   **Importance:** Must Know
-
-3. Explain Sparshavishayak Arishta lakshna (based on palpation)) Ch In 3/5,6
-   **Importance:** Must Know
-
-4. Summarise the chapter as per the sutras given at the end of the chapter Ch In 3/7
-   **Importance:** Nice to Know
-
----
-
-### Topic 28: Cha.In.4-Indriyaneekam Indriya adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Explain indriya vishayaka arishta samanya niyama (general rule regarding involvement of indriya) Ch In 4/3-6
-   **Importance:** Must Know
-
-3. Summarise the chapter as per the sutras given at the end of the chapter Ch In 4/27
-   **Importance:** Nice to Know
-
----
-
-### Topic 29: Cha.In.5-Purvarupeeyam Indriyam Adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Enlist jvara rupa vishayaka poorvaroopiya rishta (rishta based on purvarupa of jvara) Ch In 5/3-5
-   **Importance:** Must Know
-
-3. Define swapna Ch In 5/41-42
-   **Importance:** Must Know
-
-4. Enlist and explain swapna bheda (types of swapna) Ch In 5/43
-   **Importance:** Must Know
-
-5. Recite sutra Ch In 5/41-43
-   **Importance:** Must Know
-
-6. Summarise the chapter as per sutra Ch In 5/47
-   **Importance:** Nice to Know
-
----
-
-### Topic 30: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya
-
-1. Justify the position of the chapter in the Samhita and explain basic meaning and importance of key terms in the chapter
-   **Importance:** Must Know
-
-2. Outline arishta related to pureesha, mutra and swayathu Ch In 6/11-19
-   **Importance:** Desirable to Know
-
-3. Summarise the chapter as per sutras given at the end of the chapter Ch In 6/25
-   **Importance:** Nice to Know
-
----
-
-### Topic 31: Cha.In.7-Pannarupiyam Indriyam Adhyaya
-
-1. Justify the position of the chapter in the Samhita
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of chaya, pratichaya and prabha
-   **Importance:** Must Know
-
-3. Explain pratichaya vishayaka arishta. Ch In 7/4-6
-   **Importance:** Must Know
-
-4. Explain chaya vikruti arishtas. Ch In 7/4-6
-   **Importance:** Must Know
-
-5. Enlist five types chaya Ch In 7/10-13
-   **Importance:** Must Know
-
-6. Enlist seven types of prabha Ch In 7/14-15
-   **Importance:** Must Know
-
-7. Differentiate chaya and prabha Ch In 7/16-17
-   **Importance:** Must Know
-
-8. Summarise the chapter Ch In 7/32
-   **Importance:** Nice to Know
-
----
-
-### Topic 32: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya
-
-1. Justify position of the chapter in Samhita
-   **Importance:** Must Know
-
-2. Summarise the chapter as per sutra given at the end of the chapter
-   **Importance:** Nice to Know
-
----
-
-### Topic 33: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya
-
-1. Justify position of the chapter in Samhita
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms such as ashtamaharoga
-   **Importance:** Must Know
-
-3. Enlist ashtamaharogas Ch In 9/8-9
-   **Importance:** Must Know
-
-4. Summarise the chapter as per the sutra given at the end of the chapter Ch In 9/23,24
-   **Importance:** Nice to Know
-
----
-
-### Topic 34: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya
-
-1. Justify poisition of the chapter and key terms in the chapter
-   **Importance:** Must Know
-
-2. Explain sadyomaraneeya arishtas Ch In 10/3-20
-   **Importance:** Must Know
-
-3. Summarise the chapter as per the sutras given at the end of the chapter Ch In 10/21
-   **Importance:** Nice to Know
-
----
-
-### Topic 35: Cha.In.11-Anujyotiyam Indriya Adhyaya
-
-1. Justify the position of the chpater and explain key terms such as arishta Ch In 11/29
-   **Importance:** Must Know
-
-2. Define arishta Ch In 11/29
-   **Importance:** Must Know
-
-3. Recite sutra Ch In 11/29
-   **Importance:** Must Know
-
----
-### Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya
-
-1. Justify the position of the chapter in the Shareerasthana and its importance
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms in the chapter atulya-gotra, beeja, dwireta, kliba, prajnaparadha, pratikarma, daiva
-   **Importance:** Desirable Know
-
-3. Enlist prerequisites for conception Ch Sha 2/4
-   **Importance:** Must Know
-
-4. Summarize the factors affecting conception, foetus Cha Sha 2/6-12
-   **Importance:** Desirable Know
-
-5. Enlist shodasa dhatu (16 factors) in the formation of fetus Ch Sha 2/32,33
-   **Importance:** Must Know
-
-6. Outline features of multiple pregnancies, dwireta (hermaphroditism) and other types of sexual abnormalities Ca sh 2/12-14, 18-21
-   **Importance:** Desirable Know
-
-7. Explain lakshanas of sadyogruhit garbhini lakshana. Ca Sha 2/23-27
-   **Importance:** Desirable Know
-
-8. Explain ativahika purusha (factors carrying from previous birth to next birth). Ca Sha 2/31-32
-   **Importance:** Must Know
-
-9. Differentiate daivakara and purushaakara Ca Sha 2/44.
-   **Importance:** Must Know
-
-10. Explain niroga lakshana. Ca sha 1/46-47
-    **Importance:** Desirable Know
-
-11. Recite sutras Cha.Sha.2/26, 27, 35,44,45-47
-    **Importance:** Must Know
-
-12. Summarize the chapter based on Ca Sha 2/48
-    **Importance:** Nice to Know
-
----
-
-### Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya
-
-1. Justify the position of the chapter in the Shareerasthana and its importance
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms
-   * matrija
-   * pitrija
-   * sattvaja
-   * satmyaja
-   * rasaja
-   * atmaja bhavas
-   * beeja
-   * beejabhaga
-   **Importance:** Must Know
-
-3. Enlist factors responsible for the formation, growth of the embryo Cha Sha 3/3
-   **Importance:** Must Know
-
-4. Outline the sambhasha parishat on garbha utpatti (formation of embryo) and factors contributed from different agents like satva, satmya etc. Ch Sha 3/4
-   **Importance:** Desirable Know
-
-5. Explain matruja, pitruja, atmaja, satmyaja, rasaja, satvaja bhavas of garbha Ch Sha 3/6-14
-   **Importance:** Desirable Know
-
-6. Explain role of beeja-beejabhaga dushti in congenital abnormalities Ch Sha 3/17
-   **Importance:** Must Know
-
-7. Recite sutras no Ch Sha 3/17
-   **Importance:** Must Know
-
-8. Summarize the chapter based on sutra Ch Sha 3/26-27
-   **Importance:** Nice to Know
-
----
-
-### Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya
-
-1. Justify the position of the chapter in the Shareerasthana and its importance
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms such as garbhopaghatakar bhava, manas prakriti
-   **Importance:** Must Know
-
-3. Define garbha Ch. Sha 4/5
-   **Importance:** Must Know
-
-4. Enlist components of shad dhatvaatmak purush Ca Sh 4/6
-   **Importance:** Must Know
-
-5. Explain functions of atma in the formation of garbha. Ch sha 4/8
-   **Importance:** Must Know
-
-6. Outline maasanumasik garbha poshana Ch Sha 4/9-11,20-24
-   **Importance:** Desirable Know
-
-7. Explain garbhopaghatakara bhavas. Ch Sh 4/18
-   **Importance:** Must Know
-
-8. Summarize the causes of congenital abnormalities Ch Sha 4/30-32
-   **Importance:** Must Know
-
-9. Explain qualities of satva-raja-tama. Cha Sh 4/36
-   **Importance:** Must Know
-
-10. Outline features of shodash manasa prakritis (sixteen types of mental constitution). Ch Sha 4/36-40
-    **Importance:** Desirable Know
-
-11. Identify some important features of manasaprakriti in individuals (also see activity list)
-    **Importance:** Nice to Know
-
-12. Recite sutras Ch Sha 4/6,36
-    **Importance:** Must Know
-
-13. Summarize the chapter as per sutras given at the end of the chapter Ca Sha 4/42-45
-    **Importance:** Nice to Know
-
----
-
-### Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya
-
-1. Justify the position of the chapter in the Samhita
-   **Importance:** Must Know
-
-2. Explain the basic meaning and importance of key terms in the chapter such as lokapurushasamyata, hetwadi panchaka and satya buddhi
-   **Importance:** Must Know
-
-3. Define loka purusha samya siddhanta Ch Sh. 4/13; 5/3
-   **Importance:** Must Know
-
-4. Illustrate loka-purusha samya siddhanta with examples Ch Sha 5/5
-   **Importance:** Desirable Know
-
-5. Define and describe satyabuddhi Ch Sh.5/7,16-19
-   **Importance:** Must Know
-
-6. Enlist and describe hetvadi panchaka Ch Sh.5/8
-   **Importance:** Desirable Know
-
-7. Illustrate pravritti-nivritti upaya (see activity list)
-   **Importance:** Desirable Know
-
-8. Recite sutras Ch Sha 5/ 3, 5, 8,16
-   **Importance:** Must Know
-
-9. Summarize the chapter as per sutra Ch Sh 5/25,26
-   **Importance:** Nice to Know
-
----
-
-### Topic 40: Cha.Sha.06-Sareeravichaya adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Explain the basic meaning and importance of key terms in the chapter such as vriddhikara bhava, kala kaala mrityu and param ayu
-   **Importance:** Must Know
-
-3. Define shareera Ch. Sh.6/4
-   **Importance:** Must Know
-
-4. Apply samanya visesha siddhanta in shareera Ch.Sh.6/11
-   **Importance:** Must Know
-
-5. Describe shareera vruddhikara bhava Ch.Sh.6/12
-   **Importance:** Must Know
-
-6. Describe bala vruddhikara bhava Ch.Sh.6/13
-   **Importance:** Must Know
-
-7. Explain ahara parinamakara bhava Ch.Sh.6/14,15
-   **Importance:** Must Know
-
-8. Classify shareera-gunas into malarupa and prasadarupa Ch.Sh.6/16,17
-   **Importance:** Must Know
-
-9. Explain the concept of kala and Akala Mrithyu Ch.Sh 6/28
-   **Importance:** Desirable Know
-
-10. Define parama ayu karanam Ch.Sh 6/30
-    **Importance:** Desirable Know
-
-11. Analyse data related to akala-mrityu (see activity list)
-    **Importance:** Desirable Know
-
-12. Recite the sutra Ch Sha 6/4, 5-11, 12,13, 17, 28, 30
-    **Importance:** Must Know
-
-13. Summarize the chapter as per sutra Ch Sh 6/31-34
-    **Importance:** Nice to Know
-
----
-
-### Topic 41: Cha.Sha.07-Sareerasankhya sareera Adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Explain the basic meaning and importance of key terms in the chapter
-   * chetanaadishtana
-   * pranayathana
-   * koshtanga
-   * pratyanga
-   * anjali pramana etc.
-   **Importance:** Must Know
-
-3. Explain paramanu bheda shariram Ch Sha 7/17
-   **Importance:** Must Know
-
-4. Recite sutra Ch Sha 7/17
-   **Importance:** Must Know
-
-5. Summarize the chapter as per sutra Ch Sha 7/19, 20
-   **Importance:** Nice to Know
-
----
-
-### Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya
-
-1. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms in the chapter such as jathi, pumsavana, sutikagara etc
-   **Importance:** Must Know
-
-3. Enlist garbha upaghatakara bhava Ch.Su 8/21
-   **Importance:** Must Know
-
-4. Describe the infrastructure of a sutikagaram Ch. Su 8/33
-   **Importance:** Nice to Know
-
-5. Demonstrate garbhopghatakarabhava through skit (see activity list)
-   **Importance:** Desirable Know
-
-6. Summarize the chapter as per the sutra Ch Sha 8/68,69
-   **Importance:** Nice to Know
-
----
-
-### Topic 43: Cha.In.1-Varnasvariyam Indriya Adhyaya
-
-1. Describe sthana adhikarana (objectives) of Indriyasthana
-   **Importance:** Must Know
-
-2. Justify the position of the chapter in the Samhita and its importance
-   **Importance:** Must Know
-
-3. Explain basic meaning and importance of key terms
-   * arishta
-   * vikritibheda
-   * varna
-   * swara etc. related to rishta
-   **Importance:** Must Know
-
-4. Enlist factors for assessing rishta Ref: Ch. In 1/3
-   **Importance:** Must Know
-
-5. Enlist six types of prakruti bheda. Ch In 1/5
-   **Importance:** Must Know
-
-6. Enlist vikritibheda (types of vikriti) in the context of rishta Ch In 1/6,7, 17-23
-   **Importance:** Must Know
-
-7. Explain prakruta and vaikarika varna Ch In 1/8,9
-   **Importance:** Must Know
-
-8. Summarize varnavishayak arishta (rishta related to varna) Ch In 1/9-13
-   **Importance:** Must Know
-
-9. Explain prakruta and vaikarika swara (normal and abnormal voices) Ch In 1/14
-   **Importance:** Must Know
-
-10. Summarize swara vishayak arishta (arishta related to voice) Ch In 1/15,24,25
-    **Importance:** Desirable Know
-
-11. Summarize the chapter Ch In 1/26
-    **Importance:** Nice to Know
-
----
-
-### Topic 44: Cha.In.2-Pushpitakam Indriya Adhyaya
-
-1. Justify the position of the chapter in the sequence
-   **Importance:** Must Know
-
-2. Explain basic meaning and importance of key terms such as niyatarishta, aniyatarishta
-   **Importance:** Must Know
-
-3. Outline gandhavishayak arishta (prognostic signs identified through smell) Ch In 2/7-16
-   **Importance:** Desirable Know
-
-4. Summarize rasavishayak arishta (prognostic signs related to taste) Ch In 2/17-22
-   **Importance:** Desirable Know
-
-5. Summarise the chapter Ch In 3/23
-   **Importance:** Nice to Know
-
----
-
 ### Topic 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
@@ -1460,7 +1654,7 @@
 2. Enlist Sparshagamya bhava (palpable signs) in arishta Ch In 3/4
    **Importance:** Must Know
 
-3. Explain Sparshavishayak Arishta lakshna (based on palpation) Ch In 3/5,6
+3. Explain Sparshavishayak Arishta lakshna (based on palpation)) Ch In 3/5,6
    **Importance:** Must Know
 
 4. Summarise the chapter as per the sutras given at the end of the chapter Ch In 3/7
@@ -1509,7 +1703,7 @@
    **Importance:** Must Know
 
 2. Outline arishta related to pureesha, mutra and swayathu Ch In 6/11-19
-   **Importance:** Desirable Know
+   **Importance:** Desirable to Know
 
 3. Summarise the chapter as per sutras given at the end of the chapter Ch In 6/25
    **Importance:** Nice to Know
@@ -1572,7 +1766,7 @@
 
 ### Topic 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya
 
-1. Justify position of the chapter and key terms in the chapter
+1. Justify poisition of the chapter and key terms in the chapter
    **Importance:** Must Know
 
 2. Explain sadyomaraneeya arishtas Ch In 10/3-20
@@ -1585,7 +1779,7 @@
 
 ### Topic 53: Cha.In.11-Anujyotiyam Indriya Adhyaya
 
-1. Justify the position of the chapter and explain key terms such as arishta Ch In 11/29
+1. Justify the position of the chpater and explain key terms such as arishta Ch In 11/29
    **Importance:** Must Know
 
 2. Define arishta Ch In 11/29
