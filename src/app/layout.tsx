@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Athena",
+    startupImage: [
+      "/logo.svg"
+    ]
   },
 };
 
