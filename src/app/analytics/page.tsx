@@ -225,8 +225,9 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-semibold">Study Hours Trend</h3>
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={studyHoursData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={studyHoursData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="studyGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#6366f1" stopOpacity={0.3} />
@@ -249,6 +250,7 @@ export default function AnalyticsPage() {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </motion.div>
 
@@ -269,6 +271,7 @@ export default function AnalyticsPage() {
                 No subjects added yet
               </div>
             ) : (
+              <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={subjectData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
@@ -282,6 +285,7 @@ export default function AnalyticsPage() {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+              </div>
             )}
           </div>
         </motion.div>
@@ -298,22 +302,24 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-semibold">Daily Activity</h3>
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={dailyActivityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
-                <Tooltip content={<ChartTooltip />} />
-                <Legend
-                  wrapperStyle={{ fontSize: 11 }}
-                  iconType="circle"
-                  iconSize={8}
-                />
-                <Bar dataKey="Topics" stackId="a" fill="#22c55e" radius={[0, 0, 0, 0]} maxBarSize={32} />
-                <Bar dataKey="Tasks" stackId="a" fill="#6366f1" radius={[0, 0, 0, 0]} maxBarSize={32} />
-                <Bar dataKey="Revisions" stackId="a" fill="#f59e0b" radius={[6, 6, 0, 0]} maxBarSize={32} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={dailyActivityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<ChartTooltip />} />
+                  <Legend
+                    wrapperStyle={{ fontSize: 11 }}
+                    iconType="circle"
+                    iconSize={8}
+                  />
+                  <Bar dataKey="Topics" stackId="a" fill="#22c55e" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                  <Bar dataKey="Tasks" stackId="a" fill="#6366f1" radius={[0, 0, 0, 0]} maxBarSize={32} />
+                  <Bar dataKey="Revisions" stackId="a" fill="#f59e0b" radius={[6, 6, 0, 0]} maxBarSize={32} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </motion.div>
       </div>

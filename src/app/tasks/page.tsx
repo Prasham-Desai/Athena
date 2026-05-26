@@ -56,6 +56,7 @@ function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => 
   const [priority, setPriority] = useState<Priority>('medium');
   const [date, setDate] = useState('');
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -68,23 +69,28 @@ function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => 
     }
   }, [task]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!task || !title.trim() || !date) return;
+    if (!task || !title.trim() || !date || isSubmitting) return;
 
-    updateTask(task.id, {
-      title: title.trim(),
-      description: description.trim(),
-      category,
-      priority,
-      date,
-      estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes, 10) : undefined,
-    });
-    
-    window.dispatchEvent(
-      new CustomEvent('toast', { detail: { message: 'Task updated successfully', type: 'success' } }),
-    );
-    onClose();
+    setIsSubmitting(true);
+    try {
+      await updateTask(task.id, {
+        title: title.trim(),
+        description: description.trim(),
+        category,
+        priority,
+        date,
+        estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes, 10) : undefined,
+      });
+      
+      window.dispatchEvent(
+        new CustomEvent('toast', { detail: { message: 'Task updated successfully', type: 'success' } }),
+      );
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -214,9 +220,10 @@ function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => 
 
                 <button
                   type="submit"
-                  className="w-full mt-6 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition"
+                  disabled={isSubmitting}
+                  className="w-full mt-6 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 disabled:opacity-50 transition"
                 >
-                  Save Changes
+                  {isSubmitting ? 'Saving...' : 'Save Changes'}
                 </button>
               </form>
             </motion.div>
@@ -377,6 +384,7 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
   
   const [isRepeating, setIsRepeating] = useState(false);
   const [repeatCount, setRepeatCount] = useState('1');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const reset = () => {
     setTitle('');
@@ -389,10 +397,11 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
     setRepeatCount('1');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !date) return;
+    if (!title.trim() || !date || isSubmitting) return;
 
+    setIsSubmitting(true);
     const baseTask = {
       title: title.trim(),
       description: description.trim(),
@@ -401,32 +410,38 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
       estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes) : null,
     };
 
-    if (isRepeating && parseInt(repeatCount) > 1) {
-      const count = parseInt(repeatCount);
-      const startDate = new Date(date + 'T00:00:00');
-      
-      for (let i = 0; i < count; i++) {
-        const nextDate = addDays(startDate, i);
-        addTask({
+    try {
+      if (isRepeating && parseInt(repeatCount) > 1) {
+        const count = parseInt(repeatCount);
+        const startDate = new Date(date + 'T00:00:00');
+        const promises = [];
+        
+        for (let i = 0; i < count; i++) {
+          const nextDate = addDays(startDate, i);
+          promises.push(addTask({
+            ...baseTask,
+            date: format(nextDate, 'yyyy-MM-dd'),
+          }));
+        }
+        await Promise.all(promises);
+        window.dispatchEvent(
+          new CustomEvent('toast', { detail: { message: `Added ${count} repeating tasks!`, type: 'success' } }),
+        );
+      } else {
+        await addTask({
           ...baseTask,
-          date: format(nextDate, 'yyyy-MM-dd'),
+          date,
         });
+        window.dispatchEvent(
+          new CustomEvent('toast', { detail: { message: 'Task added!', type: 'success' } }),
+        );
       }
-      window.dispatchEvent(
-        new CustomEvent('toast', { detail: { message: `Added ${count} repeating tasks!`, type: 'success' } }),
-      );
-    } else {
-      addTask({
-        ...baseTask,
-        date,
-      });
-      window.dispatchEvent(
-        new CustomEvent('toast', { detail: { message: 'Task added!', type: 'success' } }),
-      );
-    }
 
-    reset();
-    onClose();
+      reset();
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!open) return null;
@@ -570,9 +585,10 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
 
               <button
                 type="submit"
-                className="w-full mt-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 transition"
+                disabled={isSubmitting}
+                className="w-full mt-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 hover:opacity-90 disabled:opacity-50 transition"
               >
-                {isRepeating ? 'Add Repeating Tasks' : 'Add Task'}
+                {isSubmitting ? 'Saving...' : (isRepeating ? 'Add Repeating Tasks' : 'Add Task')}
               </button>
             </form>
           </motion.div>

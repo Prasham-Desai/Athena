@@ -27,6 +27,7 @@
 			"binding": "DB",
 			"database_name": "athena-db",
 			"database_id": "bc9dacc0-a6d9-4b1d-8ca0-f3d0d46eebff",
+			"migrations_dir": "src/db/migrations",
 			"remote": true
 		}
 	],

@@ -54,6 +54,7 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
   },
 
   addActivity: async (activity) => {
+    const previousActivities = get().activities;
     const optimisticActivity: ActivityEntry = {
       ...activity,
       id: generateId(),
@@ -65,34 +66,44 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
     }));
 
     try {
-      await fetch('/api/activities', {
+      const response = await fetch('/api/activities', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(optimisticActivity),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ activities: previousActivities });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to save activity', error);
+      throw error;
     }
   },
 
   addDailyLog: async (log) => {
+    const previousDailyLogs = get().dailyLogs;
     set((state) => ({
       dailyLogs: [...state.dailyLogs.filter((entry) => entry.date !== log.date), log],
     }));
 
     try {
-      await fetch('/api/daily-logs', {
+      const response = await fetch('/api/daily-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date: log.date, updates: log }),
       });
+      if (!response.ok) throw new Error('Failed');
       await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
     } catch (error) {
+      set({ dailyLogs: previousDailyLogs });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to save daily log', error);
+      throw error;
     }
   },
 
   updateDailyLog: async (date, updates) => {
+    const previousDailyLogs = get().dailyLogs;
     const current = get().dailyLogs.find((entry) => entry.date === date);
     const merged = current
       ? { ...current, ...updates }
@@ -119,18 +130,23 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
     });
 
     try {
-      await fetch('/api/daily-logs', {
+      const response = await fetch('/api/daily-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, updates }),
       });
+      if (!response.ok) throw new Error('Failed');
       await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
     } catch (error) {
+      set({ dailyLogs: previousDailyLogs });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to update daily log', error);
+      throw error;
     }
   },
 
   addStudySession: async (date, session) => {
+    const previousDailyLogs = get().dailyLogs;
     const newSession: StudySession = { ...session, id: generateId() };
     const existing = get().dailyLogs.find((entry) => entry.date === date);
 
@@ -157,18 +173,23 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
     });
 
     try {
-      await fetch('/api/study-sessions', {
+      const response = await fetch('/api/study-sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, session: newSession }),
       });
+      if (!response.ok) throw new Error('Failed');
       await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
     } catch (error) {
+      set({ dailyLogs: previousDailyLogs });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to save study session', error);
+      throw error;
     }
   },
 
   removeStudySession: async (date, sessionId) => {
+    const previousDailyLogs = get().dailyLogs;
     const existing = get().dailyLogs.find((entry) => entry.date === date);
     const sessionToRemove = existing?.sessions?.find((session) => session.id === sessionId);
 
@@ -200,7 +221,10 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
       await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
     } catch (error) {
+      set({ dailyLogs: previousDailyLogs });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to delete study session', error);
+      throw error;
     }
   },
 

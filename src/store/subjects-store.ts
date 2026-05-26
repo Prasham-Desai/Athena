@@ -39,6 +39,7 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   },
 
   addSubject: async (name, color, icon) => {
+    const previousSubjects = get().subjects;
     const newSubject = {
       id: generateId(),
       name,
@@ -50,43 +51,58 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     };
     set((state) => ({ subjects: [...state.subjects, newSubject as any] }));
     try {
-      await fetch('/api/subjects', {
+      const response = await fetch('/api/subjects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newSubject),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to add subject', error);
+      throw error;
     }
   },
 
   updateSubject: async (id, updates) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) => (s.id === id ? { ...s, ...updates } : s)),
     }));
     try {
-      await fetch(`/api/subjects/${id}`, {
+      const response = await fetch(`/api/subjects/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to update subject', error);
+      throw error;
     }
   },
 
   deleteSubject: async (id) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.filter((s) => s.id !== id),
     }));
     try {
-      await fetch(`/api/subjects/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/subjects/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to delete subject', error);
+      throw error;
     }
   },
 
   addChapter: async (subjectId, name, paper = "Paper 1") => {
+    const previousSubjects = get().subjects;
     const newChapter = {
       id: generateId(),
       name,
@@ -105,17 +121,22 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch('/api/chapters', {
+      const response = await fetch('/api/chapters', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newChapter),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to add chapter', error);
+      throw error;
     }
   },
 
   updateChapter: async (subjectId, chapterId, updates) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) =>
         s.id === subjectId
@@ -130,17 +151,22 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch(`/api/chapters/${chapterId}`, {
+      const response = await fetch(`/api/chapters/${chapterId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to update chapter', error);
+      throw error;
     }
   },
 
   deleteChapter: async (subjectId, chapterId) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) =>
         s.id === subjectId
@@ -150,13 +176,18 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch(`/api/chapters/${chapterId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/chapters/${chapterId}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to delete chapter', error);
+      throw error;
     }
   },
 
   addTopic: async (subjectId, chapterId, name) => {
+    const previousSubjects = get().subjects;
     const newTopic = {
       id: generateId(),
       name,
@@ -186,17 +217,22 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch('/api/topics', {
+      const response = await fetch('/api/topics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTopic),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to add topic', error);
+      throw error;
     }
   },
 
   updateTopic: async (subjectId, chapterId, topicId, updates) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) =>
         s.id === subjectId
@@ -218,17 +254,22 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch(`/api/topics/${topicId}`, {
+      const response = await fetch(`/api/topics/${topicId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to update topic', error);
+      throw error;
     }
   },
 
   deleteTopic: async (subjectId, chapterId, topicId) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) =>
         s.id === subjectId
@@ -245,9 +286,13 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch(`/api/topics/${topicId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/topics/${topicId}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed');
     } catch (error) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error('Failed to delete topic', error);
+      throw error;
     }
   },
 
@@ -308,6 +353,7 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   },
 
   setSubtopicStatus: async (subjectId, chapterId, topicId, subtopicId, status, skipParentUpdate = false) => {
+    const previousSubjects = get().subjects;
     set((state) => ({
       subjects: state.subjects.map((s) => s.id === subjectId ? {
         ...s, chapters: s.chapters.map((c) => c.id === chapterId ? {
@@ -321,13 +367,17 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      await fetch(`/api/subtopics/${subtopicId}`, {
+      const response = await fetch(`/api/subtopics/${subtopicId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
+      if (!response.ok) throw new Error('Failed');
     } catch (e) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
       console.error(e);
+      throw e;
     }
 
     if (!skipParentUpdate) {

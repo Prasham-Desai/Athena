@@ -37,47 +37,65 @@ export const useTasksStore = create<TasksState>((set, get) => ({
       actualMinutes: null,
     };
 
+    const previousTasks = get().tasks;
+
     // Optimistic update
     set((state) => ({ tasks: [...state.tasks, newTask] }));
 
     try {
-      await fetch('/api/tasks', {
+      const response = await fetch('/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTask),
       });
+      if (!response.ok) throw new Error('Failed to save');
     } catch (error) {
       console.error('Failed to save task to backend', error);
+      set({ tasks: previousTasks });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Failed to add task', type: 'error' } }));
+      throw error;
     }
   },
 
   updateTask: async (id, updates) => {
+    const previousTasks = get().tasks;
+
     // Optimistic update
     set((state) => ({
       tasks: state.tasks.map((t) => (t.id === id ? { ...t, ...updates } : t)),
     }));
 
     try {
-      await fetch(`/api/tasks/${id}`, {
+      const response = await fetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
+      if (!response.ok) throw new Error('Failed to update');
     } catch (error) {
       console.error('Failed to update task', error);
+      set({ tasks: previousTasks });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Failed to update task', type: 'error' } }));
+      throw error;
     }
   },
 
   deleteTask: async (id) => {
+    const previousTasks = get().tasks;
+
     // Optimistic update
     set((state) => ({
       tasks: state.tasks.filter((t) => t.id !== id),
     }));
 
     try {
-      await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete');
     } catch (error) {
       console.error('Failed to delete task', error);
+      set({ tasks: previousTasks });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Failed to delete task', type: 'error' } }));
+      throw error;
     }
   },
 
@@ -89,7 +107,11 @@ export const useTasksStore = create<TasksState>((set, get) => ({
     const isCompleted = !task.completed;
     const completedAt = isCompleted ? new Date().toISOString() : null;
 
-    updateTask(id, { completed: isCompleted, completedAt });
+    try {
+      await updateTask(id, { completed: isCompleted, completedAt });
+    } catch (e) {
+      // rollback is handled by updateTask
+    }
   },
 
   setTasks: (tasks) => set({ tasks }),
