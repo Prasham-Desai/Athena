@@ -47,6 +47,7 @@ import {
   STATUS_CONFIG,
   PRIORITY_CONFIG,
 } from '@/lib/utils';
+import { useToday } from '@/hooks/use-today';
 
 // ---------------------------------------------------------------------------
 // Animation variants
@@ -171,7 +172,7 @@ export default function DashboardPage() {
 
   const streak = useMemo(() => getStreakCount(dailyLogs), [dailyLogs]);
 
-  const today = getToday();
+  const today = useToday();
   const tasksDueToday = useMemo(
     () => tasks.filter((t) => !t.completed && t.date === today).length,
     [tasks, today]

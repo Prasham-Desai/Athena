@@ -151,10 +151,10 @@ function InlineEdit({ value, onSave, className, inputClassName }: InlineEditProp
   return (
     <button
       onClick={(e) => { e.stopPropagation(); setDraft(value); setEditing(true); }}
-      className={cn('group/edit inline-flex items-center gap-1.5 text-left', className)}
+      className={cn('group/edit inline-flex items-start gap-1.5 text-left', className)}
     >
-      <span className={cn('truncate', inputClassName?.includes('w-full') && 'w-full')}>{value}</span>
-      <Pencil className="w-3 h-3 text-[hsl(var(--muted-foreground))] opacity-0 group-hover/edit:opacity-100 transition-opacity shrink-0" />
+      <span className={cn('break-words leading-snug', inputClassName?.includes('w-full') && 'w-full')}>{value}</span>
+      <Pencil className="w-3 h-3 text-[hsl(var(--muted-foreground))] opacity-0 group-hover/edit:opacity-100 transition-opacity shrink-0 mt-0.5" />
     </button>
   );
 }
@@ -377,14 +377,15 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10, height: 0, marginBottom: 0 }}
       className={cn(
-        'group rounded-xl border px-4 py-3 hover:shadow-sm transition-all',
+        'group rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 hover:shadow-sm transition-all',
         isCompleted
           ? 'bg-emerald-500/5 border-emerald-500/20'
           : 'bg-[hsl(var(--background))] border-[hsl(var(--border))]'
       )}
     >
-      <div className="flex items-start gap-3">
-        {/* Completion checkbox */}
+      <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+        <div className="flex items-start gap-3 flex-1 min-w-0 w-full">
+          {/* Completion checkbox */}
         <button
           onClick={handleToggleComplete}
           className="shrink-0 transition-transform hover:scale-110 mt-0.5"
@@ -409,8 +410,8 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             <InlineEdit
               value={topic.name}
               onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-              className={cn('text-sm font-medium topic-text-wrap w-full block')}
-              inputClassName="w-full min-w-[300px]"
+              className={cn('text-sm font-medium w-full')}
+              inputClassName="w-full"
             />
             <div className="flex items-center gap-2 flex-wrap">
               {/* Importance */}
@@ -454,7 +455,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
                       )}
                     </button>
                     <span className={cn(
-                      "text-sm",
+                      "text-sm break-words leading-snug w-full min-w-0",
                       isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
                     )}>
                       {sub.name}
@@ -491,7 +492,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto w-full sm:w-auto justify-end border-t sm:border-0 pt-3 sm:pt-0 mt-1 sm:mt-0 border-[hsl(var(--border))]/50">
           {/* Status selector */}
           <StatusSelect status={topic.status} onChange={handleStatusChange} />
 
@@ -579,13 +580,19 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
   const displayedTopics = useMemo(() => {
     if (!searchQuery) return chapter.topics;
     const q = searchQuery.toLowerCase();
+    
+    // If chapter name matches search, show all topics
+    if (chapter.name.toLowerCase().includes(q)) {
+      return chapter.topics;
+    }
+
     return chapter.topics.filter(t => {
       if (t.name.toLowerCase().includes(q)) return true;
       if (t.subtopics?.some((s: any) => s.name.toLowerCase().includes(q))) return true;
       if (t.notes?.toLowerCase().includes(q)) return true;
       return false;
     });
-  }, [chapter.topics, searchQuery]);
+  }, [chapter.topics, chapter.name, searchQuery]);
 
   if (searchQuery && displayedTopics.length === 0) {
     return null;
@@ -646,7 +653,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
       <div
         onClick={() => setOpen(!open)}
         className={cn(
-          'w-full flex items-center gap-3 px-5 py-4 hover:bg-[hsl(var(--muted))]/50 transition-colors cursor-pointer',
+          'w-full flex items-start sm:items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4 hover:bg-[hsl(var(--muted))]/50 transition-colors cursor-pointer',
           chapterStats.allDone && 'bg-emerald-500/5'
         )}
         role="button"
@@ -655,6 +662,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="mt-1 sm:mt-0"
         >
           <ChevronDown className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
         </motion.div>
@@ -662,7 +670,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
         {/* Chapter completion checkbox */}
         <div
           onClick={handleToggleChapter}
-          className="shrink-0 transition-transform hover:scale-110"
+          className="shrink-0 transition-transform hover:scale-110 mt-0.5 sm:mt-0"
           role="button"
           tabIndex={0}
           title={chapterStats.allDone ? 'Uncheck all topics' : 'Mark all topics as completed'}
@@ -682,11 +690,12 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
         </div>
 
         <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full">
             <InlineEdit
               value={chapter.name}
               onSave={(v) => updateChapter(subjectId, chapter.id, { name: v })}
-              className="text-sm font-semibold"
+              className="text-sm font-semibold w-full"
+              inputClassName="w-full"
             />
           </div>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
@@ -722,7 +731,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-5 pl-11 space-y-2">
+            <div className="px-3 sm:px-5 pb-4 sm:pb-5 pt-3 pl-3 sm:pl-11 space-y-2">
               {/* Topic list */}
               <AnimatePresence mode="popLayout">
                 {displayedTopics.map((topic) => (

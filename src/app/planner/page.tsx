@@ -26,6 +26,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { EmptyState } from '@/components/shared/empty-state';
 import { cn, formatTime, PRIORITY_CONFIG, getToday } from '@/lib/utils';
+import { useToday } from '@/hooks/use-today';
 
 // ==========================================================================
 // Calendar component
@@ -584,7 +585,19 @@ import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 
 export default function PlannerPage() {
   const hydrated = useHydration();
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const today = useToday();
+  const [selectedDate, setSelectedDate] = useState(() => new Date(today));
+  
+  const prevToday = useRef(today);
+  useEffect(() => {
+    if (prevToday.current !== today) {
+      if (format(selectedDate, 'yyyy-MM-dd') === prevToday.current) {
+        setSelectedDate(new Date(today));
+      }
+      prevToday.current = today;
+    }
+  }, [today, selectedDate]);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingBlock, setEditingBlock] = useState<any | null>(null);
   const [completingTask, setCompletingTask] = useState<{ id: string; title: string; estimatedMinutes: number; date: string } | null>(null);

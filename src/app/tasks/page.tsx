@@ -8,6 +8,7 @@ import { useTasksStore } from '@/store/tasks-store';
 import { useActivityStore } from '@/store/activity-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday, getToday } from '@/lib/utils';
+import { useToday } from '@/hooks/use-today';
 import { PageHeader } from '@/components/shared/page-header';
 import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 import { EmptyState } from '@/components/shared/empty-state';
@@ -690,6 +691,7 @@ function CompletionModal({
 
 export default function TasksPage() {
   const hydrated = useHydration();
+  const today = useToday();
   const { tasks, toggleTask, deleteTask, updateTask } = useTasksStore();
   const { addStudySession, dailyLogs } = useActivityStore();
 
@@ -755,7 +757,6 @@ export default function TasksPage() {
     updateTask(id, { completed: true, completedAt: now, actualMinutes });
     
     if (actualMinutes > 0) {
-      const today = getToday();
       const taskObj = tasks.find(t => t.id === id);
       
       const startTime = new Date(Date.now() - actualMinutes * 60000).toISOString();
@@ -808,7 +809,7 @@ export default function TasksPage() {
       </PageHeader>
 
       <div className="mb-8">
-        <TimeStudiedWidget date={getToday()} />
+        <TimeStudiedWidget date={today} />
       </div>
 
       <motion.div
