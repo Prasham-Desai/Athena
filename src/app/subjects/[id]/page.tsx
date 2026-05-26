@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   Circle,
   Pencil,
+  Search,
   RotateCcw,
   BookOpen,
   Calculator,
@@ -527,11 +528,16 @@ interface ChapterAccordionProps {
   subjectId: string;
   subjectColor: string;
   defaultOpen?: boolean;
+  searchQuery?: string;
 }
 
-function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false }: ChapterAccordionProps) {
+function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '' }: ChapterAccordionProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [newTopicName, setNewTopicName] = useState('');
+
+  useEffect(() => {
+    if (searchQuery) setOpen(true);
+  }, [searchQuery]);
 
   const updateChapter = useSubjectsStore((s) => s.updateChapter);
   const deleteChapter = useSubjectsStore((s) => s.deleteChapter);
@@ -569,6 +575,21 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
     const allDone = total > 0 && done === total;
     return { total, done, percent, allDone };
   }, [chapter.topics]);
+
+  const displayedTopics = useMemo(() => {
+    if (!searchQuery) return chapter.topics;
+    const q = searchQuery.toLowerCase();
+    return chapter.topics.filter(t => {
+      if (t.name.toLowerCase().includes(q)) return true;
+      if (t.subtopics?.some((s: any) => s.name.toLowerCase().includes(q))) return true;
+      if (t.notes?.toLowerCase().includes(q)) return true;
+      return false;
+    });
+  }, [chapter.topics, searchQuery]);
+
+  if (searchQuery && displayedTopics.length === 0) {
+    return null;
+  }
 
   const handleToggleChapter = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -704,7 +725,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
             <div className="px-5 pb-5 pl-11 space-y-2">
               {/* Topic list */}
               <AnimatePresence mode="popLayout">
-                {chapter.topics.map((topic) => (
+                {displayedTopics.map((topic) => (
                   <TopicRow
                     key={topic.id}
                     topic={topic}
@@ -715,7 +736,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
                 ))}
               </AnimatePresence>
 
-              {chapter.topics.length === 0 && (
+              {displayedTopics.length === 0 && (
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center py-4">
                   No topics yet. Add one below.
                 </p>
@@ -760,6 +781,7 @@ export default function SubjectDetailPage() {
   const addChapter = useSubjectsStore((s) => s.addChapter);
 
   const [newChapterName, setNewChapterName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const subject = useMemo(() => subjects.find((s) => s.id === id), [subjects, id]);
 
@@ -941,13 +963,25 @@ export default function SubjectDetailPage() {
         </div>
       )}
 
+      {/* Search Input */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(var(--muted-foreground))]" />
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={`Search in ${activePaper}...`}
+          className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-10 pr-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition shadow-sm"
+        />
+      </div>
+
       {/* Add chapter form */}
       <motion.form
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
         onSubmit={handleAddChapter}
-        className="flex items-center gap-3"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
       >
         <input
           type="text"
@@ -993,6 +1027,7 @@ export default function SubjectDetailPage() {
                 subjectId={subject.id}
                 subjectColor={subject.color}
                 defaultOpen={idx === 0}
+                searchQuery={searchQuery}
               />
             ))
           )}
