@@ -87,7 +87,7 @@ export function Toaster() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 max-w-sm">
+    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 z-[100] flex flex-col gap-2 sm:max-w-sm">
       <AnimatePresence>
         {toasts.map((toast) => {
           const Icon = icons[toast.type];

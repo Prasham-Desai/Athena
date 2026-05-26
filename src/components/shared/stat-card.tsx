@@ -20,7 +20,7 @@ export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1'
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 card-hover',
+        'relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3 sm:p-5 card-hover',
         className
       )}
     >
@@ -34,7 +34,7 @@ export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1'
         <div>
           <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">{title}</p>
           <motion.p
-            className="text-2xl font-bold mt-1.5"
+            className="text-lg sm:text-2xl font-bold mt-1"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
@@ -51,10 +51,10 @@ export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1'
           )}
         </div>
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0"
           style={{ background: `${color}15` }}
         >
-          <Icon className="w-5 h-5" style={{ color }} />
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color }} />
         </div>
       </div>
     </motion.div>

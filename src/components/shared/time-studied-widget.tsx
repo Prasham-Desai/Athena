@@ -149,9 +149,9 @@ export function TimeStudiedWidget({ date }: { date: string }) {
                 className="group text-left"
               >
                 <div className="flex items-end gap-2">
-                  <span className="text-5xl font-black tracking-tight text-emerald-500 sm:text-6xl">{totalHours}</span>
+                  <span className="text-3xl font-black tracking-tight text-emerald-500 sm:text-5xl lg:text-6xl">{totalHours}</span>
                   <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))]">h</span>
-                  <span className="text-5xl font-black tracking-tight text-emerald-500 sm:text-6xl">{totalMins.toString().padStart(2, '0')}</span>
+                  <span className="text-3xl font-black tracking-tight text-emerald-500 sm:text-5xl lg:text-6xl">{totalMins.toString().padStart(2, '0')}</span>
                   <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))]">m</span>
                 </div>
                 <span className="mt-1 block text-[10px] text-[hsl(var(--muted-foreground))] opacity-0 transition group-hover:opacity-100">click to edit</span>
@@ -193,8 +193,8 @@ export function TimeStudiedWidget({ date }: { date: string }) {
         <div className="relative flex items-center justify-center rounded-3xl border border-[hsl(var(--border))] bg-white/50 p-4 shadow-inner backdrop-blur dark:bg-[hsl(var(--card))]/50">
           <ProgressRing
             value={progressPct}
-            size={170}
-            strokeWidth={12}
+            size={130}
+            strokeWidth={10}
             color={progressPct >= 100 ? '#22c55e' : '#10b981'}
             bgColor="hsl(var(--muted))"
             label={`${progressPct}%`}
@@ -211,7 +211,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           <div className="text-4xl font-bold font-mono tracking-tight mb-4 tabular-nums">
             {formatSecs(mainSeconds)}
           </div>
-          <div className="flex gap-2 w-full justify-center">
+          <div className="flex flex-wrap gap-2 w-full justify-center">
             <button
               onClick={toggleMain}
               className={cn("px-6 py-2 rounded-xl text-sm font-medium transition text-white shadow-sm flex-1 max-w-[120px]", isMainRunning ? "bg-amber-500 hover:bg-amber-600" : "bg-indigo-600 hover:bg-indigo-700")}
@@ -240,7 +240,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           <div className="text-4xl font-bold font-mono tracking-tight mb-4 tabular-nums">
             {formatSecs(pomoSecondsLeft)}
           </div>
-          <div className="flex gap-2 w-full justify-center">
+          <div className="flex flex-wrap gap-2 w-full justify-center">
             <button
               onClick={() => togglePomo(settings.pomodoroMinutes)}
               className={cn("px-6 py-2 rounded-xl text-sm font-medium transition text-white shadow-sm flex-1 max-w-[120px]", pomoMode === 'study' ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700")}

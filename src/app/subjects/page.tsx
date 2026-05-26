@@ -157,7 +157,7 @@ function AddSubjectDialog({ open, onClose, onAdd }: AddSubjectDialogProps) {
               {/* Icon selector */}
               <div>
                 <label className="text-sm font-medium mb-2 block">Icon</label>
-                <div className="grid grid-cols-8 gap-2">
+                <div className="grid grid-cols-6 sm:grid-cols-8 gap-2">
                   {SUBJECT_ICONS.map((iconName) => {
                     const Ic = getIcon(iconName);
                     return (
@@ -315,7 +315,7 @@ function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
         {/* Accent top bar */}
         <div className="h-1.5 w-full" style={{ backgroundColor: subject.color }} />
 
-        <div className="p-5">
+        <div className="p-3.5 sm:p-5">
           {/* Header row */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -342,7 +342,7 @@ function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
                 e.stopPropagation();
                 onDelete(subject.id);
               }}
-              className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all"
+              className="p-1.5 rounded-lg sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -393,7 +393,7 @@ function SubjectCard({ subject, index, onDelete }: SubjectCardProps) {
 
           {/* Arrow hint */}
           <div className="flex items-center justify-end mt-3">
-            <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-0.5" />
+            <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))] sm:opacity-0 sm:group-hover:opacity-100 transition-all group-hover:translate-x-0.5" />
           </div>
         </div>
       </Link>

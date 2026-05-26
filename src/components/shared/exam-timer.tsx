@@ -54,7 +54,7 @@ export function ExamTimer({ targetDate }: ExamTimerProps) {
   const pad = (n: number) => n.toString().padStart(2, '0');
 
   return (
-    <div className={cn("inline-flex items-center gap-2 md:gap-3 px-5 py-3 md:px-6 md:py-4 rounded-2xl border font-mono text-2xl md:text-3xl tracking-widest font-bold shadow-md", colorClass)}>
+    <div className={cn("inline-flex items-center gap-1 sm:gap-2 md:gap-3 px-3 py-2 sm:px-5 sm:py-3 md:px-6 md:py-4 rounded-xl sm:rounded-2xl border font-mono text-base sm:text-2xl md:text-3xl tracking-wider sm:tracking-widest font-bold shadow-md", colorClass)}>
       <span>{pad(timeLeft.d)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">d</span></span>
       <span className="opacity-50">:</span>
       <span>{pad(timeLeft.h)}<span className="text-sm uppercase ml-1 opacity-70 tracking-normal font-sans">h</span></span>

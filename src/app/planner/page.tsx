@@ -79,7 +79,7 @@ function Calendar({
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-7 gap-1 mb-1">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1">
         {dayNames.map((d) => (
           <div key={d} className="text-center text-[10px] font-medium text-[hsl(var(--muted-foreground))] py-1">
             {d}
@@ -88,7 +88,7 @@ function Calendar({
       </div>
 
       {/* Day cells */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
         {days.map((day) => {
           const inMonth = isSameMonth(day, viewMonth);
           const selected = isSameDay(day, selectedDate);
@@ -266,7 +266,7 @@ function AddItemModal({
                 ))}
               </select>
               {/* Times */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Start</label>
                   <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
@@ -307,7 +307,7 @@ function AddItemModal({
           {/* Priority */}
           <div>
             <label className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Priority</label>
-            <div className="flex gap-2 mt-1.5">
+            <div className="grid grid-cols-2 sm:flex gap-2 mt-1.5">
               {(['low', 'medium', 'high', 'urgent'] as const).map((p) => {
                 const config = PRIORITY_CONFIG[p];
                 return (
@@ -441,7 +441,7 @@ function EditStudyBlockModal({
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Start Time</label>
                     <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
@@ -738,14 +738,20 @@ export default function PlannerPage() {
             className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5"
           >
             <div className="flex items-center justify-between mb-3">
-              <div>
+              <div className="flex items-center gap-2 lg:hidden">
+                <button onClick={() => setSelectedDate(new Date(selectedDate.getTime() - 86400000))} className="p-1.5 rounded-lg hover:bg-[hsl(var(--muted))] transition"><ChevronLeft className="w-5 h-5" /></button>
+              </div>
+              <div className="flex-1 text-center lg:text-left">
                 <h2 className="text-lg font-semibold">{format(selectedDate, 'EEEE, MMMM d')}</h2>
                 <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
                   {totalItems === 0 ? 'No items scheduled' : `${completedItems} of ${totalItems} completed`}
                 </p>
               </div>
+              <div className="flex items-center gap-2 lg:hidden">
+                <button onClick={() => setSelectedDate(new Date(selectedDate.getTime() + 86400000))} className="p-1.5 rounded-lg hover:bg-[hsl(var(--muted))] transition"><ChevronRight className="w-5 h-5" /></button>
+              </div>
               {totalItems > 0 && (
-                <span className="text-sm font-bold text-indigo-400">{completionPercent}%</span>
+                <span className="text-sm font-bold text-indigo-400 hidden lg:inline">{completionPercent}%</span>
               )}
             </div>
             {totalItems > 0 && (
@@ -779,7 +785,7 @@ export default function PlannerPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className={cn(
-                          'group flex items-center gap-3 rounded-xl border bg-[hsl(var(--card))] p-4 transition-all',
+                          'group flex items-center gap-3 rounded-xl border bg-[hsl(var(--card))] p-3 sm:p-4 transition-all',
                           block.completed
                             ? 'border-emerald-500/20 bg-emerald-500/5'
                             : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))]'
@@ -817,7 +823,7 @@ export default function PlannerPage() {
                           {priorityConf.label}
                         </span>
 
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => setEditingBlock(block)}
                             className="shrink-0 p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-indigo-500/10 hover:text-indigo-500 transition"
@@ -860,7 +866,7 @@ export default function PlannerPage() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className={cn(
-                          'group flex items-center gap-3 rounded-xl border bg-[hsl(var(--card))] p-4 transition-all',
+                          'group flex items-center gap-3 rounded-xl border bg-[hsl(var(--card))] p-3 sm:p-4 transition-all',
                           task.completed
                             ? 'border-emerald-500/20 bg-emerald-500/5'
                             : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))]'
@@ -904,7 +910,7 @@ export default function PlannerPage() {
                             deleteTask(task.id);
                             window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Task removed', type: 'info' } }));
                           }}
-                          className="shrink-0 p-1 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/10 transition"
+                          className="shrink-0 p-1 rounded-lg sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-500/10 transition"
                         >
                           <Trash2 className="w-3.5 h-3.5 text-red-500" />
                         </button>

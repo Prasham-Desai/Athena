@@ -270,7 +270,7 @@ export default function DashboardPage() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="space-y-8 pb-12"
+      className="space-y-6 sm:space-y-8 lg:space-y-10 pb-12 sm:pb-16"
     >
       {/* ---- Header + Quote ---- */}
       <motion.div variants={itemVariants}>
@@ -283,7 +283,7 @@ export default function DashboardPage() {
       {/* ---- Upcoming Exam Widget ---- */}
       {nextExam && (
         <motion.div variants={itemVariants}>
-          <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-5 shadow-sm">
+          <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-4 sm:p-5 shadow-sm">
             <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-indigo-500/10 blur-3xl" />
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-4">
@@ -337,7 +337,7 @@ export default function DashboardPage() {
       {/* ---- Top stat cards ---- */}
       <motion.div
         variants={containerVariants}
-        className="grid grid-cols-2 lg:grid-cols-5 gap-4"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5"
       >
         <motion.div variants={itemVariants}>
           <StatCard
@@ -389,7 +389,7 @@ export default function DashboardPage() {
       {/* ---- Subject Progress Cards ---- */}
       {subjectProgress.length > 0 && (
         <motion.div variants={itemVariants}>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-semibold tracking-tight">Subject Progress</h2>
             <Link
               href="/subjects"
@@ -400,7 +400,7 @@ export default function DashboardPage() {
           </div>
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
           >
             {subjectProgress.map((sp) => (
               <motion.div key={sp.id} variants={itemVariants}>
@@ -458,12 +458,12 @@ export default function DashboardPage() {
       {/* ---- Middle section: Chart + Upcoming Tasks ---- */}
       <motion.div
         variants={containerVariants}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
       >
         {/* Weekly Productivity Chart */}
         <motion.div variants={itemVariants}>
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 h-full">
-            <div className="flex items-center justify-between mb-5">
+          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 h-full">
+            <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-lg font-semibold tracking-tight">Weekly Productivity</h2>
                 <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">

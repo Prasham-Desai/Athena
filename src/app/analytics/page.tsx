@@ -204,7 +204,7 @@ export default function AnalyticsPage() {
       </PageHeader>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <StatCard title="Total Study Hours" value={totalStudyHours.toFixed(1)} icon={Clock} color="#6366f1" />
         <StatCard title="Topics Completed" value={topicsCompleted} icon={BookOpen} color="#22c55e" />
         <StatCard title="Revisions Done" value={revisionsDone} icon={RotateCcw} color="#8b5cf6" />
@@ -212,19 +212,19 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Charts grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Chart 1 — Study Hours Trend */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5"
+          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
         >
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="h-4 w-4 text-indigo-500" />
             <h3 className="text-sm font-semibold">Study Hours Trend</h3>
           </div>
-          <div className="h-64">
+          <div className="h-48 sm:h-56 lg:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={studyHoursData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -257,13 +257,13 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5"
+          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
         >
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="h-4 w-4 text-emerald-500" />
             <h3 className="text-sm font-semibold">Subject Completion</h3>
           </div>
-          <div className="h-64">
+          <div className="h-48 sm:h-56 lg:h-64">
             {subjectData.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
                 No subjects added yet
@@ -291,13 +291,13 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="xl:col-span-2 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5"
+          className="lg:col-span-2 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
         >
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="h-4 w-4 text-purple-500" />
             <h3 className="text-sm font-semibold">Daily Activity</h3>
           </div>
-          <div className="h-64">
+          <div className="h-48 sm:h-56 lg:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dailyActivityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />

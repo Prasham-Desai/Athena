@@ -147,7 +147,7 @@ function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => 
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
                         Date <span className="text-red-500">*</span>
@@ -175,7 +175,7 @@ function EditTaskModal({ open, onClose, task }: { open: boolean; onClose: () => 
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
                         Category
@@ -263,19 +263,20 @@ function TaskItem({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -40, transition: { duration: 0.2 } }}
       className={cn(
-        'group relative flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--ring))]',
+        'group relative flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3 sm:p-4 transition-colors hover:border-[hsl(var(--ring))]',
         task.completed && 'opacity-60',
       )}
     >
-      <button
-        onClick={() => onToggle(task.id, task.completed, task.estimatedMinutes || 0)}
-        className={cn(
-          'flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300',
-          task.completed
-            ? 'border-emerald-500 bg-emerald-500'
-            : 'border-[hsl(var(--border))] hover:border-indigo-400',
-        )}
-      >
+      <div className="flex items-center gap-3 w-full sm:w-auto">
+        <button
+          onClick={() => onToggle(task.id, task.completed, task.estimatedMinutes || 0)}
+          className={cn(
+            'flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all duration-300',
+            task.completed
+              ? 'border-emerald-500 bg-emerald-500'
+              : 'border-[hsl(var(--border))] hover:border-indigo-400',
+          )}
+        >
         <motion.svg
           viewBox="0 0 12 12"
           className="h-3 w-3 text-white"
@@ -314,8 +315,9 @@ function TaskItem({
           </p>
         )}
       </div>
+      </div>
 
-      <div className="flex items-center gap-3 shrink-0 ml-4">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0 sm:ml-4 mt-2 sm:mt-0">
         <div className="flex items-center gap-2">
           {task.estimatedMinutes && task.estimatedMinutes > 0 && (
             <div className="flex items-center gap-1 text-[11px] font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-2 py-0.5 rounded-full">
@@ -340,7 +342,7 @@ function TaskItem({
           </span>
         </div>
 
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit(task)}
             className="shrink-0 rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition-all hover:bg-indigo-500/10 hover:text-indigo-500"
@@ -479,7 +481,7 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Category</label>
                   <select
@@ -510,7 +512,7 @@ function AddTaskModal({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Date</label>
                   <input

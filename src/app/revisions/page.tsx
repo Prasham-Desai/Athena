@@ -58,7 +58,7 @@ function CompletionAnalysis({ subjects }: { subjects: any[] }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5"
+      className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
     >
       <h3 className="text-base font-semibold mb-1">Revision Completion Analysis</h3>
       <p className="text-xs text-[hsl(var(--muted-foreground))] mb-5">
@@ -93,7 +93,7 @@ function CompletionAnalysis({ subjects }: { subjects: any[] }) {
             <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0">
               {item.revised}/{item.total}
             </span>
-            <div className="w-24 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden shrink-0">
+            <div className="w-16 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden shrink-0">
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: item.color }}
@@ -427,7 +427,7 @@ export default function RevisionsPage() {
       />
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <StatCard
           title="Total Topics"
           value={stats.totalTopics}

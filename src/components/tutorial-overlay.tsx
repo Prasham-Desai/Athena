@@ -121,7 +121,7 @@ export function TutorialOverlay() {
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: -20 }}
-          className="relative w-full max-w-xl overflow-hidden bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-3xl shadow-2xl"
+          className="relative w-full max-w-xl sm:w-[calc(100vw-2rem)] overflow-hidden bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-3xl shadow-2xl"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -154,7 +154,7 @@ export function TutorialOverlay() {
             <X className="w-5 h-5" />
           </button>
 
-          <div className="p-8 md:p-12">
+          <div className="p-5 sm:p-8 md:p-12">
             <div className="flex flex-col items-center text-center">
               <motion.div
                 key={currentPage + '-icon'}
@@ -187,7 +187,7 @@ export function TutorialOverlay() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-6 bg-[hsl(var(--muted))]/50 border-t border-[hsl(var(--border))]">
+          <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 p-4 sm:p-6 bg-[hsl(var(--muted))]/50 border-t border-[hsl(var(--border))]">
             <div className="flex items-center gap-2">
               <button
                 onClick={goToPrev}

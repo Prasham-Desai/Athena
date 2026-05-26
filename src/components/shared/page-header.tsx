@@ -15,7 +15,7 @@ export function PageHeader({ title, description, children, className }: PageHead
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={cn('flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8', className)}
+      className={cn('flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-5 sm:mb-8', className)}
     >
       <div>
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">{title}</h1>

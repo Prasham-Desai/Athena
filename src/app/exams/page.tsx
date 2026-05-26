@@ -117,7 +117,7 @@ export default function ExamsPage() {
           <tr>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Type</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] w-40">Tentative Start Date</th>
+            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] w-28 sm:w-40">Tentative Start Date</th>
             <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] text-right">Actions</th>
           </tr>
         </thead>
@@ -165,7 +165,7 @@ export default function ExamsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3 text-right align-middle">
-                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => openModal(exam.id)}
                           className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors"
@@ -191,7 +191,7 @@ export default function ExamsPage() {
                           <thead className="bg-[hsl(var(--muted))]/40 text-[hsl(var(--muted-foreground))]">
                             <tr>
                               <th className="px-3 py-2 text-left font-medium">Subject</th>
-                              <th className="px-3 py-2 text-left font-medium w-40">Date</th>
+                              <th className="px-3 py-2 text-left font-medium w-28 sm:w-40">Date</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[hsl(var(--border))]/50">
@@ -313,7 +313,7 @@ export default function ExamsPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium">Type</label>
                       <select

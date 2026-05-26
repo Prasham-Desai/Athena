@@ -209,7 +209,7 @@ export default function SettingsPage() {
                 key={value}
                 onClick={() => updateSettings({ fontSize: value })}
                 className={cn(
-                  'flex flex-col items-center gap-1.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all min-w-[90px]',
+                  'flex flex-col items-center gap-1.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all min-w-[80px] sm:min-w-[90px]',
                   settings.fontSize === value
                     ? 'border-indigo-500 bg-indigo-500/10 text-indigo-500'
                     : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))] text-[hsl(var(--muted-foreground))]',
@@ -332,15 +332,15 @@ export default function SettingsPage() {
         {/* ---- About ---- */}
         <SettingsSection title="About" delay={0.25}>
           <div className="space-y-2 text-sm text-[hsl(var(--muted-foreground))]">
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
               <span>Version</span>
               <span className="font-mono text-xs">Athena v0.1.0</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
               <span>Built with</span>
               <span className="font-mono text-xs">Next.js · React · Tailwind CSS</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
               <span>Storage</span>
               <span className="font-mono text-xs">Database sync (server-backed)</span>
             </div>

@@ -62,14 +62,25 @@ body {
 }
 
 html {
-  font-size: 14px; /* default to small to maintain previous scale */
+  font-size: 13px; /* smaller base on mobile for breathing room */
+}
+
+@media (min-width: 640px) {
+  html { font-size: 14px; }
 }
 
 /* Font size scales for system-wide rem scaling */
-html.font-small { font-size: 14px; }
-html.font-medium { font-size: 15px; }
-html.font-large { font-size: 17px; }
-html.font-extra-large { font-size: 19px; }
+html.font-small { font-size: 13px; }
+html.font-medium { font-size: 14px; }
+html.font-large { font-size: 16px; }
+html.font-extra-large { font-size: 18px; }
+
+@media (min-width: 640px) {
+  html.font-small { font-size: 14px; }
+  html.font-medium { font-size: 15px; }
+  html.font-large { font-size: 17px; }
+  html.font-extra-large { font-size: 19px; }
+}
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
@@ -170,6 +181,24 @@ html.font-extra-large { font-size: 19px; }
 .card-hover:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px -8px hsl(var(--foreground) / 0.1);
+}
+
+/* Disable hover transforms on touch devices, use active press instead */
+@media (hover: none) {
+  .card-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .card-hover:active {
+    transform: scale(0.98);
+  }
+}
+/* Ensure hover-only actions are always visible on touch devices */
+@media (hover: none) {
+  .group:hover .group-hover\:opacity-100,
+  [class*="group-hover:opacity-100"] {
+    opacity: 1 !important;
+  }
 }
 
 /* ================================================================
