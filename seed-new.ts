@@ -1,14 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 
 const contentDir = path.join(__dirname, 'src/lib/content');
 const files = fs.readdirSync(contentDir).filter(f => f.endsWith('.md'));
 
 let sql = '';
-sql += 'DELETE FROM subtopics;\n';
-sql += 'DELETE FROM topics;\n';
-sql += 'DELETE FROM chapters;\n';
-sql += 'DELETE FROM subjects;\n\n';
+// Deleted DELETE statements to avoid wiping out user data.
 
 const SUBJECT_COLORS = [
   '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#10b981',
@@ -24,8 +22,8 @@ const SUBJECT_ICONS = [
 let colorIndex = 0;
 let iconIndex = 0;
 
-function generateId() {
-  return Array.from({ length: 8 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+function generateId(input: string) {
+  return crypto.createHash('md5').update(input).digest('hex').substring(0, 12);
 }
 
 function escapeSql(str: string) {
@@ -49,21 +47,22 @@ for (const file of files) {
   let currentSubtopics: string[] = [];
 
   const subjectName = file.replace('.md', '');
-  subjectId = generateId();
+  subjectId = generateId('subject:' + subjectName);
   const color = SUBJECT_COLORS[colorIndex % SUBJECT_COLORS.length];
   const icon = SUBJECT_ICONS[iconIndex % SUBJECT_ICONS.length];
   colorIndex++;
   iconIndex++;
 
-  sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}');\n`;
+  sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}') ON CONFLICT(id) DO UPDATE SET name=excluded.name;\n`;
   chapterOrder = 0;
 
   function flushTopic() {
     if (topicId) {
-      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, ${currentTopicImportance ? `'${escapeSql(currentTopicImportance)}'` : 'NULL'}, '${escapeSql(currentTopicNotes)}');\n`;
+      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, ${currentTopicImportance ? `'${escapeSql(currentTopicImportance)}'` : 'NULL'}, '${escapeSql(currentTopicNotes)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, importance=excluded.importance, notes=excluded.notes;\n`;
       let subOrder = 0;
       for (const st of currentSubtopics) {
-        sql += `INSERT INTO subtopics (id, topic_id, name, content, status, order_index) VALUES ('${generateId()}', '${topicId}', '${escapeSql(st)}', '', 'not-started', ${subOrder++});\n`;
+        const stId = generateId('subtopic:' + topicId + ':' + st);
+        sql += `INSERT INTO subtopics (id, topic_id, name, content, status, order_index) VALUES ('${stId}', '${topicId}', '${escapeSql(st)}', '', 'not-started', ${subOrder++}) ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index;\n`;
       }
     }
     topicId = '';
@@ -88,9 +87,9 @@ for (const file of files) {
       flushTopic();
       let chapterName = trimmed.replace('### ', '').trim();
       chapterName = chapterName.replace(/^[0-9]+\.\s*/, '').replace(/^Topic\s+[0-9]+:?\s*/i, '');
-      chapterId = generateId();
+      chapterId = generateId('chapter:' + subjectId + ':' + chapterName);
 
-      sql += `INSERT INTO chapters (id, subject_id, name, order_index, paper) VALUES ('${chapterId}', '${subjectId}', 'Topic ${chapterOrder + 1}: ${escapeSql(chapterName)}', ${chapterOrder}, '${escapeSql(currentPaper)}');\n`;
+      sql += `INSERT INTO chapters (id, subject_id, name, order_index, paper) VALUES ('${chapterId}', '${subjectId}', 'Topic ${chapterOrder + 1}: ${escapeSql(chapterName)}', ${chapterOrder}, '${escapeSql(currentPaper)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, paper=excluded.paper;\n`;
       chapterOrder++;
       topicOrder = 0;
     }
@@ -106,7 +105,7 @@ for (const file of files) {
         topicStr = topicStr.replace(/(?:— |-\s*)?Importance:\s*(.*)$/i, '').trim();
       }
 
-      topicId = generateId();
+      topicId = generateId('topic:' + chapterId + ':' + currentTopicName);
       currentTopicName = topicStr;
       topicOrder++;
     }
