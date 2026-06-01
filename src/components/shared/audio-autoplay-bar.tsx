@@ -8,6 +8,7 @@ interface PlaylistItem {
   topicId: string;
   topicName: string;
   noteId: string;
+  duration?: number;
 }
 
 interface AudioAutoplayBarProps {
