@@ -7,6 +7,24 @@ export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
+
+    // 1. One-time migration for currently completed tasks (completed before this feature was implemented).
+    // Set their completed_at to NOW so they are deleted exactly 48 hours from today.
+    await db.run(
+      `UPDATE tasks 
+       SET completed_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') 
+       WHERE completed = 1 
+       AND (completed_at IS NULL OR datetime(completed_at) < datetime('2026-06-01'))`
+    );
+
+    // 2. Auto-delete tasks that were completed more than 48 hours ago
+    await db.run(
+      `DELETE FROM tasks 
+       WHERE completed = 1 
+       AND completed_at IS NOT NULL 
+       AND datetime(completed_at) <= datetime('now', '-48 hours')`
+    );
+
     const rows = await db.query('SELECT * FROM tasks ORDER BY created_at DESC');
     const tasks = (rows as any[]).map(row => ({
       ...row,

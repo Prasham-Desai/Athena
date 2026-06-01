@@ -20,7 +20,7 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecorderProps) {
+export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal }: AudioRecorderProps) {
   const { audioNotes, loadingTopics, saveAudioNote, deleteAudioNote, getAudioUrl } =
     useAudioStore();
 
