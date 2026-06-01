@@ -325,15 +325,15 @@ function TaskItem({
       </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0 sm:ml-4 mt-2 sm:mt-0">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0 sm:ml-auto mt-2 sm:mt-0">
         <div className="flex items-center gap-2">
-          {task.estimatedMinutes && task.estimatedMinutes > 0 && (
+          {task.estimatedMinutes != null && task.estimatedMinutes > 0 && (
             <div className="flex items-center gap-1 text-[11px] font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-2 py-0.5 rounded-full">
               <Clock className="w-3 h-3" />
               <span>Est: {task.estimatedMinutes}m</span>
             </div>
           )}
-          {task.completed && task.actualMinutes && (
+          {task.completed && task.actualMinutes != null && task.actualMinutes > 0 && (
             <div className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
               <CheckCircle2 className="w-3 h-3" />
               <span>Act: {task.actualMinutes}m</span>

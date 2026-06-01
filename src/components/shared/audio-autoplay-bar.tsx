@@ -47,27 +47,30 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
     (index: number, autoplay = true) => {
       if (index < 0 || index >= playlist.length) return;
 
-      // Clean up existing
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.removeAttribute('src');
-        audioRef.current.load();
+      const track = playlist[index];
+      let audio = audioRef.current;
+      
+      if (!audio) {
+        audio = new Audio();
+        audioRef.current = audio;
+      } else {
+        audio.pause();
       }
 
-      const track = playlist[index];
-      const audio = new Audio(`/api/audio-notes/${track.noteId}`);
+      audio.src = `/api/audio-notes/${track.noteId}`;
+      audio.load();
 
-      audio.addEventListener('loadedmetadata', () => {
-        if (audio.duration && isFinite(audio.duration)) {
+      audio.onloadedmetadata = () => {
+        if (audio && audio.duration && isFinite(audio.duration)) {
           setDuration(audio.duration);
         }
-      });
+      };
 
-      audio.addEventListener('timeupdate', () => {
-        setCurrentTime(audio.currentTime);
-      });
+      audio.ontimeupdate = () => {
+        if (audio) setCurrentTime(audio.currentTime);
+      };
 
-      audio.addEventListener('ended', () => {
+      audio.onended = () => {
         if (isAutoPlayRef.current) {
           if (index < playlist.length - 1) {
             loadTrack(index + 1, true);
@@ -83,9 +86,21 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
           setIsPlaying(false);
           setCurrentTime(0);
         }
-      });
+      };
 
-      audioRef.current = audio;
+      audio.onerror = () => {
+        console.error('Failed to load audio for topic:', track.topicName);
+        if (isAutoPlayRef.current) {
+          if (index < playlist.length - 1) {
+            loadTrack(index + 1, true);
+          } else {
+            setIsPlaying(false);
+          }
+        } else {
+          setIsPlaying(false);
+        }
+      };
+
       setCurrentIndex(index);
       setCurrentTime(0);
       setDuration(0);
@@ -98,7 +113,7 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
     [playlist]
   );
 
-  // Start playback when bar becomes active
+  // Start playback when bar becomes active or startIndex changes
   useEffect(() => {
     if (isActive && playlist.length > 0) {
       setShowComplete(false);
@@ -109,14 +124,13 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current = null;
       }
       if (completeTimerRef.current) {
         clearTimeout(completeTimerRef.current);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isActive]);
+  }, [isActive, startIndex]);
 
   // ── Controls ───────────────────────────────────────────────
   const togglePlay = useCallback(() => {
@@ -160,7 +174,6 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
   const handleClose = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current = null;
     }
     setIsPlaying(false);
     onClose();

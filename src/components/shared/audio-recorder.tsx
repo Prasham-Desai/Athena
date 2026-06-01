@@ -161,6 +161,17 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
         setRecorderState('has-audio');
         setCurrentTime(0);
       });
+
+      audioRef.current.addEventListener('error', () => {
+        console.error('Failed to load audio note');
+        setRecorderState('has-audio');
+        setCurrentTime(0);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('toast', { detail: { message: 'Failed to load audio file', type: 'error' } })
+          );
+        }
+      });
     }
 
     audioRef.current.play();

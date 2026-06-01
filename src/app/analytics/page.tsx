@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
             <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <AreaChart data={studyHoursData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="studyGrad" x1="0" y1="0" x2="0" y2="1">
@@ -272,7 +272,7 @@ export default function AnalyticsPage() {
               </div>
             ) : (
               <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <BarChart data={subjectData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                   <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
@@ -303,7 +303,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
             <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                 <BarChart data={dailyActivityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                   <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
