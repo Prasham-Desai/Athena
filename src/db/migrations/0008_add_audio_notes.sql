@@ -4,14 +4,14 @@
 
 CREATE TABLE IF NOT EXISTS audio_notes (
   id TEXT PRIMARY KEY,
-  subtopic_id TEXT NOT NULL UNIQUE,
+  topic_id TEXT NOT NULL UNIQUE,
   duration_seconds REAL NOT NULL,
   mime_type TEXT NOT NULL,
   file_size INTEGER NOT NULL,
   kv_key TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (subtopic_id) REFERENCES subtopics(id) ON DELETE CASCADE
+  FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS idx_audio_notes_subtopic ON audio_notes(subtopic_id);
+CREATE INDEX IF NOT EXISTS idx_audio_notes_topic ON audio_notes(topic_id);

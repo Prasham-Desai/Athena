@@ -187,7 +187,7 @@ export interface SubjectWithChapters extends Subject {
 
 export interface AudioNoteMeta {
   id: string;
-  subtopic_id: string;
+  topic_id: string;
   duration_seconds: number;
   mime_type: string;
   file_size: number;

@@ -6,8 +6,8 @@ import { Mic, Square, Play, Pause, RefreshCcw, Trash2, Loader2 } from 'lucide-re
 import { useAudioStore } from '@/store/audio-store';
 
 interface AudioRecorderProps {
-  subtopicId: string;
-  subtopicName: string;
+  topicId: string;
+  topicName: string;
   compact?: boolean;
 }
 
@@ -19,12 +19,12 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function AudioRecorder({ subtopicId, subtopicName, compact = true }: AudioRecorderProps) {
-  const { audioNotes, loadingSubtopics, saveAudioNote, deleteAudioNote, getAudioUrl } =
+export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecorderProps) {
+  const { audioNotes, loadingTopics, saveAudioNote, deleteAudioNote, getAudioUrl } =
     useAudioStore();
 
-  const existingNote = audioNotes[subtopicId];
-  const isLoading = loadingSubtopics.includes(subtopicId);
+  const existingNote = audioNotes[topicId];
+  const isLoading = loadingTopics.includes(topicId);
 
   // State
   const [recorderState, setRecorderState] = useState<RecorderState>(
@@ -96,7 +96,7 @@ export function AudioRecorder({ subtopicId, subtopicName, compact = true }: Audi
 
         // Save via store
         try {
-          await saveAudioNote(subtopicId, blob, recordedDuration);
+          await saveAudioNote(topicId, blob, recordedDuration);
           setRecorderState('has-audio');
           setDuration(recordedDuration);
         } catch {
@@ -123,7 +123,7 @@ export function AudioRecorder({ subtopicId, subtopicName, compact = true }: Audi
         );
       }
     }
-  }, [subtopicId, saveAudioNote, elapsed]);
+  }, [topicId, saveAudioNote, elapsed]);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {
@@ -197,12 +197,12 @@ export function AudioRecorder({ subtopicId, subtopicName, compact = true }: Audi
       }
       setCurrentTime(0);
       setConfirmDelete(false);
-      deleteAudioNote(subtopicId);
+      deleteAudioNote(topicId);
     } else {
       setConfirmDelete(true);
       confirmTimerRef.current = setTimeout(() => setConfirmDelete(false), 2500);
     }
-  }, [confirmDelete, subtopicId, deleteAudioNote]);
+  }, [confirmDelete, topicId, deleteAudioNote]);
 
   // ── Progress bar click ─────────────────────────────────────
   const handleProgressClick = useCallback(
@@ -246,7 +246,7 @@ export function AudioRecorder({ subtopicId, subtopicName, compact = true }: Audi
             transition={{ duration: 0.15 }}
             onClick={startRecording}
             className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[hsl(var(--primary))/0.1] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))/0.15] border border-[hsl(var(--primary))/0.2] transition-colors duration-150 w-fit"
-            title={`Record audio for ${subtopicName}`}
+            title={`Record audio for ${topicName}`}
           >
             <Mic className="w-3 h-3" />
             <span className="text-[0.65rem] font-medium">

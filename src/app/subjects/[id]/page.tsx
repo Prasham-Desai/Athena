@@ -304,34 +304,15 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
-  onPlayAll?: (playlist: any[]) => void;
 }
 
-function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayAll }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) {
   const updateTopic = useSubjectsStore((s) => s.updateTopic);
   const setTopicStatus = useSubjectsStore((s) => s.setTopicStatus);
   const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
-  
-  const fetchAudioNotesForTopic = useAudioStore((s) => s.fetchAudioNotesForTopic);
-  const audioNotes = useAudioStore((s) => s.audioNotes);
-
-  useEffect(() => {
-    fetchAudioNotesForTopic(topic.id);
-  }, [topic.id, fetchAudioNotesForTopic]);
-
-  const playlist = useMemo(() => {
-    if (!topic.subtopics) return [];
-    return topic.subtopics
-      .filter((sub: any) => audioNotes[sub.id])
-      .map((sub: any) => ({
-        subtopicId: sub.id,
-        subtopicName: sub.name,
-        noteId: audioNotes[sub.id].id
-      }));
-  }, [topic.subtopics, audioNotes]);
 
   const subjectName = subjects.find((s) => s.id === subjectId)?.name ?? '';
   const isCompleted = topic.status === 'completed' || topic.status === 'revised';
@@ -436,6 +417,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayAll }: Topi
               className={cn('text-sm font-medium w-full')}
               inputClassName="w-full"
             />
+            <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} />
             <div className="flex items-center gap-2 flex-wrap">
               {/* Importance */}
               <ImportanceSelect
@@ -477,15 +459,12 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayAll }: Topi
                         <Circle className="w-4 h-4 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
                       )}
                     </button>
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5 pb-1">
-                      <span className={cn(
-                        "text-sm break-words leading-snug w-full min-w-0",
-                        isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
-                      )}>
-                        {sub.name}
-                      </span>
-                      <AudioRecorder subtopicId={sub.id} subtopicName={sub.name} compact={true} />
-                    </div>
+                    <span className={cn(
+                      "text-sm break-words leading-snug w-full min-w-0 mt-0.5",
+                      isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
+                    )}>
+                      {sub.name}
+                    </span>
                   </li>
                 );
               })}
@@ -531,17 +510,6 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayAll }: Topi
               title="Mark as revised"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {/* Play All Audio */}
-          {playlist.length > 0 && (
-            <button
-              onClick={() => onPlayAll?.(playlist)}
-              className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors shrink-0"
-              title={`Play all ${playlist.length} audio notes`}
-            >
-              <Headphones className="w-3.5 h-3.5" />
             </button>
           )}
 
@@ -692,7 +660,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
       <div
         onClick={() => setOpen(!open)}
         className={cn(
-          'w-full flex items-start sm:items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4 hover:bg-[hsl(var(--muted))]/50 transition-colors cursor-pointer',
+          'group w-full flex items-start sm:items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4 hover:bg-[hsl(var(--muted))]/50 transition-colors cursor-pointer',
           chapterStats.allDone && 'bg-emerald-500/5'
         )}
         role="button"
@@ -749,14 +717,29 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
           />
         </div>
 
-        {/* Delete */}
-        <div
-          onClick={(e) => { e.stopPropagation(); handleDeleteChapter(); }}
-          className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
-          role="button"
-          tabIndex={0}
-        >
-          <Trash2 className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Play All Audio */}
+          {playlist.length > 0 && (
+            <div
+              onClick={(e) => { e.stopPropagation(); onPlayAll?.(playlist); }}
+              className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors shrink-0"
+              role="button"
+              tabIndex={0}
+              title={`Play all ${playlist.length} audio notes in this chapter`}
+            >
+              <Headphones className="w-3.5 h-3.5" />
+            </div>
+          )}
+
+          {/* Delete */}
+          <div
+            onClick={(e) => { e.stopPropagation(); handleDeleteChapter(); }}
+            className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-all"
+            role="button"
+            tabIndex={0}
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
 
@@ -780,7 +763,6 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
                     subjectId={subjectId}
                     chapterId={chapter.id}
                     subjectColor={subjectColor}
-                    onPlayAll={onPlayAll}
                   />
                 ))}
               </AnimatePresence>

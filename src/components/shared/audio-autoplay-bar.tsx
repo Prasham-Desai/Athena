@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, X } from 'lucide-react';
 
 interface PlaylistItem {
-  subtopicId: string;
-  subtopicName: string;
+  topicId: string;
+  topicName: string;
   noteId: string;
 }
 
@@ -201,14 +201,14 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
                     </motion.p>
                   ) : currentTrack ? (
                     <motion.div
-                      key={currentTrack.subtopicId}
+                      key={currentTrack.topicId}
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.15 }}
                     >
                       <p className="text-xs font-medium text-[hsl(var(--foreground))] truncate">
-                        {currentTrack.subtopicName}
+                        {currentTrack.topicName}
                       </p>
                       <p className="text-[0.6rem] text-[hsl(var(--muted-foreground))] mt-0.5">
                         <span className="tabular-nums">

@@ -8,17 +8,17 @@ export async function GET(request: NextRequest) {
   try {
     const env = getEnv(request);
     const db = new Database(env.DB);
-    const topicId = request.nextUrl.searchParams.get('topic_id');
+    const chapterId = request.nextUrl.searchParams.get('chapter_id');
 
-    if (!topicId) {
-      return errorResponse('topic_id is required', 400);
+    if (!chapterId) {
+      return errorResponse('chapter_id is required', 400);
     }
 
     const notes = await db.query(
       `SELECT an.* FROM audio_notes an
-       INNER JOIN subtopics s ON an.subtopic_id = s.id
-       WHERE s.topic_id = ?`,
-      [topicId]
+       INNER JOIN topics t ON an.topic_id = t.id
+       WHERE t.chapter_id = ?`,
+      [chapterId]
     );
 
     return successResponse(notes);
@@ -33,20 +33,20 @@ export async function POST(request: NextRequest) {
     const db = new Database(env.DB);
     const body: any = await request.json();
 
-    const { subtopic_id, audio_data, mime_type, duration_seconds } = body;
+    const { topic_id, audio_data, mime_type, duration_seconds } = body;
 
-    if (!subtopic_id || !audio_data || !mime_type || duration_seconds === undefined) {
-      return errorResponse('subtopic_id, audio_data, mime_type, and duration_seconds are required', 400);
+    if (!topic_id || !audio_data || !mime_type || duration_seconds === undefined) {
+      return errorResponse('topic_id, audio_data, mime_type, and duration_seconds are required', 400);
     }
 
     // Decode base64 to ArrayBuffer
     const binaryData = Uint8Array.from(atob(audio_data), c => c.charCodeAt(0));
     const fileSize = binaryData.byteLength;
 
-    // Check if an audio note already exists for this subtopic
+    // Check if an audio note already exists for this topic
     const existing = await db.get<any>(
-      'SELECT * FROM audio_notes WHERE subtopic_id = ?',
-      [subtopic_id]
+      'SELECT * FROM audio_notes WHERE topic_id = ?',
+      [topic_id]
     );
 
     const now = new Date().toISOString();
@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
 
       // Insert D1 row
       await db.run(
-        `INSERT INTO audio_notes (id, subtopic_id, duration_seconds, mime_type, file_size, kv_key, created_at, updated_at)
+        `INSERT INTO audio_notes (id, topic_id, duration_seconds, mime_type, file_size, kv_key, created_at, updated_at)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [id, subtopic_id, duration_seconds, mime_type, fileSize, kvKey, now, now]
+        [id, topic_id, duration_seconds, mime_type, fileSize, kvKey, now, now]
       );
 
       const created = await db.get('SELECT * FROM audio_notes WHERE id = ?', [id]);

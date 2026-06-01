@@ -2,32 +2,32 @@ import { create } from 'zustand';
 import type { AudioNoteMeta } from '@/types';
 
 interface AudioState {
-  // Map of subtopic_id -> AudioNoteMeta
+  // Map of topic_id -> AudioNoteMeta
   audioNotes: Record<string, AudioNoteMeta>;
-  // Subtopic IDs currently loading (array instead of Set for Zustand compatibility)
-  loadingSubtopics: string[];
+  // Topic IDs currently loading
+  loadingTopics: string[];
 
   // Actions
-  fetchAudioNotesForTopic: (topicId: string) => Promise<void>;
-  saveAudioNote: (subtopicId: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
-  deleteAudioNote: (subtopicId: string) => Promise<void>;
+  fetchAudioNotesForChapter: (chapterId: string) => Promise<void>;
+  saveAudioNote: (topicId: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
+  deleteAudioNote: (topicId: string) => Promise<void>;
   getAudioUrl: (noteId: string) => string;
 }
 
 export const useAudioStore = create<AudioState>((set, get) => ({
   audioNotes: {},
-  loadingSubtopics: [],
+  loadingTopics: [],
 
-  fetchAudioNotesForTopic: async (topicId: string) => {
+  fetchAudioNotesForChapter: async (chapterId: string) => {
     try {
-      const response = await fetch(`/api/audio-notes?topic_id=${topicId}`);
+      const response = await fetch(`/api/audio-notes?chapter_id=${chapterId}`);
       if (response.ok) {
         const { data } = (await response.json()) as { data: AudioNoteMeta[] };
         if (data && data.length > 0) {
           set((state) => {
             const updated = { ...state.audioNotes };
             for (const note of data) {
-              updated[note.subtopic_id] = note;
+              updated[note.topic_id] = note;
             }
             return { audioNotes: updated };
           });
@@ -38,10 +38,10 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     }
   },
 
-  saveAudioNote: async (subtopicId: string, audioBlob: Blob, durationSeconds: number) => {
+  saveAudioNote: async (topicId: string, audioBlob: Blob, durationSeconds: number) => {
     // Mark as loading
     set((state) => ({
-      loadingSubtopics: [...state.loadingSubtopics, subtopicId],
+      loadingTopics: [...state.loadingTopics, topicId],
     }));
 
     try {
@@ -58,7 +58,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          subtopic_id: subtopicId,
+          topic_id: topicId,
           audio_data,
           mime_type: audioBlob.type || 'audio/webm;codecs=opus',
           duration_seconds: durationSeconds,
@@ -71,8 +71,8 @@ export const useAudioStore = create<AudioState>((set, get) => ({
 
       // Update store with the new note
       set((state) => ({
-        audioNotes: { ...state.audioNotes, [subtopicId]: data },
-        loadingSubtopics: state.loadingSubtopics.filter((id) => id !== subtopicId),
+        audioNotes: { ...state.audioNotes, [topicId]: data },
+        loadingTopics: state.loadingTopics.filter((id) => id !== topicId),
       }));
 
       if (typeof window !== 'undefined') {
@@ -85,7 +85,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     } catch (error) {
       // Remove loading state
       set((state) => ({
-        loadingSubtopics: state.loadingSubtopics.filter((id) => id !== subtopicId),
+        loadingTopics: state.loadingTopics.filter((id) => id !== topicId),
       }));
 
       if (typeof window !== 'undefined') {
@@ -100,16 +100,16 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     }
   },
 
-  deleteAudioNote: async (subtopicId: string) => {
+  deleteAudioNote: async (topicId: string) => {
     const previousNotes = get().audioNotes;
-    const note = previousNotes[subtopicId];
+    const note = previousNotes[topicId];
 
     if (!note) return;
 
     // Optimistic removal
     set((state) => {
       const updated = { ...state.audioNotes };
-      delete updated[subtopicId];
+      delete updated[topicId];
       return { audioNotes: updated };
     });
 
