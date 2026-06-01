@@ -55,6 +55,16 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
   addActivity: async (activity) => {
     const previousActivities = get().activities;
+    const isDynamicType = ['topic-completed', 'topic-revised', 'task-completed', 'study-block-completed'].includes(activity.type);
+
+    if (isDynamicType) {
+      // It's a dynamically generated activity. We just refresh the timeline.
+      await get().fetchActivities();
+      // And also refresh daily logs just in case they are tied together in the UI
+      await get().fetchDailyLogs();
+      return;
+    }
+
     const optimisticActivity: ActivityEntry = {
       ...activity,
       id: generateId(),
@@ -72,10 +82,6 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
         body: JSON.stringify(optimisticActivity),
       });
       if (!response.ok) throw new Error('Failed');
-
-      if (activity.type === 'topic-completed' || activity.type === 'task-completed' || activity.type === 'topic-revised') {
-        await get().fetchDailyLogs();
-      }
     } catch (error) {
       set({ activities: previousActivities });
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
