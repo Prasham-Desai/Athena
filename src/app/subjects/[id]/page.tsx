@@ -556,6 +556,24 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
   const subjects = useSubjectsStore((s) => s.subjects);
   const subjectName = subjects.find((s) => s.id === subjectId)?.name ?? '';
 
+  const fetchAudioNotesForChapter = useAudioStore((s) => s.fetchAudioNotesForChapter);
+  const audioNotes = useAudioStore((s) => s.audioNotes);
+
+  useEffect(() => {
+    fetchAudioNotesForChapter(chapter.id);
+  }, [chapter.id, fetchAudioNotesForChapter]);
+
+  const playlist = useMemo(() => {
+    if (!chapter.topics) return [];
+    return chapter.topics
+      .filter((t: Topic) => audioNotes[t.id])
+      .map((t: Topic) => ({
+        topicId: t.id,
+        topicName: t.name,
+        noteId: audioNotes[t.id].id
+      }));
+  }, [chapter.topics, audioNotes]);
+
   const [showTagPicker, setShowTagPicker] = useState(false);
   const tagRef = useRef<HTMLDivElement>(null);
   
