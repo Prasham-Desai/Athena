@@ -176,7 +176,7 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
 
     audioRef.current.play();
     setRecorderState('playing');
-  }, [existingNote, getAudioUrl]);
+  }, [existingNote, getAudioUrl, onPlayGlobal]);
 
   const pausePlayback = useCallback(() => {
     if (audioRef.current) {
