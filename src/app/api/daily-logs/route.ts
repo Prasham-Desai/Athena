@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     const tasksAgg = await db.query(`
       SELECT date(completed_at) as dt, COUNT(*) as cnt 
       FROM tasks 
-      WHERE completed = 1 AND completed_at IS NOT NULL 
+      WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL 
       GROUP BY dt
     `);
     
@@ -60,9 +60,9 @@ export async function GET(request: NextRequest) {
     `);
     
     const revisionsAgg = await db.query(`
-      SELECT date(last_revised) as dt, SUM(revision_count) as cnt 
-      FROM topics 
-      WHERE revision_count > 0 AND last_revised IS NOT NULL 
+      SELECT date(timestamp) as dt, COUNT(*) as cnt 
+      FROM activities 
+      WHERE type = 'topic-revised' 
       GROUP BY dt
     `);
 

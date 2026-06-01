@@ -55,7 +55,7 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
   addActivity: async (activity) => {
     const previousActivities = get().activities;
-    const isDynamicType = ['topic-completed', 'topic-revised', 'task-completed', 'study-block-completed'].includes(activity.type);
+    const isDynamicType = ['topic-completed', 'task-completed', 'study-block-completed'].includes(activity.type);
 
     if (isDynamicType) {
       // It's a dynamically generated activity. We just refresh the timeline.

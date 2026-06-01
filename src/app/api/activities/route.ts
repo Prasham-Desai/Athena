@@ -10,12 +10,12 @@ export async function GET(request: NextRequest) {
     const db = new Database(env.DB);
     
     // 1. Fetch raw activities for custom events (milestone, subject-added, etc.)
-    // We also fetch legacy topics/tasks activities just to be safe, but we will deduplicate by timestamp/type if needed.
-    // Actually, to ensure NO DATA IS LOST, we will fetch ALL legacy activities.
-    const legacyActivities = await db.query("SELECT * FROM activities WHERE type NOT IN ('topic-completed', 'topic-revised', 'task-completed', 'study-block-completed')");
+    // We MUST fetch topic-revised from here because topics table only stores the LAST revision, not the history.
+    const legacyActivities = await db.query("SELECT * FROM activities WHERE type NOT IN ('topic-completed', 'task-completed', 'study-block-completed')");
+
     
     // 2. Fetch Tasks
-    const completedTasks = await db.query('SELECT id, title, completed_at FROM tasks WHERE completed = 1 AND completed_at IS NOT NULL');
+    const completedTasks = await db.query("SELECT id, title, completed_at FROM tasks WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL");
     
     // 3. Fetch Topics (completed and revised)
     const topics = await db.query('SELECT id, name, status, completed_at, last_revised, revision_count FROM topics WHERE (status IN ("completed", "revised") AND completed_at IS NOT NULL) OR (revision_count > 0 AND last_revised IS NOT NULL)');
@@ -45,15 +45,6 @@ export async function GET(request: NextRequest) {
           description: `Completed topic: ${topic.name}`,
           timestamp: topic.completed_at,
           color: '#22c55e'
-        });
-      }
-      if (topic.last_revised && topic.revision_count > 0) {
-        allActivities.push({
-          id: `topic-rev-${topic.id}`,
-          type: 'topic-revised',
-          description: `Revised topic: ${topic.name} (${topic.revision_count}x)`,
-          timestamp: topic.last_revised,
-          color: '#8b5cf6'
         });
       }
     });
