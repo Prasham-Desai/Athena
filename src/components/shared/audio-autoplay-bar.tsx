@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, SkipBack, SkipForward, X } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, X, Repeat } from 'lucide-react';
 
 interface PlaylistItem {
   topicId: string;
@@ -14,6 +14,7 @@ interface AudioAutoplayBarProps {
   playlist: PlaylistItem[];
   isActive: boolean;
   onClose: () => void;
+  startIndex?: number;
 }
 
 function formatTime(seconds: number): string {
@@ -22,12 +23,19 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayBarProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }: AudioAutoplayBarProps) {
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showComplete, setShowComplete] = useState(false);
+  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+
+  // We need a ref for isAutoPlayEnabled to use inside the closure
+  const isAutoPlayRef = useRef(isAutoPlayEnabled);
+  useEffect(() => {
+    isAutoPlayRef.current = isAutoPlayEnabled;
+  }, [isAutoPlayEnabled]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const completeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -60,7 +68,21 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
       });
 
       audio.addEventListener('ended', () => {
-        handleNext();
+        if (isAutoPlayRef.current) {
+          if (index < playlist.length - 1) {
+            loadTrack(index + 1, true);
+          } else {
+            setIsPlaying(false);
+            setShowComplete(true);
+            completeTimerRef.current = setTimeout(() => {
+              setShowComplete(false);
+              onClose();
+            }, 2000);
+          }
+        } else {
+          setIsPlaying(false);
+          setCurrentTime(0);
+        }
       });
 
       audioRef.current = audio;
@@ -80,8 +102,8 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
   useEffect(() => {
     if (isActive && playlist.length > 0) {
       setShowComplete(false);
-      setCurrentIndex(0);
-      loadTrack(0, true);
+      setCurrentIndex(startIndex);
+      loadTrack(startIndex, true);
     }
 
     return () => {
@@ -121,13 +143,17 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
     if (currentIndex < playlist.length - 1) {
       loadTrack(currentIndex + 1);
     } else {
-      // Playlist ended
-      setIsPlaying(false);
-      setShowComplete(true);
-      completeTimerRef.current = setTimeout(() => {
-        setShowComplete(false);
-        onClose();
-      }, 2000);
+      if (isAutoPlayRef.current) {
+        setIsPlaying(false);
+        setShowComplete(true);
+        completeTimerRef.current = setTimeout(() => {
+          setShowComplete(false);
+          onClose();
+        }, 2000);
+      } else {
+        setIsPlaying(false);
+        setCurrentTime(0);
+      }
     }
   }, [currentIndex, playlist.length, loadTrack, onClose]);
 
@@ -171,9 +197,8 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
                        border border-[hsl(var(--border)/0.5)]
                        px-4 py-3 sm:px-5 sm:py-3.5"
           >
-            {/* Progress bar (full width at top of card) */}
             <div
-              className="relative w-full h-1 rounded-full bg-[hsl(var(--border))] mb-3
+              className="relative w-full h-1.5 rounded-full bg-[hsl(var(--border))] mb-4
                          cursor-pointer overflow-hidden"
               onClick={handleProgressClick}
             >
@@ -207,14 +232,14 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.15 }}
                     >
-                      <p className="text-xs font-medium text-[hsl(var(--foreground))] truncate">
+                      <p className="text-sm sm:text-base font-semibold text-[hsl(var(--foreground))] truncate">
                         {currentTrack.topicName}
                       </p>
-                      <p className="text-[0.6rem] text-[hsl(var(--muted-foreground))] mt-0.5">
+                      <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
                         <span className="tabular-nums">
                           {formatTime(currentTime)} / {formatTime(duration)}
                         </span>
-                        <span className="mx-1.5">·</span>
+                        <span className="mx-2">·</span>
                         <span className="tabular-nums">
                           {currentIndex + 1} / {playlist.length}
                         </span>
@@ -225,31 +250,43 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
               </div>
 
               {/* Controls */}
-              <div className="flex items-center gap-1 sm:gap-1.5">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                {/* Auto Play Toggle */}
+                <button
+                  onClick={() => setIsAutoPlayEnabled(!isAutoPlayEnabled)}
+                  className={`flex items-center justify-center w-10 h-10 rounded-xl transition-colors
+                             ${isAutoPlayEnabled 
+                               ? 'text-[hsl(var(--primary))] bg-[hsl(var(--primary))/0.1] hover:bg-[hsl(var(--primary))/0.15]' 
+                               : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]'}`}
+                  title={isAutoPlayEnabled ? "Auto-play: ON" : "Auto-play: OFF"}
+                >
+                  <Repeat className="w-5 h-5" />
+                </button>
+
                 {/* Previous */}
                 <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
-                  className="flex items-center justify-center w-8 h-8 rounded-lg
+                  className="flex items-center justify-center w-10 h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed
                              transition-colors"
                 >
-                  <SkipBack className="w-3.5 h-3.5" />
+                  <SkipBack className="w-5 h-5" />
                 </button>
 
                 {/* Play / Pause */}
                 <button
                   onClick={togglePlay}
-                  className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10
-                             rounded-xl bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
+                  className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14
+                             rounded-2xl bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]
                              hover:opacity-90 active:scale-95 transition-all shadow-lg
                              shadow-[hsl(var(--primary)/0.3)]"
                 >
                   {isPlaying ? (
-                    <Pause className="w-4 h-4" fill="currentColor" />
+                    <Pause className="w-6 h-6" fill="currentColor" />
                   ) : (
-                    <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                    <Play className="w-6 h-6 ml-1" fill="currentColor" />
                   )}
                 </button>
 
@@ -257,22 +294,22 @@ export function AudioAutoplayBar({ playlist, isActive, onClose }: AudioAutoplayB
                 <button
                   onClick={handleNext}
                   disabled={currentIndex >= playlist.length - 1}
-                  className="flex items-center justify-center w-8 h-8 rounded-lg
+                  className="flex items-center justify-center w-10 h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed
                              transition-colors"
                 >
-                  <SkipForward className="w-3.5 h-3.5" />
+                  <SkipForward className="w-5 h-5" />
                 </button>
 
                 {/* Close */}
                 <button
                   onClick={handleClose}
-                  className="flex items-center justify-center w-7 h-7 rounded-lg ml-1
+                  className="flex items-center justify-center w-8 h-8 rounded-xl ml-2
                              text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
                              hover:bg-[hsl(var(--muted))] transition-colors"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>

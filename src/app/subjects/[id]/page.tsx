@@ -304,9 +304,10 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
+  onPlayGlobal?: (topicId: string) => void;
 }
 
-function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: TopicRowProps) {
   const updateTopic = useSubjectsStore((s) => s.updateTopic);
   const setTopicStatus = useSubjectsStore((s) => s.setTopicStatus);
   const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
@@ -417,7 +418,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
               className={cn('text-sm font-medium w-full')}
               inputClassName="w-full"
             />
-            <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} />
+            <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? () => onPlayGlobal(topic.id) : undefined} />
             <div className="flex items-center gap-2 flex-wrap">
               {/* Importance */}
               <ImportanceSelect
@@ -536,7 +537,7 @@ interface ChapterAccordionProps {
   subjectColor: string;
   defaultOpen?: boolean;
   searchQuery?: string;
-  onPlayAll?: (playlist: any[]) => void;
+  onPlayAll?: (playlist: any[], startIndex?: number) => void;
 }
 
 function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '', onPlayAll }: ChapterAccordionProps) {
@@ -573,6 +574,13 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
         noteId: audioNotes[t.id].id
       }));
   }, [chapter.topics, audioNotes]);
+
+  const handlePlayGlobal = useCallback((topicId: string) => {
+    const startIndex = playlist.findIndex((p: any) => p.topicId === topicId);
+    if (startIndex >= 0 && onPlayAll) {
+      onPlayAll(playlist, startIndex);
+    }
+  }, [playlist, onPlayAll]);
 
   const [showTagPicker, setShowTagPicker] = useState(false);
   const tagRef = useRef<HTMLDivElement>(null);
@@ -781,6 +789,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
                     subjectId={subjectId}
                     chapterId={chapter.id}
                     subjectColor={subjectColor}
+                    onPlayGlobal={handlePlayGlobal}
                   />
                 ))}
               </AnimatePresence>
@@ -834,9 +843,11 @@ export default function SubjectDetailPage() {
   
   const [activePlaylist, setActivePlaylist] = useState<any[]>([]);
   const [autoplayActive, setAutoplayActive] = useState(false);
+  const [autoplayStartIndex, setAutoplayStartIndex] = useState(0);
 
-  const handlePlayAll = useCallback((playlist: any[]) => {
+  const handlePlayAll = useCallback((playlist: any[], startIndex = 0) => {
     setActivePlaylist(playlist);
+    setAutoplayStartIndex(startIndex);
     setAutoplayActive(true);
   }, []);
 
@@ -1096,6 +1107,7 @@ export default function SubjectDetailPage() {
         playlist={activePlaylist}
         isActive={autoplayActive}
         onClose={() => setAutoplayActive(false)}
+        startIndex={autoplayStartIndex}
       />
     </div>
   );

@@ -9,9 +9,10 @@ interface AudioRecorderProps {
   topicId: string;
   topicName: string;
   compact?: boolean;
+  onPlayGlobal?: () => void;
 }
 
-type RecorderState = 'idle' | 'recording' | 'has-audio' | 'playing';
+type RecorderState = 'idle' | 'recording' | 'pending-save' | 'has-audio' | 'playing';
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -34,6 +35,8 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(existingNote?.duration_seconds ?? 0);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
+  const [pendingDuration, setPendingDuration] = useState(0);
 
   // Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -42,6 +45,7 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const confirmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recordingStartRef = useRef<number>(0);
 
   // Sync with store when existingNote changes
   useEffect(() => {
@@ -88,20 +92,16 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
 
       mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: mediaRecorder.mimeType });
-        const recordedDuration = elapsed;
-
+        const exactDuration = (Date.now() - recordingStartRef.current) / 1000;
+        
         // Stop all tracks
         stream.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
 
-        // Save via store
-        try {
-          await saveAudioNote(topicId, blob, recordedDuration);
-          setRecorderState('has-audio');
-          setDuration(recordedDuration);
-        } catch {
-          setRecorderState('idle');
-        }
+        // Enter review state instead of saving immediately
+        setPendingBlob(blob);
+        setPendingDuration(exactDuration);
+        setRecorderState('pending-save');
       };
 
       mediaRecorder.start(250); // collect chunks every 250ms
@@ -109,9 +109,9 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
       setRecorderState('recording');
 
       // Elapsed timer
-      const start = Date.now();
+      recordingStartRef.current = Date.now();
       timerRef.current = setInterval(() => {
-        setElapsed(Math.floor((Date.now() - start) / 1000));
+        setElapsed(Math.floor((Date.now() - recordingStartRef.current) / 1000));
       }, 250);
     } catch (err) {
       console.error('Microphone access denied', err);
@@ -123,7 +123,7 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
         );
       }
     }
-  }, [topicId, saveAudioNote, elapsed]);
+  }, []);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {
@@ -137,6 +137,11 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
 
   // ── Playback ───────────────────────────────────────────────
   const startPlayback = useCallback(() => {
+    if (onPlayGlobal) {
+      onPlayGlobal();
+      return;
+    }
+
     if (!existingNote) return;
 
     if (!audioRef.current) {
@@ -179,13 +184,35 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
 
   // ── Re-record ──────────────────────────────────────────────
   const handleReRecord = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
+    if (window.confirm('Are you sure you want to discard the current note and re-record?')) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setCurrentTime(0);
+      startRecording();
     }
-    setCurrentTime(0);
-    startRecording();
   }, [startRecording]);
+
+  // ── Save / Discard Pending ─────────────────────────────────
+  const handleSavePending = useCallback(async () => {
+    if (!pendingBlob) return;
+    try {
+      await saveAudioNote(topicId, pendingBlob, pendingDuration);
+      setRecorderState('has-audio');
+      setDuration(pendingDuration);
+    } catch {
+      // Revert if failed
+      setRecorderState(existingNote ? 'has-audio' : 'idle');
+    } finally {
+      setPendingBlob(null);
+    }
+  }, [pendingBlob, pendingDuration, saveAudioNote, topicId, existingNote]);
+
+  const handleDiscardPending = useCallback(() => {
+    setPendingBlob(null);
+    setRecorderState(existingNote ? 'has-audio' : 'idle');
+  }, [existingNote]);
 
   // ── Delete ─────────────────────────────────────────────────
   const handleDeleteClick = useCallback(() => {
@@ -240,16 +267,18 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
         {!isLoading && recorderState === 'idle' && (
           <motion.button
             key="idle"
-            initial={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.15 }}
             onClick={startRecording}
-            className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[hsl(var(--primary))/0.1] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))/0.15] border border-[hsl(var(--primary))/0.2] transition-colors duration-150 w-fit"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--primary))/0.1] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))/0.15] border border-[hsl(var(--primary))/0.2] transition-colors duration-150 w-fit"
             title={`Record audio for ${topicName}`}
           >
-            <Mic className="w-3 h-3" />
-            <span className="text-[0.65rem] font-medium">
+            <Mic className="w-4 h-4" />
+            <span className="text-xs sm:text-sm font-medium">
               Record Note
             </span>
           </motion.button>
@@ -263,7 +292,7 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -8 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center gap-2 px-2 py-1 rounded-lg
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg
                        bg-red-500/10 border border-red-500/20"
           >
             {/* Pulsing mic */}
@@ -294,18 +323,55 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
             </div>
 
             {/* Elapsed time */}
-            <span className="text-[0.65rem] font-medium text-red-500 tabular-nums min-w-[2rem]">
+            <span className="text-xs sm:text-sm font-medium text-red-500 tabular-nums min-w-[2.5rem] ml-1">
               {formatTime(elapsed)}
             </span>
 
             {/* Stop button */}
             <button
               onClick={stopRecording}
-              className="flex items-center justify-center w-5 h-5 rounded-md
-                         bg-red-500 text-white hover:bg-red-600 transition-colors"
+              className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md ml-1
+                         bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm"
+              title="Stop Recording"
             >
-              <Square className="w-2.5 h-2.5" fill="currentColor" />
+              <Square className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" />
             </button>
+          </motion.div>
+        )}
+
+        {/* ── Pending Save (Review) ────────────────────────── */}
+        {!isLoading && recorderState === 'pending-save' && (
+          <motion.div
+            key="pending-save"
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -8 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg
+                       bg-amber-500/10 border border-amber-500/20"
+          >
+            <span className="text-xs sm:text-sm font-medium text-amber-600 dark:text-amber-400">
+              Review: {formatTime(pendingDuration)}
+            </span>
+            <div className="flex items-center gap-1.5 ml-2">
+              {/* Discard */}
+              <button
+                onClick={handleDiscardPending}
+                className="px-2.5 py-1 text-xs font-medium rounded-md
+                           bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] 
+                           hover:text-red-500 hover:bg-red-500/10 transition-colors"
+              >
+                Discard
+              </button>
+              {/* Save */}
+              <button
+                onClick={handleSavePending}
+                className="px-3 py-1 text-xs font-medium rounded-md shadow-sm
+                           bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
+              >
+                Save
+              </button>
+            </div>
           </motion.div>
         )}
 
@@ -317,26 +383,26 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -8 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center gap-1.5 px-2 py-1 rounded-lg
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg
                        bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"
           >
             {/* Play/Pause */}
             <button
               onClick={togglePlayback}
-              className="flex items-center justify-center w-5 h-5 rounded-md
+              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md
                          bg-emerald-500/15 text-emerald-600 dark:text-emerald-400
                          hover:bg-emerald-500/25 transition-colors"
             >
               {recorderState === 'playing' ? (
-                <Pause className="w-2.5 h-2.5" fill="currentColor" />
+                <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" />
               ) : (
-                <Play className="w-2.5 h-2.5 ml-[1px]" fill="currentColor" />
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-[1.5px]" fill="currentColor" />
               )}
             </button>
 
             {/* Progress bar */}
             <div
-              className="relative w-16 h-1.5 rounded-full bg-[hsl(var(--border))] cursor-pointer
+              className="relative w-20 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--border))] cursor-pointer
                          overflow-hidden"
               onClick={handleProgressClick}
             >
@@ -348,7 +414,7 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
             </div>
 
             {/* Time */}
-            <span className="text-[0.6rem] text-[hsl(var(--muted-foreground))] tabular-nums min-w-[3.25rem]">
+            <span className="text-[0.65rem] sm:text-xs text-[hsl(var(--muted-foreground))] tabular-nums min-w-[3.5rem] ml-1">
               {recorderState === 'playing'
                 ? `${formatTime(currentTime)} / ${formatTime(duration)}`
                 : formatTime(duration)}
@@ -357,22 +423,22 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
             {/* Re-record */}
             <button
               onClick={handleReRecord}
-              className="flex items-center justify-center w-4.5 h-4.5 rounded
+              className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md ml-1
                          text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
                          hover:bg-[hsl(var(--border))] transition-colors"
               title="Re-record"
             >
-              <RefreshCcw className="w-2.5 h-2.5" />
+              <RefreshCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </button>
 
             {/* Delete */}
             <button
               onClick={handleDeleteClick}
-              className={`flex items-center justify-center rounded transition-colors
+              className={`flex items-center justify-center rounded-md transition-colors
                          ${
                            confirmDelete
-                             ? 'px-1.5 h-4.5 bg-red-500/15 text-red-500 text-[0.55rem] font-medium'
-                             : 'w-4.5 h-4.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10'
+                             ? 'px-2 h-6 sm:h-7 bg-red-500/15 text-red-500 text-[0.65rem] font-medium'
+                             : 'w-6 h-6 sm:w-7 sm:h-7 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10'
                          }`}
               title="Delete audio"
             >
@@ -384,7 +450,7 @@ export function AudioRecorder({ topicId, topicName, compact = true }: AudioRecor
                   Sure?
                 </motion.span>
               ) : (
-                <Trash2 className="w-2.5 h-2.5" />
+                <Trash2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               )}
             </button>
           </motion.div>
