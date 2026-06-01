@@ -61,7 +61,8 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
       audio.load();
 
       audio.onloadedmetadata = () => {
-        if (audio && audio.duration && isFinite(audio.duration)) {
+        // Only update if duration is actually valid and track.duration is missing
+        if (audio && audio.duration && isFinite(audio.duration) && !track.duration) {
           setDuration(audio.duration);
         }
       };
@@ -103,7 +104,7 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
 
       setCurrentIndex(index);
       setCurrentTime(0);
-      setDuration(0);
+      setDuration(track.duration || 0);
 
       if (autoplay) {
         audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));

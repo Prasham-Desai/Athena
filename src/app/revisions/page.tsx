@@ -404,6 +404,7 @@ export default function RevisionsPage() {
         description: `Revised ${count} topics in "${chapter.name}"`,
         subjectId,
         color: subject.color,
+        count: count,
       });
       window.dispatchEvent(
         new CustomEvent('add-toast', { detail: { message: `${count} topics revised in "${chapter.name}"!`, type: 'success' } })

@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
       date: row.date || row.due_date,
       estimatedMinutes: row.estimated_minutes,
       actualMinutes: row.actual_minutes,
+      completed: Boolean(row.completed),
       completedAt: row.completed_at,
       createdAt: row.created_at,
     }));

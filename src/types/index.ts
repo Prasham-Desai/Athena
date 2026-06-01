@@ -85,6 +85,7 @@ export interface ActivityEntry {
   timestamp: string;   // ISO date string
   subjectId?: string;
   color?: string;
+  count?: number;      // Optional field for bulk updates
 }
 
 export interface StudySession {

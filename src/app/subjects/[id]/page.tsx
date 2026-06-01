@@ -571,7 +571,8 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
       .map((t: Topic) => ({
         topicId: t.id,
         topicName: t.name,
-        noteId: audioNotes[t.id].id
+        noteId: audioNotes[t.id].id,
+        duration: audioNotes[t.id].duration_seconds || 0
       }));
   }, [chapter.topics, audioNotes]);
 
@@ -649,6 +650,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
         description: `Completed all topics in "${chapter.name}" (${subjectName})`,
         subjectId,
         color: subjectColor,
+        count: chapter.topics.length,
       });
       window.dispatchEvent(
         new CustomEvent('add-toast', { detail: { message: `All ${chapter.topics.length} topics in "${chapter.name}" completed! 🎉`, type: 'success' } })
