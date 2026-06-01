@@ -245,14 +245,12 @@ export function AudioRecorder({ subtopicId, subtopicName, compact = true }: Audi
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.15 }}
             onClick={startRecording}
-            className="group flex items-center gap-1 px-1.5 py-0.5 rounded-md
-                       text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
-                       hover:bg-[hsl(var(--muted))] transition-colors duration-150"
+            className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[hsl(var(--primary))/0.1] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))/0.15] border border-[hsl(var(--primary))/0.2] transition-colors duration-150 w-fit"
             title={`Record audio for ${subtopicName}`}
           >
             <Mic className="w-3 h-3" />
-            <span className="text-[0.6rem] opacity-0 group-hover:opacity-100 transition-opacity">
-              Record
+            <span className="text-[0.65rem] font-medium">
+              Record Note
             </span>
           </motion.button>
         )}
