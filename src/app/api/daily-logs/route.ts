@@ -40,23 +40,70 @@ export async function GET(request: NextRequest) {
     const env = getEnv(request);
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
-    const progressRecords = await db.query('SELECT * FROM daily_progress');
-    const sessions = await db.query('SELECT * FROM study_sessions');
-
-    const sessionMinutesByDate = sessions.reduce((acc: Record<string, number>, session: any) => {
-      const sessionDate = session.date;
-      acc[sessionDate] = (acc[sessionDate] || 0) + (Number(session.duration_minutes) || 0);
-      return acc;
-    }, {});
     
-    const mappedLogs = progressRecords.map((log: any) => {
-      return {
-        date: log.date,
-        studyMinutes: sessionMinutesByDate[log.date] || 0,
-        topicsCompleted: log.topics_completed || 0,
-        tasksCompleted: log.tasks_completed || 0,
-        revisionsCompleted: log.revisions_completed || 0,
-        sessions: sessions.filter((s: any) => s.date === log.date).map((s: any) => ({
+    // We get all dates that have ANY activity
+    const sessions = await db.query('SELECT * FROM study_sessions');
+    
+    // Aggregate dynamically
+    const tasksAgg = await db.query(`
+      SELECT date(completed_at) as dt, COUNT(*) as cnt 
+      FROM tasks 
+      WHERE completed = 1 AND completed_at IS NOT NULL 
+      GROUP BY dt
+    `);
+    
+    const topicsAgg = await db.query(`
+      SELECT date(completed_at) as dt, COUNT(*) as cnt 
+      FROM topics 
+      WHERE status IN ('completed', 'revised') AND completed_at IS NOT NULL 
+      GROUP BY dt
+    `);
+    
+    const revisionsAgg = await db.query(`
+      SELECT date(last_revised) as dt, SUM(revision_count) as cnt 
+      FROM topics 
+      WHERE revision_count > 0 AND last_revised IS NOT NULL 
+      GROUP BY dt
+    `);
+
+    // We need to merge all dates that appear in any of the above
+    const dateMap = new Map<string, any>();
+    
+    const getOrInitDate = (dt: string) => {
+      if (!dateMap.has(dt)) {
+        dateMap.set(dt, {
+          date: dt,
+          studyMinutes: 0,
+          topicsCompleted: 0,
+          tasksCompleted: 0,
+          revisionsCompleted: 0,
+          sessions: []
+        });
+      }
+      return dateMap.get(dt);
+    };
+
+    // Process tasks
+    tasksAgg.forEach((row: any) => {
+      if (row.dt) getOrInitDate(row.dt).tasksCompleted = row.cnt;
+    });
+
+    // Process topics
+    topicsAgg.forEach((row: any) => {
+      if (row.dt) getOrInitDate(row.dt).topicsCompleted = row.cnt;
+    });
+
+    // Process revisions
+    revisionsAgg.forEach((row: any) => {
+      if (row.dt) getOrInitDate(row.dt).revisionsCompleted = row.cnt;
+    });
+
+    // Process sessions
+    sessions.forEach((s: any) => {
+      if (s.date) {
+        const entry = getOrInitDate(s.date);
+        entry.studyMinutes += (Number(s.duration_minutes) || 0);
+        entry.sessions.push({
           id: s.id,
           startTime: s.start_time,
           endTime: s.end_time,
@@ -64,9 +111,17 @@ export async function GET(request: NextRequest) {
           type: s.type,
           title: s.title,
           taskId: s.task_id
-        }))
-      };
+        });
+      }
     });
+    
+    // Also include any explicitly stored dates in daily_progress just in case they have 0 for everything but are tracked
+    const progressRecords = await db.query('SELECT date FROM daily_progress');
+    progressRecords.forEach((log: any) => {
+      if (log.date) getOrInitDate(log.date);
+    });
+
+    const mappedLogs = Array.from(dateMap.values());
     
     return successResponse(mappedLogs, 200);
   } catch (err: any) {
@@ -87,6 +142,8 @@ export async function POST(request: NextRequest) {
     const existing = await db.get('SELECT * FROM daily_progress WHERE date = ?', [date]);
     
     if (existing) {
+      // For dynamic tracking, we don't strictly need to update topics/tasks/revisions counts here, 
+      // but we update them just in case the legacy data is useful or if study_minutes needs manual updates.
       await db.run(
         `UPDATE daily_progress SET 
           study_minutes = COALESCE(?, study_minutes),

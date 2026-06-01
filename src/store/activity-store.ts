@@ -73,22 +73,8 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
       });
       if (!response.ok) throw new Error('Failed');
 
-      // Update daily logs based on activity type
-      const today = getToday();
-      const currentLog = get().getDailyLog(today);
-      const updates: Partial<DailyLog> = {};
-      const count = activity.count || 1;
-
-      if (activity.type === 'topic-completed') {
-        updates.topicsCompleted = (currentLog?.topicsCompleted || 0) + count;
-      } else if (activity.type === 'task-completed') {
-        updates.tasksCompleted = (currentLog?.tasksCompleted || 0) + count;
-      } else if (activity.type === 'topic-revised') {
-        updates.revisionsCompleted = (currentLog?.revisionsCompleted || 0) + count;
-      }
-
-      if (Object.keys(updates).length > 0) {
-        await get().updateDailyLog(today, updates);
+      if (activity.type === 'topic-completed' || activity.type === 'task-completed' || activity.type === 'topic-revised') {
+        await get().fetchDailyLogs();
       }
     } catch (error) {
       set({ activities: previousActivities });
