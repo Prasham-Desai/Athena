@@ -32,14 +32,18 @@ import {
   Compass,
   PenTool,
   Target,
+  Headphones,
   type LucideIcon,
   Tag,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useActivityStore } from '@/store/activity-store';
+import { useAudioStore } from '@/store/audio-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import { PageHeader } from '@/components/shared/page-header';
+import { AudioRecorder } from '@/components/shared/audio-recorder';
+import { AudioAutoplayBar } from '@/components/shared/audio-autoplay-bar';
 import { cn, STATUS_CONFIG, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { TopicStatus, Topic, Chapter, ImportanceTag } from '@/types';
 
@@ -300,15 +304,34 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
+  onPlayAll?: (playlist: any[]) => void;
 }
 
-function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayAll }: TopicRowProps) {
   const updateTopic = useSubjectsStore((s) => s.updateTopic);
   const setTopicStatus = useSubjectsStore((s) => s.setTopicStatus);
   const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
+  
+  const fetchAudioNotesForTopic = useAudioStore((s) => s.fetchAudioNotesForTopic);
+  const audioNotes = useAudioStore((s) => s.audioNotes);
+
+  useEffect(() => {
+    fetchAudioNotesForTopic(topic.id);
+  }, [topic.id, fetchAudioNotesForTopic]);
+
+  const playlist = useMemo(() => {
+    if (!topic.subtopics) return [];
+    return topic.subtopics
+      .filter((sub: any) => audioNotes[sub.id])
+      .map((sub: any) => ({
+        subtopicId: sub.id,
+        subtopicName: sub.name,
+        noteId: audioNotes[sub.id].id
+      }));
+  }, [topic.subtopics, audioNotes]);
 
   const subjectName = subjects.find((s) => s.id === subjectId)?.name ?? '';
   const isCompleted = topic.status === 'completed' || topic.status === 'revised';
@@ -454,12 +477,15 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
                         <Circle className="w-4 h-4 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
                       )}
                     </button>
-                    <span className={cn(
-                      "text-sm break-words leading-snug w-full min-w-0",
-                      isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
-                    )}>
-                      {sub.name}
-                    </span>
+                    <div className="flex-1 min-w-0 flex flex-col gap-1.5 pb-1">
+                      <span className={cn(
+                        "text-sm break-words leading-snug w-full min-w-0",
+                        isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
+                      )}>
+                        {sub.name}
+                      </span>
+                      <AudioRecorder subtopicId={sub.id} subtopicName={sub.name} compact={true} />
+                    </div>
                   </li>
                 );
               })}
@@ -508,6 +534,17 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             </button>
           )}
 
+          {/* Play All Audio */}
+          {playlist.length > 0 && (
+            <button
+              onClick={() => onPlayAll?.(playlist)}
+              className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors shrink-0"
+              title={`Play all ${playlist.length} audio notes`}
+            >
+              <Headphones className="w-3.5 h-3.5" />
+            </button>
+          )}
+
           {/* Delete */}
           <button
             onClick={handleDelete}
@@ -531,9 +568,10 @@ interface ChapterAccordionProps {
   subjectColor: string;
   defaultOpen?: boolean;
   searchQuery?: string;
+  onPlayAll?: (playlist: any[]) => void;
 }
 
-function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '' }: ChapterAccordionProps) {
+function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '', onPlayAll }: ChapterAccordionProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [newTopicName, setNewTopicName] = useState('');
 
@@ -742,6 +780,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
                     subjectId={subjectId}
                     chapterId={chapter.id}
                     subjectColor={subjectColor}
+                    onPlayAll={onPlayAll}
                   />
                 ))}
               </AnimatePresence>
@@ -792,6 +831,14 @@ export default function SubjectDetailPage() {
 
   const [newChapterName, setNewChapterName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const [activePlaylist, setActivePlaylist] = useState<any[]>([]);
+  const [autoplayActive, setAutoplayActive] = useState(false);
+
+  const handlePlayAll = useCallback((playlist: any[]) => {
+    setActivePlaylist(playlist);
+    setAutoplayActive(true);
+  }, []);
 
   const subject = useMemo(() => subjects.find((s) => s.id === id), [subjects, id]);
 
@@ -1038,11 +1085,18 @@ export default function SubjectDetailPage() {
                 subjectColor={subject.color}
                 defaultOpen={idx === 0}
                 searchQuery={searchQuery}
+                onPlayAll={handlePlayAll}
               />
             ))
           )}
         </AnimatePresence>
       </div>
+
+      <AudioAutoplayBar
+        playlist={activePlaylist}
+        isActive={autoplayActive}
+        onClose={() => setAutoplayActive(false)}
+      />
     </div>
   );
 }

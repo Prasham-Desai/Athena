@@ -185,6 +185,17 @@ export interface SubjectWithChapters extends Subject {
   chapters: ChapterWithTopics[];
 }
 
+export interface AudioNoteMeta {
+  id: string;
+  subtopic_id: string;
+  duration_seconds: number;
+  mime_type: string;
+  file_size: number;
+  kv_key: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
