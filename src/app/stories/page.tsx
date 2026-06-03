@@ -10,8 +10,9 @@ import { StoryModal } from '@/components/stories/story-modal';
 import { StoryPlayerBar } from '@/components/stories/story-player-bar';
 import { Story } from '@/types';
 import { useHydration } from '@/hooks/use-hydration';
+import type { Variants } from 'framer-motion';
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -19,7 +20,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
