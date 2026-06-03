@@ -566,14 +566,22 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
 
   const playlist = useMemo(() => {
     if (!chapter.topics) return [];
-    return chapter.topics
-      .filter((t: Topic) => audioNotes[t.id])
-      .map((t: Topic) => ({
-        topicId: t.id,
-        topicName: t.name,
-        noteId: audioNotes[t.id].id,
-        duration: audioNotes[t.id].duration_seconds || 0
-      }));
+    
+    const list: any[] = [];
+    chapter.topics.forEach((t: Topic) => {
+      const notes = audioNotes[t.id];
+      if (notes && notes.length > 0) {
+        notes.forEach((note: any, index: number) => {
+          list.push({
+            topicId: t.id,
+            topicName: `${t.name} (Part ${index + 1})`,
+            noteId: note.id,
+            duration: note.duration_seconds || 0
+          });
+        });
+      }
+    });
+    return list;
   }, [chapter.topics, audioNotes]);
 
   const handlePlayGlobal = useCallback((topicId: string) => {

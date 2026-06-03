@@ -8,10 +8,10 @@ import { useStoriesStore } from '@/store/stories-store';
 interface StoryAudioRecorderProps {
   storyId: string;
   compact?: boolean;
-  onPlayGlobal?: () => void;
+  onSuccess?: () => void;
 }
 
-type RecorderState = 'idle' | 'recording' | 'pending-save' | 'has-audio' | 'playing';
+type RecorderState = 'idle' | 'recording' | 'pending-save';
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -19,20 +19,14 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function StoryAudioRecorder({ storyId, compact = true, onPlayGlobal }: StoryAudioRecorderProps) {
-  const { stories, loadingStoryIds, saveStoryAudio, getStoryAudioUrl } = useStoriesStore();
+export function StoryAudioRecorder({ storyId, compact = true, onSuccess }: StoryAudioRecorderProps) {
+  const { loadingStoryIds, saveStoryAudio } = useStoriesStore();
 
-  const story = stories.find((s) => s.id === storyId);
-  const hasExistingAudio = !!story?.duration_seconds;
   const isLoading = loadingStoryIds.includes(storyId);
 
   // State
-  const [recorderState, setRecorderState] = useState<RecorderState>(
-    hasExistingAudio ? 'has-audio' : 'idle'
-  );
+  const [recorderState, setRecorderState] = useState<RecorderState>('idle');
   const [elapsed, setElapsed] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(story?.duration_seconds ?? 0);
   const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
   const [pendingDuration, setPendingDuration] = useState(0);
 
@@ -44,15 +38,7 @@ export function StoryAudioRecorder({ storyId, compact = true, onPlayGlobal }: St
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recordingStartRef = useRef<number>(0);
 
-  // Sync with store when story changes
-  useEffect(() => {
-    if (hasExistingAudio && recorderState === 'idle') {
-      setRecorderState('has-audio');
-      setDuration(story!.duration_seconds!);
-    } else if (!hasExistingAudio && (recorderState === 'has-audio' || recorderState === 'playing')) {
-      setRecorderState('idle');
-    }
-  }, [hasExistingAudio, story, recorderState]);
+
 
   // Cleanup on unmount
   useEffect(() => {
@@ -131,109 +117,29 @@ export function StoryAudioRecorder({ storyId, compact = true, onPlayGlobal }: St
     }
   }, []);
 
-  // ── Playback ───────────────────────────────────────────────
-  const startPlayback = useCallback(() => {
-    if (onPlayGlobal) {
-      onPlayGlobal();
-      return;
-    }
 
-    if (!hasExistingAudio) return;
-
-    if (!audioRef.current) {
-      audioRef.current = new Audio(getStoryAudioUrl(storyId));
-
-      audioRef.current.addEventListener('timeupdate', () => {
-        setCurrentTime(audioRef.current?.currentTime ?? 0);
-      });
-
-      audioRef.current.addEventListener('loadedmetadata', () => {
-        if (audioRef.current && audioRef.current.duration && isFinite(audioRef.current.duration)) {
-          setDuration(audioRef.current.duration);
-        }
-      });
-
-      audioRef.current.addEventListener('ended', () => {
-        setRecorderState('has-audio');
-        setCurrentTime(0);
-      });
-
-      audioRef.current.addEventListener('error', () => {
-        console.error('Failed to load story audio');
-        setRecorderState('has-audio');
-        setCurrentTime(0);
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('toast', { detail: { message: 'Failed to load audio file', type: 'error' } })
-          );
-        }
-      });
-    }
-
-    audioRef.current.play();
-    setRecorderState('playing');
-  }, [hasExistingAudio, getStoryAudioUrl, storyId, onPlayGlobal]);
-
-  const pausePlayback = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    setRecorderState('has-audio');
-  }, []);
-
-  const togglePlayback = useCallback(() => {
-    if (recorderState === 'playing') {
-      pausePlayback();
-    } else {
-      startPlayback();
-    }
-  }, [recorderState, startPlayback, pausePlayback]);
-
-  // ── Re-record ──────────────────────────────────────────────
-  const handleReRecord = useCallback(() => {
-    if (window.confirm('Are you sure you want to discard the current audio and re-record?')) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      setCurrentTime(0);
-      startRecording();
-    }
-  }, [startRecording]);
 
   // ── Save / Discard Pending ─────────────────────────────────
   const handleSavePending = useCallback(async () => {
     if (!pendingBlob) return;
     try {
       await saveStoryAudio(storyId, pendingBlob, pendingDuration);
-      setRecorderState('has-audio');
-      setDuration(pendingDuration);
+      setRecorderState('idle');
+      if (onSuccess) onSuccess();
     } catch {
       // Revert if failed
-      setRecorderState(hasExistingAudio ? 'has-audio' : 'idle');
+      setRecorderState('idle');
     } finally {
       setPendingBlob(null);
     }
-  }, [pendingBlob, pendingDuration, saveStoryAudio, storyId, hasExistingAudio]);
+  }, [pendingBlob, pendingDuration, saveStoryAudio, storyId, onSuccess]);
 
   const handleDiscardPending = useCallback(() => {
     setPendingBlob(null);
-    setRecorderState(hasExistingAudio ? 'has-audio' : 'idle');
-  }, [hasExistingAudio]);
+    setRecorderState('idle');
+  }, []);
 
-  // ── Progress bar click ─────────────────────────────────────
-  const handleProgressClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!audioRef.current || !duration) return;
-      const rect = e.currentTarget.getBoundingClientRect();
-      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      audioRef.current.currentTime = ratio * duration;
-      setCurrentTime(audioRef.current.currentTime);
-    },
-    [duration]
-  );
 
-  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   // ── Render ─────────────────────────────────────────────────
   return (
@@ -365,63 +271,7 @@ export function StoryAudioRecorder({ storyId, compact = true, onPlayGlobal }: St
           </motion.div>
         )}
 
-        {/* ── Has Audio / Playing ──────────────────────────── */}
-        {!isLoading && (recorderState === 'has-audio' || recorderState === 'playing') && (
-          <motion.div
-            key="has-audio"
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -8 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg
-                       bg-[hsl(var(--muted))] border border-[hsl(var(--border))]"
-          >
-            {/* Play/Pause */}
-            <button
-              onClick={togglePlayback}
-              className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md
-                         bg-emerald-500/15 text-emerald-600 dark:text-emerald-400
-                         hover:bg-emerald-500/25 transition-colors"
-            >
-              {recorderState === 'playing' ? (
-                <Pause className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" />
-              ) : (
-                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-[1.5px]" fill="currentColor" />
-              )}
-            </button>
 
-            {/* Progress bar */}
-            <div
-              className="relative w-20 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--border))] cursor-pointer
-                         overflow-hidden"
-              onClick={handleProgressClick}
-            >
-              <motion.div
-                className="absolute inset-y-0 left-0 rounded-full bg-[hsl(var(--primary))]"
-                style={{ width: `${progressPercent}%` }}
-                transition={{ duration: 0.1 }}
-              />
-            </div>
-
-            {/* Time */}
-            <span className="text-[0.65rem] sm:text-xs text-[hsl(var(--muted-foreground))] tabular-nums min-w-[3.5rem] ml-1">
-              {recorderState === 'playing'
-                ? `${formatTime(currentTime)} / ${formatTime(duration)}`
-                : formatTime(duration)}
-            </span>
-
-            {/* Re-record */}
-            <button
-              onClick={handleReRecord}
-              className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-md ml-1
-                         text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
-                         hover:bg-[hsl(var(--border))] transition-colors"
-              title="Re-record Audio"
-            >
-              <RefreshCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </button>
-          </motion.div>
-        )}
       </AnimatePresence>
     </div>
   );

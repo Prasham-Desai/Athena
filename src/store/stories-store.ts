@@ -12,7 +12,8 @@ interface StoriesState {
   updateStory: (id: string, title: string, description?: string) => Promise<void>;
   deleteStory: (id: string) => Promise<void>;
   saveStoryAudio: (id: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
-  getStoryAudioUrl: (id: string) => string;
+  deleteStoryAudio: (storyId: string, audioId: string) => Promise<void>;
+  getStoryAudioUrl: (storyId: string, audioId: string) => string;
 }
 
 export const useStoriesStore = create<StoriesState>((set, get) => ({
@@ -198,7 +199,41 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
     }
   },
 
-  getStoryAudioUrl: (id: string) => {
-    return `/api/stories/${id}/audio`;
+  deleteStoryAudio: async (storyId: string, audioId: string) => {
+    try {
+      const response = await fetch(`/api/stories/${storyId}/audio/${audioId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete story audio');
+
+      const { data } = (await response.json()) as { data: Story };
+      
+      set((state) => ({
+        stories: state.stories.map((s) => (s.id === storyId ? data : s)),
+      }));
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('toast', {
+            detail: { message: 'Audio note deleted', type: 'success' },
+          })
+        );
+      }
+    } catch (error) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('toast', {
+            detail: { message: 'Failed to delete audio note', type: 'error' },
+          })
+        );
+      }
+      console.error('Failed to delete story audio', error);
+      throw error;
+    }
+  },
+
+  getStoryAudioUrl: (storyId: string, audioId: string) => {
+    return `/api/stories/${storyId}/audio?audioId=${audioId}`;
   },
 }));

@@ -20,24 +20,32 @@ function formatTime(seconds: number): string {
 }
 
 export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: StoryPlayerBarProps) {
-  const [currentIndex, setCurrentIndex] = useState(startIndex);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(startIndex);
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   
-  // Note: Auto-play is explicitly disabled per user request
-  
   const { getStoryAudioUrl } = useStoriesStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const currentTrack = playlist[currentIndex] ?? null;
+  const currentStory = playlist[currentStoryIndex] ?? null;
+  const currentAudio = currentStory?.audios?.[currentAudioIndex] ?? null;
 
   // ── Audio element setup ────────────────────────────────────
   const loadTrack = useCallback(
-    (index: number, autoplay = true) => {
-      if (index < 0 || index >= playlist.length) return;
+    (storyIdx: number, audioIdx: number, autoplay = true) => {
+      if (storyIdx < 0 || storyIdx >= playlist.length) return;
+      const story = playlist[storyIdx];
+      
+      if (!story.audios || story.audios.length === 0) {
+        setIsPlaying(false);
+        return; // No audio for this story
+      }
+      
+      if (audioIdx < 0 || audioIdx >= story.audios.length) return;
+      const audioSegment = story.audios[audioIdx];
 
-      const track = playlist[index];
       let audio = audioRef.current;
       
       if (!audio) {
@@ -47,11 +55,11 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
         audio.pause();
       }
 
-      audio.src = getStoryAudioUrl(track.id);
+      audio.src = getStoryAudioUrl(story.id, audioSegment.id);
       audio.load();
 
       audio.onloadedmetadata = () => {
-        if (audio && audio.duration && isFinite(audio.duration) && !track.duration_seconds) {
+        if (audio && audio.duration && isFinite(audio.duration)) {
           setDuration(audio.duration);
         }
       };
@@ -61,19 +69,26 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
       };
 
       audio.onended = () => {
-        // Auto-play disabled
-        setIsPlaying(false);
-        setCurrentTime(0);
+        // Auto-play next segment or story
+        if (audioIdx < story.audios!.length - 1) {
+          loadTrack(storyIdx, audioIdx + 1, true);
+        } else if (storyIdx < playlist.length - 1) {
+          loadTrack(storyIdx + 1, 0, true);
+        } else {
+          setIsPlaying(false);
+          setCurrentTime(0);
+        }
       };
 
       audio.onerror = () => {
-        console.error('Failed to load audio for story:', track.title);
+        console.error('Failed to load audio segment for story:', story.title);
         setIsPlaying(false);
       };
 
-      setCurrentIndex(index);
+      setCurrentStoryIndex(storyIdx);
+      setCurrentAudioIndex(audioIdx);
       setCurrentTime(0);
-      setDuration(track.duration_seconds || 0);
+      setDuration(audioSegment.duration_seconds || 0);
 
       if (autoplay) {
         audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
@@ -86,8 +101,9 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
   // Start playback when bar becomes active or startIndex changes
   useEffect(() => {
     if (isActive && playlist.length > 0) {
-      setCurrentIndex(startIndex);
-      loadTrack(startIndex, true);
+      setCurrentStoryIndex(startIndex);
+      setCurrentAudioIndex(0);
+      loadTrack(startIndex, 0, true);
     }
 
     return () => {
@@ -111,21 +127,27 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
   }, [isPlaying]);
 
   const handlePrev = useCallback(() => {
-    if (currentIndex > 0) {
-      loadTrack(currentIndex - 1);
+    if (currentAudioIndex > 0) {
+      loadTrack(currentStoryIndex, currentAudioIndex - 1);
+    } else if (currentStoryIndex > 0) {
+      const prevStory = playlist[currentStoryIndex - 1];
+      const prevAudioCount = prevStory.audios?.length || 1;
+      loadTrack(currentStoryIndex - 1, prevAudioCount - 1);
     } else if (audioRef.current) {
       audioRef.current.currentTime = 0;
     }
-  }, [currentIndex, loadTrack]);
+  }, [currentStoryIndex, currentAudioIndex, loadTrack, playlist]);
 
   const handleNext = useCallback(() => {
-    if (currentIndex < playlist.length - 1) {
-      loadTrack(currentIndex + 1);
+    if (currentStory && currentAudioIndex < (currentStory.audios?.length || 0) - 1) {
+      loadTrack(currentStoryIndex, currentAudioIndex + 1);
+    } else if (currentStoryIndex < playlist.length - 1) {
+      loadTrack(currentStoryIndex + 1, 0);
     } else {
       setIsPlaying(false);
       setCurrentTime(0);
     }
-  }, [currentIndex, playlist.length, loadTrack]);
+  }, [currentStoryIndex, currentAudioIndex, playlist.length, loadTrack, currentStory]);
 
   const handleClose = useCallback(() => {
     if (audioRef.current) {
@@ -152,7 +174,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
   // ── Render ─────────────────────────────────────────────────
   return (
     <AnimatePresence>
-      {isActive && currentTrack && (
+      {isActive && currentStory && currentAudio && (
         <motion.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -184,14 +206,14 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
               <div className="flex-1 min-w-0">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={currentTrack.id}
+                    key={currentAudio.id}
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15 }}
                   >
                     <p className="text-sm sm:text-base font-semibold text-[hsl(var(--foreground))] truncate">
-                      {currentTrack.title}
+                      {currentStory.title} <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">(Part {currentAudioIndex + 1})</span>
                     </p>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
                       <span className="tabular-nums">
@@ -199,7 +221,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
                       </span>
                       <span className="mx-2">·</span>
                       <span className="tabular-nums">
-                        {currentIndex + 1} / {playlist.length}
+                        Story {currentStoryIndex + 1} / {playlist.length}
                       </span>
                     </p>
                   </motion.div>
@@ -211,7 +233,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
                 {/* Previous */}
                 <button
                   onClick={handlePrev}
-                  disabled={currentIndex === 0}
+                  disabled={currentStoryIndex === 0 && currentAudioIndex === 0}
                   className="flex items-center justify-center w-10 h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed
@@ -238,7 +260,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
                 {/* Next */}
                 <button
                   onClick={handleNext}
-                  disabled={currentIndex >= playlist.length - 1}
+                  disabled={currentStoryIndex >= playlist.length - 1 && currentAudioIndex >= ((currentStory.audios?.length || 1) - 1)}
                   className="flex items-center justify-center w-10 h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed

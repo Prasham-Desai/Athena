@@ -193,18 +193,27 @@ export interface AudioNoteMeta {
   mime_type: string;
   file_size: number;
   kv_key: string;
+  sequence_index: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface StoryAudio {
+  id: string;
+  story_id: string;
+  duration_seconds: number;
+  mime_type: string;
+  file_size: number;
+  kv_key: string;
+  sequence_index: number;
+  created_at: string;
 }
 
 export interface Story {
   id: string;
   title: string;
   description: string | null;
-  duration_seconds: number | null;
-  mime_type: string | null;
-  file_size: number | null;
-  kv_key: string | null;
+  audios: StoryAudio[];
   created_at: string;
   updated_at: string;
 }

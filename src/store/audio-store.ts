@@ -2,15 +2,15 @@ import { create } from 'zustand';
 import type { AudioNoteMeta } from '@/types';
 
 interface AudioState {
-  // Map of topic_id -> AudioNoteMeta
-  audioNotes: Record<string, AudioNoteMeta>;
+  // Map of topic_id -> AudioNoteMeta[]
+  audioNotes: Record<string, AudioNoteMeta[]>;
   // Topic IDs currently loading
   loadingTopics: string[];
 
   // Actions
   fetchAudioNotesForChapter: (chapterId: string) => Promise<void>;
   saveAudioNote: (topicId: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
-  deleteAudioNote: (topicId: string) => Promise<void>;
+  deleteAudioNote: (topicId: string, noteId: string) => Promise<void>;
   getAudioUrl: (noteId: string) => string;
 }
 
@@ -27,7 +27,15 @@ export const useAudioStore = create<AudioState>((set, get) => ({
           set((state) => {
             const updated = { ...state.audioNotes };
             for (const note of data) {
-              updated[note.topic_id] = note;
+              if (!updated[note.topic_id]) {
+                updated[note.topic_id] = [];
+              }
+              // Only push if not already there
+              if (!updated[note.topic_id].find((n) => n.id === note.id)) {
+                updated[note.topic_id].push(note);
+                // Sort by sequence_index
+                updated[note.topic_id].sort((a, b) => a.sequence_index - b.sequence_index);
+              }
             }
             return { audioNotes: updated };
           });
@@ -69,11 +77,17 @@ export const useAudioStore = create<AudioState>((set, get) => ({
 
       const { data } = (await response.json()) as { data: AudioNoteMeta };
 
-      // Update store with the new note
-      set((state) => ({
-        audioNotes: { ...state.audioNotes, [topicId]: data },
-        loadingTopics: state.loadingTopics.filter((id) => id !== topicId),
-      }));
+      // Update store with the new note appended
+      set((state) => {
+        const existingNotes = state.audioNotes[topicId] || [];
+        return {
+          audioNotes: { 
+            ...state.audioNotes, 
+            [topicId]: [...existingNotes, data].sort((a, b) => a.sequence_index - b.sequence_index)
+          },
+          loadingTopics: state.loadingTopics.filter((id) => id !== topicId),
+        };
+      });
 
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
@@ -100,16 +114,17 @@ export const useAudioStore = create<AudioState>((set, get) => ({
     }
   },
 
-  deleteAudioNote: async (topicId: string) => {
+  deleteAudioNote: async (topicId: string, noteId: string) => {
     const previousNotes = get().audioNotes;
-    const note = previousNotes[topicId];
+    const notesForTopic = previousNotes[topicId] || [];
 
+    const note = notesForTopic.find(n => n.id === noteId);
     if (!note) return;
 
     // Optimistic removal
     set((state) => {
       const updated = { ...state.audioNotes };
-      delete updated[topicId];
+      updated[topicId] = updated[topicId].filter((n) => n.id !== noteId);
       return { audioNotes: updated };
     });
 

@@ -44,7 +44,7 @@ export default function StoriesPage() {
   }, [fetchStories]);
 
   // Playlist is just the stories that have audio
-  const playlist = useMemo(() => stories.filter(s => !!s.duration_seconds), [stories]);
+  const playlist = useMemo(() => stories.filter(s => s.audios && s.audios.length > 0), [stories]);
 
   const handleEdit = (story: Story) => {
     setEditingStory(story);

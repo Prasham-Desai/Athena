@@ -43,50 +43,25 @@ export async function POST(request: NextRequest) {
     const binaryData = Uint8Array.from(atob(audio_data), c => c.charCodeAt(0));
     const fileSize = binaryData.byteLength;
 
-    // Check if an audio note already exists for this topic
-    const existing = await db.get<any>(
-      'SELECT * FROM audio_notes WHERE topic_id = ?',
-      [topic_id]
-    );
+    const countRes = await db.get<{c: number}>('SELECT COUNT(*) as c FROM audio_notes WHERE topic_id = ?', [topic_id]);
+    const sequenceIndex = countRes?.c || 0;
 
     const now = new Date().toISOString();
+    const id = generateId();
+    const kvKey = `audio:${id}`;
 
-    if (existing) {
-      // Delete old KV blob
-      await env.KV.delete(existing.kv_key);
+    // Store blob in KV
+    await env.KV.put(kvKey, binaryData.buffer);
 
-      // Store new blob in KV (reuse existing id)
-      const kvKey = `audio:${existing.id}`;
-      await env.KV.put(kvKey, binaryData.buffer);
+    // Insert D1 row
+    await db.run(
+      `INSERT INTO audio_notes (id, topic_id, duration_seconds, mime_type, file_size, kv_key, sequence_index, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, topic_id, duration_seconds, mime_type, fileSize, kvKey, sequenceIndex, now, now]
+    );
 
-      // Update D1 row
-      await db.run(
-        `UPDATE audio_notes
-         SET duration_seconds = ?, mime_type = ?, file_size = ?, kv_key = ?, updated_at = ?
-         WHERE id = ?`,
-        [duration_seconds, mime_type, fileSize, kvKey, now, existing.id]
-      );
-
-      const updated = await db.get('SELECT * FROM audio_notes WHERE id = ?', [existing.id]);
-      return successResponse(updated);
-    } else {
-      // Create new audio note
-      const id = generateId();
-      const kvKey = `audio:${id}`;
-
-      // Store blob in KV
-      await env.KV.put(kvKey, binaryData.buffer);
-
-      // Insert D1 row
-      await db.run(
-        `INSERT INTO audio_notes (id, topic_id, duration_seconds, mime_type, file_size, kv_key, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [id, topic_id, duration_seconds, mime_type, fileSize, kvKey, now, now]
-      );
-
-      const created = await db.get('SELECT * FROM audio_notes WHERE id = ?', [id]);
-      return successResponse(created, 201);
-    }
+    const created = await db.get('SELECT * FROM audio_notes WHERE id = ?', [id]);
+    return successResponse(created, 201);
   } catch (err: any) {
     return errorResponse(err.message, 500);
   }

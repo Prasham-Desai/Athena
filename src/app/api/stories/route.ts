@@ -12,8 +12,28 @@ export async function GET(request: NextRequest) {
     const stories = await db.query(
       `SELECT * FROM stories ORDER BY created_at DESC`
     );
+    
+    // Fetch all audios for these stories
+    const storyAudios = await db.query(
+      `SELECT * FROM story_audios ORDER BY sequence_index ASC`
+    );
 
-    return successResponse(stories);
+    // Group audios by story_id
+    const audiosByStoryId = storyAudios.reduce((acc: any, audio: any) => {
+      if (!acc[audio.story_id]) {
+        acc[audio.story_id] = [];
+      }
+      acc[audio.story_id].push(audio);
+      return acc;
+    }, {});
+
+    // Attach audios to each story
+    const storiesWithAudios = stories.map((story: any) => ({
+      ...story,
+      audios: audiosByStoryId[story.id] || [],
+    }));
+
+    return successResponse(storiesWithAudios);
   } catch (err: any) {
     console.error('GET /api/stories ERROR:', err);
     return errorResponse(err.message, 500);

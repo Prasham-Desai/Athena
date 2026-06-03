@@ -17,9 +17,6 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  
-  // Track the ID of the story being created so we can show the recorder
-  const [createdStoryId, setCreatedStoryId] = useState<string | null>(null);
 
   const { createStory, updateStory } = useStoriesStore();
 
@@ -28,11 +25,9 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
       if (editingStory) {
         setTitle(editingStory.title);
         setDescription(editingStory.description || '');
-        setCreatedStoryId(editingStory.id);
       } else {
         setTitle('');
         setDescription('');
-        setCreatedStoryId(null);
       }
     }
   }, [isOpen, editingStory]);
@@ -43,13 +38,12 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
 
     setIsSaving(true);
     try {
-      const targetId = editingStory?.id || createdStoryId;
-      if (targetId) {
-        await updateStory(targetId, title.trim(), description.trim());
+      if (editingStory) {
+        await updateStory(editingStory.id, title.trim(), description.trim());
       } else {
-        const newStory = await createStory(title.trim(), description.trim());
-        setCreatedStoryId(newStory.id);
+        await createStory(title.trim(), description.trim());
       }
+      onClose(); // Close the modal upon success
     } catch (error) {
       console.error('Failed to save story details', error);
     } finally {
@@ -115,16 +109,6 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
                   />
                 </div>
               </form>
-
-              {/* Show audio recorder only if the story is created or we are editing an existing one */}
-              {createdStoryId && (
-                <div className="pt-4 border-t border-[hsl(var(--border))]">
-                  <label className="text-sm font-medium text-[hsl(var(--foreground))] block mb-3">
-                    Story Audio
-                  </label>
-                  <StoryAudioRecorder storyId={createdStoryId} compact={false} />
-                </div>
-              )}
             </div>
 
             <div className="flex items-center justify-end gap-3 px-6 py-4 bg-[hsl(var(--muted))/0.5] border-t border-[hsl(var(--border))]">
@@ -132,7 +116,7 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
                 onClick={onClose}
                 className="px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] rounded-xl transition-colors"
               >
-                {createdStoryId ? 'Done' : 'Cancel'}
+                Cancel
               </button>
               
               <button

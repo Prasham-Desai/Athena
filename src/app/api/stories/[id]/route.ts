@@ -31,7 +31,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return errorResponse('Story not found', 404);
     }
 
-    return successResponse(updated);
+    const storyAudios = await db.query(
+      `SELECT * FROM story_audios WHERE story_id = ? ORDER BY sequence_index ASC`,
+      [id]
+    );
+
+    return successResponse({
+      ...updated,
+      audios: storyAudios || [],
+    });
   } catch (err: any) {
     return errorResponse(err.message, 500);
   }
@@ -49,9 +57,15 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return errorResponse('Story not found', 404);
     }
 
-    // Delete KV blob if exists
-    if (existing.kv_key) {
-      await env.KV.delete(existing.kv_key);
+    // Delete KV blobs if they exist
+    const storyAudios = await db.query(
+      `SELECT kv_key FROM story_audios WHERE story_id = ?`,
+      [id]
+    );
+    for (const audio of storyAudios) {
+      if (audio.kv_key) {
+        await env.KV.delete(audio.kv_key);
+      }
     }
 
     // Delete row
