@@ -14,6 +14,7 @@ import {
   GraduationCap,
   ChevronLeft,
   Menu,
+  Moon,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -26,6 +27,7 @@ const navItems = [
   { href: '/tasks', label: 'Tasks', icon: CheckSquare },
   { href: '/exams', label: 'Exams', icon: GraduationCap },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/stories', label: 'Stories', icon: Moon },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 

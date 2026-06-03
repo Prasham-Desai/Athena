@@ -197,6 +197,18 @@ export interface AudioNoteMeta {
   updated_at: string;
 }
 
+export interface Story {
+  id: string;
+  title: string;
+  description: string | null;
+  duration_seconds: number | null;
+  mime_type: string | null;
+  file_size: number | null;
+  kv_key: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
