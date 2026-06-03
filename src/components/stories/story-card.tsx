@@ -73,7 +73,9 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
                 className="absolute right-0 top-full mt-1 w-36 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl z-50 overflow-hidden py-1"
               >
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setShowMenu(false);
                     onEdit(story);
                   }}
@@ -83,7 +85,9 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
                   Edit
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     setShowMenu(false);
                     handleDelete();
                   }}

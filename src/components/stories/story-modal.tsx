@@ -43,8 +43,9 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
 
     setIsSaving(true);
     try {
-      if (editingStory) {
-        await updateStory(editingStory.id, title.trim(), description.trim());
+      const targetId = editingStory?.id || createdStoryId;
+      if (targetId) {
+        await updateStory(targetId, title.trim(), description.trim());
       } else {
         const newStory = await createStory(title.trim(), description.trim());
         setCreatedStoryId(newStory.id);
