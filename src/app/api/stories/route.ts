@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
     return successResponse(stories);
   } catch (err: any) {
+    console.error('GET /api/stories ERROR:', err);
     return errorResponse(err.message, 500);
   }
 }
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
     const created = await db.get('SELECT * FROM stories WHERE id = ?', [id]);
     return successResponse(created, 201);
   } catch (err: any) {
+    console.error('POST /api/stories ERROR:', err);
     return errorResponse(err.message, 500);
   }
 }
