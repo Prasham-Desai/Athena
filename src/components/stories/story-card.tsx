@@ -13,7 +13,7 @@ import { ConfirmModal } from '@/components/shared/confirm-modal';
 interface StoryCardProps {
   story: Story;
   onEdit: (story: Story) => void;
-  onPlay: (story: Story) => void;
+  onPlay: (story: Story, audioIndex?: number) => void;
   isActive?: boolean;
 }
 
@@ -45,19 +45,21 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col rounded-2xl border p-5 transition-all duration-300 h-[480px]",
+        "group relative flex flex-col rounded-3xl border p-5 sm:p-6 transition-all duration-300 h-[480px] overflow-hidden",
         isActive 
-          ? "border-indigo-500 shadow-md shadow-indigo-500/10 bg-indigo-50/50 dark:bg-indigo-500/10" 
-          : "border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--primary))] hover:shadow-md"
+          ? "border-indigo-500 shadow-xl shadow-indigo-500/10 bg-indigo-50/40 dark:bg-indigo-500/10 ring-1 ring-indigo-500/20" 
+          : "border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/5"
       )}
     >
+      {/* Glassy reflection effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 dark:from-white/5 dark:to-white/0 pointer-events-none rounded-3xl" />
       {/* Decorative gradient for stories */}
       <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-[100px] bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-50 pointer-events-none" />
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-3 relative z-10 shrink-0">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
-          <Headphones className="w-5 h-5 text-white" />
+      <div className="flex items-start justify-between mb-4 relative z-10 shrink-0">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+          <Headphones className="w-6 h-6 text-white drop-shadow-md" />
         </div>
 
         {/* Radix Dropdown Menu */}
@@ -102,14 +104,26 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
       </div>
 
       {/* Audio List Area (Scrollable) */}
-      <div className="flex-1 min-h-0 overflow-y-auto mb-4 border border-[hsl(var(--border))] rounded-xl bg-[hsl(var(--muted))/0.3] p-2 custom-scrollbar">
+      <div className="flex-1 min-h-0 overflow-y-auto mb-4 -mx-2 px-2 custom-scrollbar relative z-10">
         {hasAudio ? (
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {story.audios.map((audio, index) => (
-              <div key={audio.id} className="flex items-center justify-between p-2 rounded-lg bg-[hsl(var(--background))] border border-[hsl(var(--border))] shadow-sm text-sm">
-                <span className="font-medium text-[hsl(var(--foreground))]">Part {index + 1}</span>
+              <div key={audio.id} className="group/item flex items-center justify-between p-3 rounded-2xl bg-[hsl(var(--muted))/40] hover:bg-[hsl(var(--muted))] border border-transparent hover:border-[hsl(var(--border))] transition-all duration-200">
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-[hsl(var(--muted-foreground))] tabular-nums">{formatTime(audio.duration_seconds)}</span>
+                  <button
+                    onClick={() => onPlay(story, index)}
+                    className="w-9 h-9 shrink-0 rounded-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] flex items-center justify-center group-hover/item:bg-indigo-500 group-hover/item:border-indigo-500 group-hover/item:text-white transition-all shadow-sm"
+                    title="Play from this part"
+                  >
+                    <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                  </button>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-sm text-[hsl(var(--foreground))]">Part {index + 1}</span>
+                    <span className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Audio Segment</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))] tabular-nums bg-[hsl(var(--background))] border border-[hsl(var(--border))] px-2 py-1 rounded-lg shadow-sm">{formatTime(audio.duration_seconds)}</span>
                   <button
                     onClick={() => {
                       setConfirmState({
@@ -118,9 +132,10 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
                         onConfirm: () => deleteStoryAudio(story.id, audio.id)
                       });
                     }}
-                    className="text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
+                    className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all opacity-0 group-hover/item:opacity-100 focus:opacity-100"
+                    title="Delete segment"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>

@@ -44,6 +44,7 @@ import { ProgressRing } from '@/components/shared/progress-ring';
 import { PageHeader } from '@/components/shared/page-header';
 import { AudioRecorder } from '@/components/shared/audio-recorder';
 import { AudioAutoplayBar } from '@/components/shared/audio-autoplay-bar';
+import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { cn, STATUS_CONFIG, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { TopicStatus, Topic, Chapter, ImportanceTag } from '@/types';
 
@@ -304,7 +305,7 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
-  onPlayGlobal?: (topicId: string) => void;
+  onPlayGlobal?: (topicId: string, audioId?: string) => void;
 }
 
 function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: TopicRowProps) {
@@ -314,6 +315,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const subjectName = subjects.find((s) => s.id === subjectId)?.name ?? '';
   const isCompleted = topic.status === 'completed' || topic.status === 'revised';
@@ -367,6 +369,10 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
   };
 
   const handleDelete = () => {
+    setConfirmDelete(true);
+  };
+
+  const executeDelete = () => {
     deleteTopic(subjectId, chapterId, topic.id);
     window.dispatchEvent(
       new CustomEvent('add-toast', { detail: { message: `Topic "${topic.name}" deleted.`, type: 'success' } })
@@ -412,14 +418,14 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex flex-col gap-2 w-full">
-            <InlineEdit
-              value={topic.name}
-              onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-              className={cn('text-sm font-medium w-full')}
-              inputClassName="w-full"
-            />
-            <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? () => onPlayGlobal(topic.id) : undefined} />
-            <div className="flex items-center gap-2 flex-wrap">
+              <InlineEdit
+                value={topic.name}
+                onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
+                className={cn('text-sm font-medium w-full')}
+                inputClassName="w-full"
+              />
+              <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined} />
+              <div className="flex items-center gap-2 flex-wrap">
               {/* Importance */}
               <ImportanceSelect
                 importance={topic.importance}
@@ -524,6 +530,15 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={executeDelete}
+        title="Delete Topic"
+        message={`Are you sure you want to delete "${topic.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+      />
     </motion.div>
   );
 }
@@ -543,6 +558,7 @@ interface ChapterAccordionProps {
 function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '', onPlayAll }: ChapterAccordionProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [newTopicName, setNewTopicName] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
     if (searchQuery) setOpen(true);
@@ -584,8 +600,11 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
     return list;
   }, [chapter.topics, audioNotes]);
 
-  const handlePlayGlobal = useCallback((topicId: string) => {
-    const startIndex = playlist.findIndex((p: any) => p.topicId === topicId);
+  const handlePlayGlobal = useCallback((topicId: string, audioId?: string) => {
+    let startIndex = playlist.findIndex((p: any) => p.topicId === topicId);
+    if (audioId) {
+      startIndex = playlist.findIndex((p: any) => p.noteId === audioId);
+    }
     if (startIndex >= 0 && onPlayAll) {
       onPlayAll(playlist, startIndex);
     }
@@ -678,6 +697,10 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
   };
 
   const handleDeleteChapter = () => {
+    setConfirmDelete(true);
+  };
+
+  const executeDeleteChapter = () => {
     deleteChapter(subjectId, chapter.id);
     window.dispatchEvent(
       new CustomEvent('add-toast', { detail: { message: `Chapter "${chapter.name}" deleted.`, type: 'success' } })
@@ -804,6 +827,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
                 ))}
               </AnimatePresence>
 
+
               {displayedTopics.length === 0 && (
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center py-4">
                   No topics yet. Add one below.
@@ -832,6 +856,15 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={executeDeleteChapter}
+        title="Delete Chapter"
+        message={`Are you sure you want to delete "${chapter.name}"? All topics inside it will be deleted. This action cannot be undone.`}
+        confirmText="Delete"
+      />
     </motion.div>
   );
 }

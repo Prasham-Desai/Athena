@@ -38,6 +38,7 @@ export default function StoriesPage() {
   
   const [playerActive, setPlayerActive] = useState(false);
   const [playingIndex, setPlayingIndex] = useState(0);
+  const [playingAudioIndex, setPlayingAudioIndex] = useState(0);
 
   useEffect(() => {
     fetchStories();
@@ -51,10 +52,11 @@ export default function StoriesPage() {
     setIsModalOpen(true);
   };
 
-  const handlePlay = (story: Story) => {
+  const handlePlay = (story: Story, audioIndex: number = 0) => {
     const index = playlist.findIndex(s => s.id === story.id);
     if (index !== -1) {
       setPlayingIndex(index);
+      setPlayingAudioIndex(audioIndex);
       setPlayerActive(true);
     }
   };
@@ -159,6 +161,7 @@ export default function StoriesPage() {
         isActive={playerActive}
         onClose={() => setPlayerActive(false)}
         startIndex={playingIndex}
+        startAudioIndex={playingAudioIndex}
       />
     </motion.div>
   );

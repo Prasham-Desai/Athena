@@ -11,6 +11,7 @@ interface StoryPlayerBarProps {
   isActive: boolean;
   onClose: () => void;
   startIndex?: number;
+  startAudioIndex?: number;
 }
 
 function formatTime(seconds: number): string {
@@ -19,9 +20,9 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: StoryPlayerBarProps) {
+export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, startAudioIndex = 0 }: StoryPlayerBarProps) {
   const [currentStoryIndex, setCurrentStoryIndex] = useState(startIndex);
-  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(startAudioIndex);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -102,8 +103,8 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
   useEffect(() => {
     if (isActive && playlist.length > 0) {
       setCurrentStoryIndex(startIndex);
-      setCurrentAudioIndex(0);
-      loadTrack(startIndex, 0, true);
+      setCurrentAudioIndex(startAudioIndex);
+      loadTrack(startIndex, startAudioIndex, true);
     }
 
     return () => {
@@ -112,7 +113,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0 }: 
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isActive, startIndex]);
+  }, [isActive, startIndex, startAudioIndex]);
 
   // ── Controls ───────────────────────────────────────────────
   const togglePlay = useCallback(() => {

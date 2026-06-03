@@ -10,6 +10,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG, isOverdue, isToday, getToday } from '@/lib/utils';
 import { useToday } from '@/hooks/use-today';
 import { PageHeader } from '@/components/shared/page-header';
+import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { TimeStudiedWidget } from '@/components/shared/time-studied-widget';
 import { EmptyState } from '@/components/shared/empty-state';
 import type { TaskCategory, Priority, Task } from '@/types';
@@ -702,6 +703,7 @@ export default function TasksPage() {
   const [prevAllDone, setPrevAllDone] = useState(false);
 
   const [completingTask, setCompletingTask] = useState<{ id: string, est: number } | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const filteredTasks = useMemo(() => {
     return tasks
@@ -776,10 +778,18 @@ export default function TasksPage() {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setConfirmDeleteId(id);
+    },
+    [],
+  );
+
+  const executeDelete = useCallback(
+    (id: string) => {
       deleteTask(id);
       window.dispatchEvent(
         new CustomEvent('toast', { detail: { message: 'Task deleted', type: 'info' } }),
       );
+      setConfirmDeleteId(null);
     },
     [deleteTask],
   );
@@ -927,6 +937,15 @@ export default function TasksPage() {
         estimatedMinutes={completingTask?.est || 0}
         onClose={() => setCompletingTask(null)}
         onConfirm={handleConfirmCompletion}
+      />
+      
+      <ConfirmModal
+        isOpen={confirmDeleteId !== null}
+        onClose={() => setConfirmDeleteId(null)}
+        onConfirm={() => confirmDeleteId && executeDelete(confirmDeleteId)}
+        title="Delete Task"
+        message="Are you sure you want to delete this task? This action cannot be undone."
+        confirmText="Delete"
       />
     </>
   );

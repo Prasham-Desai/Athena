@@ -10,7 +10,7 @@ interface AudioRecorderProps {
   topicId: string;
   topicName: string;
   compact?: boolean;
-  onPlayGlobal?: () => void;
+  onPlayGlobal?: (audioId?: string) => void;
 }
 
 type RecorderState = 'idle' | 'recording' | 'pending-save';
@@ -256,26 +256,40 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden w-full"
           >
-            <div className="flex flex-col gap-1.5 mt-1 border-l-2 border-[hsl(var(--border))] pl-2 ml-1">
+            <div className="flex flex-col gap-2 mt-3">
               {notes.map((note, idx) => (
-                <div key={note.id} className="flex items-center justify-between py-1 px-2 rounded bg-[hsl(var(--muted))/0.5] border border-[hsl(var(--border))] text-xs">
-                  <span className="font-medium text-[hsl(var(--foreground))] text-[11px]">Part {idx + 1}</span>
+                <div key={note.id} className="group/note flex items-center justify-between p-3 rounded-2xl bg-[hsl(var(--muted))/30] hover:bg-[hsl(var(--muted))/60] border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))/30] transition-all duration-200 shadow-sm hover:shadow-md">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    {onPlayGlobal && (
+                      <button
+                        onClick={() => onPlayGlobal(note.id)}
+                        className="w-9 h-9 shrink-0 rounded-full bg-[hsl(var(--background))] border border-[hsl(var(--border))] text-[hsl(var(--foreground))] flex items-center justify-center group-hover/note:bg-indigo-500 group-hover/note:border-indigo-500 group-hover/note:text-white transition-all shadow-sm"
+                        title="Play from this part"
+                      >
+                        <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                      </button>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm text-[hsl(var(--foreground))]">Part {idx + 1}</span>
+                      <span className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Audio Note</span>
+                    </div>
+                  </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] text-[hsl(var(--muted-foreground))] tabular-nums">
+                    <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))] tabular-nums bg-[hsl(var(--background))] border border-[hsl(var(--border))] px-2 py-1 rounded-lg shadow-sm">
                       {formatTime(note.duration_seconds)}
                     </span>
                     <button
                       onClick={() => {
-                      setConfirmState({
-                        title: 'Delete Audio Segment',
-                        message: 'Are you sure you want to delete this audio segment?',
-                        onConfirm: () => deleteAudioNote(topicId, note.id)
-                      });
-                    }}
-                      className="text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
+                        setConfirmState({
+                          title: 'Delete Audio Note',
+                          message: 'Are you sure you want to delete this audio note?',
+                          onConfirm: () => deleteAudioNote(topicId, note.id)
+                        });
+                      }}
+                      className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all opacity-0 group-hover/note:opacity-100 focus:opacity-100"
                       title="Delete segment"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
