@@ -8,7 +8,7 @@ interface StoriesState {
 
   // Actions
   fetchStories: () => Promise<void>;
-  createStory: (title: string, description?: string) => Promise<Story>;
+  createStory: (title: string, description?: string, type?: 'story' | 'imagination') => Promise<Story>;
   updateStory: (id: string, title: string, description?: string) => Promise<void>;
   deleteStory: (id: string) => Promise<void>;
   saveStoryAudio: (id: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
@@ -36,12 +36,12 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
     }
   },
 
-  createStory: async (title: string, description?: string) => {
+  createStory: async (title: string, description?: string, type?: 'story' | 'imagination') => {
     try {
       const response = await fetch('/api/stories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description }),
+        body: JSON.stringify({ title, description, type }),
       });
 
       if (!response.ok) throw new Error('Failed to create story');

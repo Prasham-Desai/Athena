@@ -11,9 +11,10 @@ interface StoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   editingStory?: Story | null;
+  defaultType?: 'story' | 'imagination';
 }
 
-export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
+export function StoryModal({ isOpen, onClose, editingStory, defaultType = 'story' }: StoryModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -41,7 +42,7 @@ export function StoryModal({ isOpen, onClose, editingStory }: StoryModalProps) {
       if (editingStory) {
         await updateStory(editingStory.id, title.trim(), description.trim());
       } else {
-        await createStory(title.trim(), description.trim());
+        await createStory(title.trim(), description.trim(), defaultType);
       }
       onClose(); // Close the modal upon success
     } catch (error) {

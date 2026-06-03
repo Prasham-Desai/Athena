@@ -286,7 +286,7 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
                           onConfirm: () => deleteAudioNote(topicId, note.id)
                         });
                       }}
-                      className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all opacity-0 group-hover/note:opacity-100 focus:opacity-100"
+                      className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all"
                       title="Delete segment"
                     >
                       <Trash2 className="w-4 h-4" />

@@ -209,10 +209,13 @@ export interface StoryAudio {
   created_at: string;
 }
 
+export type StoryType = 'story' | 'imagination';
+
 export interface Story {
   id: string;
   title: string;
   description: string | null;
+  type?: StoryType;
   audios: StoryAudio[];
   created_at: string;
   updated_at: string;

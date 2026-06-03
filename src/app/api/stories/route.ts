@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const db = new Database(env.DB);
     const body: any = await request.json();
 
-    const { title, description } = body;
+    const { title, description, type } = body;
 
     if (!title) {
       return errorResponse('title is required', 400);
@@ -54,11 +54,12 @@ export async function POST(request: NextRequest) {
 
     const now = new Date().toISOString();
     const id = generateId();
+    const storyType = type || 'story';
 
     await db.run(
-      `INSERT INTO stories (id, title, description, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?)`,
-      [id, title, description || null, now, now]
+      `INSERT INTO stories (id, title, description, type, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [id, title, description || null, storyType, now, now]
     );
 
     const created = await db.get('SELECT * FROM stories WHERE id = ?', [id]);

@@ -132,7 +132,7 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
                         onConfirm: () => deleteStoryAudio(story.id, audio.id)
                       });
                     }}
-                    className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all opacity-0 group-hover/item:opacity-100 focus:opacity-100"
+                    className="text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 p-2 rounded-xl transition-all"
                     title="Delete segment"
                   >
                     <Trash2 className="w-4 h-4" />

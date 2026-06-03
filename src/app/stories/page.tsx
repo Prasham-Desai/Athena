@@ -36,6 +36,8 @@ export default function StoriesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStory, setEditingStory] = useState<Story | null>(null);
   
+  const [activeTab, setActiveTab] = useState<'story' | 'imagination'>('story');
+  
   const [playerActive, setPlayerActive] = useState(false);
   const [playingIndex, setPlayingIndex] = useState(0);
   const [playingAudioIndex, setPlayingAudioIndex] = useState(0);
@@ -44,8 +46,12 @@ export default function StoriesPage() {
     fetchStories();
   }, [fetchStories]);
 
-  // Playlist is just the stories that have audio
-  const playlist = useMemo(() => stories.filter(s => s.audios && s.audios.length > 0), [stories]);
+  const displayedStories = useMemo(() => {
+    return stories.filter(s => s.type === activeTab || (!s.type && activeTab === 'story'));
+  }, [stories, activeTab]);
+
+  // Playlist is just the displayed items that have audio
+  const playlist = useMemo(() => displayedStories.filter(s => s.audios && s.audios.length > 0), [displayedStories]);
 
   const handleEdit = (story: Story) => {
     setEditingStory(story);
@@ -77,17 +83,47 @@ export default function StoriesPage() {
     >
       <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader
-          title="Sleep Stories"
-          description="Relax and drift off with audio stories tailored for winding down after studying."
+          title={activeTab === 'story' ? "Sleep Stories" : "Imaginations"}
+          description={
+            activeTab === 'story'
+              ? "Relax and drift off with audio stories tailored for winding down after studying."
+              : "Let your mind wander with creative visualizations and guided imaginations."
+          }
         />
         
         <button
           onClick={openNewModal}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all w-full sm:w-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
-          Add Story
+          {activeTab === 'story' ? 'Add Story' : 'Add Imagination'}
         </button>
+      </motion.div>
+
+      {/* Tabs */}
+      <motion.div variants={itemVariants} className="flex justify-center">
+        <div className="inline-flex p-1 bg-[hsl(var(--muted))] rounded-xl">
+          <button
+            onClick={() => setActiveTab('story')}
+            className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'story'
+                ? 'bg-[hsl(var(--background))] text-[hsl(var(--foreground))] shadow-sm'
+                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+            }`}
+          >
+            Stories
+          </button>
+          <button
+            onClick={() => setActiveTab('imagination')}
+            className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'imagination'
+                ? 'bg-[hsl(var(--background))] text-[hsl(var(--foreground))] shadow-sm'
+                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+            }`}
+          >
+            Imaginations
+          </button>
+        </div>
       </motion.div>
 
       {/* Stats/Info Card */}
@@ -112,23 +148,27 @@ export default function StoriesPage() {
       {loadingStories && stories.length === 0 ? (
         <div className="flex items-center justify-center min-h-[40vh]">
           <div className="text-[hsl(var(--muted-foreground))] animate-pulse text-sm">
-            Loading stories...
+            Loading...
           </div>
         </div>
-      ) : stories.length === 0 ? (
+      ) : displayedStories.length === 0 ? (
         <motion.div variants={itemVariants} className="flex flex-col items-center justify-center text-center py-20">
           <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-4">
             <Moon className="w-8 h-8 text-[hsl(var(--muted-foreground))]" />
           </div>
-          <h3 className="text-lg font-semibold">No stories yet</h3>
+          <h3 className="text-lg font-semibold">
+            {activeTab === 'story' ? 'No stories yet' : 'No imaginations yet'}
+          </h3>
           <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1 max-w-sm">
-            Create your first sleep story by recording your own voice or uploading an audio file.
+            {activeTab === 'story'
+              ? 'Create your first sleep story by recording your own voice or uploading an audio file.'
+              : 'Create your first imagination exercise to help you relax and visualize.'}
           </p>
           <button
             onClick={openNewModal}
             className="mt-6 px-5 py-2.5 bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity"
           >
-            Create Story
+            {activeTab === 'story' ? 'Create Story' : 'Create Imagination'}
           </button>
         </motion.div>
       ) : (
@@ -136,7 +176,7 @@ export default function StoriesPage() {
           variants={containerVariants}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {stories.map((story) => (
+          {displayedStories.map((story) => (
             <motion.div key={story.id} variants={itemVariants}>
               <StoryCard
                 story={story}
@@ -154,6 +194,7 @@ export default function StoriesPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         editingStory={editingStory}
+        defaultType={activeTab}
       />
 
       <StoryPlayerBar
