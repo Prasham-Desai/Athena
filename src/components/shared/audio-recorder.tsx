@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, Square, Trash2, Loader2, Play } from 'lucide-react';
 import { useAudioStore } from '@/store/audio-store';
+import { ConfirmModal } from '@/components/shared/confirm-modal';
 
 interface AudioRecorderProps {
   topicId: string;
@@ -33,6 +34,7 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
   const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
   const [pendingDuration, setPendingDuration] = useState(0);
   const [showList, setShowList] = useState(!compact);
+  const [confirmState, setConfirmState] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
 
   // Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -264,10 +266,12 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
                     </span>
                     <button
                       onClick={() => {
-                        if (confirm('Delete this audio segment?')) {
-                          deleteAudioNote(topicId, note.id);
-                        }
-                      }}
+                      setConfirmState({
+                        title: 'Delete Audio Segment',
+                        message: 'Are you sure you want to delete this audio segment?',
+                        onConfirm: () => deleteAudioNote(topicId, note.id)
+                      });
+                    }}
                       className="text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
                       title="Delete segment"
                     >
@@ -280,6 +284,15 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ConfirmModal
+        isOpen={!!confirmState}
+        onClose={() => setConfirmState(null)}
+        onConfirm={confirmState?.onConfirm || (() => {})}
+        title={confirmState?.title || ''}
+        message={confirmState?.message || ''}
+        confirmText="Delete"
+      />
     </div>
   );
 }

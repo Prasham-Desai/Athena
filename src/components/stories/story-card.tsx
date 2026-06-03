@@ -8,6 +8,7 @@ import { useStoriesStore } from '@/store/stories-store';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { StoryAudioRecorder } from './story-audio-recorder';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ConfirmModal } from '@/components/shared/confirm-modal';
 
 interface StoryCardProps {
   story: Story;
@@ -26,11 +27,16 @@ function formatTime(seconds: number | null): string {
 export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
   const { deleteStory, deleteStoryAudio } = useStoriesStore();
   const [isRecording, setIsRecording] = useState(false);
+  const [confirmState, setConfirmState] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
 
-  const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this story?')) {
-      await deleteStory(story.id);
-    }
+  const handleDelete = () => {
+    setConfirmState({
+      title: 'Delete Story',
+      message: 'Are you sure you want to delete this story? This action cannot be undone.',
+      onConfirm: async () => {
+        await deleteStory(story.id);
+      }
+    });
   };
 
   const totalDuration = story.audios?.reduce((sum, a) => sum + a.duration_seconds, 0) || 0;
@@ -106,9 +112,11 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
                   <span className="text-xs text-[hsl(var(--muted-foreground))] tabular-nums">{formatTime(audio.duration_seconds)}</span>
                   <button
                     onClick={() => {
-                      if (confirm('Delete this audio segment?')) {
-                        deleteStoryAudio(story.id, audio.id);
-                      }
+                      setConfirmState({
+                        title: 'Delete Audio Segment',
+                        message: 'Are you sure you want to delete this audio segment?',
+                        onConfirm: () => deleteStoryAudio(story.id, audio.id)
+                      });
                     }}
                     className="text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
                   >
@@ -168,6 +176,15 @@ export function StoryCard({ story, onEdit, onPlay, isActive }: StoryCardProps) {
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={!!confirmState}
+        onClose={() => setConfirmState(null)}
+        onConfirm={confirmState?.onConfirm || (() => {})}
+        title={confirmState?.title || ''}
+        message={confirmState?.message || ''}
+        confirmText="Delete"
+      />
     </div>
   );
 }

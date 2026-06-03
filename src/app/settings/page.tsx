@@ -12,8 +12,8 @@ import { useActivityStore } from '@/store/activity-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
-
-// ---------------------------------------------------------------------------
+import { ConfirmModal } from '@/components/shared/confirm-modal';
+import { useState } from 'react';
 // Section wrapper
 // ---------------------------------------------------------------------------
 
@@ -57,6 +57,8 @@ export default function SettingsPage() {
   const { studyBlocks, setStudyBlocks } = usePlannerStore();
   const { tasks, setTasks } = useTasksStore();
   const { activities, dailyLogs, setActivities, setDailyLogs } = useActivityStore();
+  
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -130,11 +132,10 @@ export default function SettingsPage() {
 
   // ---- Reset ----
   const handleReset = async () => {
-    const confirmed = window.confirm(
-      'This will permanently delete ALL your data including subjects, tasks, planner entries, and activity logs. This cannot be undone.\n\nAre you sure?',
-    );
-    if (!confirmed) return;
-
+    setConfirmReset(true);
+  };
+  
+  const executeReset = async () => {
     setSubjects([]);
     setStudyBlocks([]);
     setTasks([]);
@@ -347,6 +348,15 @@ export default function SettingsPage() {
           </div>
         </SettingsSection>
       </div>
+
+      <ConfirmModal
+        isOpen={confirmReset}
+        onClose={() => setConfirmReset(false)}
+        onConfirm={executeReset}
+        title="Reset All Data"
+        message="This will permanently delete ALL your data including subjects, tasks, planner entries, and activity logs. This cannot be undone. Are you sure?"
+        confirmText="Reset Everything"
+      />
     </>
   );
 }
