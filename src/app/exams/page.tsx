@@ -22,6 +22,7 @@ export default function ExamsPage() {
   const [type, setType] = useState<ExamType>('test');
   const [date, setDate] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState<ExamSubject[]>([]);
+  const [topicsDescription, setTopicsDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function ExamsPage() {
         setType(exam.type);
         setDate(exam.date);
         setSelectedSubjects(exam.subjects || []);
+        setTopicsDescription(exam.topics_description || '');
       }
     } else {
       setEditingExamId(null);
@@ -44,6 +46,7 @@ export default function ExamsPage() {
       setType('test');
       setDate('');
       setSelectedSubjects([]);
+      setTopicsDescription('');
     }
     setIsModalOpen(true);
   };
@@ -92,6 +95,7 @@ export default function ExamsPage() {
         type,
         date,
         subjects: selectedSubjects,
+        topics_description: topicsDescription.trim() || undefined,
       };
 
       if (editingExamId) {
@@ -111,145 +115,136 @@ export default function ExamsPage() {
   const pastExams = useMemo(() => exams.filter(e => e.completed).sort((a, b) => a.date < b.date ? 1 : -1), [exams]);
 
   const renderTable = (examList: typeof exams, isPast: boolean) => (
-    <div className="overflow-x-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-      <table className="w-full text-left text-base">
-        <thead className="bg-[hsl(var(--muted))]/50">
-          <tr>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Title</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))]">Type</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] w-28 sm:w-40">Tentative Start Date</th>
-            <th className="px-4 py-3 font-medium text-[hsl(var(--muted-foreground))] text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-[hsl(var(--border))]">
-          {examList.length === 0 ? (
-            <tr>
-              <td colSpan={4} className="px-4 py-8 text-center text-[hsl(var(--muted-foreground))]">
-                No {isPast ? 'past' : 'upcoming'} exams found.
-              </td>
-            </tr>
-          ) : (
-            examList.map((exam) => {
-              return (
-                <React.Fragment key={exam.id}>
-                  {/* First Row: Main Exam Info */}
-                  <tr className="hover:bg-[hsl(var(--muted))]/30 transition-colors group">
-                    <td className="px-4 py-3 font-medium align-middle">
-                      <div className="flex items-center gap-2">
-                        {isPast ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                        ) : (
-                          <Clock className="w-4 h-4 text-indigo-500 shrink-0" />
-                        )}
-                        <span>{exam.title}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 align-middle">
-                      <span className={cn(
-                        "px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider inline-block",
-                        exam.type === 'exam' 
-                          ? "bg-purple-500/10 text-purple-500" 
-                          : "bg-blue-500/10 text-blue-500"
-                      )}>
-                        {exam.type}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 align-middle">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-medium">{format(new Date(exam.date), 'MMM d, yyyy')}</span>
-                        {!isPast && (
-                          <span className="text-sm text-[hsl(var(--muted-foreground))]">
-                            {getRelativeDate(exam.date)}
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-right align-middle">
-                      <div className="flex items-center justify-end gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => openModal(exam.id)}
-                          className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors"
-                          title="Edit Exam"
+    <div className="grid grid-cols-1 gap-6">
+      {examList.length === 0 ? (
+        <div className="p-8 text-center bg-[hsl(var(--card))] rounded-2xl border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]">
+          No {isPast ? 'past' : 'upcoming'} exams found.
+        </div>
+      ) : (
+        examList.map((exam) => (
+          <div key={exam.id} className="group flex flex-col bg-[hsl(var(--card))] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-all hover:border-indigo-500/30 hover:shadow-md">
+            {/* Header Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:px-6 bg-[hsl(var(--muted))]/10 border-b border-[hsl(var(--border))]">
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-3">
+                  {isPast ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  ) : (
+                    <Clock className="w-5 h-5 text-indigo-500 shrink-0" />
+                  )}
+                  <h3 className="text-xl font-bold text-[hsl(var(--foreground))]">{exam.title}</h3>
+                  <span className={cn(
+                    "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest",
+                    exam.type === 'exam' 
+                      ? "bg-purple-500/10 text-purple-600 dark:text-purple-400" 
+                      : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  )}>
+                    {exam.type}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] sm:pl-8">
+                  <Calendar className="w-4 h-4" />
+                  <span className="font-medium">{format(new Date(exam.date), 'MMMM d, yyyy')}</span>
+                  {!isPast && (
+                    <>
+                      <span>•</span>
+                      <span className="text-indigo-500 font-medium">{getRelativeDate(exam.date)}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 self-end sm:self-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => openModal(exam.id)}
+                  className="p-2 text-[hsl(var(--muted-foreground))] hover:text-indigo-500 hover:bg-indigo-500/10 rounded-xl transition-colors bg-[hsl(var(--background))]"
+                  title="Edit Exam"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => deleteExam(exam.id)}
+                  className="p-2 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-colors bg-[hsl(var(--background))]"
+                  title="Delete Exam"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Details Area */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 sm:px-6">
+              {/* Subjects Column */}
+              <div className="space-y-3">
+                <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
+                  <BookOpen className="w-4 h-4" />
+                  Syllabus Subjects
+                </h4>
+                {(!exam.subjects || exam.subjects.length === 0) ? (
+                  <p className="text-sm italic text-[hsl(var(--muted-foreground))]">No subjects selected</p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {exam.subjects.map(s => {
+                      const subjectData = subjects.find(sub => sub.id === s.id);
+                      if (!subjectData) return null;
+                      return (
+                        <div 
+                          key={s.id}
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-transform hover:scale-105"
+                          style={{ 
+                            backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
+                            borderColor: `${subjectData.color}30`,
+                            color: subjectData.details?.textAccent || subjectData.color,
+                          }}
                         >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteExam(exam.id)}
-                          className="p-1.5 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                          title="Delete Exam"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* Second Row: Subject Tabular Data */}
-                  <tr>
-                    <td colSpan={4} className="p-0 border-t-0 border-b-4 border-b-[hsl(var(--background))]">
-                      <div className="px-4 pb-4 pt-2">
-                        <table className="w-full text-sm sm:text-base rounded-xl overflow-hidden border border-[hsl(var(--border))] shadow-sm">
-                          <thead className="bg-[hsl(var(--muted))]/40 text-[hsl(var(--muted-foreground))]">
-                            <tr>
-                              <th className="px-3 py-2 text-left font-medium">Subject</th>
-                              <th className="px-3 py-2 text-left font-medium w-28 sm:w-40">Date</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-[hsl(var(--border))]/50">
-                            {(!exam.subjects || exam.subjects.length === 0) ? (
-                              <tr>
-                                <td colSpan={2} className="px-3 py-2 text-[hsl(var(--muted-foreground))] italic">No subjects selected</td>
-                              </tr>
-                            ) : (
-                              exam.subjects.map(s => {
-                                const subjectData = subjects.find(sub => sub.id === s.id);
-                                if (!subjectData) return null;
-                                return (
-                                  <tr key={s.id}>
-                                    <td className="px-4 py-3">
-                                      <span 
-                                        className="text-xs sm:text-sm px-3 py-1 rounded-md inline-block font-medium"
-                                        style={{ 
-                                          backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}20`, 
-                                          color: subjectData.details?.textAccent || subjectData.color,
-                                          boxShadow: subjectData.details?.secondaryGlow ? `0 0 10px ${subjectData.details.secondaryGlow}40` : 'none'
-                                        }}
-                                      >
-                                        {subjectData.name}
-                                      </span>
-                                    </td>
-                                    <td className="px-4 py-3 font-medium">
-                                      {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))]">Tentative</span>}
-                                    </td>
-                                  </tr>
-                                )
-                              })
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              )
-            })
-          )}
-        </tbody>
-      </table>
+                          <span>{subjectData.name}</span>
+                          {s.date && (
+                            <span className="text-xs opacity-80 pl-2 border-l border-current/20">
+                              {format(new Date(s.date), 'MMM d')}
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Topics Column */}
+              <div className="space-y-3 flex flex-col">
+                <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
+                  <AlertCircle className="w-4 h-4" />
+                  Topics Description
+                </h4>
+                <div className="bg-[hsl(var(--muted))]/20 rounded-xl p-4 flex-1 border border-[hsl(var(--border))]">
+                  {exam.topics_description ? (
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap text-[hsl(var(--foreground))]">
+                      {exam.topics_description}
+                    </p>
+                  ) : (
+                    <p className="text-sm italic text-[hsl(var(--muted-foreground))] flex h-full items-center">No topics specified.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 
   return (
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
           title="Exams & Tests" 
           description="Manage your upcoming university exams and unit tests" 
         />
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm"
+          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-indigo-500/25 active:scale-95 shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-5 h-5" />
           Add Exam
         </button>
       </div>
@@ -259,18 +254,18 @@ export default function ExamsPage() {
           <div className="animate-pulse text-sm text-[hsl(var(--muted-foreground))]">Loading exams...</div>
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-10">
           <section>
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <GraduationCap className="w-5 h-5 text-indigo-500" />
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[hsl(var(--foreground))]">
+              <GraduationCap className="w-6 h-6 text-indigo-500" />
               Upcoming
             </h2>
             {renderTable(upcomingExams, false)}
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[hsl(var(--foreground))]">
+              <CheckCircle2 className="w-6 h-6 text-emerald-500" />
               Completed
             </h2>
             {renderTable(pastExams, true)}
@@ -293,63 +288,73 @@ export default function ExamsPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-xl bg-[hsl(var(--card))] rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-2xl bg-[hsl(var(--card))] rounded-3xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="p-5 border-b border-[hsl(var(--border))]">
-                <h2 className="text-lg font-semibold">{editingExamId ? 'Edit Exam' : 'Schedule Exam'}</h2>
+              <div className="p-6 border-b border-[hsl(var(--border))] flex items-center justify-between">
+                <h2 className="text-xl font-bold">{editingExamId ? 'Edit Exam' : 'Schedule Exam'}</h2>
               </div>
               
-              <div className="p-5 overflow-y-auto">
-                <form id="exam-form" onSubmit={handleSave} className="space-y-5">
+              <div className="p-6 overflow-y-auto custom-scrollbar">
+                <form id="exam-form" onSubmit={handleSave} className="space-y-6">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium">Title</label>
+                    <label className="text-sm font-semibold">Title</label>
                     <input
                       type="text"
                       required
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="e.g. Unit Test 1, Final University Exam"
-                      className="w-full px-3 py-2 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                      className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all hover:border-[hsl(var(--border-hover))]"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Type</label>
+                      <label className="text-sm font-semibold">Type</label>
                       <select
                         value={type}
                         onChange={(e) => setType(e.target.value as ExamType)}
-                        className="w-full px-3 py-2 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all cursor-pointer"
                       >
                         <option value="exam">Exam</option>
                         <option value="test">Test</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-medium">Tentative Start Date</label>
+                      <label className="text-sm font-semibold">Tentative Start Date</label>
                       <input
                         type="date"
                         required
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full px-3 py-2 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all cursor-pointer"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-3 pt-2">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold">Topics to be asked</label>
+                    <textarea
+                      value={topicsDescription}
+                      onChange={(e) => setTopicsDescription(e.target.value)}
+                      placeholder="e.g. Chapters 1-3, Focus on calculus and algebra..."
+                      className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all min-h-[100px] resize-y"
+                    />
+                  </div>
+
+                  <div className="space-y-3 pt-4 border-t border-[hsl(var(--border))]">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">Syllabus Subjects</label>
+                      <label className="text-sm font-semibold">Syllabus Subjects</label>
                       <button
                         type="button"
                         onClick={handleSelectAll}
-                        className="text-xs text-indigo-500 hover:text-indigo-600 font-medium"
+                        className="text-xs text-indigo-500 hover:text-indigo-600 font-bold tracking-wide uppercase px-2 py-1 rounded hover:bg-indigo-500/10 transition-colors"
                       >
                         {selectedSubjects.length === subjects.length ? 'Deselect All' : 'Select All'}
                       </button>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {subjects.map(subject => {
                         const selectedState = selectedSubjects.find(s => s.id === subject.id);
                         const isSelected = !!selectedState;
@@ -358,35 +363,36 @@ export default function ExamsPage() {
                           <div
                             key={subject.id}
                             className={cn(
-                              "flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl border transition-colors",
+                              "flex flex-col gap-2 p-3 rounded-xl border transition-all cursor-pointer",
                               isSelected 
-                                ? "border-indigo-500 bg-indigo-500/5"
-                                : "border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]/50"
+                                ? "border-indigo-500 bg-indigo-500/5 shadow-sm"
+                                : "border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]/50 hover:border-indigo-500/30"
                             )}
                           >
                             <div 
                               onClick={() => handleToggleSubject(subject.id)}
-                              className="flex items-center gap-3 flex-1 cursor-pointer"
+                              className="flex items-center gap-3 flex-1"
                             >
                               <div className={cn(
-                                "w-4 h-4 rounded-full border flex items-center justify-center shrink-0",
+                                "w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-colors",
                                 isSelected ? "border-indigo-500 bg-indigo-500" : "border-[hsl(var(--muted-foreground))]"
                               )}>
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
-                              <span className="text-sm font-medium truncate" style={{ color: isSelected ? 'inherit' : 'var(--muted-foreground)' }}>
+                              <span className="text-sm font-semibold truncate" style={{ color: isSelected ? 'inherit' : 'var(--muted-foreground)' }}>
                                 {subject.name}
                               </span>
                             </div>
 
                             {isSelected && (
-                              <div className="pl-7 sm:pl-0 shrink-0">
+                              <div className="pl-7 mt-1">
                                 <input
                                   type="date"
                                   value={selectedState.date || ''}
                                   onChange={(e) => handleSubjectDateChange(subject.id, e.target.value)}
-                                  className="w-full sm:w-auto px-2 py-1 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-                                  placeholder="Leave blank for Tentative"
+                                  className="w-full px-3 py-1.5 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                                  placeholder="Tentative date"
+                                  title="Specific exam date for this subject"
                                 />
                               </div>
                             )}
@@ -395,19 +401,19 @@ export default function ExamsPage() {
                       })}
                     </div>
                     {selectedSubjects.length === 0 && (
-                      <p className="text-xs text-red-500 flex items-center gap-1 mt-1">
-                        <AlertCircle className="w-3 h-3" /> Please select at least one subject.
+                      <p className="text-xs text-red-500 flex items-center gap-1.5 mt-2 bg-red-500/10 px-3 py-2 rounded-lg font-medium">
+                        <AlertCircle className="w-4 h-4" /> Please select at least one subject.
                       </p>
                     )}
                   </div>
                 </form>
               </div>
 
-              <div className="p-5 border-t border-[hsl(var(--border))] flex justify-end gap-3 bg-[hsl(var(--muted))]/20 mt-auto">
+              <div className="p-6 border-t border-[hsl(var(--border))] flex justify-end gap-3 bg-[hsl(var(--muted))]/30 mt-auto">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 text-sm font-medium hover:bg-[hsl(var(--muted))] rounded-xl transition-colors"
+                  className="px-5 py-2.5 text-sm font-bold hover:bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] rounded-xl transition-colors"
                 >
                   Cancel
                 </button>
@@ -415,7 +421,7 @@ export default function ExamsPage() {
                   type="submit"
                   form="exam-form"
                   disabled={isSubmitting || !title.trim() || !date || selectedSubjects.length === 0}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl text-sm font-medium transition-colors"
+                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow-indigo-500/25 active:scale-95"
                 >
                   {isSubmitting ? 'Saving...' : (editingExamId ? 'Update Exam' : 'Save Exam')}
                 </button>

@@ -122,6 +122,7 @@ export interface Exam {
   subjects: ExamSubject[]; // parsed from JSON
   completed: boolean;
   createdAt?: string;
+  topics_description?: string;
 }
 
 export type FontSize = 'small' | 'medium' | 'large' | 'extra-large';

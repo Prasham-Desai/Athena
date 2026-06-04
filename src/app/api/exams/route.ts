@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
       subjects: JSON.parse(row.subject_ids as string),
       completed: row.completed === 1,
       createdAt: row.created_at,
+      topics_description: row.topics_description,
     }));
     
     return successResponse(exams);
@@ -37,10 +38,11 @@ export async function POST(request: NextRequest) {
     const type = data.type;
     const date = data.date;
     const subjectsStr = JSON.stringify(data.subjects || []);
+    const topicsDescription = data.topics_description || null;
     
     await db.prepare(
-      'INSERT INTO exams (id, title, type, date, subject_ids, completed) VALUES (?, ?, ?, ?, ?, ?)'
-    ).bind(id, title, type, date, subjectsStr, 0).run();
+      'INSERT INTO exams (id, title, type, date, subject_ids, completed, topics_description) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind(id, title, type, date, subjectsStr, 0, topicsDescription).run();
     
     const newExam = {
       id,
@@ -49,6 +51,7 @@ export async function POST(request: NextRequest) {
       date,
       subjects: data.subjects || [],
       completed: false,
+      topics_description: topicsDescription,
     };
     
     return successResponse(newExam);

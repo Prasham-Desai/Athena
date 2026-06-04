@@ -36,8 +36,8 @@ export async function PATCH(
     }
     
     if (data.title !== undefined) {
-      await db.prepare('UPDATE exams SET title = ?, type = ?, date = ?, subject_ids = ? WHERE id = ?')
-        .bind(data.title, data.type, data.date, JSON.stringify(data.subjects || []), id)
+      await db.prepare('UPDATE exams SET title = ?, type = ?, date = ?, subject_ids = ?, topics_description = ? WHERE id = ?')
+        .bind(data.title, data.type, data.date, JSON.stringify(data.subjects || []), data.topics_description || null, id)
         .run();
     }
     
