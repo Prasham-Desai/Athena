@@ -315,7 +315,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
-  const audioNotes = useAudioStore((s) => s.audioNotes[topic.id] || []);
+  const audioNotes = useAudioStore((s) => s.audioNotes[topic.id]) || [];
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const hasAudio = audioNotes.length > 0;
