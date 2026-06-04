@@ -280,7 +280,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
                   </div>
                   <button 
                     onClick={() => handleDeleteSession(session.id, session.type, session.taskId)}
-                    className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-500 transition opacity-0 group-hover:opacity-100"
+                    className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-500 transition"
                     title="Delete session"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

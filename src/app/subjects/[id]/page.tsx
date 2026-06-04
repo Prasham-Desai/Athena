@@ -315,7 +315,10 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
+  const audioNotes = useAudioStore((s) => s.audioNotes[topic.id] || []);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const hasAudio = audioNotes.length > 0;
 
   const subjectName = subjects.find((s) => s.id === subjectId)?.name ?? '';
   const isCompleted = topic.status === 'completed' || topic.status === 'revised';
@@ -520,10 +523,20 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
             </button>
           )}
 
+          {/* Audio Indicator */}
+          {hasAudio && (
+            <div
+              className="p-1.5 rounded-lg text-indigo-500 bg-indigo-500/10 shrink-0 flex items-center justify-center"
+              title="This topic has audio notes"
+            >
+              <Headphones className="w-3.5 h-3.5" />
+            </div>
+          )}
+
           {/* Delete */}
           <button
             onClick={handleDelete}
-            className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/10 hover:text-red-500 transition-all shrink-0"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all shrink-0"
             title="Delete topic"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -776,7 +789,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
           />
         </div>
 
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 transition-opacity">
           {/* Play All Audio */}
           {playlist.length > 0 && (
             <div
@@ -793,7 +806,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
           {/* Delete */}
           <div
             onClick={(e) => { e.stopPropagation(); handleDeleteChapter(); }}
-            className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-all"
+            className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all"
             role="button"
             tabIndex={0}
           >
