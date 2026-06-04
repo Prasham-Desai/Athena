@@ -92,7 +92,7 @@ export const useExamsStore = create<ExamsState>((set, get) => ({
 
     for (let i = 0; i < updatedExams.length; i++) {
       const exam = updatedExams[i];
-      if (!exam.completed && exam.date < today) {
+      if (!exam.completed && exam.date && exam.date < today) {
         // Date has passed
         try {
           await fetch(`/api/exams/${exam.id}`, {

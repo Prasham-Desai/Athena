@@ -21,8 +21,8 @@ export default function ExamsPage() {
   const [title, setTitle] = useState('');
   const [type, setType] = useState<ExamType>('test');
   const [date, setDate] = useState('');
+  const [date, setDate] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState<ExamSubject[]>([]);
-  const [topicsDescription, setTopicsDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -36,9 +36,8 @@ export default function ExamsPage() {
         setEditingExamId(examId);
         setTitle(exam.title);
         setType(exam.type);
-        setDate(exam.date);
+        setDate(exam.date || '');
         setSelectedSubjects(exam.subjects || []);
-        setTopicsDescription(exam.topics_description || '');
       }
     } else {
       setEditingExamId(null);
@@ -46,7 +45,6 @@ export default function ExamsPage() {
       setType('test');
       setDate('');
       setSelectedSubjects([]);
-      setTopicsDescription('');
     }
     setIsModalOpen(true);
   };
@@ -92,7 +90,7 @@ export default function ExamsPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !date || selectedSubjects.length === 0) return;
+    if (!title.trim() || selectedSubjects.length === 0) return;
 
     try {
       setIsSubmitting(true);
@@ -101,7 +99,6 @@ export default function ExamsPage() {
         type,
         date,
         subjects: selectedSubjects,
-        topics_description: topicsDescription.trim() || undefined,
       };
 
       if (editingExamId) {
@@ -150,8 +147,8 @@ export default function ExamsPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] sm:pl-8">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-medium">{format(new Date(exam.date), 'MMMM d, yyyy')}</span>
-                  {!isPast && (
+                  <span className="font-medium">{exam.date ? format(new Date(exam.date), 'MMMM d, yyyy') : 'No date set'}</span>
+                  {!isPast && exam.date && (
                     <>
                       <span>•</span>
                       <span className="text-indigo-500 font-medium">{getRelativeDate(exam.date)}</span>
@@ -180,20 +177,6 @@ export default function ExamsPage() {
 
             {/* Details Area */}
             <div className="flex flex-col gap-6 p-5 sm:px-6">
-              {exam.topics_description && (
-                <div className="space-y-3 flex flex-col">
-                  <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
-                    <AlertCircle className="w-4 h-4" />
-                    Overall Exam Description
-                  </h4>
-                  <div className="bg-[hsl(var(--muted))]/20 rounded-xl p-4 border border-[hsl(var(--border))]">
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap text-[hsl(var(--foreground))]">
-                      {exam.topics_description}
-                    </p>
-                  </div>
-                </div>
-              )}
-
               <div className="space-y-3">
                 <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
                   <BookOpen className="w-4 h-4" />
@@ -338,10 +321,9 @@ export default function ExamsPage() {
                       </select>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-sm font-semibold">Tentative Start Date</label>
+                      <label className="text-sm font-semibold">Tentative Start Date <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">(Optional)</span></label>
                       <input
                         type="date"
-                        required
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                         className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all cursor-pointer"
@@ -349,15 +331,7 @@ export default function ExamsPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold">Topics to be asked</label>
-                    <textarea
-                      value={topicsDescription}
-                      onChange={(e) => setTopicsDescription(e.target.value)}
-                      placeholder="e.g. Chapters 1-3, Focus on calculus and algebra..."
-                      className="w-full px-4 py-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all min-h-[100px] resize-y"
-                    />
-                  </div>
+
 
                   <div className="space-y-3 pt-4 border-t border-[hsl(var(--border))]">
                     <div className="flex items-center justify-between">
@@ -443,7 +417,7 @@ export default function ExamsPage() {
                 <button
                   type="submit"
                   form="exam-form"
-                  disabled={isSubmitting || !title.trim() || !date || selectedSubjects.length === 0}
+                  disabled={isSubmitting || !title.trim() || selectedSubjects.length === 0}
                   className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl text-sm font-bold transition-all shadow-sm hover:shadow-indigo-500/25 active:scale-95"
                 >
                   {isSubmitting ? 'Saving...' : (editingExamId ? 'Update Exam' : 'Save Exam')}
