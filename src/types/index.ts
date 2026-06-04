@@ -112,6 +112,7 @@ export type ExamType = 'test' | 'exam';
 export interface ExamSubject {
   id: string;
   date?: string; // YYYY-MM-DD
+  description?: string;
 }
 
 export interface Exam {

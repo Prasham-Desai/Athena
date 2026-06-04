@@ -73,6 +73,12 @@ export default function ExamsPage() {
     );
   };
 
+  const handleSubjectDescriptionChange = (id: string, newDesc: string) => {
+    setSelectedSubjects(prev => 
+      prev.map(s => s.id === id ? { ...s, description: newDesc } : s)
+    );
+  };
+
   const handleSelectAll = () => {
     if (selectedSubjects.length === subjects.length) {
       setSelectedSubjects([]);
@@ -173,8 +179,21 @@ export default function ExamsPage() {
             </div>
 
             {/* Details Area */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 sm:px-6">
-              {/* Subjects Column */}
+            <div className="flex flex-col gap-6 p-5 sm:px-6">
+              {exam.topics_description && (
+                <div className="space-y-3 flex flex-col">
+                  <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
+                    <AlertCircle className="w-4 h-4" />
+                    Overall Exam Description
+                  </h4>
+                  <div className="bg-[hsl(var(--muted))]/20 rounded-xl p-4 border border-[hsl(var(--border))]">
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap text-[hsl(var(--foreground))]">
+                      {exam.topics_description}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-3">
                 <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
                   <BookOpen className="w-4 h-4" />
@@ -183,48 +202,46 @@ export default function ExamsPage() {
                 {(!exam.subjects || exam.subjects.length === 0) ? (
                   <p className="text-sm italic text-[hsl(var(--muted-foreground))]">No subjects selected</p>
                 ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {exam.subjects.map(s => {
-                      const subjectData = subjects.find(sub => sub.id === s.id);
-                      if (!subjectData) return null;
-                      return (
-                        <div 
-                          key={s.id}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-transform hover:scale-105"
-                          style={{ 
-                            backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
-                            borderColor: `${subjectData.color}30`,
-                            color: subjectData.details?.textAccent || subjectData.color,
-                          }}
-                        >
-                          <span>{subjectData.name}</span>
-                          {s.date && (
-                            <span className="text-xs opacity-80 pl-2 border-l border-current/20">
-                              {format(new Date(s.date), 'MMM d')}
-                            </span>
-                          )}
-                        </div>
-                      )
-                    })}
+                  <div className="overflow-x-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+                    <table className="w-full text-left text-sm">
+                      <thead className="bg-[hsl(var(--muted))]/30">
+                        <tr>
+                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-48">Subject</th>
+                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-32">Date</th>
+                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))]">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[hsl(var(--border))]/50">
+                        {exam.subjects.map(s => {
+                          const subjectData = subjects.find(sub => sub.id === s.id);
+                          if (!subjectData) return null;
+                          return (
+                            <tr key={s.id} className="hover:bg-[hsl(var(--muted))]/10 transition-colors">
+                              <td className="px-4 py-3 align-top">
+                                <div 
+                                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold"
+                                  style={{ 
+                                    backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
+                                    borderColor: `${subjectData.color}30`,
+                                    color: subjectData.details?.textAccent || subjectData.color,
+                                  }}
+                                >
+                                  <span>{subjectData.name}</span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 align-top font-medium text-[hsl(var(--foreground))]">
+                                {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))] italic">Tentative</span>}
+                              </td>
+                              <td className="px-4 py-3 align-top text-[hsl(var(--foreground))] whitespace-pre-wrap">
+                                {s.description || <span className="italic opacity-50 text-[hsl(var(--muted-foreground))]">No description provided</span>}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 )}
-              </div>
-
-              {/* Topics Column */}
-              <div className="space-y-3 flex flex-col">
-                <h4 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] flex items-center gap-2 uppercase tracking-wider">
-                  <AlertCircle className="w-4 h-4" />
-                  Topics Description
-                </h4>
-                <div className="bg-[hsl(var(--muted))]/20 rounded-xl p-4 flex-1 border border-[hsl(var(--border))]">
-                  {exam.topics_description ? (
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap text-[hsl(var(--foreground))]">
-                      {exam.topics_description}
-                    </p>
-                  ) : (
-                    <p className="text-sm italic text-[hsl(var(--muted-foreground))] flex h-full items-center">No topics specified.</p>
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -385,7 +402,7 @@ export default function ExamsPage() {
                             </div>
 
                             {isSelected && (
-                              <div className="pl-7 mt-1">
+                              <div className="flex flex-col gap-2 mt-2 pt-2 border-t border-[hsl(var(--border))]/50">
                                 <input
                                   type="date"
                                   value={selectedState.date || ''}
@@ -393,6 +410,12 @@ export default function ExamsPage() {
                                   className="w-full px-3 py-1.5 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                                   placeholder="Tentative date"
                                   title="Specific exam date for this subject"
+                                />
+                                <textarea
+                                  value={selectedState.description || ''}
+                                  onChange={(e) => handleSubjectDescriptionChange(subject.id, e.target.value)}
+                                  placeholder="Description for this subject (optional)..."
+                                  className="w-full px-3 py-1.5 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/50 min-h-[60px] resize-y"
                                 />
                               </div>
                             )}
