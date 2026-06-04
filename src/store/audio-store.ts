@@ -10,6 +10,8 @@ interface AudioState {
   // Actions
   fetchAudioNotesForChapter: (chapterId: string) => Promise<void>;
   saveAudioNote: (topicId: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
+  createAudioNote: (topicId: string, mimeType: string) => Promise<string>;
+  appendAudioChunk: (topicId: string, noteId: string, audioBlob: Blob, chunkDuration: number) => Promise<void>;
   deleteAudioNote: (topicId: string, noteId: string) => Promise<void>;
   getAudioUrl: (noteId: string) => string;
 }
@@ -154,6 +156,80 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       }
       console.error('Failed to delete audio note', error);
       throw error;
+    }
+  },
+
+  createAudioNote: async (topicId: string, mimeType: string) => {
+    try {
+      const response = await fetch('/api/audio-notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic_id: topicId,
+          mime_type: mimeType,
+          duration_seconds: 0,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to create audio note');
+
+      const { data } = (await response.json()) as { data: AudioNoteMeta };
+
+      // Add the new (empty) note to the store
+      set((state) => {
+        const existingNotes = state.audioNotes[topicId] || [];
+        return {
+          audioNotes: {
+            ...state.audioNotes,
+            [topicId]: [...existingNotes, data].sort((a, b) => a.sequence_index - b.sequence_index),
+          },
+        };
+      });
+
+      return data.id;
+    } catch (error) {
+      console.error('Failed to create audio note', error);
+      throw error;
+    }
+  },
+
+  appendAudioChunk: async (topicId: string, noteId: string, audioBlob: Blob, chunkDuration: number) => {
+    try {
+      // Convert Blob to base64
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const audio_data = btoa(binary);
+
+      const response = await fetch(`/api/audio-notes/${noteId}/append`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audio_data,
+          duration_seconds: chunkDuration,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to append audio chunk');
+
+      const { data } = (await response.json()) as { data: AudioNoteMeta };
+
+      // Update the note in the store with latest metadata
+      set((state) => {
+        const existingNotes = state.audioNotes[topicId] || [];
+        return {
+          audioNotes: {
+            ...state.audioNotes,
+            [topicId]: existingNotes.map((n) => (n.id === noteId ? data : n)),
+          },
+        };
+      });
+    } catch (error) {
+      console.error('Failed to append audio chunk', error);
+      // Don't throw - checkpoint failures should not crash the recording
     }
   },
 

@@ -12,6 +12,8 @@ interface StoriesState {
   updateStory: (id: string, title: string, description?: string) => Promise<void>;
   deleteStory: (id: string) => Promise<void>;
   saveStoryAudio: (id: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
+  createStoryAudioNote: (storyId: string, mimeType: string) => Promise<string>;
+  appendStoryAudioChunk: (storyId: string, audioId: string, audioBlob: Blob, chunkDuration: number) => Promise<void>;
   deleteStoryAudio: (storyId: string, audioId: string) => Promise<void>;
   getStoryAudioUrl: (storyId: string, audioId: string) => string;
 }
@@ -230,6 +232,61 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
       }
       console.error('Failed to delete story audio', error);
       throw error;
+    }
+  },
+
+  createStoryAudioNote: async (storyId: string, mimeType: string) => {
+    try {
+      const response = await fetch(`/api/stories/${storyId}/audio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audio_data: '',
+          mime_type: mimeType,
+          duration_seconds: 0,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to create story audio note');
+
+      const { data } = (await response.json()) as { data: Story };
+
+      set((state) => ({
+        stories: state.stories.map((s) => (s.id === storyId ? data : s)),
+      }));
+
+      // Return the ID of the newly created audio
+      const newAudio = data.audios?.[data.audios.length - 1];
+      return newAudio?.id || '';
+    } catch (error) {
+      console.error('Failed to create story audio note', error);
+      throw error;
+    }
+  },
+
+  appendStoryAudioChunk: async (storyId: string, audioId: string, audioBlob: Blob, chunkDuration: number) => {
+    try {
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const audio_data = btoa(binary);
+
+      const response = await fetch(`/api/stories/${storyId}/audio/${audioId}/append`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audio_data,
+          duration_seconds: chunkDuration,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to append story audio chunk');
+    } catch (error) {
+      console.error('Failed to append story audio chunk', error);
+      // Don't throw - checkpoint failures should not crash the recording
     }
   },
 

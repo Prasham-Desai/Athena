@@ -13,7 +13,8 @@ interface AudioRecorderProps {
   onPlayGlobal?: (audioId?: string) => void;
 }
 
-type RecorderState = 'idle' | 'recording' | 'pending-save';
+const MAX_DURATION = 300; // 5 minutes in seconds
+const CHECKPOINT_INTERVAL = 20; // seconds
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -22,38 +23,129 @@ function formatTime(seconds: number): string {
 }
 
 export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal }: AudioRecorderProps) {
-  const { audioNotes, loadingTopics, saveAudioNote, deleteAudioNote } = useAudioStore();
+  const { audioNotes, loadingTopics, createAudioNote, appendAudioChunk, deleteAudioNote } = useAudioStore();
 
   const notes = audioNotes[topicId] || [];
   const hasAudio = notes.length > 0;
   const isLoading = loadingTopics.includes(topicId);
 
   // State
-  const [recorderState, setRecorderState] = useState<RecorderState>('idle');
+  const [isRecording, setIsRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const [pendingBlob, setPendingBlob] = useState<Blob | null>(null);
-  const [pendingDuration, setPendingDuration] = useState(0);
   const [showList, setShowList] = useState(!compact);
   const [confirmState, setConfirmState] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
+  const [checkpointCount, setCheckpointCount] = useState(0);
 
   // Refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const checkpointTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const autoStopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const recordingStartRef = useRef<number>(0);
+  const lastCheckpointRef = useRef<number>(0);
+  const activeNoteIdRef = useRef<string | null>(null);
+  const mimeTypeRef = useRef<string>('audio/webm;codecs=opus');
+  const isSavingRef = useRef(false);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (checkpointTimerRef.current) clearInterval(checkpointTimerRef.current);
+      if (autoStopTimerRef.current) clearTimeout(autoStopTimerRef.current);
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((t) => t.stop());
       }
     };
   }, []);
 
-  // ── Recording ──────────────────────────────────────────────
+  // ── Flush accumulated chunks as a checkpoint ──────────────
+  const flushChunks = useCallback(async () => {
+    if (isSavingRef.current) return;
+    if (!activeNoteIdRef.current) return;
+    if (chunksRef.current.length === 0) return;
+
+    isSavingRef.current = true;
+    const chunksCopy = [...chunksRef.current];
+    chunksRef.current = [];
+
+    const now = Date.now();
+    const chunkDuration = (now - lastCheckpointRef.current) / 1000;
+    lastCheckpointRef.current = now;
+
+    try {
+      const blob = new Blob(chunksCopy, { type: mimeTypeRef.current });
+      await appendAudioChunk(topicId, activeNoteIdRef.current, blob, chunkDuration);
+      setCheckpointCount((c) => c + 1);
+    } catch (err) {
+      console.error('Checkpoint save failed', err);
+    } finally {
+      isSavingRef.current = false;
+    }
+  }, [topicId, appendAudioChunk]);
+
+  // ── Stop + final save ─────────────────────────────────────
+  const stopAndSave = useCallback(async () => {
+    // Clear all timers
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (checkpointTimerRef.current) {
+      clearInterval(checkpointTimerRef.current);
+      checkpointTimerRef.current = null;
+    }
+    if (autoStopTimerRef.current) {
+      clearTimeout(autoStopTimerRef.current);
+      autoStopTimerRef.current = null;
+    }
+
+    // Stop the MediaRecorder (this triggers onstop which we handle below)
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+
+    // Stop mic
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+
+    // Wait a tick for final ondataavailable to fire
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Flush remaining chunks
+    if (chunksRef.current.length > 0 && activeNoteIdRef.current) {
+      const remainingChunks = [...chunksRef.current];
+      chunksRef.current = [];
+
+      const chunkDuration = (Date.now() - lastCheckpointRef.current) / 1000;
+
+      try {
+        const blob = new Blob(remainingChunks, { type: mimeTypeRef.current });
+        await appendAudioChunk(topicId, activeNoteIdRef.current, blob, chunkDuration);
+      } catch (err) {
+        console.error('Final chunk save failed', err);
+      }
+    }
+
+    activeNoteIdRef.current = null;
+    setIsRecording(false);
+    setShowList(true);
+    setCheckpointCount(0);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('toast', {
+          detail: { message: 'Audio note saved', type: 'success' },
+        })
+      );
+    }
+  }, [topicId, appendAudioChunk]);
+
+  // ── Start Recording ───────────────────────────────────────
   const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -63,6 +155,12 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
         ? 'audio/webm;codecs=opus'
         : 'audio/mp4';
 
+      mimeTypeRef.current = mimeType;
+
+      // Reserve a DB row immediately
+      const noteId = await createAudioNote(topicId, mimeType);
+      activeNoteIdRef.current = noteId;
+
       const mediaRecorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
@@ -71,27 +169,32 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: mediaRecorder.mimeType });
-        const exactDuration = (Date.now() - recordingStartRef.current) / 1000;
-        
-        // Stop all tracks
-        stream.getTracks().forEach((t) => t.stop());
-        streamRef.current = null;
+      // We handle onstop in stopAndSave, not here
+      mediaRecorder.onstop = () => {};
 
-        setPendingBlob(blob);
-        setPendingDuration(exactDuration);
-        setRecorderState('pending-save');
-      };
-
-      mediaRecorder.start(250); 
+      mediaRecorder.start(250); // collect chunks every 250ms
       setElapsed(0);
-      setRecorderState('recording');
+      setCheckpointCount(0);
+      setIsRecording(true);
 
       recordingStartRef.current = Date.now();
+      lastCheckpointRef.current = Date.now();
+
+      // Elapsed timer (UI update)
       timerRef.current = setInterval(() => {
-        setElapsed(Math.floor((Date.now() - recordingStartRef.current) / 1000));
+        const currentElapsed = Math.floor((Date.now() - recordingStartRef.current) / 1000);
+        setElapsed(currentElapsed);
       }, 250);
+
+      // 20-second checkpoint timer
+      checkpointTimerRef.current = setInterval(() => {
+        flushChunks();
+      }, CHECKPOINT_INTERVAL * 1000);
+
+      // 5-minute auto-stop
+      autoStopTimerRef.current = setTimeout(() => {
+        stopAndSave();
+      }, MAX_DURATION * 1000);
     } catch (err) {
       console.error('Microphone access denied', err);
       if (typeof window !== 'undefined') {
@@ -100,38 +203,11 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
         );
       }
     }
-  }, []);
-
-  const stopRecording = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
-    }
-  }, []);
-
-  // ── Save / Discard Pending ─────────────────────────────────
-  const handleSavePending = useCallback(async () => {
-    if (!pendingBlob) return;
-    try {
-      await saveAudioNote(topicId, pendingBlob, pendingDuration);
-      setRecorderState('idle');
-      setShowList(true); // show list after saving new audio
-    } catch {
-      setRecorderState('idle');
-    } finally {
-      setPendingBlob(null);
-    }
-  }, [pendingBlob, pendingDuration, saveAudioNote, topicId]);
-
-  const handleDiscardPending = useCallback(() => {
-    setPendingBlob(null);
-    setRecorderState('idle');
-  }, []);
+  }, [topicId, createAudioNote, flushChunks, stopAndSave]);
 
   // ── Render ─────────────────────────────────────────────────
+  const progressPercent = (elapsed / MAX_DURATION) * 100;
+
   return (
     <div className={`flex flex-col gap-2 ${compact ? 'mt-1' : 'mt-2'} w-full`}>
       {/* ── Action Bar ──────────────────────────────────────── */}
@@ -150,7 +226,7 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
             </motion.div>
           )}
 
-          {!isLoading && recorderState === 'idle' && (
+          {!isLoading && !isRecording && (
             <motion.button
               key="idle"
               whileHover={{ scale: 1.02 }}
@@ -169,14 +245,14 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
           )}
 
           {/* ── Recording State ────────────────────────────── */}
-          {!isLoading && recorderState === 'recording' && (
+          {!isLoading && isRecording && (
             <motion.div
               key="recording"
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20"
             >
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
@@ -184,51 +260,42 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
               >
                 <Mic className="w-3.5 h-3.5 text-red-500" />
               </motion.div>
-              <span className="text-xs font-medium text-red-500 tabular-nums min-w-[2.5rem] ml-1">
-                {formatTime(elapsed)}
+
+              {/* Time display: elapsed / max */}
+              <span className="text-xs font-medium text-red-500 tabular-nums min-w-[5rem]">
+                {formatTime(elapsed)} / {formatTime(MAX_DURATION)}
               </span>
+
+              {/* Mini progress bar */}
+              <div className="w-16 h-1.5 rounded-full bg-red-500/20 overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full bg-red-500"
+                  style={{ width: `${Math.min(progressPercent, 100)}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+
+              {/* Checkpoint indicator */}
+              {checkpointCount > 0 && (
+                <span className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded" title={`${checkpointCount} checkpoint(s) saved`}>
+                  ✓{checkpointCount}
+                </span>
+              )}
+
+              {/* Stop/End button */}
               <button
-                onClick={stopRecording}
+                onClick={stopAndSave}
                 className="flex items-center justify-center w-6 h-6 rounded-md ml-1 bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm"
+                title="End recording & save"
               >
                 <Square className="w-3 h-3" fill="currentColor" />
               </button>
             </motion.div>
           )}
-
-          {/* ── Pending Save ──────────────────────────────── */}
-          {!isLoading && recorderState === 'pending-save' && (
-            <motion.div
-              key="pending-save"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -8 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20"
-            >
-              <span className="text-xs font-medium text-amber-600 dark:text-amber-400">
-                Review: {formatTime(pendingDuration)}
-              </span>
-              <div className="flex items-center gap-1.5 ml-2">
-                <button
-                  onClick={handleDiscardPending}
-                  className="px-2.5 py-1 text-[10px] font-medium rounded-md bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 transition-colors"
-                >
-                  Discard
-                </button>
-                <button
-                  onClick={handleSavePending}
-                  className="px-3 py-1 text-[10px] font-medium rounded-md shadow-sm bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
-                >
-                  Save
-                </button>
-              </div>
-            </motion.div>
-          )}
         </AnimatePresence>
 
         {/* Global Play Button if has audio */}
-        {hasAudio && recorderState === 'idle' && (
+        {hasAudio && !isRecording && (
           <motion.div className="flex items-center gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <button
               onClick={() => onPlayGlobal && onPlayGlobal()}

@@ -21,7 +21,6 @@ export default function ExamsPage() {
   const [title, setTitle] = useState('');
   const [type, setType] = useState<ExamType>('test');
   const [date, setDate] = useState('');
-  const [date, setDate] = useState('');
   const [selectedSubjects, setSelectedSubjects] = useState<ExamSubject[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

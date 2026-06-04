@@ -51,18 +51,14 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const { audio_data, mime_type, duration_seconds } = body;
 
-    if (!audio_data || !mime_type || duration_seconds === undefined) {
-      return errorResponse('audio_data, mime_type, and duration_seconds are required', 400);
+    if (!mime_type || duration_seconds === undefined) {
+      return errorResponse('mime_type and duration_seconds are required', 400);
     }
 
     const existing = await db.get<any>('SELECT * FROM stories WHERE id = ?', [id]);
     if (!existing) {
       return errorResponse('Story not found', 404);
     }
-
-    // Decode base64 to ArrayBuffer
-    const binaryData = Uint8Array.from(atob(audio_data), c => c.charCodeAt(0));
-    const fileSize = binaryData.byteLength;
 
     const countRes = await db.get<{c: number}>('SELECT COUNT(*) as c FROM story_audios WHERE story_id = ?', [id]);
     const sequenceIndex = countRes?.c || 0;
@@ -71,8 +67,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const audioId = `${id}-audio-${Date.now()}`;
     const kvKey = `story_audio:${audioId}`;
 
-    // Store blob in KV
-    await env.KV.put(kvKey, binaryData.buffer);
+    let fileSize = 0;
+
+    if (audio_data && audio_data.length > 0) {
+      // Decode base64 to ArrayBuffer
+      const binaryData = Uint8Array.from(atob(audio_data), c => c.charCodeAt(0));
+      fileSize = binaryData.byteLength;
+      await env.KV.put(kvKey, binaryData.buffer);
+    } else {
+      // Reserve with empty blob
+      await env.KV.put(kvKey, new ArrayBuffer(0));
+    }
 
     const now = new Date().toISOString();
 
