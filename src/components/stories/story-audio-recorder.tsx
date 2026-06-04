@@ -21,7 +21,7 @@ function formatTime(seconds: number): string {
 }
 
 export function StoryAudioRecorder({ storyId, compact = true, onSuccess }: StoryAudioRecorderProps) {
-  const { loadingStoryIds, createStoryAudioNote, appendStoryAudioChunk } = useStoriesStore();
+  const { loadingStoryIds, createStoryAudioNote, appendStoryAudioChunk, addFinalizedStoryAudio } = useStoriesStore();
 
   const isLoading = loadingStoryIds.includes(storyId);
 
@@ -110,8 +110,8 @@ export function StoryAudioRecorder({ storyId, compact = true, onSuccess }: Story
     // Wait a tick for final ondataavailable to fire
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Flush remaining chunks
-    if (chunksRef.current.length > 0 && activeAudioIdRef.current) {
+    // Flush remaining chunks (even if empty, to get the final metadata)
+    if (activeAudioIdRef.current) {
       const remainingChunks = [...chunksRef.current];
       chunksRef.current = [];
 
@@ -119,7 +119,11 @@ export function StoryAudioRecorder({ storyId, compact = true, onSuccess }: Story
 
       try {
         const blob = new Blob(remainingChunks, { type: mimeTypeRef.current });
-        await appendStoryAudioChunk(storyId, activeAudioIdRef.current, blob, chunkDuration);
+        const finalStory = await appendStoryAudioChunk(storyId, activeAudioIdRef.current, blob, chunkDuration);
+        
+        if (finalStory) {
+          addFinalizedStoryAudio(finalStory);
+        }
       } catch (err) {
         console.error('Final chunk save failed', err);
       }

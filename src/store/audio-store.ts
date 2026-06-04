@@ -11,7 +11,8 @@ interface AudioState {
   fetchAudioNotesForChapter: (chapterId: string) => Promise<void>;
   saveAudioNote: (topicId: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
   createAudioNote: (topicId: string, mimeType: string) => Promise<string>;
-  appendAudioChunk: (topicId: string, noteId: string, audioBlob: Blob, chunkDuration: number) => Promise<void>;
+  appendAudioChunk: (topicId: string, noteId: string, audioBlob: Blob, chunkDuration: number) => Promise<AudioNoteMeta | null>;
+  addFinalizedAudioNote: (topicId: string, note: AudioNoteMeta) => void;
   deleteAudioNote: (topicId: string, noteId: string) => Promise<void>;
   getAudioUrl: (noteId: string) => string;
 }
@@ -175,17 +176,7 @@ export const useAudioStore = create<AudioState>((set, get) => ({
 
       const { data } = (await response.json()) as { data: AudioNoteMeta };
 
-      // Add the new (empty) note to the store
-      set((state) => {
-        const existingNotes = state.audioNotes[topicId] || [];
-        return {
-          audioNotes: {
-            ...state.audioNotes,
-            [topicId]: [...existingNotes, data].sort((a, b) => a.sequence_index - b.sequence_index),
-          },
-        };
-      });
-
+      // Do NOT add to store yet — note stays invisible during recording
       return data.id;
     } catch (error) {
       console.error('Failed to create audio note', error);
@@ -216,21 +207,32 @@ export const useAudioStore = create<AudioState>((set, get) => ({
       if (!response.ok) throw new Error('Failed to append audio chunk');
 
       const { data } = (await response.json()) as { data: AudioNoteMeta };
+      return data;
+    } catch (error) {
+      console.error('Failed to append audio chunk', error);
+      return null;
+    }
+  },
 
-      // Update the note in the store with latest metadata
-      set((state) => {
-        const existingNotes = state.audioNotes[topicId] || [];
+  addFinalizedAudioNote: (topicId: string, note: AudioNoteMeta) => {
+    set((state) => {
+      const existingNotes = state.audioNotes[topicId] || [];
+      // If it somehow already exists, update it
+      if (existingNotes.some(n => n.id === note.id)) {
         return {
           audioNotes: {
             ...state.audioNotes,
-            [topicId]: existingNotes.map((n) => (n.id === noteId ? data : n)),
+            [topicId]: existingNotes.map(n => n.id === note.id ? note : n),
           },
         };
-      });
-    } catch (error) {
-      console.error('Failed to append audio chunk', error);
-      // Don't throw - checkpoint failures should not crash the recording
-    }
+      }
+      return {
+        audioNotes: {
+          ...state.audioNotes,
+          [topicId]: [...existingNotes, note].sort((a, b) => a.sequence_index - b.sequence_index),
+        },
+      };
+    });
   },
 
   getAudioUrl: (noteId: string) => {

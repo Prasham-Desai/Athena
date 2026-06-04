@@ -13,7 +13,8 @@ interface StoriesState {
   deleteStory: (id: string) => Promise<void>;
   saveStoryAudio: (id: string, audioBlob: Blob, durationSeconds: number) => Promise<void>;
   createStoryAudioNote: (storyId: string, mimeType: string) => Promise<string>;
-  appendStoryAudioChunk: (storyId: string, audioId: string, audioBlob: Blob, chunkDuration: number) => Promise<void>;
+  appendStoryAudioChunk: (storyId: string, audioId: string, audioBlob: Blob, chunkDuration: number) => Promise<Story | null>;
+  addFinalizedStoryAudio: (story: Story) => void;
   deleteStoryAudio: (storyId: string, audioId: string) => Promise<void>;
   getStoryAudioUrl: (storyId: string, audioId: string) => string;
 }
@@ -251,9 +252,10 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
 
       const { data } = (await response.json()) as { data: Story };
 
-      set((state) => ({
-        stories: state.stories.map((s) => (s.id === storyId ? data : s)),
-      }));
+      // Do NOT update store - hide the empty audio until recording finishes
+      // set((state) => ({
+      //   stories: state.stories.map((s) => (s.id === storyId ? data : s)),
+      // }));
 
       // Return the ID of the newly created audio
       const newAudio = data.audios?.[data.audios.length - 1];
@@ -284,10 +286,19 @@ export const useStoriesStore = create<StoriesState>((set, get) => ({
       });
 
       if (!response.ok) throw new Error('Failed to append story audio chunk');
+      
+      const { data } = (await response.json()) as { data: Story };
+      return data;
     } catch (error) {
       console.error('Failed to append story audio chunk', error);
-      // Don't throw - checkpoint failures should not crash the recording
+      return null;
     }
+  },
+
+  addFinalizedStoryAudio: (story: Story) => {
+    set((state) => ({
+      stories: state.stories.map((s) => (s.id === story.id ? story : s)),
+    }));
   },
 
   getStoryAudioUrl: (storyId: string, audioId: string) => {

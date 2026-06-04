@@ -23,7 +23,7 @@ function formatTime(seconds: number): string {
 }
 
 export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal }: AudioRecorderProps) {
-  const { audioNotes, loadingTopics, createAudioNote, appendAudioChunk, deleteAudioNote } = useAudioStore();
+  const { audioNotes, loadingTopics, createAudioNote, appendAudioChunk, deleteAudioNote, addFinalizedAudioNote } = useAudioStore();
 
   const notes = audioNotes[topicId] || [];
   const hasAudio = notes.length > 0;
@@ -116,8 +116,8 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
     // Wait a tick for final ondataavailable to fire
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Flush remaining chunks
-    if (chunksRef.current.length > 0 && activeNoteIdRef.current) {
+    // Flush remaining chunks (even if empty, to get the final metadata)
+    if (activeNoteIdRef.current) {
       const remainingChunks = [...chunksRef.current];
       chunksRef.current = [];
 
@@ -125,7 +125,11 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
 
       try {
         const blob = new Blob(remainingChunks, { type: mimeTypeRef.current });
-        await appendAudioChunk(topicId, activeNoteIdRef.current, blob, chunkDuration);
+        const finalNote = await appendAudioChunk(topicId, activeNoteIdRef.current, blob, chunkDuration);
+        
+        if (finalNote) {
+          addFinalizedAudioNote(topicId, finalNote);
+        }
       } catch (err) {
         console.error('Final chunk save failed', err);
       }
