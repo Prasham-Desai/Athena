@@ -13,7 +13,7 @@ interface AudioRecorderProps {
   onPlayGlobal?: (audioId?: string) => void;
 }
 
-const MAX_DURATION = 600; // 10 minutes in seconds
+const MAX_DURATION = 300; // 5 minutes in seconds
 const CHECKPOINT_INTERVAL = 20; // seconds
 
 function formatTime(seconds: number): string {
