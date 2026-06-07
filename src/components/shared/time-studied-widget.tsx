@@ -248,32 +248,48 @@ export function TimeStudiedWidget({ date }: { date: string }) {
       </div>
 
       {/* Timer Section */}
-      <div className="w-full max-w-md mx-auto">
-        {/* Main User Timer */}
-        <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 flex flex-col items-center">
-          <span className="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-2">Main Stopwatch</span>
-          <div className="text-4xl font-bold font-mono tracking-tight mb-4 tabular-nums">
-            {formatSecs(mainSeconds)}
-          </div>
-          <div className="flex flex-wrap gap-2 w-full justify-center">
-            <button
-              onClick={handleToggleMain}
-              className={cn("px-6 py-2 rounded-xl text-sm font-medium transition text-white shadow-sm flex-1 max-w-[120px]", isMainRunning ? "bg-amber-500 hover:bg-amber-600" : "bg-indigo-600 hover:bg-indigo-700")}
-            >
-              {isMainRunning ? 'Pause' : 'Start'}
-            </button>
-            {mainSeconds > 0 && (
+      <div className="w-full mt-6">
+        <div className="relative rounded-3xl border border-indigo-500/30 bg-gradient-to-b from-indigo-500/10 to-indigo-500/5 p-8 flex flex-col items-center shadow-lg backdrop-blur-sm overflow-hidden">
+          {/* Decorative background glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl opacity-50 pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col items-center w-full">
+            <span className="text-sm font-bold text-indigo-500 uppercase tracking-[0.2em] mb-4 drop-shadow-sm flex items-center gap-2">
+              <Timer className="w-4 h-4" />
+              Main Stopwatch
+            </span>
+            
+            <div className="text-6xl sm:text-7xl md:text-8xl font-black font-mono tracking-tighter mb-8 tabular-nums text-[hsl(var(--foreground))] drop-shadow-md">
+              {formatSecs(mainSeconds)}
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center max-w-lg">
               <button
-                onClick={handleMainSave}
-                className="px-6 py-2 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition shadow-sm flex-1 max-w-[120px]"
+                onClick={handleToggleMain}
+                className={cn(
+                  "px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-200 shadow-xl flex-1 w-full sm:w-auto hover:scale-[1.02] active:scale-[0.98]", 
+                  isMainRunning 
+                    ? "bg-amber-500 hover:bg-amber-400 text-amber-950 ring-4 ring-amber-500/20" 
+                    : "bg-indigo-600 hover:bg-indigo-500 text-white ring-4 ring-indigo-600/20"
+                )}
               >
-                Save
+                {isMainRunning ? 'Pause Timer' : 'Start Timer'}
               </button>
-            )}
+              
+              {mainSeconds > 0 && (
+                <button
+                  onClick={handleMainSave}
+                  className="px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-lg font-bold transition-all duration-200 shadow-xl flex-1 w-full sm:w-auto hover:scale-[1.02] active:scale-[0.98] ring-4 ring-emerald-600/20"
+                >
+                  Save Progress
+                </button>
+              )}
+            </div>
+            
+            <p className="text-xs text-[hsl(var(--muted-foreground))] mt-6 text-center leading-relaxed font-medium">
+              Tracks actual study time. Saves to total when stopped.
+            </p>
           </div>
-          <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3 text-center leading-tight">
-            Tracks actual study time.<br/>Saves to total when stopped.
-          </p>
         </div>
       </div>
 
