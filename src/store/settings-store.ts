@@ -13,8 +13,6 @@ export const defaultSettings: UserSettings = {
   theme: 'dark',
   dailyStudyGoalHours: 6,
   showWelcome: true,
-  pomodoroMinutes: 25,
-  breakMinutes: 5,
   fontSize: 'small',
 };
 

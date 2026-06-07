@@ -132,8 +132,6 @@ export interface UserSettings {
   theme: 'light' | 'dark' | 'system';
   dailyStudyGoalHours: number;
   showWelcome: boolean;
-  pomodoroMinutes: number;
-  breakMinutes: number;
   fontSize: FontSize;
 }
 

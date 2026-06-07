@@ -244,43 +244,6 @@ export default function SettingsPage() {
           </div>
         </SettingsSection>
 
-        {/* ---- Pomodoro ---- */}
-        <SettingsSection title="Pomodoro Timer" description="Configure your focus and break durations" delay={0.15}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="flex items-center gap-4">
-              <Clock className="h-5 w-5 text-[hsl(var(--muted-foreground))] shrink-0" />
-              <div>
-                <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                  Focus duration (min)
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  max={120}
-                  value={settings.pomodoroMinutes}
-                  onChange={(e) => updateSettings({ pomodoroMinutes: Number(e.target.value) })}
-                  className="mt-1.5 w-full max-w-[140px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Clock className="h-5 w-5 text-[hsl(var(--muted-foreground))] shrink-0" />
-              <div>
-                <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                  Break duration (min)
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  max={60}
-                  value={settings.breakMinutes}
-                  onChange={(e) => updateSettings({ breakMinutes: Number(e.target.value) })}
-                  className="mt-1.5 w-full max-w-[140px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                />
-              </div>
-            </div>
-          </div>
-        </SettingsSection>
 
         {/* ---- Data Management ---- */}
         <SettingsSection title="Data Management" description="Export, import, or reset your study data" delay={0.2}>

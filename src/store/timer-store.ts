@@ -11,20 +11,10 @@ interface TimerState {
   // New fields for segment tracking
   segmentStartTime: string | null;
   lastPauseTime: string | null;
-  
-  // Pomodoro Timer
-  isPomoRunning: boolean;
-  pomoSecondsLeft: number | null; // null means not initialized
-  pomoMode: 'study' | 'break';
-
   // Actions
   toggleMain: () => void;
   resetMain: () => void;
   setMainSeconds: (s: number) => void;
-  
-  togglePomo: (defaultMinutes: number) => void;
-  resetPomo: (defaultMinutes: number) => void;
-  setPomoMode: (mode: 'study' | 'break', defaultMinutes: number) => void;
   
   setSegmentStartTime: (time: string | null) => void;
   setLastPauseTime: (time: string | null) => void;
@@ -43,17 +33,11 @@ export const useTimerStore = create<TimerState>()(
       segmentStartTime: null,
       lastPauseTime: null,
 
-      isPomoRunning: false,
-      pomoSecondsLeft: null,
-      pomoMode: 'study',
-
       toggleMain: () => set((state) => {
         const nextState = !state.isMainRunning;
         return {
           isMainRunning: nextState,
           mainStartTime: nextState && !state.mainStartTime ? new Date().toISOString() : state.mainStartTime,
-          // Start pomo automatically if we're starting main and pomo is stopped
-          isPomoRunning: nextState && !state.isPomoRunning ? true : state.isPomoRunning,
           lastTick: Date.now(),
         };
       }),
@@ -71,27 +55,10 @@ export const useTimerStore = create<TimerState>()(
       setSegmentStartTime: (time) => set({ segmentStartTime: time }),
       setLastPauseTime: (time) => set({ lastPauseTime: time }),
 
-      togglePomo: (defaultMinutes) => set((state) => ({
-        isPomoRunning: !state.isPomoRunning,
-        pomoSecondsLeft: state.pomoSecondsLeft === null ? defaultMinutes * 60 : state.pomoSecondsLeft,
-        lastTick: Date.now(),
-      })),
-
-      resetPomo: (defaultMinutes) => set((state) => ({
-        isPomoRunning: false,
-        pomoSecondsLeft: defaultMinutes * 60,
-      })),
-
-      setPomoMode: (mode, defaultMinutes) => set({
-        pomoMode: mode,
-        pomoSecondsLeft: defaultMinutes * 60,
-        isPomoRunning: false, // auto pause on switch
-      }),
-
       tick: () => {
         const now = Date.now();
         set((state) => {
-          if (!state.isMainRunning && !state.isPomoRunning) {
+          if (!state.isMainRunning) {
             return { lastTick: now };
           }
 
@@ -99,32 +66,14 @@ export const useTimerStore = create<TimerState>()(
           if (deltaSeconds <= 0) return {}; // Wait for at least 1 second
 
           let newMainSeconds = state.mainSeconds;
-          let newPomoSecondsLeft = state.pomoSecondsLeft;
-          let newPomoRunning = state.isPomoRunning;
-          let newPomoMode = state.pomoMode;
 
           if (state.isMainRunning) {
             newMainSeconds += deltaSeconds;
           }
 
-          let reachedZero = false;
-
-          if (state.isPomoRunning && newPomoSecondsLeft !== null) {
-            newPomoSecondsLeft -= deltaSeconds;
-            if (newPomoSecondsLeft <= 0) {
-              // Time's up for pomodoro
-              reachedZero = true;
-              newPomoRunning = false;
-              newPomoSecondsLeft = 0; // will be reset by UI or provider
-            }
-          }
-
           // Return updated state
           return {
             mainSeconds: newMainSeconds,
-            pomoSecondsLeft: newPomoSecondsLeft,
-            isPomoRunning: newPomoRunning,
-            pomoMode: newPomoMode,
             lastTick: now - ((now - state.lastTick) % 1000), // Keep fractional remainder
           };
         });
@@ -139,9 +88,6 @@ export const useTimerStore = create<TimerState>()(
         lastTick: state.lastTick,
         segmentStartTime: state.segmentStartTime,
         lastPauseTime: state.lastPauseTime,
-        isPomoRunning: state.isPomoRunning,
-        pomoSecondsLeft: state.pomoSecondsLeft,
-        pomoMode: state.pomoMode,
       }),
     }
   )

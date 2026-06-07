@@ -18,8 +18,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   
   const { 
     isMainRunning, mainSeconds, mainStartTime, toggleMain, resetMain,
-    segmentStartTime, lastPauseTime, setSegmentStartTime, setLastPauseTime,
-    isPomoRunning, pomoSecondsLeft, pomoMode, togglePomo, resetPomo
+    segmentStartTime, lastPauseTime, setSegmentStartTime, setLastPauseTime
   } = useTimerStore();
 
   const log = dailyLogs.find((l) => l.date === date);
@@ -43,12 +42,6 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   const [inputHours, setInputHours] = useState(String(totalHours));
   const [inputMins, setInputMins] = useState(String(totalMins));
 
-  // Initialize Pomo if empty
-  useEffect(() => {
-    if (pomoSecondsLeft === null) {
-      resetPomo(settings.pomodoroMinutes);
-    }
-  }, [pomoSecondsLeft, resetPomo, settings.pomodoroMinutes]);
 
   const handleToggleMain = () => {
     const now = new Date();
@@ -254,8 +247,8 @@ export function TimeStudiedWidget({ date }: { date: string }) {
         </div>
       </div>
 
-      {/* Dual Timers Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Timer Section */}
+      <div className="w-full max-w-md mx-auto">
         {/* Main User Timer */}
         <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 flex flex-col items-center">
           <span className="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-2">Main Stopwatch</span>
@@ -280,33 +273,6 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           </div>
           <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3 text-center leading-tight">
             Tracks actual study time.<br/>Saves to total when stopped.
-          </p>
-        </div>
-
-        {/* Pomodoro Timer */}
-        <div className={cn("rounded-xl border p-4 flex flex-col items-center transition-colors", pomoMode === 'study' ? "border-rose-500/20 bg-rose-500/5" : "border-emerald-500/20 bg-emerald-500/5")}>
-          <span className={cn("text-xs font-semibold uppercase tracking-wider mb-2", pomoMode === 'study' ? "text-rose-500" : "text-emerald-500")}>
-            {pomoMode === 'study' ? 'Pomodoro (Focus)' : 'Pomodoro (Break)'}
-          </span>
-          <div className="text-4xl font-bold font-mono tracking-tight mb-4 tabular-nums">
-            {formatSecs(pomoSecondsLeft)}
-          </div>
-          <div className="flex flex-wrap gap-2 w-full justify-center">
-            <button
-              onClick={() => togglePomo(settings.pomodoroMinutes)}
-              className={cn("px-6 py-2 rounded-xl text-sm font-medium transition text-white shadow-sm flex-1 max-w-[120px]", pomoMode === 'study' ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700")}
-            >
-              {isPomoRunning ? 'Pause' : 'Start'}
-            </button>
-            <button
-              onClick={() => resetPomo(pomoMode === 'study' ? settings.pomodoroMinutes : settings.breakMinutes)}
-              className="px-6 py-2 rounded-xl bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] text-sm font-medium hover:opacity-80 transition flex-1 max-w-[120px]"
-            >
-              Reset
-            </button>
-          </div>
-          <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-3 text-center leading-tight">
-            Ideal rhythm guide.<br/>Auto-pauses on completion.
           </p>
         </div>
       </div>
