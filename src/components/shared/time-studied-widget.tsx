@@ -64,7 +64,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
             endTime: now.toISOString(),
             durationMinutes: diffMins,
             type: 'timer',
-            title: 'Study Segment'
+            title: 'Stopwatch Session'
           });
         }
       }
@@ -105,7 +105,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           endTime: now.toISOString(),
           durationMinutes: diffMins,
           type: 'timer',
-          title: 'Study Segment'
+          title: 'Stopwatch Session'
         });
       }
     }
@@ -321,7 +321,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
               return (
                 <div key={session.id} className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
                   <div>
-                    <p className={cn("font-medium", isBreak ? "text-amber-600 dark:text-amber-500" : "")}>{session.title || 'Study Session'}</p>
+                    <p className={cn("font-medium", isBreak ? "text-amber-600 dark:text-amber-500" : "")}>{session.title || 'Stopwatch Session'}</p>
                     <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
                       {format(new Date(session.startTime), 'h:mm a')} - {format(new Date(session.endTime), 'h:mm a')}
                     </p>
