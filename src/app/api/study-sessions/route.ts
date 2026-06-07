@@ -107,16 +107,18 @@ export async function DELETE(request: NextRequest) {
       return errorResponse('id and date are required', 400);
     }
     
-    const session = await db.get('SELECT duration_minutes FROM study_sessions WHERE id = ?', [id]);
+    const session = await db.get('SELECT duration_minutes, type FROM study_sessions WHERE id = ?', [id]);
     if (!session) {
       return errorResponse('session not found', 404);
     }
     
-    // Deduct minutes
-    await db.run(
-      `UPDATE daily_progress SET study_minutes = MAX(0, study_minutes - ?) WHERE date = ?`,
-      [session.duration_minutes, date]
-    );
+    // Deduct minutes if it wasn't a break
+    if (session.type !== 'break') {
+      await db.run(
+        `UPDATE daily_progress SET study_minutes = MAX(0, study_minutes - ?) WHERE date = ?`,
+        [session.duration_minutes, date]
+      );
+    }
     
     await db.run('DELETE FROM study_sessions WHERE id = ?', [id]);
     

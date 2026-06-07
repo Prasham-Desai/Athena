@@ -221,7 +221,8 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
         if (entry.date !== date) return entry;
 
         const currentTotal = Number(entry.studyMinutes) || 0;
-        const deduct = Number(sessionToRemove.durationMinutes) || 0;
+        const isBreak = sessionToRemove.type === 'break';
+        const deduct = isBreak ? 0 : (Number(sessionToRemove.durationMinutes) || 0);
 
         return {
           ...entry,
