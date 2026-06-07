@@ -157,20 +157,31 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
   addStudySession: async (date, session) => {
     const previousDailyLogs = get().dailyLogs;
-    const newSession: StudySession = { ...session, id: generateId() };
+    
+    // Recalculate duration from actual start/end times (same logic as server)
+    const startMs = new Date(session.startTime).getTime();
+    const endMs = new Date(session.endTime).getTime();
+    const correctDuration = (!isNaN(startMs) && !isNaN(endMs) && endMs > startMs)
+      ? Math.max(1, Math.round((endMs - startMs) / 60000))
+      : (session.durationMinutes || 0);
+    
+    const newSession: StudySession = { ...session, id: generateId(), durationMinutes: correctDuration };
     const existing = get().dailyLogs.find((entry) => entry.date === date);
 
     set((state) => {
       const nextLogs = state.dailyLogs.filter((entry) => entry.date !== date);
+      const isBreak = newSession.type === 'break';
+      const addedMinutes = isBreak ? 0 : newSession.durationMinutes;
+      
       const nextLog = existing
         ? {
             ...existing,
-            studyMinutes: (Number(existing.studyMinutes) || 0) + newSession.durationMinutes,
+            studyMinutes: (Number(existing.studyMinutes) || 0) + addedMinutes,
             sessions: [...(existing.sessions || []), newSession],
           }
         : {
             date,
-            studyMinutes: newSession.durationMinutes,
+            studyMinutes: addedMinutes,
             topicsCompleted: 0,
             tasksCompleted: 0,
             revisionsCompleted: 0,

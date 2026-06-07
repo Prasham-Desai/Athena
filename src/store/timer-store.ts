@@ -8,6 +8,10 @@ interface TimerState {
   mainStartTime: string | null;
   lastTick: number; // timestamp to calculate elapsed time when away
   
+  // New fields for segment tracking
+  segmentStartTime: string | null;
+  lastPauseTime: string | null;
+  
   // Pomodoro Timer
   isPomoRunning: boolean;
   pomoSecondsLeft: number | null; // null means not initialized
@@ -22,6 +26,9 @@ interface TimerState {
   resetPomo: (defaultMinutes: number) => void;
   setPomoMode: (mode: 'study' | 'break', defaultMinutes: number) => void;
   
+  setSegmentStartTime: (time: string | null) => void;
+  setLastPauseTime: (time: string | null) => void;
+  
   // Tick action to be called regularly (e.g. from a global provider)
   tick: () => void;
 }
@@ -33,6 +40,8 @@ export const useTimerStore = create<TimerState>()(
       mainSeconds: 0,
       mainStartTime: null,
       lastTick: Date.now(),
+      segmentStartTime: null,
+      lastPauseTime: null,
 
       isPomoRunning: false,
       pomoSecondsLeft: null,
@@ -49,9 +58,18 @@ export const useTimerStore = create<TimerState>()(
         };
       }),
 
-      resetMain: () => set({ isMainRunning: false, mainSeconds: 0, mainStartTime: null, lastTick: Date.now() }),
+      resetMain: () => set({ 
+        isMainRunning: false, 
+        mainSeconds: 0, 
+        mainStartTime: null, 
+        lastTick: Date.now(),
+        segmentStartTime: null,
+        lastPauseTime: null,
+      }),
       
       setMainSeconds: (s) => set({ mainSeconds: s }),
+      setSegmentStartTime: (time) => set({ segmentStartTime: time }),
+      setLastPauseTime: (time) => set({ lastPauseTime: time }),
 
       togglePomo: (defaultMinutes) => set((state) => ({
         isPomoRunning: !state.isPomoRunning,
@@ -119,6 +137,8 @@ export const useTimerStore = create<TimerState>()(
         mainSeconds: state.mainSeconds,
         mainStartTime: state.mainStartTime,
         lastTick: state.lastTick,
+        segmentStartTime: state.segmentStartTime,
+        lastPauseTime: state.lastPauseTime,
         isPomoRunning: state.isPomoRunning,
         pomoSecondsLeft: state.pomoSecondsLeft,
         pomoMode: state.pomoMode,

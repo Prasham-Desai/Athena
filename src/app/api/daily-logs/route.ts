@@ -98,16 +98,26 @@ export async function GET(request: NextRequest) {
       if (row.dt) getOrInitDate(row.dt).revisionsCompleted = row.cnt;
     });
 
-    // Process sessions
+    // Process sessions — always recalculate duration from actual start/end times
     sessions.forEach((s: any) => {
       if (s.date) {
         const entry = getOrInitDate(s.date);
-        entry.studyMinutes += (Number(s.duration_minutes) || 0);
+        
+        // Recalculate correct duration from timestamps
+        const startMs = new Date(s.start_time).getTime();
+        const endMs = new Date(s.end_time).getTime();
+        const correctDuration = (!isNaN(startMs) && !isNaN(endMs) && endMs > startMs)
+          ? Math.max(1, Math.round((endMs - startMs) / 60000))
+          : (Number(s.duration_minutes) || 0);
+        
+        if (s.type !== 'break') {
+          entry.studyMinutes += correctDuration;
+        }
         entry.sessions.push({
           id: s.id,
           startTime: s.start_time,
           endTime: s.end_time,
-          durationMinutes: s.duration_minutes,
+          durationMinutes: correctDuration,
           type: s.type,
           title: s.title,
           taskId: s.task_id
@@ -115,7 +125,7 @@ export async function GET(request: NextRequest) {
       }
     });
     
-    // Also include any explicitly stored dates in daily_progress just in case they have 0 for everything but are tracked
+    // Also include any explicitly stored dates in daily_progress just in case they have 0 sessions but are tracked
     const progressRecords = await db.query('SELECT date FROM daily_progress');
     progressRecords.forEach((log: any) => {
       if (log.date) getOrInitDate(log.date);

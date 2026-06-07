@@ -49,17 +49,27 @@ export async function POST(request: NextRequest) {
     
     const id = session.id || generateId();
     
-    // Ensure daily progress exists
+    // Always recalculate duration from the actual start/end times
+    const startMs = new Date(session.startTime).getTime();
+    const endMs = new Date(session.endTime).getTime();
+    const calculatedDuration = (!isNaN(startMs) && !isNaN(endMs) && endMs > startMs)
+      ? Math.max(1, Math.round((endMs - startMs) / 60000))
+      : (session.durationMinutes || 0);
+    
+    // Ensure daily progress exists and update study_minutes if it's not a break
+    const isBreak = session.type === 'break';
+    const addedMinutes = isBreak ? 0 : calculatedDuration;
+
     const existingProgress = await db.get('SELECT * FROM daily_progress WHERE date = ?', [date]);
     if (!existingProgress) {
       await db.run(
         `INSERT INTO daily_progress (date, study_minutes) VALUES (?, ?)`,
-        [date, session.durationMinutes || 0]
+        [date, addedMinutes]
       );
     } else {
       await db.run(
         `UPDATE daily_progress SET study_minutes = study_minutes + ? WHERE date = ?`,
-        [session.durationMinutes || 0, date]
+        [addedMinutes, date]
       );
     }
     
@@ -71,7 +81,7 @@ export async function POST(request: NextRequest) {
         date,
         session.startTime,
         session.endTime,
-        session.durationMinutes,
+        calculatedDuration,
         session.type,
         session.title || null,
         session.taskId || null

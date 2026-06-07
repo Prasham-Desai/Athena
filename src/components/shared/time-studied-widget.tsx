@@ -18,6 +18,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   
   const { 
     isMainRunning, mainSeconds, mainStartTime, toggleMain, resetMain,
+    segmentStartTime, lastPauseTime, setSegmentStartTime, setLastPauseTime,
     isPomoRunning, pomoSecondsLeft, pomoMode, togglePomo, resetPomo
   } = useTimerStore();
 
@@ -49,20 +50,70 @@ export function TimeStudiedWidget({ date }: { date: string }) {
     }
   }, [pomoSecondsLeft, resetPomo, settings.pomodoroMinutes]);
 
-  const handleMainSave = () => {
-    // Minimum 1 min threshold
-    const minsToSave = Math.max(1, Math.floor(mainSeconds / 60));
+  const handleToggleMain = () => {
+    const now = new Date();
     
-    if (mainSeconds > 0) {
-      addStudySession(date, {
-        startTime: mainStartTime || new Date(Date.now() - minsToSave * 60000).toISOString(),
-        endTime: new Date().toISOString(),
-        durationMinutes: minsToSave,
-        type: 'timer',
-        title: 'Stopwatch Session'
-      });
-      window.dispatchEvent(new CustomEvent('toast', { detail: { message: `Added ${minsToSave} minutes to today's total!`, type: 'success' } }));
+    if (isMainRunning) {
+      // PAUSING: log the study segment
+      if (segmentStartTime) {
+        const start = new Date(segmentStartTime);
+        const diffMins = Math.round((now.getTime() - start.getTime()) / 60000);
+        if (diffMins > 0) {
+          addStudySession(date, {
+            startTime: segmentStartTime,
+            endTime: now.toISOString(),
+            durationMinutes: diffMins,
+            type: 'timer',
+            title: 'Study Segment'
+          });
+        }
+      }
+      setLastPauseTime(now.toISOString());
+      setSegmentStartTime(null);
+    } else {
+      // STARTING / RESUMING: log the break
+      if (lastPauseTime) {
+        const pauseStart = new Date(lastPauseTime);
+        const breakMins = Math.round((now.getTime() - pauseStart.getTime()) / 60000);
+        if (breakMins > 0) {
+          addStudySession(date, {
+            startTime: lastPauseTime,
+            endTime: now.toISOString(),
+            durationMinutes: breakMins,
+            type: 'break',
+            title: 'Break'
+          });
+        }
+      }
+      setSegmentStartTime(now.toISOString());
+      setLastPauseTime(null);
     }
+    
+    toggleMain();
+  };
+
+  const handleMainSave = () => {
+    const now = new Date();
+
+    if (isMainRunning && segmentStartTime) {
+      // Log the final running segment
+      const start = new Date(segmentStartTime);
+      const diffMins = Math.round((now.getTime() - start.getTime()) / 60000);
+      if (diffMins > 0) {
+        addStudySession(date, {
+          startTime: segmentStartTime,
+          endTime: now.toISOString(),
+          durationMinutes: diffMins,
+          type: 'timer',
+          title: 'Study Segment'
+        });
+      }
+    }
+    
+    // Alert the user of total saved
+    const minsToSave = Math.max(1, Math.round(mainSeconds / 60));
+    window.dispatchEvent(new CustomEvent('toast', { detail: { message: `Saved ${minsToSave} minutes total for this session!`, type: 'success' } }));
+
     resetMain();
   };
 
@@ -86,7 +137,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
     window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
   };
 
-  const handleDeleteSession = (sessionId: string, type: 'manual' | 'timer' | 'task', taskId?: string) => {
+  const handleDeleteSession = (sessionId: string, type: 'manual' | 'timer' | 'task' | 'break', taskId?: string) => {
     removeStudySession(date, sessionId);
     if (type === 'task' && taskId) {
       updateTask(taskId, { completed: false, completedAt: null, actualMinutes: null });
@@ -213,7 +264,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
           </div>
           <div className="flex flex-wrap gap-2 w-full justify-center">
             <button
-              onClick={toggleMain}
+              onClick={handleToggleMain}
               className={cn("px-6 py-2 rounded-xl text-sm font-medium transition text-white shadow-sm flex-1 max-w-[120px]", isMainRunning ? "bg-amber-500 hover:bg-amber-600" : "bg-indigo-600 hover:bg-indigo-700")}
             >
               {isMainRunning ? 'Pause' : 'Start'}
@@ -265,29 +316,34 @@ export function TimeStudiedWidget({ date }: { date: string }) {
         <div className="pt-4 border-t border-[hsl(var(--border))]">
           <h4 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-3">Today's Sessions</h4>
           <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-            {[...sessions].reverse().map((session) => (
-              <div key={session.id} className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
-                <div>
-                  <p className="font-medium">{session.title || 'Study Session'}</p>
-                  <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
-                    {format(new Date(session.startTime), 'h:mm a')} - {format(new Date(session.endTime), 'h:mm a')}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3 mt-2 sm:mt-0">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                    <span className="font-medium text-emerald-600 dark:text-emerald-400">{session.durationMinutes} min</span>
+            {[...sessions].reverse().map((session) => {
+              const isBreak = session.type === 'break';
+              return (
+                <div key={session.id} className="group flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-[hsl(var(--muted))] text-sm">
+                  <div>
+                    <p className={cn("font-medium", isBreak ? "text-amber-600 dark:text-amber-500" : "")}>{session.title || 'Study Session'}</p>
+                    <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
+                      {format(new Date(session.startTime), 'h:mm a')} - {format(new Date(session.endTime), 'h:mm a')}
+                    </p>
                   </div>
-                  <button 
-                    onClick={() => handleDeleteSession(session.id, session.type, session.taskId)}
-                    className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-500 transition"
-                    title="Delete session"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-3 mt-2 sm:mt-0">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className={cn("w-3.5 h-3.5", isBreak ? "text-amber-500" : "text-emerald-500")} />
+                      <span className={cn("font-medium", isBreak ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400")}>
+                        {session.durationMinutes} min
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => handleDeleteSession(session.id, session.type, session.taskId)}
+                      className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-500 transition"
+                      title="Delete session"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
