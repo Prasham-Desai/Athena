@@ -93,7 +93,7 @@ export interface StudySession {
   startTime: string; // ISO date string
   endTime: string;   // ISO date string
   durationMinutes: number;
-  type: 'manual' | 'timer' | 'task' | 'break';
+  type: 'manual' | 'timer' | 'task' | 'break' | 'study-block';
   title?: string;
   taskId?: string;
 }

@@ -635,13 +635,46 @@ export default function PlannerPage() {
     window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Task added!', type: 'success' } }));
   }, [addTask]);
 
-  const handleToggleBlock = useCallback((id: string, title: string) => {
-    toggleStudyBlock(id);
+  const handleToggleBlock = useCallback(async (id: string, title: string) => {
     const block = studyBlocks.find(b => b.id === id);
-    if (block && !block.completed) {
-      addActivity({ type: 'study-block-completed', description: `Completed "${title}"`, color: '#22c55e' });
+    if (!block) return;
+    
+    toggleStudyBlock(id);
+    
+    if (!block.completed) {
+      const [startHour, startMin] = block.startTime.split(':').map(Number);
+      const [endHour, endMin] = block.endTime.split(':').map(Number);
+      let durationMinutes = (endHour * 60 + endMin) - (startHour * 60 + startMin);
+      if (durationMinutes < 0) durationMinutes += 24 * 60;
+      
+      if (durationMinutes > 0) {
+        const sessionDate = block.date;
+        const startTimeIso = new Date(`${sessionDate}T${block.startTime}:00`).toISOString();
+        const endTimeIso = new Date(`${sessionDate}T${block.endTime}:00`).toISOString();
+        
+        await addStudySession(sessionDate, {
+          startTime: startTimeIso,
+          endTime: endTimeIso,
+          durationMinutes,
+          type: 'study-block',
+          title: `Study Block: ${title}`,
+          taskId: id,
+        });
+      }
+      
+      await addActivity({ type: 'study-block-completed', description: `Completed "${title}"`, color: '#22c55e' });
+      window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Study block completed and study time logged!', type: 'success' } }));
+    } else {
+      const sessionMatch = dailyLogs
+        .flatMap((log) => (log.sessions || []).map((session) => ({ date: log.date, session })))
+        .filter((item) => item.session.type === 'study-block' && item.session.taskId === id)
+        .sort((a, b) => b.session.startTime.localeCompare(a.session.startTime))[0];
+
+      if (sessionMatch) {
+        await removeStudySession(sessionMatch.date, sessionMatch.session.id);
+      }
     }
-  }, [toggleStudyBlock, studyBlocks, addActivity]);
+  }, [toggleStudyBlock, studyBlocks, addActivity, addStudySession, dailyLogs, removeStudySession]);
 
   const handleConfirmTaskCompletion = useCallback(async (actualMinutes: number) => {
     if (!completingTask) return;

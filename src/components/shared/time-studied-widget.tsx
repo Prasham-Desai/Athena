@@ -41,8 +41,7 @@ export function TimeStudiedWidget({ date }: { date: string }) {
   const [editing, setEditing] = useState(false);
   const [inputHours, setInputHours] = useState(String(totalHours));
   const [inputMins, setInputMins] = useState(String(totalMins));
-
-
+  const [manualSessionPrompt, setManualSessionPrompt] = useState<{ difference: number, startTime: string } | null>(null);
   const handleToggleMain = () => {
     const now = new Date();
     
@@ -115,26 +114,47 @@ export function TimeStudiedWidget({ date }: { date: string }) {
     const difference = newTotalMins - totalMinutes;
     
     if (difference > 0) {
-      addStudySession(date, {
-        startTime: new Date(Date.now() - difference * 60000).toISOString(),
-        endTime: new Date().toISOString(),
-        durationMinutes: difference,
-        type: 'manual',
-        title: 'Manual Entry'
+      const defaultStart = new Date(Date.now() - difference * 60000);
+      setManualSessionPrompt({
+        difference,
+        startTime: format(defaultStart, 'HH:mm')
       });
+      setEditing(false);
     } else {
       updateDailyLog(date, { studyMinutes: newTotalMins });
+      setEditing(false);
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
     }
+  };
+
+  const handleConfirmManualSession = () => {
+    if (!manualSessionPrompt) return;
     
-    setEditing(false);
+    const { difference, startTime } = manualSessionPrompt;
+    const sessionDate = date === getToday() ? getToday() : date;
+    
+    // Construct robust dates
+    const startIso = new Date(`${sessionDate}T${startTime}:00`).toISOString();
+    const endIso = new Date(new Date(startIso).getTime() + difference * 60000).toISOString();
+    
+    addStudySession(date, {
+      startTime: startIso,
+      endTime: endIso,
+      durationMinutes: difference,
+      type: 'manual',
+      title: 'Manual Entry'
+    });
+    
+    setManualSessionPrompt(null);
     window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Study time updated!', type: 'success' } }));
   };
 
-  const handleDeleteSession = (sessionId: string, type: 'manual' | 'timer' | 'task' | 'break', taskId?: string) => {
+  const handleDeleteSession = (sessionId: string, type: 'manual' | 'timer' | 'task' | 'break' | 'study-block', taskId?: string) => {
     removeStudySession(date, sessionId);
     if (type === 'task' && taskId) {
       updateTask(taskId, { completed: false, completedAt: null, actualMinutes: null });
     }
+    // Also we could uncomplete study blocks but planner page handles it through the toggle button
     window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Session deleted', type: 'info' } }));
   };
 
@@ -326,6 +346,42 @@ export function TimeStudiedWidget({ date }: { date: string }) {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* Manual Session Prompt Modal */}
+      {manualSessionPrompt && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4" onClick={() => setManualSessionPrompt(null)}>
+          <div className="w-full max-w-sm rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold mb-2">Log Manual Session</h3>
+            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">You are adding {manualSessionPrompt.difference} minutes. Pick a start time.</p>
+            
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Start Time</label>
+                <input 
+                  type="time" 
+                  value={manualSessionPrompt.startTime} 
+                  onChange={e => setManualSessionPrompt(p => p ? { ...p, startTime: e.target.value } : null)} 
+                  className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" 
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">End Time</label>
+                <input 
+                  type="time" 
+                  value={format(new Date(new Date(`${date === getToday() ? getToday() : date}T${manualSessionPrompt.startTime}:00`).getTime() + manualSessionPrompt.difference * 60000), 'HH:mm')} 
+                  disabled 
+                  className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] text-sm cursor-not-allowed opacity-70" 
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button onClick={() => setManualSessionPrompt(null)} className="flex-1 py-2.5 rounded-xl bg-[hsl(var(--muted))] text-sm font-medium hover:opacity-80 transition">Cancel</button>
+              <button onClick={handleConfirmManualSession} className="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:opacity-90 transition shadow-lg shadow-emerald-500/20">Save</button>
+            </div>
           </div>
         </div>
       )}
