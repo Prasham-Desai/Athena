@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS activities (
 );
 
 -- Update daily_progress to add new columns
-ALTER TABLE daily_progress ADD COLUMN topics_completed INTEGER DEFAULT 0;
-ALTER TABLE daily_progress ADD COLUMN tasks_completed INTEGER DEFAULT 0;
-ALTER TABLE daily_progress ADD COLUMN revisions_completed INTEGER DEFAULT 0;
+-- ALTER TABLE daily_progress ADD COLUMN topics_completed INTEGER DEFAULT 0;
+-- ALTER TABLE daily_progress ADD COLUMN tasks_completed INTEGER DEFAULT 0;
+-- ALTER TABLE daily_progress ADD COLUMN revisions_completed INTEGER DEFAULT 0;
 
 -- Study Sessions table (linked to daily_progress date)
 CREATE TABLE IF NOT EXISTS study_sessions (
