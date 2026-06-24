@@ -1,0 +1,12 @@
+[
+  {
+    "id": "global",
+    "theme": "dark",
+    "daily_study_goal_hours": 6,
+    "show_welcome": 1,
+    "pomodoro_minutes": 25,
+    "break_minutes": 5,
+    "font_size": "small",
+    "updated_at": "2026-06-08 11:17:18"
+  }
+]

@@ -1,0 +1,902 @@
+[
+  {
+    "id": "ogt5qbqpzumpn67nj4",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 46: Masurika — Romantika\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:05.344Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:12"
+  },
+  {
+    "id": "eavl8s6p4h7mpn67o7c",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 48: Pandu\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:06.216Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:13"
+  },
+  {
+    "id": "i0dzqc5pr9mpn67tfr",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 49: Raktapitta\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:12.999Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:20"
+  },
+  {
+    "id": "r5bnm7za2wlmpn67w35",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 54: Kamala\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:16.433Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:23"
+  },
+  {
+    "id": "47y4d0do5onmpn67xau",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 55: Udara Roga\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:18.006Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:25"
+  },
+  {
+    "id": "re5uyhp494ampn67z1h",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 56: Hepatobiliary diseases\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:20.261Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:27"
+  },
+  {
+    "id": "unbuxkas7npmpn682jp",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 57: Kushtha - Maha Kushtha & Kshudra Kushtha (According to Charaka)\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:24.805Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:32"
+  },
+  {
+    "id": "x2imvnbip6mpn6861f",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 66: Prameha\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:52:29.331Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:52:36"
+  },
+  {
+    "id": "lt60ennc5vmpn68kkc",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Swastha and Swasthya\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:48.156Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:52:55"
+  },
+  {
+    "id": "me12sw9idbmpn68lsa",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 2: Healthy Life style -Dinacharya (Daily regimen)\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:49.738Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:52:57"
+  },
+  {
+    "id": "le4jloez25impn68mkb",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 4: Ritucharya\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:50.747Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:52:58"
+  },
+  {
+    "id": "eydr3nz5xaumpn68mzv",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 5: Roga nutpadaniya\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:51.307Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:52:58"
+  },
+  {
+    "id": "d4vrm8c672tmpn68r7f",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 7: Ahara\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:56.763Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:53:04"
+  },
+  {
+    "id": "jakc4kigdkmpn68s5k",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 6: Sadvritta\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:52:57.992Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 21:53:05"
+  },
+  {
+    "id": "z0ms23s2dp8mpn6bf15",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:00.953Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:09"
+  },
+  {
+    "id": "w5wxw7j5msmpn6bg4e",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:02.366Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:10"
+  },
+  {
+    "id": "sv636zuyimmpn6bgr6",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:03.186Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:10"
+  },
+  {
+    "id": "1ny71se0qncmpn6bh41",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:03.649Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:11"
+  },
+  {
+    "id": "n35ap1i3urmpn6bhq0",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 40: Cha.Sha.06-Sareeravichaya adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:04.440Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:11"
+  },
+  {
+    "id": "ko4nt7yb8xmpn6bisl",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 41: Cha.Sha.07- Sareerasankhya sareera Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:05.829Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:13"
+  },
+  {
+    "id": "6csjksz044xmpn6bjp9",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-26T21:55:07.005Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-26 21:55:14"
+  },
+  {
+    "id": "ae1rla709jsmpn6c98m",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Chronological development of Ayurvediya Aushadhi Nirmana\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:40.102Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:47"
+  },
+  {
+    "id": "2but9ssc08mmpn6c9x0",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 2: Paribhasha ( Terminology)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:40.980Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:48"
+  },
+  {
+    "id": "gl4usxpo4tfmpn6cbtx",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 3: Adharbhuta Siddhanta (Application of fundamental principles )\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:43.461Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:51"
+  },
+  {
+    "id": "2od6vpurgb6mpn6ccma",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 4: Yantropakaranani- I (Equipments and machineries)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:44.482Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:52"
+  },
+  {
+    "id": "ys4eih8r36empn6cd3z",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 5: Yantropakaranani -II (Equipments, fuel and Heating Devices)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:45.119Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:53"
+  },
+  {
+    "id": "4nk5wo1f35empn6cf2s",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 6: Kalpana Nirmana I (Primary & Secondary dosage forms)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:47.668Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:55"
+  },
+  {
+    "id": "8ifebihfgwkmpn6cg8r",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 7: Kalpana Nirmana-II (Method of Preparation of different dosage forms & Dietary Supplements)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:49.179Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:55:56"
+  },
+  {
+    "id": "43r0uq5vqemmpn6cjz5",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 9: Rasa Dravya Parichaya II\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:54.017Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:01"
+  },
+  {
+    "id": "7i91e0t50olmpn6cksw",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 11: Kalpana Nirman -III (Method of Preparation of different dosage forms)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:55.088Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:02"
+  },
+  {
+    "id": "sjrx7wyou68mpn6clm8",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 12: Chaturvidha Rasayana\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:55:56.144Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:03"
+  },
+  {
+    "id": "6x2clyhwlvsmpn6cpit",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 18: Aushadhi Kalpa -I (Compound formulations)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:56:01.205Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:08"
+  },
+  {
+    "id": "wmjargdmaycmpn6cu8c",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 16: Single drug (Herbal & Mineral)\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:56:07.308Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:14"
+  },
+  {
+    "id": "fvl4h7wnzi6mpn6cxo9",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 23: Aushadhi Prayoga Marga\" (Rasashastra evam Bhaishajyakalpana)",
+    "timestamp": "2026-05-26T21:56:11.769Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-26 21:56:19"
+  },
+  {
+    "id": "8n7yy2isv94mpn6d52c",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Roga nidana — Pathophysiology and clinical diagnosis\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:21.348Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:28"
+  },
+  {
+    "id": "ykqfkohsm6impn6d60r",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 3: Methods of Rogi pareeksha\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:22.587Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:30"
+  },
+  {
+    "id": "0ybegu0nmqlmpn6d75n",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 5: Upashaya/ Anupashaya\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:24.059Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:31"
+  },
+  {
+    "id": "9re1vucvmugmpn6d8fw",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 7: Doshagati and Rogamarga\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:25.724Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:33"
+  },
+  {
+    "id": "vasuio49m1empn6dezt",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 6: Dosha Vikriti\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:34.217Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:41"
+  },
+  {
+    "id": "h2ip0ep5326mpn6dlpd",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 30: Chhardi\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:42.913Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:50"
+  },
+  {
+    "id": "i1ascgcsnn9mpn6dmc9",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 33: Atisara, and Pravahika\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:43.737Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:51"
+  },
+  {
+    "id": "hj6l5zxu0jmpn6dpij",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 34: Grahani\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:47.851Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:55"
+  },
+  {
+    "id": "qzbl4f7ex68mpn6dsd2",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 37: Mutrakrichhra\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-26T21:56:51.542Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-26 21:56:59"
+  },
+  {
+    "id": "8rktuv3qcrmpn6hon8",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 10: Naturopathy\" (Swasthavritta evam Yoga)",
+    "timestamp": "2026-05-26T21:59:53.348Z",
+    "subject_id": "0370b3f90527",
+    "color": "#6366f1",
+    "created_at": "2026-05-26 22:00:01"
+  },
+  {
+    "id": "ku1v8d2t9khmpndf635",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Cha.Su.1- Sneha Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:53.297Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:54"
+  },
+  {
+    "id": "gfhkbiuu4wjmpndf6k5",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 2: Cha.Su.14- Sweda Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:53.909Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:54"
+  },
+  {
+    "id": "f0vz6lnry5ampndf7iy",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 3: Cha.Su.15- Upakalpaniya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:55.162Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:55"
+  },
+  {
+    "id": "wkppe1esljhmpndf82b",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 4: Cha.Su.16- Chikitsaprabhritiya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:55.859Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:56"
+  },
+  {
+    "id": "set8jrk4scmpndf8u3",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 5: Cha.Su.17- Mahasneha Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:56.859Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:57"
+  },
+  {
+    "id": "ebussbaffj7mpndf9i1",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 6: Cha.Su.18- Trishothiya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:57.721Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:58"
+  },
+  {
+    "id": "pwihxte66jmpndfaee",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 7: Cha.Su.19- Ashtodariya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:13:58.886Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:13:59"
+  },
+  {
+    "id": "m3ybnfji7ghmpndfbup",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 8: Cha.Su.20- Maharoga Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:00.769Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:01"
+  },
+  {
+    "id": "y7tpjjg18jmpndfcho",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 9: Cha.Su.21- Ashtau Ninditiya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:01.596Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:02"
+  },
+  {
+    "id": "21ps2b70go5mpndfd8j",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 10: Cha.Su.22- Langhanabrimhaniya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:02.563Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:03"
+  },
+  {
+    "id": "9vemioojyttmpndfega",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 11: Cha.Su.23- Santarpaniya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:04.138Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:04"
+  },
+  {
+    "id": "6n1q9ddmwzmpndfg9r",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 12: Cha.Su.24- Vidhishonitiya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:06.495Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:07"
+  },
+  {
+    "id": "z7hs7apd1smpndfh5d",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 13: Cha.Su.25- Yajjah Purusheeya Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T01:14:07.633Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 01:14:08"
+  },
+  {
+    "id": "5yea9c9omk2mpndwdk8",
+    "type": "topic-completed",
+    "description": "Completed \"Explain Shodhan and Marana and other processing techniques of the Rasa- Dravya.\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:27:16.136Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:27:28"
+  },
+  {
+    "id": "wqrmepfqdsmpndwp63",
+    "type": "topic-completed",
+    "description": "Completed \"Parada (mercury)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:27:31.179Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:27:43"
+  },
+  {
+    "id": "lxdzeg899bmpndxc92",
+    "type": "topic-completed",
+    "description": "Completed \"Abhraka (Biotite Mica)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:28:01.094Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:28:13"
+  },
+  {
+    "id": "hyt9aco5yhempndxmbe",
+    "type": "topic-completed",
+    "description": "Completed \"Makshika (Chalco-pyrite)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:28:14.138Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:28:26"
+  },
+  {
+    "id": "ftkpp7xligwmpndy5jd",
+    "type": "topic-completed",
+    "description": "Completed \"Shilajatu(Asphaltum Punjabianum)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:28:39.049Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:28:51"
+  },
+  {
+    "id": "4srj18uy70pmpne2fid",
+    "type": "topic-completed",
+    "description": "Completed \"Navasadara (Ammonium chloride)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:31:58.597Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:32:11"
+  },
+  {
+    "id": "gew7229w8wtmpnf067l",
+    "type": "topic-completed",
+    "description": "Completed \"Gandhaka (Sulfur)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:58:12.849Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:58:26"
+  },
+  {
+    "id": "bchdo3k71impnf0y8n",
+    "type": "topic-completed",
+    "description": "Completed \"Kankshi (Alum)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:58:49.175Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:59:02"
+  },
+  {
+    "id": "48rj23gynbhmpnf17xk",
+    "type": "topic-completed",
+    "description": "Completed \"Haratala (Orpiment)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:59:01.736Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:59:15"
+  },
+  {
+    "id": "7fw57e3dakdmpnf1nvw",
+    "type": "topic-completed",
+    "description": "Completed \"Manahshila (Realgar)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:59:22.412Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:59:35"
+  },
+  {
+    "id": "xbfqati8dgjmpnf23er",
+    "type": "topic-completed",
+    "description": "Completed \"Kampillaka(Mallotus Philippinensis)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T01:59:42.531Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 01:59:55"
+  },
+  {
+    "id": "tbhii18tn4pmpnf2jbi",
+    "type": "topic-completed",
+    "description": "Completed \"Hingula (Red Cinnabar)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:00:03.150Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:00:16"
+  },
+  {
+    "id": "ig63se4g4sfmpnf2lws",
+    "type": "topic-completed",
+    "description": "Completed \"Hingula (Red Cinnabar)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:00:06.508Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:00:19"
+  },
+  {
+    "id": "p45i24v3508mpnf3d9d",
+    "type": "topic-completed",
+    "description": "Completed \"Swarna (Gold)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:00:41.953Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:00:55"
+  },
+  {
+    "id": "t9kutq7908impnf3oza",
+    "type": "topic-completed",
+    "description": "Completed \"Rajata (Silver)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:00:57.142Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:01:10"
+  },
+  {
+    "id": "40vgbr8sedlmpnf4kkf",
+    "type": "topic-completed",
+    "description": "Completed \"Tamra (Copper)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:01:38.079Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:01:51"
+  },
+  {
+    "id": "mtm0kcb8ndmpnfaf5c",
+    "type": "topic-completed",
+    "description": "Completed \"Mukta (Pearl)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:06:10.992Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:06:24"
+  },
+  {
+    "id": "nbuafr7incmpnfeota",
+    "type": "topic-completed",
+    "description": "Completed \"Vajra (Diamond)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:09:30.142Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:09:44"
+  },
+  {
+    "id": "acy3kvy4g7qmpnfmnn0",
+    "type": "topic-completed",
+    "description": "Completed \"Enlist synonyms of Rasadravya and explain significance of that\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:15:41.868Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:15:55"
+  },
+  {
+    "id": "iny7i5oyoxmpng4i2q",
+    "type": "topic-completed",
+    "description": "Completed \"Shilajatu(Asphaltum Punjabianum)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:29:34.466Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:29:47"
+  },
+  {
+    "id": "dokihv8vkbcmpng8dne",
+    "type": "topic-completed",
+    "description": "Completed \"Kankshi (Alum)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:32:35.354Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:32:48"
+  },
+  {
+    "id": "gqadtuqaf9lmpngcgvq",
+    "type": "topic-completed",
+    "description": "Completed \"Hingula (Red Cinnabar)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:35:46.166Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:36:00"
+  },
+  {
+    "id": "t2tvvo5f149mpngezc7",
+    "type": "topic-completed",
+    "description": "Completed \"Vanga (Tin)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:37:43.399Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:37:57"
+  },
+  {
+    "id": "hh335ri3ipumpnggziz",
+    "type": "topic-completed",
+    "description": "Completed \"Shankh (Conch Shell)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:39:16.955Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:39:30"
+  },
+  {
+    "id": "2us2l7x570ympnghotp",
+    "type": "topic-completed",
+    "description": "Completed \"Samudraphena (Cattle Fish bone)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:39:49.741Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:40:02"
+  },
+  {
+    "id": "qncem5ijwsqmpnghq7q",
+    "type": "topic-completed",
+    "description": "Completed \"Kukkutanda twak (Hen’s EggShell)\" in Rasashastra evam Bhaishajyakalpana",
+    "timestamp": "2026-05-27T02:39:51.542Z",
+    "subject_id": "90fe0eb61286",
+    "color": "#3b82f6",
+    "created_at": "2026-05-27 02:40:04"
+  },
+  {
+    "id": "b9ktus3vjxqmpngsfru",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Cha.Su.1- Sneha Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T02:48:11.226Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 02:48:12"
+  },
+  {
+    "id": "n6vl5p4199mpngslvs",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 1: Cha.Su.1- Sneha Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-05-27T02:48:19.144Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-05-27 02:48:20"
+  },
+  {
+    "id": "cs05bfvv0lvmpnmud9t",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 2: Pareeksha\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-27T05:37:38.993Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-27 05:37:53"
+  },
+  {
+    "id": "4o53oj0wqj3mpnmue8l",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 4: Sapeksha nidana - Vyavacchedaka nidana\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-27T05:37:40.245Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-27 05:37:53"
+  },
+  {
+    "id": "elqrl3yd0zdmpnnzhg3",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 7: Doshagati and Rogamarga\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-05-27T06:09:37.299Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-05-27 06:09:51"
+  },
+  {
+    "id": "gmhprb13j4mmpuq9n0w",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 29: Agnimandya — Ajeerna, Anaha, Adhmana, Atopa\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T04:47:53.552Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 04:47:57"
+  },
+  {
+    "id": "kpuzm30n8vmpuqau92",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 31: Amlapitta\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T04:48:49.574Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 04:48:56"
+  },
+  {
+    "id": "dysmr38fzampuqax8r",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 32: Shoola\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T04:48:53.451Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 04:48:57"
+  },
+  {
+    "id": "cynf5bo7iplmpuqbf19",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 41: Shwasa\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T04:49:16.509Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 04:49:20"
+  },
+  {
+    "id": "qtofwp5ewumpuqbu4t",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 51: Hridroga\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T04:49:36.077Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 04:49:39"
+  },
+  {
+    "id": "y7zgwf8qihmpv4zzi2",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 8: Srotodushti\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T11:40:17.402Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 11:40:18"
+  },
+  {
+    "id": "3eygthaulfvmpv4zzq5",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 9: Concept of Ama\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T11:40:17.693Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 11:40:18"
+  },
+  {
+    "id": "bu5nmefmjnmpv5uxvy",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 10: Assessment of Ama\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T12:04:21.646Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 12:04:23"
+  },
+  {
+    "id": "6h4plwn2zampv7guin",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 25: Cha.Ni.07-Unmada nidana Adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-06-01T12:49:23.327Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-06-01 12:49:25"
+  },
+  {
+    "id": "czw60n534yumpv7guxy",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 26: Cha.Ni.08-Apasmara nidana adhyaya\" (Charak  Samhita)",
+    "timestamp": "2026-06-01T12:49:23.878Z",
+    "subject_id": "11dca16728ae",
+    "color": "#ec4899",
+    "created_at": "2026-06-01 12:49:25"
+  },
+  {
+    "id": "l643kq4w4krmpv9d2y1",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 11: Sthana samshraya — Poorvaroopa\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T13:42:26.857Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 13:42:28"
+  },
+  {
+    "id": "sl8e9w3dp1fmpvgdl8e",
+    "type": "topic-completed",
+    "description": "Completed all topics in \"Topic 12: Dushya dushti\" (Roga Nidan evam Vikriti Vigyan)",
+    "timestamp": "2026-06-01T16:58:47.870Z",
+    "subject_id": "358b0a03c72f",
+    "color": "#06b6d4",
+    "created_at": "2026-06-01 16:58:52"
+  }
+]

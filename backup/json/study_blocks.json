@@ -1,0 +1,67 @@
+[
+  {
+    "id": "ekx7bd4nwgfmpuqjzus",
+    "date": "2026-06-01",
+    "subject_id": "358b0a03c72f",
+    "topic_id": null,
+    "title": "8,9,10",
+    "start_time": "10:30",
+    "end_time": "12:15",
+    "priority": "medium",
+    "completed": 1,
+    "notes": "",
+    "created_at": "2026-06-01 04:56:01"
+  },
+  {
+    "id": "0tbi6vv2qacjmpuqlxqx",
+    "date": "2026-06-01",
+    "subject_id": "11dca16728ae",
+    "topic_id": null,
+    "title": "ch ni 7,8",
+    "start_time": "16:00",
+    "end_time": "18:00",
+    "priority": "medium",
+    "completed": 1,
+    "notes": "",
+    "created_at": "2026-06-01 04:57:31"
+  },
+  {
+    "id": "hjp9yg4hrqimpyals4i",
+    "date": "2026-06-04",
+    "subject_id": "29a761385260",
+    "topic_id": null,
+    "title": "botanical names",
+    "start_time": "05:30",
+    "end_time": "06:00",
+    "priority": "medium",
+    "completed": 0,
+    "notes": null,
+    "created_at": "2026-06-03 16:40:30"
+  },
+  {
+    "id": "pwotqg4caiimpyam5tj",
+    "date": "2026-06-04",
+    "subject_id": "29a761385260",
+    "topic_id": null,
+    "title": "Jatamansi",
+    "start_time": "06:30",
+    "end_time": "10:00",
+    "priority": "medium",
+    "completed": 0,
+    "notes": null,
+    "created_at": "2026-06-03 16:40:48"
+  },
+  {
+    "id": "ylv58hgk4xmpyap1ln",
+    "date": "2026-06-04",
+    "subject_id": "29a761385260",
+    "topic_id": null,
+    "title": "Bilva",
+    "start_time": "06:30",
+    "end_time": "07:00",
+    "priority": "medium",
+    "completed": 0,
+    "notes": null,
+    "created_at": "2026-06-03 16:43:03"
+  }
+]

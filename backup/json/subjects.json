@@ -1,0 +1,56 @@
+[
+  {
+    "id": "600ae0d78504",
+    "name": "Agad Tantra",
+    "color": "#14b8a6",
+    "icon": "Microscope",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:40:10",
+    "details": "{}"
+  },
+  {
+    "id": "11dca16728ae",
+    "name": "Charak  Samhita",
+    "color": "#ec4899",
+    "icon": "BookOpen",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:41:33",
+    "details": "{}"
+  },
+  {
+    "id": "29a761385260",
+    "name": "Dravyagun Vigyan",
+    "color": "#a855f7",
+    "icon": "Atom",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:41:39",
+    "details": "{}"
+  },
+  {
+    "id": "90fe0eb61286",
+    "name": "Rasashastra evam Bhaishajyakalpana",
+    "color": "#3b82f6",
+    "icon": "FlaskConical",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:41:47",
+    "details": "{}"
+  },
+  {
+    "id": "358b0a03c72f",
+    "name": "Roga Nidan evam Vikriti Vigyan",
+    "color": "#06b6d4",
+    "icon": "Scale",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:41:59",
+    "details": "{}"
+  },
+  {
+    "id": "0370b3f90527",
+    "name": "Swasthavritta evam Yoga",
+    "color": "#6366f1",
+    "icon": "Brain",
+    "created_at": "2026-05-26 21:15:45",
+    "updated_at": "2026-05-26 21:42:13",
+    "details": "{}"
+  }
+]

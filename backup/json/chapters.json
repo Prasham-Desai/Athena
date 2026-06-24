@@ -1,0 +1,2462 @@
+[
+  {
+    "id": "b04a0bcfa348",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 1: Concepts of Agada Tantra (Clinical Toxicoiogy) (Lecture :8 hours, Non lecture: 1 hours)",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0577167d683a",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 2: Visha Chikitsa (Management of Poisoning) (Lecture :5 hours, Non lecture: 4 hours)",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "244dee754cdc",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 3: Vishakta aahara pariksha and Viruddha ahara (Lecture :3 hours, Non lecture: 2 hours)",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "183dfb8a717e",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 4: Garavisha and Dooshivisha (Lecture :7 hours, Non lecture: 2 hours)",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5c81538641e0",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 5: Visha Upadrava and diseases caused due to exposure to Visha/poisons (Lecture :4 hours, Non lecture: 2 hours)",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b634c2245b66",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 6: Environmental Toxicotogy (Lecture :2 hours, Non lecture: 5 hours)",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6f241452b8df",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 7: Dermatoiogical manifestations of visha/poisons. (Lecture :6 hours, Non lecture: 2 hours)",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fb800dc6e473",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 8: Therapeutic utility of Agada yoga (Lecture :1 hours, Non lecture: 0 hours)",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "691ed5296ec4",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 9: Sthavara visha — Poisons of Plant origin (Lecture :4 hours, Non lecture: 2 hours)",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ee0b3143cc1a",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 10: Sthavara Visha — Poisons of Metallic origin (Lecture :4 hours, Non lecture: 2 hours)",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3457cc2194d4",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 11: Jangama Visha (Lecture :10 hours, Non lecture: 6 hours)",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "facbf81e4f57",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 12: Kritrima visha (Lecture :2 hours, Non lecture: 0 hours)",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3651d1291063",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 13: Substances of abuse (Lecture :4 hours, Non lecture: 3 hours)",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7a1b422a2d33",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 14: Agada Tantra perspectives on cancer (Lecture :2 hours, Non lecture: 4 hours)",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "dbef1cc74e85",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 15: Forensic medicine (Vyavahara Ayurveda) and Medical jurisprudence (Vidhi vaidyaka): (Lecture :1 hours, Non lecture: 0 hours)",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "897f3f473dc2",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 16: Vaidya sadvritta : Duties and Responsibilities of medical practitioner (Lecture :6 hours, Non lecture: 4 hours)",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a74403eb2768",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 17: Legal Procedures (Lecture :4 hours, Non lecture: 4 hours)",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "13830e1f3b81",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 18: Personal identity (Lecture :2 hours, Non lecture: 2 hours)",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4f461e04354d",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 19: Thanatology (Lecture :6 hours, Non lecture: 2 hours)",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fe3c80232b52",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 20: Asphyxial deaths (Lecture :4 hours, Non lecture: 2 hours)",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "340bb64600a1",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 21: Injury (Lecture :5 hours, Non lecture: 3 hours)",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d4e2f7576b6c",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 22: Pregnancy, delivery and abortion (Lecture :2 hours, Non lecture: 3 hours)",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "9ddcea8ca1f6",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 23: Sexual offences (Lecture :2 hours, Non lecture: 1 hours)",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e9f48e3dc7c2",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 24: Forensic psychiatry. (Lecture :2 hours, Non lecture: 2 hours)",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3b9774055e3c",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 25: Forensic science laboratory (Lecture :1 hours, Non lecture: 0 hours)",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3f16e4ed27e7",
+    "subject_id": "600ae0d78504",
+    "name": "Topic 26: Laws, Acts, Rules and Regulations (Lecture :3 hours, Non lecture: 2 hours)",
+    "order_index": 25,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "bfe154727627",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 1: Cha.Su.13- Sneha Adhyaya",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "970dea1cc823",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 2: Cha.Su.14- Sweda Adhyaya",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "818361671380",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 3: Cha.Su.15- Upakalpaniya Adhyaya",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "930b90c7e4e6",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 4: Cha.Su.16- Chikitsaprabhritiya Adhyaya",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b3f6510c4a43",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 5: Cha.Su.17- Mahasneha Adhyaya",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "689eb18d6bb6",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 6: Cha.Su.18- Trishothiya Adhyaya",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "dd89e334e7c2",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 7: Cha.Su.19- Ashtodariya Adhyaya",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f3420f3d857e",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 8: Cha.Su.20- Maharoga Adhyaya",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "8a82d82419e5",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 9: Cha.Su.21- Ashtau Ninditiya Adhyaya",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "01a6a0fa4741",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 10: Cha.Su.22- Langhanabrimhaniya Adhyaya",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b838ddeae815",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 11: Cha.Su.23- Santarpaniya Adhyaya",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0d1bd1015858",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 12: Cha.Su.24- Vidhishonitiya Adhyaya",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "571e5b89cb4b",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 13: Cha.Su.25- Yajjah Purusheeya Adhyaya",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c30c2b7d3ea7",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 14: Cha.Su.26- Annapanavidhi Adhyaya",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "160d2f840aac",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 15: Cha.Su.27- Annapana Vidhi Vishesha Ayatana Adhyaya",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "12b81d2a1aa1",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 16: Cha.Su.28- Vividhashitapitiya Adhyaya",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a17bb9e42c10",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 17: Cha.Su.29- Dashapranayataniya Adhyaya",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e97cdbcbfb5b",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 18: Ch.Su.30- Arthedashamahamuliya Adhyaya",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6c731e5c0b9b",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 19: Cha.Ni.01-Jwara nidana Adhyaya",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fd0b94a60bc4",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 20: Cha.Ni.02-Raktapitta nidana Adhyaya",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1728afcdb665",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 21: Cha.Ni.03-Gulma nidana Adhyaya",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0d00a1544421",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 22: Cha.Ni.04-Prameha nidana adhyaya",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "aaf55ac5c0f6",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 23: Cha.Ni.05-Kushta nidana Adhyaya",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f9c9bf1f445e",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 24: Cha.Ni.06-Shosha nidana Adhyaya",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6116adc5e693",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 25: Cha.Ni.07-Unmada nidana Adhyaya",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4c38421ae06e",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 26: Cha.Ni.08-Apasmara nidana adhyaya",
+    "order_index": 25,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e12434ad62b8",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 27: Cha.Vi.01- Rasa vimana Adhyayam",
+    "order_index": 26,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7cdf1d2cad9f",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 28: Cha.Vi.02-Trividha kuksheeya Adhyayam",
+    "order_index": 27,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "437f59c60cc9",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 29: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya",
+    "order_index": 28,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3f073b941554",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 30: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya",
+    "order_index": 29,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a18cf941aa82",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 31: Cha.Vi. 05- Sroto vimana Adhyaya",
+    "order_index": 30,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "08a006847808",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 32: Cha.Vi. 06-Roganika vimana adhyaya",
+    "order_index": 31,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "81ce571976bc",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 33: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya",
+    "order_index": 32,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f34cd0000916",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 34: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam",
+    "order_index": 33,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1cd92d9d8d03",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 35: Cha.Sha.01-Katithapurusheeya Adhyaya",
+    "order_index": 34,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5b996300db6a",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya",
+    "order_index": 35,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "25a0a4531924",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya",
+    "order_index": 36,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f73060d492b8",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya",
+    "order_index": 37,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "103b27f5a1f3",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya",
+    "order_index": 38,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2b8b6f7c823a",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 40: Cha.Sha.06-Sareeravichaya adhyaya",
+    "order_index": 39,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "791ffde9c278",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 41: Cha.Sha.07- Sareerasankhya sareera Adhyaya",
+    "order_index": 40,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d21d769f45e6",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya",
+    "order_index": 41,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c9ca014eefe2",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 43: Cha.In.1-Varnasvariyam Indriya Adhyaya",
+    "order_index": 42,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4b3932c344b3",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 44: Cha.In.2-Pushpitakam Indriya Adhyaya",
+    "order_index": 43,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "908f8c9270c4",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya",
+    "order_index": 44,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "9b65305d94ff",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 46: Cha.In.4-Indriyaneekam Indriya adhyaya",
+    "order_index": 45,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "85f4da71e379",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 47: Cha.In.5-Purvarupeeyam Indriyam Adhyaya",
+    "order_index": 46,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "01661921aa40",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 48: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya",
+    "order_index": 47,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "39f81fcb08f6",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 49: Cha.In.7-Pannarupiyam Indriyam Adhyaya",
+    "order_index": 48,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "54c004801898",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 50: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya",
+    "order_index": 49,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b56ea537b8c7",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 51: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya",
+    "order_index": 50,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "9f75efcde4f3",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya",
+    "order_index": 51,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a07f96a1ad55",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 53: Cha.In.11-Anujyotiyam Indriya Adhyaya",
+    "order_index": 52,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "174d2643165a",
+    "subject_id": "11dca16728ae",
+    "name": "Topic 54: Cha.In.12-Gomayachurniyam Indriya Adhyaya",
+    "order_index": 53,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b5c4dc5d8099",
+    "subject_id": "29a761385260",
+    "name": "Topic 1: Dravyaguna Vigyana",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "acef3a52c2ea",
+    "subject_id": "29a761385260",
+    "name": "Topic 2: Dravya",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "30705dcdb355",
+    "subject_id": "29a761385260",
+    "name": "Topic 3: Guna",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b5701c297bce",
+    "subject_id": "29a761385260",
+    "name": "Topic 4: Rasa",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "322c473cdfdc",
+    "subject_id": "29a761385260",
+    "name": "Topic 5: Vipaka",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e95e7fdbc010",
+    "subject_id": "29a761385260",
+    "name": "Topic 6: Virya",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d0d365c4fafc",
+    "subject_id": "29a761385260",
+    "name": "Topic 7: Prabhava",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "483c1a75d9d5",
+    "subject_id": "29a761385260",
+    "name": "Topic 8: Interrelation of Rasa-Guna-Virya-Vipaka-Prabhava",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5287859c7e18",
+    "subject_id": "29a761385260",
+    "name": "Topic 9: Karma",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "419b62e6e709",
+    "subject_id": "29a761385260",
+    "name": "Topic 10: Karmas of Dashemani Gana",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c507d297c0f1",
+    "subject_id": "29a761385260",
+    "name": "Topic 11: Principles of General Pharmacology",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5f902a73be6e",
+    "subject_id": "29a761385260",
+    "name": "Topic 12: Mishraka Gana",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "586fc02dca12",
+    "subject_id": "29a761385260",
+    "name": "Topic 13: Nomenclature of dravya as per Nighantu, Vedic taxonomy and Botany",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "15c18be075b3",
+    "subject_id": "29a761385260",
+    "name": "Topic 14: Prashasta Bheshaja, Bheshaja Pariksha and drug evaluation method with correlation as per Pharmacognosy",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "66620fd11b84",
+    "subject_id": "29a761385260",
+    "name": "Topic 15: Dravyasangrahana and Drug collection methods as per GFCP (Good Field collection practices)",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7518dbdd9f5a",
+    "subject_id": "29a761385260",
+    "name": "Topic 16: GCP (Good cultivation practices), seed bank, conservation of medicinal plants, knowledge about RET (Rear, Endangered & Threatened ) medicinal plants.",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ef86956a26bc",
+    "subject_id": "29a761385260",
+    "name": "Topic 17: Abhava Pratinidhi Dravya (substitutes)",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "31ad6d79e766",
+    "subject_id": "29a761385260",
+    "name": "Topic 18: Classifications and techniques of aqueous and alcoholic extracts",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "059e0182567e",
+    "subject_id": "29a761385260",
+    "name": "Topic 19: Adverse drug reaction and Pharmacovigilance with recent updates",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1dc07aaafb25",
+    "subject_id": "29a761385260",
+    "name": "Topic 20: NMPB (National Medicinal Plant Board), CCRAS (Central Council of Research in Ayurveda Sciences), API ( Ayurvedic Pharmacopeia of India), GCTM ( Global Centre for Traditional Medicine), PCIMH ( Pharmacopeia Commission of Indian Medicine and Homeopathy)",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fe51ebbf6f7d",
+    "subject_id": "29a761385260",
+    "name": "Topic 21: Vrikshayurveda and Ethno-medicine",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7ff91d313093",
+    "subject_id": "29a761385260",
+    "name": "Topic 22: Network pharmacology and Bioinformatics",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a348b2e25948",
+    "subject_id": "29a761385260",
+    "name": "Topic 23: Bheshajavacharaniya (Criteria's to be considered for selection of drugs in vyadhis)",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "eaef359cac78",
+    "subject_id": "29a761385260",
+    "name": "Topic 24: Dravya (Drug) Nama-Guna-Karma Jnana",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "77fcdc86792e",
+    "subject_id": "29a761385260",
+    "name": "Topic 25: Dravya (Drugs) Nama-Guna-Karma-Jnana",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fad27a93bb4b",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 1: Chronological development of Ayurvediya Aushadhi Nirmana",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e0d9da04dc01",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 2: Paribhasha ( Terminology)",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6baad6337cb4",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 3: Adharbhuta Siddhanta (Application of fundamental principles )",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f72ba62c3203",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 4: Yantropakaranani- I (Equipments and machineries)",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "be534e0ad5f6",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 5: Yantropakaranani -II (Equipments, fuel and Heating Devices)",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b819446960bb",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 6: Kalpana Nirmana I (Primary & Secondary dosage forms)",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "03c391c0c8ae",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 7: Kalpana Nirmana-II (Method of Preparation of different dosage forms & Dietary Supplements)",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4fd6f021caac",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 8: Rasa Dravya Parichaya- I",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "468addb39448",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 9: Rasa Dravya Parichaya II",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "834e268c0a43",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 10: Rasadravya Parichaya III",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0e56382acc7d",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 11: Kalpana Nirman -III (Method of Preparation of different dosage forms)",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ed14d06573b7",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 12: Chaturvidha Rasayana",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fca8d0ac99e5",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 13: Current and emerging trend in Ayurvedic pharmaceuticals",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7cde82a4ecee",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 14: GMP(Schedule T) & Regulatory aspects of Ayurvedic drugs",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "74e61fb2df86",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 15: Aushadhi Prayoga Vigyana",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1d5c0682379b",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 16: Single drug (Herbal & Mineral)",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d1dbcd81792b",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 17: Single drug(Bhasma, Shuddha & Pishti)",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3f702acab497",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 18: Aushadhi Kalpa -I (Compound formulations)",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d9ca732ab263",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 19: Aushadhi Kalpa-II (Compound Drugs/Formulations)",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "865870ba4f40",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 20: Dosage Forms & Cosmetic Products",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c91054948370",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 21: Nutraceuticals",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1d4b0fb8a4b8",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 22: Anupana Prayoga for Aushadhi Kalpa",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "615ac9497daa",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 23: Aushadhi Prayoga Marga",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "831520a098a8",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 24: Rational prescription along with safe dispensing of Ayurvedic formulations.",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "44b086dc2c81",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 25: Traditional & Local health Practices",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "452934cf0e59",
+    "subject_id": "90fe0eb61286",
+    "name": "Topic 26: Pharmacovigilance for Ayurveda drugs",
+    "order_index": 25,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "cac3e9a43f4a",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 1: Roga nidana — Pathophysiology and clinical diagnosis",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ad74ef3394d8",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 2: Pareeksha",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c50bfbd0b6e2",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 3: Methods of Rogi pareeksha",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b4a9e71bfda7",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 4: Sapeksha nidana - Vyavacchedaka nidana",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7fc32ea2a50c",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 5: Upashaya/ Anupashaya",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "af2b0267bb48",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 6: Dosha Vikriti",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f629cb329fbc",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 7: Doshagati and Rogamarga",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "34e14b370d5d",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 8: Srotodushti",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6d5b8c7a6329",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 9: Concept of Ama",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "23fd2e700d17",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 10: Assessment of Ama",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5c6a4f8515c7",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 11: Sthana samshraya — Poorvaroopa",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "180fad2d9fa7",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 12: Dushya dushti",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2aeb1e7da3dc",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 13: Samprapti",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "25dc348c18aa",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 14: Rupa",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0d55f02e42e5",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 15: Vyadhinamakarana",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "beb54759eb93",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 16: Vyadhi",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2ee55f7230c0",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 17: Ashtanindita (Endocrine disorders)",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1173752ec6b5",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 18: Janapadodhwamsa vikara (Pandemic disorders)",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c2f5257e5b64",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 19: Nidanarthakara Vyadhi, Vyadhisankara",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3b659c0dff52",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 20: Vyadhikshamatva",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "793eded87872",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 21: Rogi bala Pareeksha",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2bc41e77b573",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 22: Dhatu Paka",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0059da333611",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 23: Infection and Nutritional disorders",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "28fe47a5d589",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 24: Upadrava",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3404010e528a",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 25: Arishta",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "236cd1932d27",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 26: Vyadhi bala pareeksha",
+    "order_index": 25,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4cc68802730f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 27: Sadhyasadhyatva — Prognosis",
+    "order_index": 26,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e913a0628e9e",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 28: Digital health and Artificial intelligence in the context of Roganidana",
+    "order_index": 27,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0585255eccf0",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 29: Agnimandya — Ajeerna, Anaha, Adhmana, Atopa",
+    "order_index": 28,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6881d75841ef",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 30: Chhardi",
+    "order_index": 29,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "098a897816c6",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 31: Amlapitta",
+    "order_index": 30,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2f53f88f6350",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 32: Shoola",
+    "order_index": 31,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5a56bf3042e8",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 33: Atisara, and Pravahika",
+    "order_index": 32,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "555cf72cd72c",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 34: Grahani",
+    "order_index": 33,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "57bdd4932cef",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 35: Visuchika, Alasaka, Vilambika",
+    "order_index": 34,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2aa075fae862",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 36: Common GIT diseases",
+    "order_index": 35,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "c6e043c59310",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 37: Mutrakrichhra",
+    "order_index": 36,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "857c63d425a1",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 38: Mutraghata",
+    "order_index": 37,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "97b21778ff10",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 39: Common Urinary diseases",
+    "order_index": 38,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "df91f295f673",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 40: Hikka",
+    "order_index": 39,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1ae82bc3ece6",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 41: Shwasa",
+    "order_index": 40,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d94edc977087",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 42: Kasa",
+    "order_index": 41,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "348989cb45c2",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 43: Rajayakshma & Shosha",
+    "order_index": 42,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e15cfddb3583",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 44: Common lung disorders",
+    "order_index": 43,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2dcdd94f35d8",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 45: Jwara",
+    "order_index": 44,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "723368a71ca9",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 46: Masurika — Romantika",
+    "order_index": 45,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "43605d771cd6",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 47: Fever",
+    "order_index": 46,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d6528010c7be",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 48: Pandu",
+    "order_index": 47,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6b173286412a",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 49: Raktapitta",
+    "order_index": 48,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "357464983bd9",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 50: Hematopoietic diseases",
+    "order_index": 49,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "22fca0c00841",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 51: Hridroga",
+    "order_index": 50,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "55ccbc0c9c6f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 52: Shotha",
+    "order_index": 51,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3ddf2186b8d0",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 53: Cardiovascular disorders",
+    "order_index": 52,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4bc8e622cf68",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 54: Kamala",
+    "order_index": 53,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "15b9a758af4d",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 55: Udara Roga",
+    "order_index": 54,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "30b9f0941bac",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 56: Hepatobiliary diseases",
+    "order_index": 55,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "353716362ebf",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 57: Kushtha - Maha Kushtha & Kshudra Kushtha (According to Charaka)",
+    "order_index": 56,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "beb8fd144d25",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 58: Sheetapitta",
+    "order_index": 57,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "2dce1e627db9",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 59: Shwitra",
+    "order_index": 58,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "64dfb5693b6e",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 60: Visarpa",
+    "order_index": 59,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f809d4cd25ce",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 61: Skin diseases",
+    "order_index": 60,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7e337007c56b",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 62: Galaganda",
+    "order_index": 61,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "81b58a395b04",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 63: Thyroid disorders",
+    "order_index": 62,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "0ec08e3beb7f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 64: Sthoulya — Karshya",
+    "order_index": 63,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5733445cf432",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 65: Obesity",
+    "order_index": 64,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6cda3e8e5721",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 66: Prameha",
+    "order_index": 65,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1627e8900ef8",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 67: Diabetes Mellitus and Pancreatitis",
+    "order_index": 66,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "620de98c67a4",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 68: Vatavyadhi",
+    "order_index": 67,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "f08e22f71b51",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 69: Snayugata vata",
+    "order_index": 68,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "280b6dbe582a",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 70: Common neurologic and spine disorders",
+    "order_index": 69,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "43b8e2d97360",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 71: Sandhigatavata and Asthi majja gata vata",
+    "order_index": 70,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "74991a527893",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 72: Diseases of bone, joints, and muscles",
+    "order_index": 71,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "88eba4a77d1f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 73: Amavata",
+    "order_index": 72,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "03d2186cf015",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 74: Vatarakta",
+    "order_index": 73,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "dca745d198ba",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 75: Immunological & Metabolic disorders",
+    "order_index": 74,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "30580dfa06ae",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 76: Klaibya & Vandhyatva",
+    "order_index": 75,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "194f5735130d",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 77: Sexual dysfunction and Infertility",
+    "order_index": 76,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "e789060e56fd",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 78: Unmada & Apasmara",
+    "order_index": 77,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "8d7281de56e7",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 79: Vishada",
+    "order_index": 78,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5afdf6b6d52f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 80: Murchha, and Sanyasa",
+    "order_index": 79,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fa51e56b838f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 81: Common Psychiatric diseases",
+    "order_index": 80,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "09b8a936748f",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 82: Phiranga and Upadamsha",
+    "order_index": 81,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "91885ce3ee00",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 83: Syphilis & Gonorrhoea",
+    "order_index": 82,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a40be21082fe",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 84: Krimiroga",
+    "order_index": 83,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "23d6c41c3229",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 85: Clinical presentation of common parasitic disorders",
+    "order_index": 84,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "fe96ab813d6a",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 86: Khalitya & Palitya",
+    "order_index": 85,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "09b3952936ee",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 87: Shleepada",
+    "order_index": 86,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "face1153698b",
+    "subject_id": "358b0a03c72f",
+    "name": "Topic 88: Tuberculosis",
+    "order_index": 87,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "9176d071b736",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 1: Swastha and Swasthya",
+    "order_index": 0,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "1d0d3fceae7b",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 2: Healthy Life style -Dinacharya (Daily regimen)",
+    "order_index": 1,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "78f3ba910f7f",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 3: Ratricharya",
+    "order_index": 2,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "22e38072d2b3",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 4: Ritucharya",
+    "order_index": 3,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "6076fbe049b5",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 5: Roga nutpadaniya",
+    "order_index": 4,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "421b3558c011",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 6: Sadvritta",
+    "order_index": 5,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "87bf0cce6fc9",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 7: Ahara",
+    "order_index": 6,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d1bc1bc25c4c",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 8: Rasayana for Swastha",
+    "order_index": 7,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b339a114007f",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 9: Yoga",
+    "order_index": 8,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d6ba08a0cced",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 10: Naturopathy",
+    "order_index": 9,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "3ed7f832d35a",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 11: Janapadodhwamsa / Maraka Vyadhi",
+    "order_index": 10,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "477db510b98a",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 12: Environmental health",
+    "order_index": 11,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ec1746ee2c9c",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 13: Disaster management",
+    "order_index": 12,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "dfbbb52bdb25",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 14: Occupational Health",
+    "order_index": 13,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "a047c5bec1ce",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 15: School health services",
+    "order_index": 14,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "4c62cc32c4a4",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 16: Disinfection",
+    "order_index": 15,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "ca54b4b73c80",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 17: Primary health care",
+    "order_index": 16,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "5675cb09f88c",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 18: Mother and Child health care",
+    "order_index": 17,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "8989039bbfdb",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 19: Family welfare programme",
+    "order_index": 18,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "cdfc148e18d1",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 20: Preventive Geriatrics",
+    "order_index": 19,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "44c25be545da",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 21: World Health Organization and International health agencies",
+    "order_index": 20,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "d9477f12d322",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 22: Vital Statistics",
+    "order_index": 21,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "58dfbe9db527",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 23: Health Administration",
+    "order_index": 22,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "b538558df7df",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 24: National Health Programmes",
+    "order_index": 23,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "7fcd14125ac8",
+    "subject_id": "0370b3f90527",
+    "name": "Topic 25: National Health Policy",
+    "order_index": 24,
+    "created_at": "2026-05-26 21:15:45",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "53gvvg6fh3mmpzhyb77",
+    "subject_id": "29a761385260",
+    "name": "Drugs",
+    "order_index": 26,
+    "created_at": "2026-06-04 12:53:59",
+    "paper": "Paper 2",
+    "tag": null,
+    "estimated_marks": null
+  },
+  {
+    "id": "yv1jgjy2zvmpzi8ikd",
+    "subject_id": "90fe0eb61286",
+    "name": "Shlokas",
+    "order_index": 26,
+    "created_at": "2026-06-04 13:01:55",
+    "paper": "Paper 1",
+    "tag": null,
+    "estimated_marks": null
+  }
+]
