@@ -58,6 +58,37 @@ export const useTimerStore = create<TimerState>()(
       tick: () => {
         const now = Date.now();
         set((state) => {
+          const nowDate = new Date(now);
+          const lastTickDate = new Date(state.lastTick);
+          
+          const isNewDay = 
+            nowDate.getFullYear() !== lastTickDate.getFullYear() ||
+            nowDate.getMonth() !== lastTickDate.getMonth() ||
+            nowDate.getDate() !== lastTickDate.getDate();
+
+          if (isNewDay) {
+            const midnight = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
+            
+            if (state.isMainRunning) {
+              return {
+                mainSeconds: Math.floor((now - midnight) / 1000),
+                lastTick: now - ((now - midnight) % 1000),
+                mainStartTime: new Date(midnight).toISOString(),
+                segmentStartTime: new Date(midnight).toISOString(),
+                lastPauseTime: null,
+              };
+            } else {
+              return {
+                isMainRunning: false,
+                mainSeconds: 0,
+                lastTick: now,
+                mainStartTime: null,
+                segmentStartTime: null,
+                lastPauseTime: null,
+              };
+            }
+          }
+
           if (!state.isMainRunning) {
             return { lastTick: now };
           }
