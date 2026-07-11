@@ -16,6 +16,10 @@ export async function PUT(
       await db.run('UPDATE subtopics SET status = ? WHERE id = ?', [body.status, id]);
     }
     
+    if (body.revisionCount !== undefined) {
+      await db.run('UPDATE subtopics SET revision_count = ? WHERE id = ?', [body.revisionCount, id]);
+    }
+    
     return successResponse({ id, updated: true });
   } catch (err: any) {
     return errorResponse(err.message, 500);

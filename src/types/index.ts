@@ -169,6 +169,9 @@ export interface Subtopic {
   topic_id: string;
   name: string;
   content: string | null;
+  status?: string;
+  revision_count?: number; // DB column
+  revisionCount?: number;  // UI property
   order_index: number;
   importance: string | null;
   created_at: string;

@@ -21,6 +21,9 @@ interface SubjectsState {
   undoRevision: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
   setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => Promise<void>;
   setSubtopicStatus: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, status: string, skipParentUpdate?: boolean) => Promise<void>;
+  setTopicRevisionCount: (subjectId: string, chapterId: string, topicId: string, count: number) => Promise<void>;
+  setSubtopicRevisionCount: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, count: number) => Promise<void>;
+  resetAllRevisions: () => Promise<void>;
   setSubjects: (subjects: Subject[]) => void;
 }
 
@@ -414,4 +417,73 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   },
 
   setSubjects: (subjects) => set({ subjects }),
+
+  setTopicRevisionCount: async (subjectId, chapterId, topicId, count) => {
+    const updates: Partial<Topic> = {
+      revisionCount: count,
+      lastRevised: count > 0 ? getToday() : null, // keep simple string date
+      status: count > 0 ? 'revised' as TopicStatus : 'completed' as TopicStatus,
+    };
+    await get().updateTopic(subjectId, chapterId, topicId, updates);
+  },
+
+  setSubtopicRevisionCount: async (subjectId, chapterId, topicId, subtopicId, count) => {
+    const previousSubjects = get().subjects;
+    set((state) => ({
+      subjects: state.subjects.map((s) => s.id === subjectId ? {
+        ...s, chapters: s.chapters.map((c) => c.id === chapterId ? {
+          ...c, topics: c.topics.map((t) => t.id === topicId ? {
+            ...t, subtopics: t.subtopics?.map((sub: any) => sub.id === subtopicId ? {
+              ...sub, revisionCount: count
+            } : sub)
+          } : t)
+        } : c)
+      } : s)
+    }));
+
+    try {
+      const response = await fetch(`/api/subtopics/${subtopicId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ revisionCount: count })
+      });
+      if (!response.ok) throw new Error('Failed');
+    } catch (e) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Action failed', type: 'error' } }));
+      console.error(e);
+      throw e;
+    }
+  },
+
+  resetAllRevisions: async () => {
+    const previousSubjects = get().subjects;
+    
+    // Optimistic UI update
+    set((state) => ({
+      subjects: state.subjects.map(s => ({
+        ...s,
+        chapters: s.chapters.map(c => ({
+          ...c,
+          topics: c.topics.map(t => ({
+            ...t,
+            revisionCount: 0,
+            status: t.status === 'revised' ? 'completed' : t.status,
+            subtopics: t.subtopics?.map((sub: any) => ({ ...sub, revisionCount: 0 }))
+          }))
+        }))
+      }))
+    }));
+
+    try {
+      const response = await fetch('/api/reset-revisions', { method: 'POST' });
+      if (!response.ok) throw new Error('Failed');
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'All revisions have been reset', type: 'success' } }));
+    } catch (e) {
+      set({ subjects: previousSubjects });
+      if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'Reset failed', type: 'error' } }));
+      console.error(e);
+      throw e;
+    }
+  },
 }));

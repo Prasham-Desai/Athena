@@ -19,14 +19,12 @@ import {
   Microscope,
   Compass,
   PenTool,
+  PenTool,
   ChevronRight,
-  CheckCircle2,
-  Lock,
-  RotateCcw,
-  RefreshCw,
   type LucideIcon,
 } from 'lucide-react';
-import { cn, isOverdue, isToday, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import type { Subject, Chapter, Topic } from '@/types';
 
@@ -57,31 +55,11 @@ function getIcon(name: string): LucideIcon {
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-function isRevisable(topic: Topic): boolean {
-  return topic.status === 'completed' || topic.status === 'revised';
-}
-
-function getRevisionDueStatus(topic: Topic): 'overdue' | 'due-today' | 'revised-today' | null {
-  if (topic.lastRevised && isToday(topic.lastRevised)) return 'revised-today';
-  if (isOverdue(topic.nextRevisionDue)) return 'overdue';
-  if (isToday(topic.nextRevisionDue)) return 'due-today';
-  return null;
-}
-
-// ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 interface RevisionSubjectCardProps {
   subject: Subject;
   index: number;
-  onMarkRevised: (chapterId: string, topicId: string) => void;
-  onReviseAllInChapter: (chapterId: string) => void;
-  onUndoRevision: (chapterId: string, topicId: string) => void;
-  isExpanded: boolean;
-  onToggleExpand: () => void;
-  undoableTopics: Set<string>;
 }
 
 // ---------------------------------------------------------------------------
@@ -90,29 +68,8 @@ interface RevisionSubjectCardProps {
 export function RevisionSubjectCard({
   subject,
   index,
-  onMarkRevised,
-  onReviseAllInChapter,
-  onUndoRevision,
-  isExpanded,
-  onToggleExpand,
-  undoableTopics,
 }: RevisionSubjectCardProps) {
   const Icon = getIcon(subject.icon);
-
-  // ── Local state for expanded chapters ──────────────────────────────────
-  const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set());
-
-  const toggleChapter = useCallback((chapterId: string) => {
-    setExpandedChapters((prev) => {
-      const next = new Set(prev);
-      if (next.has(chapterId)) {
-        next.delete(chapterId);
-      } else {
-        next.add(chapterId);
-      }
-      return next;
-    });
-  }, []);
 
   // ── Computed stats ─────────────────────────────────────────────────────
   const stats = useMemo(() => {
@@ -136,20 +93,7 @@ export function RevisionSubjectCard({
     return { totalTopics, completed, revised: revisedCount, revisableCount, revisionPercent };
   }, [subject.chapters]);
 
-  // ── Chapter-level stats helper ─────────────────────────────────────────
-  const getChapterStats = useCallback((chapter: Chapter) => {
-    let total = 0;
-    let revised = 0;
-    let hasRevisable = false;
-
-    for (const t of chapter.topics) {
-      total++;
-      if (t.status === 'revised') revised++;
-      if (isRevisable(t)) hasRevisable = true;
-    }
-
-    return { total, revised, hasRevisable };
-  }, []);
+  }, [subject.chapters]);
 
   return (
     <motion.div
@@ -171,10 +115,9 @@ export function RevisionSubjectCard({
 
         <div className="p-3 sm:p-4">
           {/* ── Header row (clickable) ───────────────────────────────── */}
-          <button
-            type="button"
-            onClick={onToggleExpand}
-            className="flex items-start justify-between w-full text-left gap-2 mb-3"
+          <Link
+            href={`/revisions/${subject.id}`}
+            className="flex items-start justify-between w-full text-left gap-2 mb-3 outline-none"
           >
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               {/* Subject icon */}
@@ -187,7 +130,7 @@ export function RevisionSubjectCard({
 
               {/* Name + subtitle */}
               <div className="min-w-0 pr-1">
-                <h3 className="font-semibold text-sm sm:text-base truncate">
+                <h3 className="font-semibold text-sm sm:text-base truncate group-hover:text-[hsl(var(--primary))] transition-colors">
                   {subject.name}
                 </h3>
                 <div className="flex flex-wrap items-center gap-x-1.5 text-[10px] sm:text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5 font-medium">
@@ -210,14 +153,9 @@ export function RevisionSubjectCard({
                   color={subject.color}
                 />
               </div>
-              <motion.div
-                animate={{ rotate: isExpanded ? 90 : 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              >
-                <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
-              </motion.div>
+              <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
             </div>
-          </button>
+          </Link>
 
           {/* ── Topic stats pills ──────────────────────────────────── */}
           {stats.totalTopics > 0 && (
@@ -258,209 +196,7 @@ export function RevisionSubjectCard({
           </div>
         </div>
 
-        {/* ── Expanded content ─────────────────────────────────────── */}
-        <AnimatePresence initial={false}>
-          {isExpanded && (
-            <motion.div
-              key="expanded-content"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="overflow-hidden"
-            >
-              <div className="border-t border-[hsl(var(--border))]">
-                {subject.chapters.length === 0 ? (
-                  <div className="px-4 py-6 text-center text-xs text-[hsl(var(--muted-foreground))]">
-                    No chapters in this subject yet.
-                  </div>
-                ) : (
-                  <div className="divide-y divide-[hsl(var(--border))]">
-                    {subject.chapters.map((chapter) => {
-                      const chStats = getChapterStats(chapter);
-                      const isChapterExpanded = expandedChapters.has(chapter.id);
-
-                      return (
-                        <div key={chapter.id}>
-                          {/* ── Chapter header ─────────────────────── */}
-                          <button
-                            type="button"
-                            onClick={() => toggleChapter(chapter.id)}
-                            className="flex items-center justify-between w-full px-3 sm:px-4 py-2.5 text-left hover:bg-[hsl(var(--muted))]/50 transition-colors"
-                          >
-                            <div className="flex items-center gap-2 min-w-0">
-                              <motion.div
-                                animate={{ rotate: isChapterExpanded ? 90 : 0 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                                className="shrink-0"
-                              >
-                                <ChevronRight className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
-                              </motion.div>
-                              <span className="text-xs sm:text-sm font-medium truncate">
-                                {chapter.name}
-                              </span>
-                              <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-medium shrink-0">
-                                {chStats.revised}/{chStats.total} revised
-                              </span>
-                            </div>
-
-                            {/* Revise All button */}
-                            {chStats.hasRevisable && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onReviseAllInChapter(chapter.id);
-                                }}
-                                className={cn(
-                                  'shrink-0 inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg',
-                                  'bg-gradient-to-r from-violet-600 to-purple-600 text-white',
-                                  'text-[9px] sm:text-[10px] font-medium',
-                                  'shadow-sm shadow-violet-500/20 hover:opacity-90 transition-opacity',
-                                  'ml-2'
-                                )}
-                              >
-                                <RefreshCw className="w-2.5 h-2.5" />
-                                Revise All
-                              </button>
-                            )}
-                          </button>
-
-                          {/* ── Chapter topics list ────────────────── */}
-                          <AnimatePresence initial={false}>
-                            {isChapterExpanded && (
-                              <motion.div
-                                key={`topics-${chapter.id}`}
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="overflow-hidden"
-                              >
-                                <div className="pb-2">
-                                  {chapter.topics.length === 0 ? (
-                                    <div className="px-4 py-3 text-center text-[10px] text-[hsl(var(--muted-foreground))]">
-                                      No topics in this chapter.
-                                    </div>
-                                  ) : (
-                                    chapter.topics.map((topic, topicIdx) => {
-                                      const revisable = isRevisable(topic);
-                                      const dueStatus = getRevisionDueStatus(topic);
-
-                                      return (
-                                        <motion.div
-                                          key={topic.id}
-                                          initial={{ opacity: 0, x: -8 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          transition={{ delay: topicIdx * 0.02, type: 'spring', stiffness: 400, damping: 30 }}
-                                          className={cn(
-                                            'flex items-center gap-2 px-4 sm:px-5 py-1.5 sm:py-2',
-                                            'hover:bg-[hsl(var(--muted))]/30 transition-colors',
-                                            !revisable && 'opacity-50'
-                                          )}
-                                        >
-                                          {/* Status icon + due dot */}
-                                          <div className="relative shrink-0">
-                                            {revisable ? (
-                                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                                            ) : (
-                                              <Lock className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
-                                            )}
-                                            {/* Smart due-date indicator dot */}
-                                            {dueStatus === 'overdue' && (
-                                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500 ring-1 ring-[hsl(var(--card))]" />
-                                            )}
-                                            {dueStatus === 'due-today' && (
-                                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-500 ring-1 ring-[hsl(var(--card))]" />
-                                            )}
-                                            {dueStatus === 'revised-today' && (
-                                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-[hsl(var(--card))]" />
-                                            )}
-                                          </div>
-
-                                          {/* Topic name */}
-                                          <span className="text-xs truncate min-w-0 flex-1">
-                                            {topic.name}
-                                            {!revisable && (
-                                              <span className="italic text-[9px] text-[hsl(var(--muted-foreground))] ml-1.5">
-                                                (complete in Subjects first)
-                                              </span>
-                                            )}
-                                          </span>
-
-                                          {/* Badges: importance + revision count */}
-                                          <div className="flex items-center gap-1.5 shrink-0">
-                                            {/* Importance badge */}
-                                            {topic.importance && IMPORTANCE_TAG_CONFIG[topic.importance] && (
-                                              <span
-                                                className={cn(
-                                                  'hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-semibold border',
-                                                  IMPORTANCE_TAG_CONFIG[topic.importance].bg,
-                                                  IMPORTANCE_TAG_CONFIG[topic.importance].text,
-                                                  IMPORTANCE_TAG_CONFIG[topic.importance].border
-                                                )}
-                                              >
-                                                {IMPORTANCE_TAG_CONFIG[topic.importance].label}
-                                              </span>
-                                            )}
-
-                                            {/* Revision count pill */}
-                                            {topic.revisionCount > 0 && (
-                                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-500 text-[9px] sm:text-[10px] font-medium">
-                                                ×{topic.revisionCount} revised
-                                              </span>
-                                            )}
-
-                                            {/* Undo button */}
-                                            {undoableTopics.has(topic.id) && (
-                                              <button
-                                                type="button"
-                                                onClick={() => onUndoRevision(chapter.id, topic.id)}
-                                                className={cn(
-                                                  'inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-lg',
-                                                  'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20',
-                                                  'text-[9px] font-medium transition-colors'
-                                                )}
-                                                title="Undo revision"
-                                              >
-                                                <RotateCcw className="w-2.5 h-2.5" />
-                                                Undo
-                                              </button>
-                                            )}
-
-                                            {/* Revise / Revise Again button */}
-                                            {revisable && (
-                                              <button
-                                                type="button"
-                                                onClick={() => onMarkRevised(chapter.id, topic.id)}
-                                                className={cn(
-                                                  'inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg',
-                                                  'bg-gradient-to-r from-indigo-600 to-purple-600 text-white',
-                                                  'text-[9px] sm:text-[10px] font-medium',
-                                                  'shadow-sm shadow-indigo-500/20 hover:opacity-90 transition-opacity'
-                                                )}
-                                              >
-                                                {topic.revisionCount > 0 ? 'Revise Again' : 'Revise'}
-                                              </button>
-                                            )}
-                                          </div>
-                                        </motion.div>
-                                      );
-                                    })
-                                  )}
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );

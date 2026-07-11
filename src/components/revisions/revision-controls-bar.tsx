@@ -25,13 +25,10 @@ interface RevisionControlsBarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   filter: RevisionFilter;
-  onFilterChange: (filter: RevisionFilter) => void;
   sortBy: RevisionSort;
   onSortChange: (sort: RevisionSort) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
-  allExpanded: boolean;
-  onToggleExpandAll: () => void;
   filterCounts: {
     all: number;
     due: number;
@@ -75,8 +72,6 @@ export function RevisionControlsBar({
   onSortChange,
   viewMode,
   onViewModeChange,
-  allExpanded,
-  onToggleExpandAll,
   filterCounts,
 }: RevisionControlsBarProps) {
   return (
@@ -197,27 +192,7 @@ export function RevisionControlsBar({
               aria-label="Grid view"
             >
               <LayoutGrid className="h-3.5 w-3.5" />
-            </button>
           </div>
-
-          {/* Expand / Collapse All */}
-          <button
-            onClick={onToggleExpandAll}
-            className={cn(
-              'flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-all',
-              'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))]'
-            )}
-            aria-label={allExpanded ? 'Collapse all' : 'Expand all'}
-          >
-            {allExpanded ? (
-              <ChevronUp className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronDown className="h-3.5 w-3.5" />
-            )}
-            <span className="hidden sm:inline">
-              {allExpanded ? 'Collapse All' : 'Expand All'}
-            </span>
-          </button>
         </div>
       </div>
     </motion.div>

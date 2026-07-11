@@ -15,24 +15,16 @@ import type { Subject } from '@/types';
 import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
 import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
 import { RevisionSubjectCard } from '@/components/revisions/revision-subject-card';
-import { RevisionUndoToast, type UndoEntry } from '@/components/revisions/revision-undo-toast';
 
 export default function RevisionsPage() {
   const hydrated = useHydration();
 
   const subjects = useSubjectsStore((s) => s.subjects);
-  const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
-  const undoRevision = useSubjectsStore((s) => s.undoRevision);
-  const { addActivity } = useActivityStore();
-
   // Local state
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<RevisionFilter>('all');
   const [sortBy, setSortBy] = useState<RevisionSort>('progress');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  
-  const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set());
-  const [undoEntries, setUndoEntries] = useState<UndoEntry[]>([]);
 
   // Compute counts for filters
   const filterCounts = useMemo(() => {
@@ -128,111 +120,6 @@ export default function RevisionsPage() {
     return result;
   }, [subjects, searchQuery, filter, sortBy]);
 
-  // Handlers
-  const handleMarkRevised = useCallback((subjectId: string, chapterId: string, topicId: string) => {
-    const subject = subjects.find((s) => s.id === subjectId);
-    const chapter = subject?.chapters.find((c) => c.id === chapterId);
-    const topic = chapter?.topics.find((t) => t.id === topicId);
-    if (!subject || !chapter || !topic) return;
-
-    if (topic.status !== 'completed' && topic.status !== 'revised') {
-      window.dispatchEvent(
-        new CustomEvent('add-toast', { detail: { message: 'Complete this topic in Subjects first!', type: 'error' } })
-      );
-      return;
-    }
-
-    markTopicRevised(subjectId, chapterId, topicId);
-    
-    // Add to undo stack
-    setUndoEntries(prev => [...prev, {
-      topicId,
-      topicName: topic.name,
-      subjectName: subject.name,
-      chapterId,
-      subjectId,
-      timestamp: Date.now()
-    }]);
-
-    addActivity({
-      type: 'topic-revised',
-      description: `Revised "${topic.name}" (×${topic.revisionCount + 1})`,
-      subjectId,
-      color: subject.color,
-    });
-    
-  }, [subjects, markTopicRevised, addActivity]);
-
-  const handleReviseAllInChapter = useCallback((subjectId: string, chapterId: string) => {
-    const subject = subjects.find((s) => s.id === subjectId);
-    const chapter = subject?.chapters.find((c) => c.id === chapterId);
-    if (!subject || !chapter) return;
-
-    let count = 0;
-    const newUndoEntries: UndoEntry[] = [];
-    
-    chapter.topics.forEach((topic) => {
-      if (topic.status === 'completed' || topic.status === 'revised') {
-        markTopicRevised(subjectId, chapterId, topic.id);
-        count++;
-        newUndoEntries.push({
-          topicId: topic.id,
-          topicName: topic.name,
-          subjectName: subject.name,
-          chapterId,
-          subjectId,
-          timestamp: Date.now()
-        });
-      }
-    });
-
-    if (count > 0) {
-      setUndoEntries(prev => [...prev, ...newUndoEntries]);
-      addActivity({
-        type: 'topic-revised',
-        description: `Revised ${count} topics in "${chapter.name}"`,
-        subjectId,
-        color: subject.color,
-        count: count,
-      });
-    }
-  }, [subjects, markTopicRevised, addActivity]);
-
-  const handleUndo = useCallback((entry: UndoEntry) => {
-    undoRevision(entry.subjectId, entry.chapterId, entry.topicId);
-    setUndoEntries(prev => prev.filter(e => e.topicId !== entry.topicId));
-  }, [undoRevision]);
-
-  const handleUndoAll = useCallback(() => {
-    undoEntries.forEach(entry => {
-      undoRevision(entry.subjectId, entry.chapterId, entry.topicId);
-    });
-    setUndoEntries([]);
-  }, [undoEntries, undoRevision]);
-
-  const handleDismissUndo = useCallback(() => {
-    setUndoEntries([]);
-  }, []);
-
-  const toggleSubjectExpand = useCallback((subjectId: string) => {
-    setExpandedSubjects(prev => {
-      const next = new Set(prev);
-      if (next.has(subjectId)) next.delete(subjectId);
-      else next.add(subjectId);
-      return next;
-    });
-  }, []);
-
-  const toggleExpandAll = useCallback(() => {
-    if (expandedSubjects.size === filteredAndSortedSubjects.length && filteredAndSortedSubjects.length > 0) {
-      setExpandedSubjects(new Set());
-    } else {
-      setExpandedSubjects(new Set(filteredAndSortedSubjects.map(s => s.id)));
-    }
-  }, [expandedSubjects.size, filteredAndSortedSubjects]);
-
-  const undoableTopicsSet = useMemo(() => new Set(undoEntries.map(e => e.topicId)), [undoEntries]);
-
   if (!hydrated) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -263,8 +150,6 @@ export default function RevisionsPage() {
             onSortChange={setSortBy}
             viewMode={viewMode}
             onViewModeChange={setViewMode}
-            allExpanded={expandedSubjects.size === filteredAndSortedSubjects.length && filteredAndSortedSubjects.length > 0}
-            onToggleExpandAll={toggleExpandAll}
             filterCounts={filterCounts}
           />
 
@@ -295,15 +180,6 @@ export default function RevisionsPage() {
                     key={subject.id}
                     subject={subject}
                     index={idx}
-                    isExpanded={expandedSubjects.has(subject.id)}
-                    onToggleExpand={() => toggleSubjectExpand(subject.id)}
-                    onMarkRevised={(chapterId, topicId) => handleMarkRevised(subject.id, chapterId, topicId)}
-                    onReviseAllInChapter={(chapterId) => handleReviseAllInChapter(subject.id, chapterId)}
-                    onUndoRevision={(chapterId, topicId) => {
-                      const entry = undoEntries.find(e => e.topicId === topicId);
-                      if (entry) handleUndo(entry);
-                    }}
-                    undoableTopics={undoableTopicsSet}
                   />
                 ))}
               </AnimatePresence>
@@ -317,18 +193,6 @@ export default function RevisionsPage() {
           description="Add subjects in the Subjects page. Complete topics there, then come here to track revisions."
         />
       )}
-
-      {/* Undo Toast */}
-      <AnimatePresence>
-        {undoEntries.length > 0 && (
-          <RevisionUndoToast
-            entries={undoEntries}
-            onUndo={handleUndo}
-            onUndoAll={handleUndoAll}
-            onDismiss={handleDismissUndo}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
