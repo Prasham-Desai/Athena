@@ -86,13 +86,10 @@ export function RevisionSubjectCard({
     }
 
     const revisedCount = revised;
-    const revisableCount = completed + revised;
     const revisionPercent =
       totalTopics > 0 ? Math.round((revisedCount / totalTopics) * 100) : 0;
 
-    return { totalTopics, completed, revised: revisedCount, revisableCount, revisionPercent };
-  }, [subject.chapters]);
-
+    return { totalTopics, completed, revised: revisedCount, revisionPercent };
   }, [subject.chapters]);
 
   return (
