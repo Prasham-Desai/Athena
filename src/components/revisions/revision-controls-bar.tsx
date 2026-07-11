@@ -25,6 +25,7 @@ interface RevisionControlsBarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   filter: RevisionFilter;
+  onFilterChange: (filter: RevisionFilter) => void;
   sortBy: RevisionSort;
   onSortChange: (sort: RevisionSort) => void;
   viewMode: ViewMode;

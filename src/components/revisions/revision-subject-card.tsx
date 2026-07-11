@@ -19,7 +19,6 @@ import {
   Microscope,
   Compass,
   PenTool,
-  PenTool,
   ChevronRight,
   type LucideIcon,
 } from 'lucide-react';
