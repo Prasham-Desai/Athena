@@ -26,14 +26,18 @@ interface RevisionsCheckboxGroupProps {
   revisionCount: number;
   onRevisionChange: (newCount: number) => void;
   size?: 'sm' | 'md';
+  subjectColor: string;
 }
 
 function RevisionsCheckboxGroup({
   revisionCount,
   onRevisionChange,
   size = 'md',
+  subjectColor,
 }: RevisionsCheckboxGroupProps) {
   const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
+
+  const [hoverEmpty, setHoverEmpty] = useState(false);
 
   // Render exactly `revisionCount` filled circles, plus 1 empty circle.
   const circles = [];
@@ -44,13 +48,15 @@ function RevisionsCheckboxGroup({
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          // Clicking a filled circle at index `i` decrements the count to `i`
           onRevisionChange(i);
         }}
         className="shrink-0 outline-none hover:scale-110 transition-transform"
         aria-label={`Unmark revision ${i + 1}`}
       >
-        <CheckCircle2 className={cn(iconSize, 'text-emerald-500')} />
+        <CheckCircle2 
+          className={cn(iconSize, 'transition-all drop-shadow-md')} 
+          style={{ color: subjectColor }} 
+        />
       </button>
     );
   }
@@ -64,14 +70,34 @@ function RevisionsCheckboxGroup({
         e.stopPropagation();
         onRevisionChange(revisionCount + 1);
       }}
+      onMouseEnter={() => setHoverEmpty(true)}
+      onMouseLeave={() => setHoverEmpty(false)}
       className="shrink-0 outline-none hover:scale-110 transition-transform"
       aria-label={`Mark revision ${revisionCount + 1}`}
     >
-      <Circle className={cn(iconSize, 'text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors')} />
+      <Circle 
+        className={cn(iconSize, 'transition-colors')} 
+        style={{ color: hoverEmpty ? subjectColor : 'hsl(var(--muted-foreground))' }}
+      />
     </button>
   );
 
-  return <div className="flex items-center gap-1.5">{circles}</div>;
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">{circles}</div>
+      {revisionCount > 0 && (
+        <span 
+          className={cn(
+            "text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+            size === 'sm' && "text-[9px] px-1 py-px"
+          )}
+          style={{ backgroundColor: `${subjectColor}20`, color: subjectColor }}
+        >
+          {revisionCount} {revisionCount === 1 ? 'rev' : 'revs'}
+        </span>
+      )}
+    </div>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -81,15 +107,15 @@ interface TopicRowProps {
   topic: Topic;
   subjectId: string;
   chapterId: string;
+  subjectColor: string;
 }
 
-function TopicRow({ topic, subjectId, chapterId }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) {
   const setTopicRevisionCount = useSubjectsStore((s) => s.setTopicRevisionCount);
   const setSubtopicRevisionCount = useSubjectsStore((s) => s.setSubtopicRevisionCount);
 
-  // If topic is not completed/revised, we can visually dim it or just show it anyway.
-  // The prompt said "mimic subjects tab, tailored for manual revision tracking".
-  // Let's dim it if it hasn't been completed at least once.
+  const [hoverTopic, setHoverTopic] = useState(false);
+
   const isRevisable = topic.status === 'completed' || topic.status === 'revised';
 
   return (
@@ -100,6 +126,8 @@ function TopicRow({ topic, subjectId, chapterId }: TopicRowProps) {
           'flex items-center gap-3 p-2 rounded-xl transition-all',
           'hover:bg-[hsl(var(--muted))]/50 group'
         )}
+        onMouseEnter={() => setHoverTopic(true)}
+        onMouseLeave={() => setHoverTopic(false)}
       >
         <RevisionsCheckboxGroup
           revisionCount={topic.revisionCount}
@@ -108,11 +136,15 @@ function TopicRow({ topic, subjectId, chapterId }: TopicRowProps) {
               setTopicRevisionCount(subjectId, chapterId, topic.id, count);
             }
           }}
+          subjectColor={subjectColor}
         />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium truncate group-hover:text-[hsl(var(--primary))] transition-colors">
+            <span 
+              className="text-sm font-medium truncate transition-colors"
+              style={{ color: hoverTopic ? subjectColor : 'inherit' }}
+            >
               {topic.name}
             </span>
             {!isRevisable && (
@@ -155,6 +187,7 @@ function TopicRow({ topic, subjectId, chapterId }: TopicRowProps) {
                     setSubtopicRevisionCount(subjectId, chapterId, topic.id, sub.id, count);
                   }
                 }}
+                subjectColor={subjectColor}
               />
               <span className="text-xs text-[hsl(var(--muted-foreground))] truncate">
                 {sub.name}
@@ -174,9 +207,10 @@ interface ChapterAccordionProps {
   chapter: Chapter;
   subjectId: string;
   defaultOpen?: boolean;
+  subjectColor: string;
 }
 
-function ChapterAccordion({ chapter, subjectId, defaultOpen = false }: ChapterAccordionProps) {
+function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColor }: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
@@ -212,7 +246,7 @@ function ChapterAccordion({ chapter, subjectId, defaultOpen = false }: ChapterAc
                 </div>
               ) : (
                 chapter.topics.map((topic) => (
-                  <TopicRow key={topic.id} topic={topic} subjectId={subjectId} chapterId={chapter.id} />
+                  <TopicRow key={topic.id} topic={topic} subjectId={subjectId} chapterId={chapter.id} subjectColor={subjectColor} />
                 ))
               )}
             </div>
@@ -281,7 +315,20 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   return (
     <div className="w-full max-w-5xl mx-auto pb-24 sm:pb-12">
       <PageHeader
-        title={`Revise: ${subject.name}`}
+        title={
+          <div className="flex items-center gap-3">
+            <div 
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white shadow-lg shrink-0"
+              style={{ backgroundColor: subject.color }}
+            >
+              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[hsl(var(--muted-foreground))] text-xs sm:text-sm font-medium -mb-0.5">Revise</span>
+              <span style={{ color: subject.color }}>{subject.name}</span>
+            </div>
+          </div>
+        }
         description="Track your multiple revisions for each topic and subtopic."
       >
         <Link
@@ -322,6 +369,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
               chapter={chapter}
               subjectId={subject.id}
               defaultOpen={idx === 0}
+              subjectColor={subject.color}
             />
           ))
         )}
