@@ -192,8 +192,6 @@ export function RevisionSubjectCard({
             </div>
           </div>
         </div>
-
-        </div>
       </div>
     </motion.div>
   );

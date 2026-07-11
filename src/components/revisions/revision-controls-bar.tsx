@@ -192,6 +192,7 @@ export function RevisionControlsBar({
               aria-label="Grid view"
             >
               <LayoutGrid className="h-3.5 w-3.5" />
+            </button>
           </div>
         </div>
       </div>
