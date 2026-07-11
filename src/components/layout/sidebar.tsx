@@ -41,7 +41,7 @@ export function Sidebar() {
     return pathname.startsWith(href);
   };
 
-  const sidebarContent = (
+  const getSidebarContent = (idPrefix: string) => (
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-[hsl(var(--border))]">
@@ -86,7 +86,7 @@ export function Sidebar() {
             >
               {active && (
                 <motion.div
-                  layoutId="sidebar-active"
+                  layoutId={`${idPrefix}-sidebar-active`}
                   className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/20"
                   transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                 />
@@ -166,7 +166,7 @@ export function Sidebar() {
             transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
             className="lg:hidden fixed left-0 top-0 bottom-0 w-[260px] z-50 bg-[hsl(var(--card))] border-r border-[hsl(var(--border))] shadow-2xl"
           >
-            {sidebarContent}
+            {getSidebarContent('mobile')}
           </motion.aside>
         )}
       </AnimatePresence>
@@ -177,7 +177,7 @@ export function Sidebar() {
         transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
         className="hidden lg:block fixed left-0 top-0 bottom-0 bg-[hsl(var(--card))] border-r border-[hsl(var(--border))] z-30 overflow-hidden"
       >
-        {sidebarContent}
+        {getSidebarContent('desktop')}
       </motion.aside>
 
       {/* Spacer for desktop */}
