@@ -12,12 +12,55 @@ import {
   Search,
   BookOpen,
   Tag,
+  Calculator,
+  Atom,
+  Globe,
+  Code,
+  Palette,
+  Music,
+  FlaskConical,
+  Scale,
+  Languages,
+  Brain,
+  Lightbulb,
+  GraduationCap,
+  Microscope,
+  Compass,
+  PenTool,
+  type LucideIcon,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { cn, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { Topic, Chapter, Subtopic } from '@/types';
+
+// ---------------------------------------------------------------------------
+// Icon map
+// ---------------------------------------------------------------------------
+const ICON_MAP: Record<string, LucideIcon> = {
+  BookOpen,
+  Calculator,
+  Atom,
+  Globe,
+  Code,
+  Palette,
+  Music,
+  FlaskConical,
+  Scale,
+  Languages,
+  Brain,
+  Lightbulb,
+  GraduationCap,
+  Microscope,
+  Compass,
+  PenTool,
+};
+
+function getIcon(name: string | undefined): LucideIcon {
+  if (!name) return BookOpen;
+  return ICON_MAP[name] ?? BookOpen;
+}
 
 // ---------------------------------------------------------------------------
 // Revision Icon Group
@@ -27,6 +70,7 @@ interface RevisionIconGroupProps {
   onRevisionChange: (newCount: number) => void;
   size?: 'sm' | 'md';
   subjectColor: string;
+  subjectIcon?: string;
 }
 
 function RevisionIconGroup({
@@ -34,9 +78,12 @@ function RevisionIconGroup({
   onRevisionChange,
   size = 'md',
   subjectColor,
+  subjectIcon,
 }: RevisionIconGroupProps) {
   const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
   const [hoverEmpty, setHoverEmpty] = useState(false);
+  
+  const Icon = getIcon(subjectIcon);
 
   const icons = [];
   for (let i = 0; i < revisionCount; i++) {
@@ -51,7 +98,7 @@ function RevisionIconGroup({
         className="shrink-0 outline-none hover:scale-110 transition-transform"
         aria-label={`Unmark revision ${i + 1}`}
       >
-        <BookOpen 
+        <Icon 
           className={cn(iconSize, 'transition-all drop-shadow-md')} 
           style={{ color: subjectColor, fill: subjectColor }} 
         />
@@ -73,7 +120,7 @@ function RevisionIconGroup({
       className="shrink-0 outline-none hover:scale-110 transition-transform"
       aria-label={`Mark revision ${revisionCount + 1}`}
     >
-      <BookOpen 
+      <Icon 
         className={cn(iconSize, 'transition-colors')} 
         style={{ 
           color: hoverEmpty ? subjectColor : 'hsl(var(--muted-foreground))',
@@ -109,9 +156,10 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
+  subjectIcon: string;
 }
 
-function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor, subjectIcon }: TopicRowProps) {
   const setTopicRevisionCount = useSubjectsStore((s) => s.setTopicRevisionCount);
   const setSubtopicRevisionCount = useSubjectsStore((s) => s.setSubtopicRevisionCount);
 
@@ -169,6 +217,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
             }
           }}
           subjectColor={subjectColor}
+          subjectIcon={subjectIcon}
         />
       </div>
 
@@ -192,6 +241,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
                   }
                 }}
                 subjectColor={subjectColor}
+                subjectIcon={subjectIcon}
               />
             </div>
           ))}
@@ -209,27 +259,47 @@ interface ChapterAccordionProps {
   subjectId: string;
   defaultOpen?: boolean;
   subjectColor: string;
+  subjectIcon: string;
 }
 
-function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColor }: ChapterAccordionProps) {
+  function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColor, subjectIcon }: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const setChapterRevisionCount = useSubjectsStore((s) => s.setChapterRevisionCount);
+
+  const chapterRevisionCount = useMemo(() => {
+    if (chapter.topics.length === 0) return 0;
+    return Math.min(...chapter.topics.map((t) => t.revisionCount || 0));
+  }, [chapter.topics]);
 
   return (
     <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden">
-      <button
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted))]/30 transition-colors text-left"
-      >
-        <div>
+      <div className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted))]/30 transition-colors">
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="flex-1 flex flex-col items-start text-left"
+        >
           <h3 className="font-semibold text-sm sm:text-base">{chapter.name}</h3>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
             {chapter.topics.length} topics
           </p>
+        </button>
+
+        <div className="flex items-center gap-4">
+          <RevisionIconGroup
+            revisionCount={chapterRevisionCount}
+            onRevisionChange={(count) => {
+              setChapterRevisionCount(subjectId, chapter.id, count);
+            }}
+            subjectColor={subjectColor}
+            subjectIcon={subjectIcon}
+          />
+          <button onClick={() => setIsOpen((prev) => !prev)}>
+            <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}>
+              <ChevronDown className="w-5 h-5 text-[hsl(var(--muted-foreground))]" />
+            </motion.div>
+          </button>
         </div>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}>
-          <ChevronDown className="w-5 h-5 text-[hsl(var(--muted-foreground))]" />
-        </motion.div>
-      </button>
+      </div>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -247,7 +317,7 @@ function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColo
                 </div>
               ) : (
                 chapter.topics.map((topic) => (
-                  <TopicRow key={topic.id} topic={topic} subjectId={subjectId} chapterId={chapter.id} subjectColor={subjectColor} />
+                  <TopicRow key={topic.id} topic={topic} subjectId={subjectId} chapterId={chapter.id} subjectColor={subjectColor} subjectIcon={subjectIcon} />
                 ))
               )}
             </div>
@@ -364,13 +434,14 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
             </p>
           </div>
         ) : (
-          filteredChapters.map((chapter, idx) => (
+          filteredChapters.map((chapter) => (
             <ChapterAccordion
               key={chapter.id}
               chapter={chapter}
               subjectId={subject.id}
-              defaultOpen={idx === 0}
               subjectColor={subject.color}
+              subjectIcon={subject.icon}
+              defaultOpen={filteredChapters.length === 1 || searchQuery.length > 0}
             />
           ))
         )}

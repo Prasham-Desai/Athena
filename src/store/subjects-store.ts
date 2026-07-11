@@ -22,6 +22,7 @@ interface SubjectsState {
   setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => Promise<void>;
   setSubtopicStatus: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, status: string, skipParentUpdate?: boolean) => Promise<void>;
   setTopicRevisionCount: (subjectId: string, chapterId: string, topicId: string, count: number) => Promise<void>;
+  setChapterRevisionCount: (subjectId: string, chapterId: string, count: number) => Promise<void>;
   setSubtopicRevisionCount: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, count: number) => Promise<void>;
   resetAllRevisions: () => Promise<void>;
   setSubjects: (subjects: Subject[]) => void;
@@ -439,6 +440,18 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }
 
     await get().updateTopic(subjectId, chapterId, topicId, updates);
+  },
+
+  setChapterRevisionCount: async (subjectId, chapterId, count) => {
+    const subject = get().subjects.find((s) => s.id === subjectId);
+    const chapter = subject?.chapters.find((c) => c.id === chapterId);
+    
+    if (chapter && chapter.topics) {
+      chapter.topics.forEach((topic) => {
+        // We reuse setTopicRevisionCount which internally also handles subtopics
+        get().setTopicRevisionCount(subjectId, chapterId, topic.id, count);
+      });
+    }
   },
 
   setSubtopicRevisionCount: async (subjectId, chapterId, topicId, subtopicId, count) => {
