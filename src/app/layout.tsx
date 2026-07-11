@@ -15,14 +15,14 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/logo.svg",
-    apple: "/logo.svg",
+    apple: "/pwa-icon.svg",
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Athena",
     startupImage: [
-      "/logo.svg"
+      "/pwa-icon.svg"
     ]
   },
 };
