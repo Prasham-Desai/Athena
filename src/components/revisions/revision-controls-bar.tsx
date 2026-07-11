@@ -108,12 +108,12 @@ export function RevisionControlsBar({
       {/* ----------------------------------------------------------------- */}
       {/* Row 2 — Filters + Sort + View Toggle + Expand/Collapse            */}
       {/* ----------------------------------------------------------------- */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between min-w-0">
         {/* Filter pills — horizontal scroll on mobile, wrap on desktop */}
         <div
           className={cn(
-            'flex gap-2 sm:flex-wrap',
-            'flex-nowrap overflow-x-auto pb-1 -mx-1 px-1 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-x-visible',
+            'flex gap-2 sm:flex-wrap w-full sm:w-auto',
+            'flex-nowrap overflow-x-auto pb-2 -mx-1 px-1 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-x-visible',
             '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
           )}
         >
@@ -149,7 +149,7 @@ export function RevisionControlsBar({
         </div>
 
         {/* Right side controls */}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
           {/* Sort dropdown */}
           <select
             value={sortBy}
