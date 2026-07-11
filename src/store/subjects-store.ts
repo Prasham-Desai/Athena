@@ -419,11 +419,25 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   setSubjects: (subjects) => set({ subjects }),
 
   setTopicRevisionCount: async (subjectId, chapterId, topicId, count) => {
+    const subject = get().subjects.find((s) => s.id === subjectId);
+    const chapter = subject?.chapters.find((c) => c.id === chapterId);
+    const topic = chapter?.topics.find((t) => t.id === topicId);
+
     const updates: Partial<Topic> = {
       revisionCount: count,
       lastRevised: count > 0 ? getToday() : null, // keep simple string date
       status: count > 0 ? 'revised' as TopicStatus : 'completed' as TopicStatus,
     };
+
+    // Auto update all children
+    if (topic && topic.subtopics) {
+      topic.subtopics.forEach((sub: any) => {
+        if (sub.revisionCount !== count) {
+          get().setSubtopicRevisionCount(subjectId, chapterId, topicId, sub.id, count);
+        }
+      });
+    }
+
     await get().updateTopic(subjectId, chapterId, topicId, updates);
   },
 

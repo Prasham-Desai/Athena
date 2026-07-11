@@ -20,55 +20,83 @@ import { cn, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { Topic, Chapter, Subtopic } from '@/types';
 
 // ---------------------------------------------------------------------------
-// Revision Stepper
+// Revision Icon Group
 // ---------------------------------------------------------------------------
-interface RevisionStepperProps {
+interface RevisionIconGroupProps {
   revisionCount: number;
   onRevisionChange: (newCount: number) => void;
   size?: 'sm' | 'md';
   subjectColor: string;
 }
 
-function RevisionStepper({
+function RevisionIconGroup({
   revisionCount,
   onRevisionChange,
   size = 'md',
   subjectColor,
-}: RevisionStepperProps) {
-  const isSm = size === 'sm';
-  return (
-    <div 
-      className={cn(
-        "flex items-center rounded-lg border",
-        isSm ? "h-6 text-[10px]" : "h-8 text-xs"
-      )}
-      style={{ borderColor: `${subjectColor}40`, backgroundColor: `${subjectColor}10` }}
-    >
-      <button 
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRevisionChange(Math.max(0, revisionCount - 1)); }}
-        disabled={revisionCount === 0}
-        className="px-2 h-full flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-30 transition-colors rounded-l-lg"
-        style={{ color: subjectColor }}
-        aria-label="Decrease revision count"
-      >
-        <Minus className={isSm ? "w-3 h-3" : "w-4 h-4"} />
-      </button>
-      
-      <div 
-        className="flex items-center justify-center font-bold min-w-[2rem]"
-        style={{ color: subjectColor }}
-      >
-        {revisionCount}
-      </div>
+}: RevisionIconGroupProps) {
+  const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
+  const [hoverEmpty, setHoverEmpty] = useState(false);
 
-      <button 
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRevisionChange(revisionCount + 1); }}
-        className="px-2 h-full flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors rounded-r-lg"
-        style={{ color: subjectColor }}
-        aria-label="Increase revision count"
+  const icons = [];
+  for (let i = 0; i < revisionCount; i++) {
+    icons.push(
+      <button
+        key={`filled-${i}`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onRevisionChange(i);
+        }}
+        className="shrink-0 outline-none hover:scale-110 transition-transform"
+        aria-label={`Unmark revision ${i + 1}`}
       >
-        <Plus className={isSm ? "w-3 h-3" : "w-4 h-4"} />
+        <BookOpen 
+          className={cn(iconSize, 'transition-all drop-shadow-md')} 
+          style={{ color: subjectColor, fill: subjectColor }} 
+        />
       </button>
+    );
+  }
+
+  // The next empty icon to click
+  icons.push(
+    <button
+      key={`empty-${revisionCount}`}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onRevisionChange(revisionCount + 1);
+      }}
+      onMouseEnter={() => setHoverEmpty(true)}
+      onMouseLeave={() => setHoverEmpty(false)}
+      className="shrink-0 outline-none hover:scale-110 transition-transform"
+      aria-label={`Mark revision ${revisionCount + 1}`}
+    >
+      <BookOpen 
+        className={cn(iconSize, 'transition-colors')} 
+        style={{ 
+          color: hoverEmpty ? subjectColor : 'hsl(var(--muted-foreground))',
+          fill: hoverEmpty ? `${subjectColor}40` : 'none'
+        }}
+      />
+    </button>
+  );
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">{icons}</div>
+      {revisionCount > 0 && (
+        <span 
+          className={cn(
+            "text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+            size === 'sm' && "text-[9px] px-1 py-px"
+          )}
+          style={{ backgroundColor: `${subjectColor}20`, color: subjectColor }}
+        >
+          {revisionCount} {revisionCount === 1 ? 'rev' : 'revs'}
+        </span>
+      )}
     </div>
   );
 }
@@ -133,7 +161,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
           </div>
         )}
 
-        <RevisionStepper
+        <RevisionIconGroup
           revisionCount={topic.revisionCount}
           onRevisionChange={(count) => {
             if (isRevisable || count === 0) {
@@ -155,7 +183,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor }: TopicRowProps) 
               <span className="flex-1 min-w-0 text-xs text-[hsl(var(--muted-foreground))] truncate">
                 {sub.name}
               </span>
-              <RevisionStepper
+              <RevisionIconGroup
                 size="sm"
                 revisionCount={sub.revisionCount || 0}
                 onRevisionChange={(count) => {
