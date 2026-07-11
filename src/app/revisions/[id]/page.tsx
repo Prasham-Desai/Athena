@@ -339,6 +339,8 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   const subjects = useSubjectsStore((s) => s.subjects);
   const subject = subjects.find((s) => s.id === id);
 
+  const HeaderIcon = getIcon(subject?.icon);
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredChapters = useMemo(() => {
@@ -392,7 +394,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white shadow-lg shrink-0"
               style={{ backgroundColor: subject.color }}
             >
-              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
+              <HeaderIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div className="flex flex-col">
               <span className="text-[hsl(var(--muted-foreground))] text-xs sm:text-sm font-medium -mb-0.5">Revise</span>
