@@ -113,7 +113,7 @@ export function RevisionControlsBar({
         <div
           className={cn(
             'flex gap-2 sm:flex-wrap w-full sm:w-auto',
-            'flex-nowrap overflow-x-auto pb-2 -mx-1 px-1 sm:mx-0 sm:px-0 sm:pb-0 sm:overflow-x-visible',
+            'flex-nowrap overflow-x-auto pb-2 sm:pb-0 sm:overflow-x-visible',
             '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
           )}
         >

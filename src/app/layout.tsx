@@ -42,7 +42,7 @@ export default function RootLayout({
           <TimerProvider />
           <div className="flex min-h-screen">
             <Sidebar />
-            <main className="flex-1 min-h-screen lg:py-0 py-14">
+            <main className="flex-1 min-w-0 min-h-screen lg:py-0 py-14">
               <div className="max-w-[1400px] mx-auto px-3 py-4 sm:px-4 sm:py-5 lg:px-8 lg:py-8">
                 {children}
               </div>
