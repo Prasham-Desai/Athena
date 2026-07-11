@@ -18,6 +18,7 @@ interface SubjectsState {
   setTopicStatus: (subjectId: string, chapterId: string, topicId: string, status: TopicStatus) => Promise<void>;
   setAllChapterTopicsStatus: (subjectId: string, chapterId: string, status: TopicStatus) => Promise<void>;
   markTopicRevised: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
+  undoRevision: (subjectId: string, chapterId: string, topicId: string) => Promise<void>;
   setChapterTag: (subjectId: string, chapterId: string, tag: ImportanceTag | null) => Promise<void>;
   setSubtopicStatus: (subjectId: string, chapterId: string, topicId: string, subtopicId: string, status: string, skipParentUpdate?: boolean) => Promise<void>;
   setSubjects: (subjects: Subject[]) => void;
@@ -333,6 +334,23 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
       revisionCount: (topic.revisionCount || 0) + 1,
       lastRevised: getToday(),
       nextRevisionDue: getSpacedRepetitionDate((topic.revisionCount || 0) + 1),
+    };
+    get().updateTopic(subjectId, chapterId, topicId, updates);
+  },
+
+  undoRevision: async (subjectId, chapterId, topicId) => {
+    const subject = get().subjects.find((s) => s.id === subjectId);
+    const chapter = subject?.chapters.find((c) => c.id === chapterId);
+    const topic = chapter?.topics.find((t) => t.id === topicId);
+    
+    if (!topic || topic.revisionCount <= 0) return;
+
+    const newCount = topic.revisionCount - 1;
+    const updates: Partial<Topic> = {
+      revisionCount: newCount,
+      lastRevised: newCount > 0 ? topic.lastRevised : null,
+      nextRevisionDue: newCount > 0 ? getSpacedRepetitionDate(newCount) : getSpacedRepetitionDate(0),
+      status: newCount === 0 ? 'completed' as TopicStatus : 'revised' as TopicStatus,
     };
     get().updateTopic(subjectId, chapterId, topicId, updates);
   },

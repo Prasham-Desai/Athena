@@ -1,370 +1,140 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  RotateCcw,
-  ChevronRight,
-  Plus,
-  BookOpen,
-  Target,
-  TrendingUp,
-  CheckCircle2,
-  Circle,
-  Lock,
-} from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useActivityStore } from '@/store/activity-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
-import { ProgressRing } from '@/components/shared/progress-ring';
-import { StatCard } from '@/components/shared/stat-card';
-import { cn, STATUS_CONFIG } from '@/lib/utils';
+import { EmptyState } from '@/components/shared/empty-state';
+import { cn, isOverdue, isToday } from '@/lib/utils';
+import type { Subject } from '@/types';
 
-// ==========================================================================
-// Completion Analysis
-// ==========================================================================
-
-function CompletionAnalysis({ subjects }: { subjects: any[] }) {
-  const analysis = useMemo(() => {
-    return subjects.map((s) => {
-      const allTopics = s.chapters.flatMap((c: any) => c.topics);
-      const total = allTopics.length;
-      const completed = allTopics.filter((t: any) => t.status === 'completed' || t.status === 'revised').length;
-      const revised = allTopics.filter((t: any) => t.revisionCount > 0).length;
-      const totalRevisions = allTopics.reduce((sum: number, t: any) => sum + t.revisionCount, 0);
-
-      return {
-        id: s.id,
-        name: s.name,
-        color: s.color,
-        total,
-        completed,
-        revised,
-        totalRevisions,
-        completionPercent: total > 0 ? Math.round((completed / total) * 100) : 0,
-        revisionPercent: total > 0 ? Math.round((revised / total) * 100) : 0,
-      };
-    });
-  }, [subjects]);
-
-  const overallRevised = analysis.reduce((s, a) => s + a.revised, 0);
-  const overallTotal = analysis.reduce((s, a) => s + a.total, 0);
-  const overallPercent = overallTotal > 0 ? Math.round((overallRevised / overallTotal) * 100) : 0;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 }}
-      className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
-    >
-      <h3 className="text-base font-semibold mb-1">Revision Completion Analysis</h3>
-      <p className="text-xs text-[hsl(var(--muted-foreground))] mb-5">
-        Track how much of each subject has been revised at least once
-      </p>
-
-      {/* Overall bar */}
-      <div className="mb-5">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs font-medium">Overall Revision Coverage</span>
-          <span className="text-xs font-bold text-indigo-400">{overallPercent}%</span>
-        </div>
-        <div className="h-2 rounded-full bg-[hsl(var(--muted))] overflow-hidden">
-          <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
-            initial={{ width: 0 }}
-            animate={{ width: `${overallPercent}%` }}
-            transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
-          />
-        </div>
-        <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1">
-          {overallRevised} of {overallTotal} topics revised at least once
-        </p>
-      </div>
-
-      {/* Per-subject breakdown */}
-      <div className="space-y-3">
-        {analysis.map((item) => (
-          <div key={item.id} className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
-            <span className="text-xs font-medium flex-1 min-w-0 truncate">{item.name}</span>
-            <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0">
-              {item.revised}/{item.total}
-            </span>
-            <div className="w-16 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden shrink-0">
-              <motion.div
-                className="h-full rounded-full"
-                style={{ background: item.color }}
-                initial={{ width: 0 }}
-                animate={{ width: `${item.revisionPercent}%` }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-              />
-            </div>
-            <span className="text-[10px] font-bold w-8 text-right shrink-0" style={{ color: item.color }}>
-              {item.revisionPercent}%
-            </span>
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-// ==========================================================================
-// Subject Curriculum Accordion
-// ==========================================================================
-
-function SubjectCurriculum({
-  subject,
-  onMarkRevised,
-  onReviseAllInChapter,
-}: {
-  subject: any;
-  onMarkRevised: (chapterId: string, topicId: string) => void;
-  onReviseAllInChapter: (chapterId: string) => void;
-}) {
-  const [expanded, setExpanded] = useState(false);
-  const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set());
-
-  const allTopics = subject.chapters.flatMap((c: any) => c.topics);
-  const revisedTopics = allTopics.filter((t: any) => t.revisionCount > 0);
-  const completedTopics = allTopics.filter((t: any) => t.status === 'completed' || t.status === 'revised');
-  const completionPercent = allTopics.length > 0 ? Math.round((revisedTopics.length / allTopics.length) * 100) : 0;
-
-  const toggleChapter = (chId: string) => {
-    setExpandedChapters((prev) => {
-      const next = new Set(prev);
-      if (next.has(chId)) next.delete(chId);
-      else next.add(chId);
-      return next;
-    });
-  };
-
-  return (
-    <motion.div
-      layout
-      className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden"
-    >
-      {/* Subject Header */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-4 p-4 sm:p-5 hover:bg-[hsl(var(--muted)/0.5)] transition text-left"
-      >
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${subject.color}20` }}>
-          <BookOpen className="w-5 h-5" style={{ color: subject.color }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold">{subject.name}</h3>
-          <p className="text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5">
-            {subject.chapters.length} chapters · {allTopics.length} topics · {completedTopics.length} completed · {revisedTopics.length} revised
-          </p>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden sm:block">
-            <ProgressRing value={completionPercent} size={40} strokeWidth={4} color={subject.color} />
-          </div>
-          <motion.div animate={{ rotate: expanded ? 90 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
-          </motion.div>
-        </div>
-      </button>
-
-      {/* Chapters & Topics */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
-          >
-            <div className="border-t border-[hsl(var(--border))] px-4 sm:px-5 pb-4 pt-2 space-y-2">
-              {subject.chapters.map((chapter: any) => {
-                const chExpanded = expandedChapters.has(chapter.id);
-                const chTopics = chapter.topics;
-                const chCompleted = chTopics.filter((t: any) => t.status === 'completed' || t.status === 'revised');
-                const chRevised = chTopics.filter((t: any) => t.revisionCount > 0).length;
-
-                return (
-                  <div key={chapter.id}>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => toggleChapter(chapter.id)}
-                        className="flex-1 flex items-center gap-2 py-2 px-2 rounded-lg hover:bg-[hsl(var(--muted))] transition text-left"
-                      >
-                        <motion.div animate={{ rotate: chExpanded ? 90 : 0 }} transition={{ duration: 0.15 }}>
-                          <ChevronRight className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
-                        </motion.div>
-                        <span className="text-sm font-medium flex-1">{chapter.name}</span>
-                        <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                          {chRevised}/{chTopics.length} revised
-                        </span>
-                      </button>
-                      {/* Revise all completed topics in chapter */}
-                      {chCompleted.length > 0 && (
-                        <button
-                          onClick={() => onReviseAllInChapter(chapter.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-violet-500/10 text-violet-400 text-[10px] font-medium hover:bg-violet-500/20 transition shrink-0 flex items-center gap-1"
-                          title="Revise all completed topics in this chapter"
-                        >
-                          <RotateCcw className="w-3 h-3" />
-                          Revise All
-                        </button>
-                      )}
-                    </div>
-
-                    <AnimatePresence>
-                      {chExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="ml-6 space-y-1 py-1">
-                            {chTopics.map((topic: any) => {
-                              const isCompleted = topic.status === 'completed' || topic.status === 'revised';
-                              const hasRevisions = topic.revisionCount > 0;
-
-                              return (
-                                <motion.div
-                                  key={topic.id}
-                                  layout
-                                  className={cn(
-                                    'flex items-center gap-2.5 py-2.5 px-3 rounded-xl transition group',
-                                    isCompleted
-                                      ? 'hover:bg-[hsl(var(--muted)/0.5)]'
-                                      : 'opacity-50'
-                                  )}
-                                >
-                                  {/* Completion indicator */}
-                                  {isCompleted ? (
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                                  ) : (
-                                    <Lock className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] shrink-0" />
-                                  )}
-
-                                  {/* Topic name and importance */}
-                                  <div className={cn(
-                                    'flex-1 min-w-0 flex items-center gap-2',
-                                    !isCompleted && 'italic'
-                                  )}>
-                                    <span className="text-xs truncate">{topic.name}</span>
-                                    {topic.importance && (
-                                      <span className={cn(
-                                        'text-[9px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap shrink-0',
-                                        topic.importance.toLowerCase().includes('must') 
-                                          ? 'bg-red-500/10 text-red-500' 
-                                          : topic.importance.toLowerCase().includes('desirable')
-                                          ? 'bg-amber-500/10 text-amber-500'
-                                          : 'bg-blue-500/10 text-blue-500'
-                                      )}>
-                                        {topic.importance}
-                                      </span>
-                                    )}
-                                    {!isCompleted && (
-                                      <span className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                                        (complete in Subjects first)
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  {/* Revision count badge */}
-                                  {hasRevisions && (
-                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-400 shrink-0">
-                                      ×{topic.revisionCount} revised
-                                    </span>
-                                  )}
-
-                                  {/* Revision actions — only for completed topics */}
-                                  {isCompleted && (
-                                    <div className="flex items-center gap-1 shrink-0">
-                                      {/* Add extra revision */}
-                                      <button
-                                        onClick={() => onMarkRevised(chapter.id, topic.id)}
-                                        title={hasRevisions ? 'Add another revision' : 'Mark first revision'}
-                                        className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-[10px] font-medium hover:opacity-90 transition flex items-center gap-1 shadow-sm"
-                                      >
-                                        {hasRevisions ? (
-                                          <>
-                                            <Plus className="w-3 h-3" />
-                                            Revise Again
-                                          </>
-                                        ) : (
-                                          <>
-                                            <RotateCcw className="w-3 h-3" />
-                                            Revise
-                                          </>
-                                        )}
-                                      </button>
-                                    </div>
-                                  )}
-                                </motion.div>
-                              );
-                            })}
-
-                            {chTopics.length === 0 && (
-                              <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center py-3 italic">
-                                No topics in this chapter
-                              </p>
-                            )}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-// ==========================================================================
-// Main Revisions Page
-// ==========================================================================
+import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
+import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
+import { RevisionSubjectCard } from '@/components/revisions/revision-subject-card';
+import { RevisionUndoToast, type UndoEntry } from '@/components/revisions/revision-undo-toast';
 
 export default function RevisionsPage() {
   const hydrated = useHydration();
 
   const subjects = useSubjectsStore((s) => s.subjects);
   const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
+  const undoRevision = useSubjectsStore((s) => s.undoRevision);
   const { addActivity } = useActivityStore();
 
-  // Stats
-  const stats = useMemo(() => {
-    let totalTopics = 0;
-    let completedTopics = 0;
-    let revisedAtLeastOnce = 0;
-    let totalRevisionCount = 0;
+  // Local state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState<RevisionFilter>('all');
+  const [sortBy, setSortBy] = useState<RevisionSort>('progress');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  
+  const [expandedSubjects, setExpandedSubjects] = useState<Set<string>>(new Set());
+  const [undoEntries, setUndoEntries] = useState<UndoEntry[]>([]);
 
-    subjects.forEach((s) => {
-      s.chapters.forEach((c) => {
-        c.topics.forEach((t) => {
-          totalTopics++;
-          if (t.status === 'completed' || t.status === 'revised') completedTopics++;
-          if (t.revisionCount > 0) revisedAtLeastOnce++;
-          totalRevisionCount += t.revisionCount;
+  // Compute counts for filters
+  const filterCounts = useMemo(() => {
+    let all = 0, due = 0, revised = 0, notRevised = 0;
+    
+    subjects.forEach(s => {
+      s.chapters.forEach(c => {
+        c.topics.forEach(t => {
+          all++;
+          const isRevisable = t.status === 'completed' || t.status === 'revised';
+          if (isRevisable) {
+            const hasRevisions = t.revisionCount > 0;
+            const isTopicDue = t.nextRevisionDue && (isOverdue(t.nextRevisionDue) || isToday(t.nextRevisionDue));
+            
+            if (isTopicDue) due++;
+            if (hasRevisions) revised++;
+            if (!hasRevisions) notRevised++;
+          }
         });
       });
     });
 
-    return { totalTopics, completedTopics, revisedAtLeastOnce, totalRevisionCount };
+    return { all, due, revised, notRevised };
   }, [subjects]);
 
-  const handleMarkRevised = (subjectId: string, chapterId: string, topicId: string) => {
+  // Filter and sort subjects
+  const filteredAndSortedSubjects = useMemo(() => {
+    let result = [...subjects];
+
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(s => {
+        if (s.name.toLowerCase().includes(q)) return true;
+        return s.chapters.some(c => 
+          c.name.toLowerCase().includes(q) ||
+          c.topics.some(t => t.name.toLowerCase().includes(q))
+        );
+      });
+    }
+
+    // Status filter (this filters out subjects that don't have ANY topics matching the criteria)
+    if (filter !== 'all') {
+      result = result.filter(s => {
+        return s.chapters.some(c => {
+          return c.topics.some(t => {
+            const isRevisable = t.status === 'completed' || t.status === 'revised';
+            if (!isRevisable) return false;
+            
+            if (filter === 'due') {
+              return t.nextRevisionDue && (isOverdue(t.nextRevisionDue) || isToday(t.nextRevisionDue));
+            }
+            if (filter === 'revised') {
+              return t.revisionCount > 0;
+            }
+            if (filter === 'not-revised') {
+              return t.revisionCount === 0;
+            }
+            return true;
+          });
+        });
+      });
+    }
+
+    // Sort
+    result.sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      
+      const getSubjectStats = (subject: Subject) => {
+        let total = 0, revised = 0, due = 0;
+        subject.chapters.forEach(c => {
+          c.topics.forEach(t => {
+            total++;
+            if (t.revisionCount > 0) revised++;
+            if ((t.status === 'completed' || t.status === 'revised') && t.nextRevisionDue && (isOverdue(t.nextRevisionDue) || isToday(t.nextRevisionDue))) {
+              due++;
+            }
+          });
+        });
+        const progress = total > 0 ? (revised / total) : 0;
+        return { progress, due };
+      };
+
+      const statsA = getSubjectStats(a);
+      const statsB = getSubjectStats(b);
+
+      if (sortBy === 'progress') return statsB.progress - statsA.progress;
+      if (sortBy === 'due-count') return statsB.due - statsA.due;
+      
+      return 0;
+    });
+
+    return result;
+  }, [subjects, searchQuery, filter, sortBy]);
+
+  // Handlers
+  const handleMarkRevised = useCallback((subjectId: string, chapterId: string, topicId: string) => {
     const subject = subjects.find((s) => s.id === subjectId);
     const chapter = subject?.chapters.find((c) => c.id === chapterId);
     const topic = chapter?.topics.find((t) => t.id === topicId);
     if (!subject || !chapter || !topic) return;
 
-    // Validation: only allow revision for completed/revised topics
     if (topic.status !== 'completed' && topic.status !== 'revised') {
       window.dispatchEvent(
         new CustomEvent('add-toast', { detail: { message: 'Complete this topic in Subjects first!', type: 'error' } })
@@ -373,32 +143,51 @@ export default function RevisionsPage() {
     }
 
     markTopicRevised(subjectId, chapterId, topicId);
+    
+    // Add to undo stack
+    setUndoEntries(prev => [...prev, {
+      topicId,
+      topicName: topic.name,
+      subjectName: subject.name,
+      chapterId,
+      subjectId,
+      timestamp: Date.now()
+    }]);
+
     addActivity({
       type: 'topic-revised',
       description: `Revised "${topic.name}" (×${topic.revisionCount + 1})`,
       subjectId,
       color: subject.color,
     });
-    window.dispatchEvent(
-      new CustomEvent('add-toast', { detail: { message: `"${topic.name}" revised! (×${topic.revisionCount + 1})`, type: 'success' } })
-    );
-  };
+    
+  }, [subjects, markTopicRevised, addActivity]);
 
-  const handleReviseAllInChapter = (subjectId: string, chapterId: string) => {
+  const handleReviseAllInChapter = useCallback((subjectId: string, chapterId: string) => {
     const subject = subjects.find((s) => s.id === subjectId);
     const chapter = subject?.chapters.find((c) => c.id === chapterId);
     if (!subject || !chapter) return;
 
     let count = 0;
+    const newUndoEntries: UndoEntry[] = [];
+    
     chapter.topics.forEach((topic) => {
-      // Only revise completed/revised topics
       if (topic.status === 'completed' || topic.status === 'revised') {
         markTopicRevised(subjectId, chapterId, topic.id);
         count++;
+        newUndoEntries.push({
+          topicId: topic.id,
+          topicName: topic.name,
+          subjectName: subject.name,
+          chapterId,
+          subjectId,
+          timestamp: Date.now()
+        });
       }
     });
 
     if (count > 0) {
+      setUndoEntries(prev => [...prev, ...newUndoEntries]);
       addActivity({
         type: 'topic-revised',
         description: `Revised ${count} topics in "${chapter.name}"`,
@@ -406,11 +195,43 @@ export default function RevisionsPage() {
         color: subject.color,
         count: count,
       });
-      window.dispatchEvent(
-        new CustomEvent('add-toast', { detail: { message: `${count} topics revised in "${chapter.name}"!`, type: 'success' } })
-      );
     }
-  };
+  }, [subjects, markTopicRevised, addActivity]);
+
+  const handleUndo = useCallback((entry: UndoEntry) => {
+    undoRevision(entry.subjectId, entry.chapterId, entry.topicId);
+    setUndoEntries(prev => prev.filter(e => e.topicId !== entry.topicId));
+  }, [undoRevision]);
+
+  const handleUndoAll = useCallback(() => {
+    undoEntries.forEach(entry => {
+      undoRevision(entry.subjectId, entry.chapterId, entry.topicId);
+    });
+    setUndoEntries([]);
+  }, [undoEntries, undoRevision]);
+
+  const handleDismissUndo = useCallback(() => {
+    setUndoEntries([]);
+  }, []);
+
+  const toggleSubjectExpand = useCallback((subjectId: string) => {
+    setExpandedSubjects(prev => {
+      const next = new Set(prev);
+      if (next.has(subjectId)) next.delete(subjectId);
+      else next.add(subjectId);
+      return next;
+    });
+  }, []);
+
+  const toggleExpandAll = useCallback(() => {
+    if (expandedSubjects.size === filteredAndSortedSubjects.length && filteredAndSortedSubjects.length > 0) {
+      setExpandedSubjects(new Set());
+    } else {
+      setExpandedSubjects(new Set(filteredAndSortedSubjects.map(s => s.id)));
+    }
+  }, [expandedSubjects.size, filteredAndSortedSubjects]);
+
+  const undoableTopicsSet = useMemo(() => new Set(undoEntries.map(e => e.topicId)), [undoEntries]);
 
   if (!hydrated) {
     return (
@@ -421,83 +242,93 @@ export default function RevisionsPage() {
   }
 
   return (
-    <>
+    <div className="relative pb-24">
       <PageHeader
         title="Revisions"
         description="Repetition is the mother of learning — each revision makes you stronger! 🧠"
       />
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <StatCard
-          title="Total Topics"
-          value={stats.totalTopics}
-          icon={BookOpen}
-          color="#6366f1"
-          subtitle={`${stats.completedTopics} completed`}
-        />
-        <StatCard
-          title="Revised"
-          value={stats.revisedAtLeastOnce}
-          icon={RotateCcw}
-          color="#8b5cf6"
-          subtitle={`of ${stats.totalTopics} topics`}
-        />
-        <StatCard
-          title="Total Revisions"
-          value={stats.totalRevisionCount}
-          icon={TrendingUp}
-          color="#22c55e"
-          subtitle="Across all topics"
-        />
-        <StatCard
-          title="Coverage"
-          value={`${stats.totalTopics > 0 ? Math.round((stats.revisedAtLeastOnce / stats.totalTopics) * 100) : 0}%`}
-          icon={Target}
-          color="#f97316"
-          subtitle="Topics revised at least once"
-        />
-      </div>
+      <RevisionStatsHeader subjects={subjects} />
 
-      {/* Completion analysis */}
-      {subjects.length > 0 && (
-        <div className="mb-6">
-          <CompletionAnalysis subjects={subjects} />
-        </div>
-      )}
+      <div className="my-6" />
 
-      {/* Full Curriculum */}
-      {subjects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-4">
-            <BookOpen className="w-8 h-8 text-[hsl(var(--muted-foreground))]" />
-          </div>
-          <h3 className="text-lg font-semibold mb-2">No subjects yet</h3>
-          <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-sm">
-            Add subjects in the Subjects page. Complete topics there, then come here to track revisions.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-sm font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-              Subjects ({subjects.length})
-            </h2>
-            <div className="flex-1 h-px bg-[hsl(var(--border))]" />
-            <p className="text-[10px] text-[hsl(var(--muted-foreground))] flex items-center gap-1">
-              <Lock className="w-3 h-3" /> Locked topics need completion in Subjects first
-            </p>
-          </div>
-          {subjects.map((subject) => (
-            <SubjectCurriculum
-              key={subject.id}
-              subject={subject}
-              onMarkRevised={(chapterId, topicId) => handleMarkRevised(subject.id, chapterId, topicId)}
-              onReviseAllInChapter={(chapterId) => handleReviseAllInChapter(subject.id, chapterId)}
+      {subjects.length > 0 ? (
+        <>
+          <RevisionControlsBar
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            filter={filter}
+            onFilterChange={setFilter}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            allExpanded={expandedSubjects.size === filteredAndSortedSubjects.length && filteredAndSortedSubjects.length > 0}
+            onToggleExpandAll={toggleExpandAll}
+            filterCounts={filterCounts}
+          />
+
+          {filteredAndSortedSubjects.length === 0 ? (
+            <EmptyState
+              icon={BookOpen}
+              title="No topics found"
+              description="Try adjusting your search or filters to find what you're looking for."
+              actionLabel="Clear Filters"
+              onAction={() => {
+                setSearchQuery('');
+                setFilter('all');
+              }}
             />
-          ))}
-        </div>
+          ) : (
+            <motion.div 
+              layout
+              className={cn(
+                "grid gap-4",
+                viewMode === 'grid' 
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3" 
+                  : "grid-cols-1"
+              )}
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredAndSortedSubjects.map((subject, idx) => (
+                  <RevisionSubjectCard
+                    key={subject.id}
+                    subject={subject}
+                    index={idx}
+                    isExpanded={expandedSubjects.has(subject.id)}
+                    onToggleExpand={() => toggleSubjectExpand(subject.id)}
+                    onMarkRevised={(chapterId, topicId) => handleMarkRevised(subject.id, chapterId, topicId)}
+                    onReviseAllInChapter={(chapterId) => handleReviseAllInChapter(subject.id, chapterId)}
+                    onUndoRevision={(chapterId, topicId) => {
+                      const entry = undoEntries.find(e => e.topicId === topicId);
+                      if (entry) handleUndo(entry);
+                    }}
+                    undoableTopics={undoableTopicsSet}
+                  />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </>
+      ) : (
+        <EmptyState
+          icon={BookOpen}
+          title="No subjects yet"
+          description="Add subjects in the Subjects page. Complete topics there, then come here to track revisions."
+        />
       )}
-    </>
+
+      {/* Undo Toast */}
+      <AnimatePresence>
+        {undoEntries.length > 0 && (
+          <RevisionUndoToast
+            entries={undoEntries}
+            onUndo={handleUndo}
+            onUndoAll={handleUndoAll}
+            onDismiss={handleDismissUndo}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
