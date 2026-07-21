@@ -58,35 +58,25 @@ export const useTimerStore = create<TimerState>()(
       tick: () => {
         const now = Date.now();
         set((state) => {
-          const nowDate = new Date(now);
-          const lastTickDate = new Date(state.lastTick);
+          // IST is UTC + 5:30 (5.5 hours)
+          const IST_OFFSET = 5.5 * 60 * 60 * 1000;
+          const nowIST = new Date(now + IST_OFFSET);
+          const lastTickIST = new Date(state.lastTick + IST_OFFSET);
           
           const isNewDay = 
-            nowDate.getFullYear() !== lastTickDate.getFullYear() ||
-            nowDate.getMonth() !== lastTickDate.getMonth() ||
-            nowDate.getDate() !== lastTickDate.getDate();
+            nowIST.getUTCFullYear() !== lastTickIST.getUTCFullYear() ||
+            nowIST.getUTCMonth() !== lastTickIST.getUTCMonth() ||
+            nowIST.getUTCDate() !== lastTickIST.getUTCDate();
 
           if (isNewDay) {
-            const midnight = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
-            
-            if (state.isMainRunning) {
-              return {
-                mainSeconds: Math.floor((now - midnight) / 1000),
-                lastTick: now - ((now - midnight) % 1000),
-                mainStartTime: new Date(midnight).toISOString(),
-                segmentStartTime: new Date(midnight).toISOString(),
-                lastPauseTime: null,
-              };
-            } else {
-              return {
-                isMainRunning: false,
-                mainSeconds: 0,
-                lastTick: now,
-                mainStartTime: null,
-                segmentStartTime: null,
-                lastPauseTime: null,
-              };
-            }
+            return {
+              isMainRunning: false,
+              mainSeconds: 0,
+              lastTick: now,
+              mainStartTime: null,
+              segmentStartTime: null,
+              lastPauseTime: null,
+            };
           }
 
           if (!state.isMainRunning) {
