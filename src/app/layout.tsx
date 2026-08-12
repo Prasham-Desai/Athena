@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { FontSizeManager } from "@/components/font-size-manager";
 import { TutorialOverlay } from "@/components/tutorial-overlay";
 import { TimerProvider } from "@/components/providers/timer-provider";
+import { MessageBanner } from "@/components/message-banner";
 
 export const metadata: Metadata = {
   title: "Athena",
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen gradient-bg">
         <Providers>
+          <MessageBanner />
           <FontSizeManager />
           <DataSeeder />
           <TutorialOverlay />
