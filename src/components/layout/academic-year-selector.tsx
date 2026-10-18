@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Sparkles, Loader2, type LucideIcon } from 'lucide-react';
+import { Scroll, Stethoscope, GraduationCap, Loader2, type LucideIcon } from 'lucide-react';
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { cn } from '@/lib/utils';
 
@@ -20,27 +20,27 @@ interface YearTheme {
 
 const YEAR_THEMES: Record<string, YearTheme> = {
   year_2: {
-    icon: GraduationCap,
+    icon: Scroll,
     badge: '2nd',
-    activeBg: 'bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600',
-    activeShadow: 'shadow-lg shadow-emerald-500/25',
-    activeBadge: 'bg-emerald-500/30 text-white border-emerald-300/40',
-    inactiveIcon: 'text-emerald-500/80 group-hover:text-emerald-400 group-hover:scale-110 transition-transform',
-    inactiveHoverText: 'hover:text-emerald-400',
-    inactiveHoverBg: 'hover:bg-emerald-500/10',
-    inactiveBadge: 'text-emerald-500/90 border-emerald-500/30 bg-emerald-500/5',
-    dotColor: 'bg-emerald-400',
+    activeBg: 'bg-gradient-to-r from-blue-600 to-indigo-600',
+    activeShadow: 'shadow-md shadow-blue-500/25',
+    activeBadge: 'bg-white/20 text-white border-white/30',
+    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-blue-400 transition-colors',
+    inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
+    inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
+    inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
+    dotColor: 'bg-blue-400',
   },
   year_3: {
-    icon: Sparkles,
+    icon: Stethoscope,
     badge: '3rd',
-    activeBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600',
-    activeShadow: 'shadow-lg shadow-purple-500/25',
-    activeBadge: 'bg-purple-500/30 text-white border-purple-300/40',
-    inactiveIcon: 'text-purple-500/80 group-hover:text-purple-400 group-hover:scale-110 transition-transform',
-    inactiveHoverText: 'hover:text-purple-400',
-    inactiveHoverBg: 'hover:bg-purple-500/10',
-    inactiveBadge: 'text-purple-500/90 border-purple-500/30 bg-purple-500/5',
+    activeBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-700',
+    activeShadow: 'shadow-md shadow-purple-500/25',
+    activeBadge: 'bg-white/20 text-white border-white/30',
+    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-purple-400 transition-colors',
+    inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
+    inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
+    inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
     dotColor: 'bg-purple-400',
   },
 };
@@ -49,12 +49,12 @@ const DEFAULT_THEME: YearTheme = {
   icon: GraduationCap,
   badge: 'Yr',
   activeBg: 'bg-gradient-to-r from-indigo-600 to-purple-600',
-  activeShadow: 'shadow-lg shadow-indigo-500/25',
+  activeShadow: 'shadow-md shadow-indigo-500/20',
   activeBadge: 'bg-white/20 text-white border-white/30',
-  inactiveIcon: 'text-indigo-400 group-hover:scale-110 transition-transform',
-  inactiveHoverText: 'hover:text-indigo-400',
-  inactiveHoverBg: 'hover:bg-indigo-500/10',
-  inactiveBadge: 'text-indigo-400 border-indigo-500/30',
+  inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-indigo-400 transition-colors',
+  inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
+  inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
+  inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
   dotColor: 'bg-indigo-400',
 };
 

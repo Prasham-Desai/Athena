@@ -150,7 +150,8 @@ export async function GET(request: NextRequest) {
           durationMinutes: correctDuration,
           type: s.type,
           title: s.title,
-          taskId: s.task_id
+          taskId: s.task_id,
+          studyBlockId: s.study_block_id,
         });
       }
     });

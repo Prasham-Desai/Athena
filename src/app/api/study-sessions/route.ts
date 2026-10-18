@@ -30,6 +30,7 @@ async function ensureStudyTrackingTables(db: Database) {
       type TEXT NOT NULL,
       title TEXT,
       task_id TEXT,
+      study_block_id TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`
   );
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
     
     const id = session.id || generateId();
     const academicYearId = body.academicYearId || body.academic_year_id || session.academicYearId || session.academic_year_id || 'year_3';
+    const studyBlockId = session.studyBlockId || session.study_block_id || null;
     
     // Always recalculate duration from the actual start/end times
     const startMs = new Date(session.startTime).getTime();
@@ -80,8 +82,8 @@ export async function POST(request: NextRequest) {
     }
     
     await db.run(
-      `INSERT INTO study_sessions (id, date, start_time, end_time, duration_minutes, type, title, task_id, academic_year_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO study_sessions (id, date, start_time, end_time, duration_minutes, type, title, task_id, study_block_id, academic_year_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         date,
@@ -91,6 +93,7 @@ export async function POST(request: NextRequest) {
         session.type,
         session.title || null,
         session.taskId || null,
+        studyBlockId,
         academicYearId
       ]
     );

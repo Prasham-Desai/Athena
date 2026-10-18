@@ -546,7 +546,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <Link
-                href="/tasks"
+                href="/planner?view=tasks"
                 className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors flex items-center gap-1"
               >
                 View all <ArrowRight className="w-3 h-3" />

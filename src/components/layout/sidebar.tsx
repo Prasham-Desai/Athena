@@ -25,11 +25,10 @@ import { AcademicYearNavSection, AcademicYearMobileBadge } from './academic-year
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/subjects', label: 'Subjects', icon: BookOpen },
+  { href: '/planner', label: 'Daily Planner', icon: CalendarDays },
   { href: '/notes', label: 'Notes', icon: FileText },
   // { href: '/anatomy', label: 'Human Anatomy', icon: Activity }, // Kept for future use
-  { href: '/planner', label: 'Daily Planner', icon: CalendarDays },
   { href: '/revisions', label: 'Revisions', icon: RotateCcw },
-  { href: '/tasks', label: 'Tasks', icon: CheckSquare },
   { href: '/exams', label: 'Exams', icon: GraduationCap },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/settings', label: 'Settings', icon: Settings },
@@ -42,6 +41,7 @@ export function Sidebar() {
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
+    if (href === '/planner') return pathname === '/planner' || pathname === '/tasks';
     return pathname.startsWith(href);
   };
 

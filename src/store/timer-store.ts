@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface ActiveTimerTarget {
+  type: 'general' | 'task' | 'study-block';
+  id?: string;
+  title: string;
+  taskId?: string;
+  studyBlockId?: string;
+  subjectId?: string;
+}
+
 interface TimerState {
   // Main Stopwatch
   isMainRunning: boolean;
@@ -8,13 +17,19 @@ interface TimerState {
   mainStartTime: string | null;
   lastTick: number; // timestamp to calculate elapsed time when away
   
-  // New fields for segment tracking
+  // Target binding
+  activeTarget: ActiveTimerTarget | null;
+
+  // Fields for segment tracking
   segmentStartTime: string | null;
   lastPauseTime: string | null;
+  
   // Actions
   toggleMain: () => void;
   resetMain: () => void;
   setMainSeconds: (s: number) => void;
+  setActiveTarget: (target: ActiveTimerTarget | null) => void;
+  startTargetSession: (target: ActiveTimerTarget) => void;
   
   setSegmentStartTime: (time: string | null) => void;
   setLastPauseTime: (time: string | null) => void;
@@ -30,23 +45,43 @@ export const useTimerStore = create<TimerState>()(
       mainSeconds: 0,
       mainStartTime: null,
       lastTick: Date.now(),
+      activeTarget: null,
       segmentStartTime: null,
       lastPauseTime: null,
 
       toggleMain: () => set((state) => {
         const nextState = !state.isMainRunning;
+        const now = new Date().toISOString();
         return {
           isMainRunning: nextState,
-          mainStartTime: nextState && !state.mainStartTime ? new Date().toISOString() : state.mainStartTime,
+          mainStartTime: nextState && !state.mainStartTime ? now : state.mainStartTime,
+          segmentStartTime: nextState ? now : null,
+          lastPauseTime: !nextState ? now : null,
           lastTick: Date.now(),
         };
       }),
+
+      setActiveTarget: (target) => set({ activeTarget: target }),
+
+      startTargetSession: (target) => {
+        const now = new Date().toISOString();
+        set({
+          activeTarget: target,
+          isMainRunning: true,
+          mainStartTime: now,
+          segmentStartTime: now,
+          lastPauseTime: null,
+          mainSeconds: 0,
+          lastTick: Date.now(),
+        });
+      },
 
       resetMain: () => set({ 
         isMainRunning: false, 
         mainSeconds: 0, 
         mainStartTime: null, 
         lastTick: Date.now(),
+        activeTarget: null,
         segmentStartTime: null,
         lastPauseTime: null,
       }),
@@ -74,6 +109,7 @@ export const useTimerStore = create<TimerState>()(
               mainSeconds: 0,
               lastTick: now,
               mainStartTime: null,
+              activeTarget: null,
               segmentStartTime: null,
               lastPauseTime: null,
             };
@@ -107,6 +143,7 @@ export const useTimerStore = create<TimerState>()(
         mainSeconds: state.mainSeconds,
         mainStartTime: state.mainStartTime,
         lastTick: state.lastTick,
+        activeTarget: state.activeTarget,
         segmentStartTime: state.segmentStartTime,
         lastPauseTime: state.lastPauseTime,
       }),

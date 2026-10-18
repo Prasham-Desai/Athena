@@ -66,6 +66,8 @@ export interface StudyBlock {
   id: string;
   academicYearId?: string;
   academic_year_id?: string;
+  taskId?: string | null;
+  task_id?: string | null;
   date: string;        // YYYY-MM-DD
   subjectId: string;
   topicId?: string;
@@ -75,6 +77,8 @@ export interface StudyBlock {
   priority: Priority;
   completed: boolean;
   notes: string;
+  durationMinutes?: number;
+  duration_minutes?: number;
 }
 
 export interface Task {
@@ -115,6 +119,7 @@ export interface StudySession {
   type: 'manual' | 'timer' | 'task' | 'break' | 'study-block';
   title?: string;
   taskId?: string;
+  studyBlockId?: string;
 }
 
 export interface DailyLog {
