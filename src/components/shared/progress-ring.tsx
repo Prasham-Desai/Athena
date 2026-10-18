@@ -27,7 +27,11 @@ export function ProgressRing({
   const [animatedValue, setAnimatedValue] = useState(0);
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (animatedValue / 100) * circumference;
+  const cappedValue = Math.min(Math.max(animatedValue, 0), 100);
+  const offset = circumference - (cappedValue / 100) * circumference;
+
+  // Inner diameter available within the ring stroke
+  const innerDiameter = Math.max(0, size - strokeWidth * 2);
 
   // Scale font sizes proportionally to the ring diameter with balanced typography
   const valueFontSize =
@@ -37,9 +41,26 @@ export function ProgressRing({
       ? 15
       : size <= 80
       ? 19
-      : Math.round(size * 0.24);
+      : size <= 100
+      ? 22
+      : Math.round(size * 0.21);
 
-  const sublabelFontSize = size <= 60 ? 8 : Math.max(9, Math.round(size * 0.1));
+  // Dynamically calculate sublabel font size based on string length to guarantee it fits inside the circle chord
+  const sublabelFontSize = (() => {
+    if (!sublabel) return 9;
+    const len = sublabel.length;
+    if (size <= 60) return 7.5;
+    if (size <= 80) return 8.5;
+    
+    // For larger rings, start around 9.5-10px and scale down if label is longer (e.g. 'of daily goal')
+    let base = Math.min(10, Math.round(size * 0.075));
+    if (len > 12) {
+      base = Math.min(base, 8.5);
+    } else if (len > 9) {
+      base = Math.min(base, 9);
+    }
+    return Math.max(7.5, base);
+  })();
 
   useEffect(() => {
     if (animate) {
@@ -76,7 +97,14 @@ export function ProgressRing({
           transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center select-none pointer-events-none">
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center select-none pointer-events-none text-center px-1.5"
+        style={{
+          maxWidth: `${innerDiameter}px`,
+          maxHeight: `${innerDiameter}px`,
+          margin: 'auto',
+        }}
+      >
         <motion.div
           className="flex items-baseline justify-center font-bold leading-none tabular-nums"
           style={{ fontSize: `${valueFontSize}px` }}
@@ -85,7 +113,14 @@ export function ProgressRing({
           transition={{ delay: 0.3 }}
         >
           {label !== undefined ? (
-            <span>{label}</span>
+            typeof label === 'string' && label.endsWith('%') ? (
+              <>
+                <span className="tracking-tight">{label.slice(0, -1)}</span>
+                <span className="text-[0.68em] font-semibold opacity-75 ml-[1px]">%</span>
+              </>
+            ) : (
+              <span>{label}</span>
+            )
           ) : (
             <>
               <span className="tracking-tight">{Math.round(animatedValue)}</span>
@@ -95,8 +130,9 @@ export function ProgressRing({
         </motion.div>
         {sublabel && (
           <span
-            className="text-[hsl(var(--muted-foreground))] uppercase tracking-wider font-medium leading-none"
-            style={{ fontSize: `${sublabelFontSize}px`, marginTop: `${Math.max(1.5, Math.round(size * 0.04))}px` }}
+            className="text-[hsl(var(--muted-foreground))] uppercase tracking-wider font-semibold leading-tight text-center max-w-[90%] truncate"
+            style={{ fontSize: `${sublabelFontSize}px`, marginTop: `${Math.max(2, Math.round(size * 0.035))}px` }}
+            title={sublabel}
           >
             {sublabel}
           </span>

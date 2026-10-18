@@ -247,6 +247,57 @@ export interface Story {
   updated_at: string;
 }
 
+export type NoteFileType = 'pdf' | 'jpg' | 'jpeg' | 'png';
+
+export interface NoteDocument {
+  id: string;
+  subject_id: string;
+  academic_year_id: string;
+  title: string;
+  subtitle: string | null;
+  file_name: string;
+  file_type: NoteFileType;
+  mime_type: string;
+  file_size: number;
+  kv_key: string;
+  page_count: number;
+  thumbnail_url?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export type AnnotationToolType = 'pen' | 'highlighter' | 'eraser' | 'text' | 'rect' | 'circle' | 'arrow' | 'line';
+
+export interface AnnotationPoint {
+  x: number; // normalized 0..1
+  y: number; // normalized 0..1
+}
+
+export interface AnnotationItem {
+  id: string;
+  type: AnnotationToolType;
+  points?: AnnotationPoint[];
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  color: string;
+  strokeWidth: number;
+  opacity: number;
+  text?: string;
+  fontSize?: number;
+}
+
+export interface NoteAnnotationRecord {
+  id: string;
+  note_id: string;
+  page_number: number;
+  type: string;
+  data: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

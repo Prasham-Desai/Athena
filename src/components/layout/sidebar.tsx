@@ -15,6 +15,8 @@ import {
   ChevronLeft,
   Menu,
   Moon,
+  // Activity, // Kept for future use (Human Anatomy Lab)
+  FileText,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -23,12 +25,13 @@ import { AcademicYearNavSection, AcademicYearMobileBadge } from './academic-year
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/subjects', label: 'Subjects', icon: BookOpen },
+  { href: '/notes', label: 'Notes', icon: FileText },
+  // { href: '/anatomy', label: 'Human Anatomy', icon: Activity }, // Kept for future use
   { href: '/planner', label: 'Daily Planner', icon: CalendarDays },
   { href: '/revisions', label: 'Revisions', icon: RotateCcw },
   { href: '/tasks', label: 'Tasks', icon: CheckSquare },
   { href: '/exams', label: 'Exams', icon: GraduationCap },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/stories', label: 'Stories', icon: Moon },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 

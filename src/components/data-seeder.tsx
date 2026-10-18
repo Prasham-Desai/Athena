@@ -10,6 +10,7 @@ import { useSettingsStore } from '@/store/settings-store';
 
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { useExamsStore } from '@/store/exams-store';
+import { useNotesStore } from '@/store/notes-store';
 
 /**
  * Component that hydrates the application data from the Cloudflare API.
@@ -37,6 +38,7 @@ export function DataSeeder() {
         useActivityStore.getState().fetchActivities(activeYearId),
         useActivityStore.getState().fetchDailyLogs(activeYearId),
         useExamsStore.getState().fetchExams(activeYearId),
+        useNotesStore.getState().fetchNotes(activeYearId),
       ]);
 
       if (settings?.theme) {

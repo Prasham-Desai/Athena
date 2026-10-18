@@ -7,7 +7,14 @@ initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  /* config options here */
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      canvas: false,
+      encoding: false,
+    };
+    return config;
+  },
 };
 
 // Multi-year Athena system enabled

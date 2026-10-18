@@ -87,6 +87,7 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
         useActivityStore.getState().fetchActivities(yearId),
         useActivityStore.getState().fetchDailyLogs(yearId),
         useExamsStore.getState().fetchExams(yearId),
+        (await import('./notes-store')).useNotesStore.getState().fetchNotes(yearId),
       ]);
     } catch (error) {
       console.error('Failed to reload data for academic year', yearId, error);
