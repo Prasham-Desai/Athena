@@ -5,7 +5,7 @@ import { INITIAL_SUBJECTS } from '@/lib/curriculum-data';
 
 interface SubjectsState {
   subjects: Subject[];
-  fetchSubjects: () => Promise<void>;
+  fetchSubjects: (academicYearId?: string) => Promise<void>;
   addSubject: (name: string, color: string, icon: string) => Promise<void>;
   updateSubject: (id: string, updates: Partial<Omit<Subject, 'id' | 'createdAt'>>) => Promise<void>;
   deleteSubject: (id: string) => Promise<void>;
@@ -31,9 +31,11 @@ interface SubjectsState {
 export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   subjects: [],
 
-  fetchSubjects: async () => {
+  fetchSubjects: async (academicYearId?: string) => {
     try {
-      const response = await fetch('/api/subjects');
+      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+      const url = yearId ? `/api/subjects?academic_year_id=${yearId}` : '/api/subjects';
+      const response = await fetch(url);
       if (response.ok) {
         const { data } = (await response.json()) as any;
         set({ subjects: data || [] });
@@ -45,8 +47,11 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
 
   addSubject: async (name, color, icon) => {
     const previousSubjects = get().subjects;
+    const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
     const newSubject = {
       id: generateId(),
+      academicYearId: yearId,
+      academic_year_id: yearId,
       name,
       color,
       icon,
@@ -503,7 +508,12 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }));
 
     try {
-      const response = await fetch('/api/reset-revisions', { method: 'POST' });
+      const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId;
+      const response = await fetch('/api/reset-revisions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ academic_year_id: yearId }),
+      });
       if (!response.ok) throw new Error('Failed');
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('add-toast', { detail: { message: 'All revisions have been reset', type: 'success' } }));
     } catch (e) {

@@ -8,7 +8,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
     
@@ -42,7 +42,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     
     await db.run('DELETE FROM chapters WHERE id = ?', [id]);

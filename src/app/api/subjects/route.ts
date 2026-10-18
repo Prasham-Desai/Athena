@@ -7,13 +7,14 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     if (!env.DB) return errorResponse('D1 Database binding not found', 500);
 
     const db = new Database(env.DB);
     const service = new SubjectService(db);
+    const academicYearId = request.nextUrl.searchParams.get('academic_year_id') || undefined;
     
-    const subjects = await service.getAllWithHierarchy();
+    const subjects = await service.getAllWithHierarchy(academicYearId);
     return successResponse(subjects);
   } catch (err: any) {
     return errorResponse(err.message, 500);
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     if (!env.DB) return errorResponse('D1 Database binding not found', 500);
 
     const db = new Database(env.DB);

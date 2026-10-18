@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
 
@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
 
     const existing = await db.get<any>('SELECT * FROM stories WHERE id = ?', [id]);

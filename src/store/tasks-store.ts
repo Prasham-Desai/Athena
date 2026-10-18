@@ -9,15 +9,17 @@ interface TasksState {
   deleteTask: (id: string) => Promise<void>;
   toggleTask: (id: string) => Promise<void>;
   setTasks: (tasks: Task[]) => void;
-  fetchTasks: () => Promise<void>;
+  fetchTasks: (academicYearId?: string) => Promise<void>;
 }
 
 export const useTasksStore = create<TasksState>((set, get) => ({
   tasks: [],
 
-  fetchTasks: async () => {
+  fetchTasks: async (academicYearId?: string) => {
     try {
-      const response = await fetch('/api/tasks');
+      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+      const url = yearId ? `/api/tasks?academic_year_id=${yearId}` : '/api/tasks';
+      const response = await fetch(url);
       if (response.ok) {
         const { data } = (await response.json()) as any;
         set({ tasks: data || [] });
@@ -28,9 +30,12 @@ export const useTasksStore = create<TasksState>((set, get) => ({
   },
 
   addTask: async (task) => {
+    const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
     const newTask = {
       ...task,
       id: generateId(),
+      academicYearId: yearId,
+      academic_year_id: yearId,
       completed: false,
       createdAt: new Date().toISOString(),
       completedAt: null,

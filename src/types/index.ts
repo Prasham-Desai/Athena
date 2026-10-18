@@ -40,8 +40,19 @@ export interface Chapter {
   paper?: string;
 }
 
+export interface AcademicYear {
+  id: string;
+  name: string;
+  code: string;
+  order_index: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Subject {
   id: string;
+  academic_year_id?: string;
+  academicYearId?: string;
   name: string;
   color: string;       // hex color
   icon: string;        // lucide icon name
@@ -53,6 +64,8 @@ export interface Subject {
 
 export interface StudyBlock {
   id: string;
+  academicYearId?: string;
+  academic_year_id?: string;
   date: string;        // YYYY-MM-DD
   subjectId: string;
   topicId?: string;
@@ -66,6 +79,8 @@ export interface StudyBlock {
 
 export interface Task {
   id: string;
+  academicYearId?: string;
+  academic_year_id?: string;
   title: string;
   description: string;
   category: TaskCategory;
@@ -80,6 +95,8 @@ export interface Task {
 
 export interface ActivityEntry {
   id: string;
+  academicYearId?: string;
+  academic_year_id?: string;
   type: 'topic-completed' | 'topic-revised' | 'task-completed' | 'subject-added' | 'study-block-completed' | 'milestone';
   description: string;
   timestamp: string;   // ISO date string
@@ -90,6 +107,8 @@ export interface ActivityEntry {
 
 export interface StudySession {
   id: string;
+  academicYearId?: string;
+  academic_year_id?: string;
   startTime: string; // ISO date string
   endTime: string;   // ISO date string
   durationMinutes: number;
@@ -100,6 +119,8 @@ export interface StudySession {
 
 export interface DailyLog {
   date: string;        // YYYY-MM-DD
+  academicYearId?: string;
+  academic_year_id?: string;
   studyMinutes: number;
   topicsCompleted: number;
   tasksCompleted: number;
@@ -117,6 +138,8 @@ export interface ExamSubject {
 
 export interface Exam {
   id: string;
+  academicYearId?: string;
+  academic_year_id?: string;
   title: string;
   type: ExamType;
   date: string;        // YYYY-MM-DD

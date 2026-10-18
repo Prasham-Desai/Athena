@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { AcademicYearNavSection, AcademicYearMobileBadge } from './academic-year-selector';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -107,6 +108,9 @@ export function Sidebar() {
             </Link>
           );
         })}
+
+        {/* Academic Year Navigation Section - Inline below items after divider line */}
+        <AcademicYearNavSection collapsed={collapsed} idPrefix={idPrefix} />
       </nav>
 
       {/* Collapse button - desktop only */}
@@ -135,13 +139,19 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-2.5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg"
-      >
-        <Menu className="w-5 h-5" />
-      </button>
+      {/* Mobile top controls */}
+      <div className="lg:hidden fixed top-3 left-3 right-3 z-40 flex items-center justify-between pointer-events-none">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="pointer-events-auto p-2.5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg"
+          aria-label="Open menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div className="pointer-events-auto">
+          <AcademicYearMobileBadge />
+        </div>
+      </div>
 
       {/* Mobile overlay */}
       <AnimatePresence>

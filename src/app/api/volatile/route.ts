@@ -4,7 +4,7 @@ import { KVService } from '@/kv';
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     if (!env.KV) return errorResponse('KV binding not found', 500);
 
     const kvService = new KVService(env.KV);
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const kvService = new KVService(env.KV);
     const body: any = await request.json();
     
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const kvService = new KVService(env.KV);
     
     const searchParams = request.nextUrl.searchParams;

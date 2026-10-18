@@ -152,7 +152,7 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
               <div key={item.id} className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
                 <span className="text-xs font-medium flex-1 min-w-0 truncate">{item.name}</span>
-                <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0">
+                <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0 font-medium tabular-nums">
                   {item.revised}/{item.total}
                 </span>
                 <div className="w-16 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden shrink-0">
@@ -164,7 +164,7 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
                     transition={{ duration: 0.8, delay: 0.1 }}
                   />
                 </div>
-                <span className="text-[10px] font-bold w-8 text-right shrink-0" style={{ color: item.color }}>
+                <span className="text-[11px] font-bold w-9 text-right shrink-0 tabular-nums" style={{ color: item.color }}>
                   {item.revisionPercent}%
                 </span>
               </div>

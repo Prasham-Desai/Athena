@@ -17,15 +17,19 @@ export function errorResponse(error: string, status = 400) {
 }
 
 /**
- * Safely extracts environment variables in Next.js Cloudflare contexts
+ * Safely extracts environment variables in Next.js Cloudflare contexts.
+ * Uses the async version so it works with both `next dev` (via initOpenNextCloudflareForDev)
+ * and the deployed Cloudflare worker environment.
  */
-export function getEnv(request: Request): any {
+export async function getEnv(request: Request): Promise<any> {
   try {
     // OpenNext securely exposes the Cloudflare bindings here
-    const { env } = getCloudflareContext();
+    // Using { async: true } is required for local dev compatibility
+    const { env } = await getCloudflareContext({ async: true });
     if (env && env.DB) return env;
   } catch (err) {
     // Fallback if not available
   }
   return process.env as any;
 }
+

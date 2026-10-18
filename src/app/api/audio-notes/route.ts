@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const chapterId = request.nextUrl.searchParams.get('chapter_id');
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
 

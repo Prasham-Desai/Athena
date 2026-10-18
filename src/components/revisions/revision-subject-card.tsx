@@ -144,8 +144,8 @@ export function RevisionSubjectCard({
               <div className="hidden sm:block">
                 <ProgressRing
                   value={stats.revisionPercent}
-                  size={40}
-                  strokeWidth={4}
+                  size={42}
+                  strokeWidth={3.5}
                   color={subject.color}
                 />
               </div>

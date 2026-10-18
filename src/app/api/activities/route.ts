@@ -6,22 +6,44 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     
-    // 1. Fetch raw activities for custom events (milestone, subject-added, etc.)
-    // We MUST fetch topic-revised from here because topics table only stores the LAST revision, not the history.
-    const legacyActivities = await db.query("SELECT * FROM activities WHERE type NOT IN ('topic-completed', 'task-completed', 'study-block-completed')");
+    const academicYearId = request.nextUrl.searchParams.get('academic_year_id');
 
-    
+    // 1. Fetch raw activities for custom events (milestone, subject-added, etc.)
+    const legacyActivities = academicYearId
+      ? await db.query(
+          "SELECT * FROM activities WHERE type NOT IN ('topic-completed', 'task-completed', 'study-block-completed') AND academic_year_id = ?",
+          [academicYearId]
+        )
+      : await db.query("SELECT * FROM activities WHERE type NOT IN ('topic-completed', 'task-completed', 'study-block-completed')");
+
     // 2. Fetch Tasks
-    const completedTasks = await db.query("SELECT id, title, completed_at FROM tasks WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL");
-    
-    // 3. Fetch Topics (completed and revised)
-    const topics = await db.query('SELECT id, name, status, completed_at, last_revised, revision_count FROM topics WHERE (status IN ("completed", "revised") AND completed_at IS NOT NULL) OR (revision_count > 0 AND last_revised IS NOT NULL)');
-    
+    const completedTasks = academicYearId
+      ? await db.query(
+          "SELECT id, title, completed_at FROM tasks WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL AND academic_year_id = ?",
+          [academicYearId]
+        )
+      : await db.query("SELECT id, title, completed_at FROM tasks WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL");
+
+    // 3. Fetch Topics (completed and revised) scoped via subject's academic_year_id
+    const topics = academicYearId
+      ? await db.query(
+          `SELECT topics.id, topics.name, topics.status, topics.completed_at, topics.last_revised, topics.revision_count 
+           FROM topics 
+           JOIN chapters ON topics.chapter_id = chapters.id 
+           JOIN subjects ON chapters.subject_id = subjects.id 
+           WHERE ((topics.status IN ('completed', 'revised') AND topics.completed_at IS NOT NULL) OR (topics.revision_count > 0 AND topics.last_revised IS NOT NULL))
+           AND subjects.academic_year_id = ?`,
+          [academicYearId]
+        )
+      : await db.query('SELECT id, name, status, completed_at, last_revised, revision_count FROM topics WHERE (status IN ("completed", "revised") AND completed_at IS NOT NULL) OR (revision_count > 0 AND last_revised IS NOT NULL)');
+
     // 4. Fetch Study Sessions
-    const sessions = await db.query('SELECT id, title, duration_minutes, end_time FROM study_sessions');
+    const sessions = academicYearId
+      ? await db.query('SELECT id, title, duration_minutes, end_time FROM study_sessions WHERE academic_year_id = ?', [academicYearId])
+      : await db.query('SELECT id, title, duration_minutes, end_time FROM study_sessions');
 
     let allActivities: any[] = [...legacyActivities];
 
@@ -88,7 +110,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
     
@@ -97,21 +119,22 @@ export async function POST(request: NextRequest) {
     }
     
     const id = body.id || generateId();
+    const academicYearId = body.academicYearId || body.academic_year_id || 'year_3';
     
     await db.run(
-      `INSERT INTO activities (id, type, description, timestamp, subject_id, color)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [id, body.type, body.description, body.timestamp, body.subjectId, body.color]
+      `INSERT INTO activities (id, type, description, timestamp, subject_id, color, academic_year_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [id, body.type, body.description, body.timestamp, body.subjectId, body.color, academicYearId]
     );
     
     const activity = await db.get('SELECT * FROM activities WHERE id = ?', [id]);
     
-    // Also prune old activities to keep under 100
+    // Also prune old activities to keep under 100 per academic year
     await db.run(`
       DELETE FROM activities WHERE id NOT IN (
-        SELECT id FROM activities ORDER BY timestamp DESC LIMIT 100
-      )
-    `);
+        SELECT id FROM activities WHERE academic_year_id = ? ORDER BY timestamp DESC LIMIT 100
+      ) AND academic_year_id = ?
+    `, [academicYearId, academicYearId]);
 
     return successResponse(activity, 201);
   } catch (err: any) {

@@ -5,7 +5,7 @@ import { INITIAL_SUBJECTS } from '@/lib/curriculum-data';
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     
     // Clear existing data

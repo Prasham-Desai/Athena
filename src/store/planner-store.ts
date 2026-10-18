@@ -4,7 +4,7 @@ import { generateId } from '@/lib/utils';
 
 interface PlannerState {
   studyBlocks: StudyBlock[];
-  fetchStudyBlocks: () => Promise<void>;
+  fetchStudyBlocks: (academicYearId?: string) => Promise<void>;
   addStudyBlock: (block: Omit<StudyBlock, 'id'>) => Promise<void>;
   updateStudyBlock: (id: string, updates: Partial<StudyBlock>) => Promise<void>;
   deleteStudyBlock: (id: string) => Promise<void>;
@@ -32,9 +32,11 @@ async function saveStudyBlock(block: StudyBlock, method: 'POST' | 'PUT' = 'POST'
 export const usePlannerStore = create<PlannerState>()((set, get) => ({
   studyBlocks: [],
 
-  fetchStudyBlocks: async () => {
+  fetchStudyBlocks: async (academicYearId?: string) => {
     try {
-      const response = await fetch('/api/study-blocks');
+      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+      const url = yearId ? `/api/study-blocks?academic_year_id=${yearId}` : '/api/study-blocks';
+      const response = await fetch(url);
       if (!response.ok) return;
 
       const payload = (await response.json()) as { data?: StudyBlock[] };
@@ -47,7 +49,13 @@ export const usePlannerStore = create<PlannerState>()((set, get) => ({
   },
 
   addStudyBlock: async (block) => {
-    const newBlock: StudyBlock = { ...block, id: generateId() };
+    const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
+    const newBlock: StudyBlock = {
+      ...block,
+      id: generateId(),
+      academicYearId: yearId,
+      academic_year_id: yearId,
+    };
     set((state) => ({ studyBlocks: [...state.studyBlocks, newBlock] }));
 
     try {

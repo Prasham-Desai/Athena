@@ -5,7 +5,7 @@ import { generateId } from '@/api/helpers';
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
     

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const service = new TopicService(db);
     const body: any = await request.json();

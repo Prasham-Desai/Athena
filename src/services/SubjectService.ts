@@ -53,10 +53,13 @@ export class SubjectService {
 
   /**
    * Returns ALL subjects with their full nested hierarchy (chapters → topics).
+   * Supports optional filtering by academic_year_id.
    * This is the primary data source for the frontend store.
    */
-  async getAllWithHierarchy(): Promise<any[]> {
-    const subjects = await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
+  async getAllWithHierarchy(academicYearId?: string): Promise<any[]> {
+    const subjects = academicYearId
+      ? await this.db.query<any>('SELECT * FROM subjects WHERE academic_year_id = ? ORDER BY created_at DESC', [academicYearId])
+      : await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
     if (!subjects.length) return [];
 
     // Fetch ALL chapters, topics, and subtopics directly to avoid SQLite's 100 variable limit in IN() clauses
@@ -74,6 +77,8 @@ export class SubjectService {
 
       return {
         id: subject.id,
+        academicYearId: subject.academic_year_id,
+        academic_year_id: subject.academic_year_id,
         name: subject.name,
         color: subject.color,
         icon: subject.icon,
@@ -96,11 +101,12 @@ export class SubjectService {
     return this.db.get<Subject>('SELECT * FROM subjects WHERE id = ?', [id]);
   }
 
-  async create(data: { name: string; color?: string; icon?: string }): Promise<Subject> {
+  async create(data: { name: string; color?: string; icon?: string; academicYearId?: string; academic_year_id?: string }): Promise<Subject> {
     const id = generateId();
+    const yearId = data.academicYearId || data.academic_year_id || 'year_3';
     await this.db.run(
-      'INSERT INTO subjects (id, name, color, icon) VALUES (?, ?, ?, ?)',
-      [id, data.name, data.color || null, data.icon || null]
+      'INSERT INTO subjects (id, name, color, icon, academic_year_id) VALUES (?, ?, ?, ?, ?)',
+      [id, data.name, data.color || null, data.icon || null, yearId]
     );
     const subject = await this.getById(id);
     if (!subject) throw new Error('Failed to create subject');

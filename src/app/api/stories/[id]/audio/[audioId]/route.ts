@@ -10,7 +10,7 @@ export async function DELETE(
 ) {
   try {
     const { id, audioId } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
 
     const existingAudio = await db.get<any>(

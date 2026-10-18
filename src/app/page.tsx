@@ -388,17 +388,17 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* ---- Subject Progress Cards ---- */}
-      {subjectProgress.length > 0 && (
-        <motion.div variants={itemVariants}>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold tracking-tight">Subject Progress</h2>
-            <Link
-              href="/subjects"
-              className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors flex items-center gap-1"
-            >
-              View all <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
+      <motion.div variants={itemVariants}>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-semibold tracking-tight">Subject Progress</h2>
+          <Link
+            href="/subjects"
+            className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors flex items-center gap-1"
+          >
+            View all <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        {subjectProgress.length > 0 ? (
           <motion.div
             variants={containerVariants}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
@@ -453,8 +453,24 @@ export default function DashboardPage() {
               </motion.div>
             ))}
           </motion.div>
-        </motion.div>
-      )}
+        ) : (
+          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8 text-center flex flex-col items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-3">
+              <BookOpen className="w-6 h-6 text-indigo-500" />
+            </div>
+            <p className="text-sm font-semibold">No subjects yet</p>
+            <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1 max-w-sm mb-4">
+              Add your curriculum subjects to start tracking chapters, topics, and revision progress.
+            </p>
+            <Link
+              href="/subjects"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20 hover:opacity-90 transition-opacity"
+            >
+              Add Subjects <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        )}
+      </motion.div>
 
       {/* ---- Middle section: Chart + Upcoming Tasks ---- */}
       <motion.div

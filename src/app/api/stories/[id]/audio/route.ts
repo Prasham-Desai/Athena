@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const searchParams = request.nextUrl.searchParams;
     const audioId = searchParams.get('audioId');
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
 

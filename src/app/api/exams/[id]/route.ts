@@ -6,7 +6,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = env.DB;
     const { id } = await params;
     
@@ -24,7 +24,7 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = env.DB;
     const { id } = await params;
     const data: any = await request.json();

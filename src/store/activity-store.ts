@@ -5,8 +5,8 @@ import { generateId, getToday } from '@/lib/utils';
 interface ActivityState {
   activities: ActivityEntry[];
   dailyLogs: DailyLog[];
-  fetchActivities: () => Promise<void>;
-  fetchDailyLogs: () => Promise<void>;
+  fetchActivities: (academicYearId?: string) => Promise<void>;
+  fetchDailyLogs: (academicYearId?: string) => Promise<void>;
   addActivity: (activity: Omit<ActivityEntry, 'id' | 'timestamp'>) => Promise<void>;
   addDailyLog: (log: DailyLog) => Promise<void>;
   updateDailyLog: (date: string, updates: Partial<DailyLog>) => Promise<void>;
@@ -17,8 +17,10 @@ interface ActivityState {
   setDailyLogs: (logs: DailyLog[]) => void;
 }
 
-async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void) {
-  const response = await fetch('/api/daily-logs');
+async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void, academicYearId?: string) {
+  const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+  const url = yearId ? `/api/daily-logs?academic_year_id=${yearId}` : '/api/daily-logs';
+  const response = await fetch(url);
   if (!response.ok) return;
 
   const payload = (await response.json()) as { data?: DailyLog[] };
@@ -31,9 +33,11 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
   activities: [],
   dailyLogs: [],
 
-  fetchActivities: async () => {
+  fetchActivities: async (academicYearId?: string) => {
     try {
-      const response = await fetch('/api/activities');
+      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+      const url = yearId ? `/api/activities?academic_year_id=${yearId}` : '/api/activities';
+      const response = await fetch(url);
       if (!response.ok) return;
 
       const payload = (await response.json()) as { data?: ActivityEntry[] };
@@ -45,9 +49,9 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
     }
   },
 
-  fetchDailyLogs: async () => {
+  fetchDailyLogs: async (academicYearId?: string) => {
     try {
-      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }), academicYearId);
     } catch (error) {
       console.error('Failed to fetch daily logs', error);
     }
@@ -65,9 +69,12 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
       return;
     }
 
+    const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
     const optimisticActivity: ActivityEntry = {
       ...activity,
       id: generateId(),
+      academicYearId: yearId,
+      academic_year_id: yearId,
       timestamp: new Date().toISOString(),
     };
 
@@ -92,18 +99,21 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
   addDailyLog: async (log) => {
     const previousDailyLogs = get().dailyLogs;
+    const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
+    const logWithYear = { ...log, academicYearId: yearId, academic_year_id: yearId };
+
     set((state) => ({
-      dailyLogs: [...state.dailyLogs.filter((entry) => entry.date !== log.date), log],
+      dailyLogs: [...state.dailyLogs.filter((entry) => entry.date !== log.date), logWithYear],
     }));
 
     try {
       const response = await fetch('/api/daily-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date: log.date, updates: log }),
+        body: JSON.stringify({ date: log.date, updates: logWithYear, academicYearId: yearId }),
       });
       if (!response.ok) throw new Error('Failed');
-      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }), yearId);
     } catch (error) {
       set({ dailyLogs: previousDailyLogs });
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));
@@ -194,13 +204,14 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
     });
 
     try {
+      const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
       const response = await fetch('/api/study-sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date, session: newSession }),
+        body: JSON.stringify({ date, session: { ...newSession, academicYearId: yearId }, academicYearId: yearId }),
       });
       if (!response.ok) throw new Error('Failed');
-      await refreshDailyLogs((logs) => set({ dailyLogs: logs }));
+      await refreshDailyLogs((logs) => set({ dailyLogs: logs }), yearId);
     } catch (error) {
       set({ dailyLogs: previousDailyLogs });
       if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Action failed', type: 'error' } }));

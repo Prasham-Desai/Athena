@@ -6,6 +6,8 @@ function snakeToCamel(row: any) {
   if (!row) return row;
   return {
     id: row.id,
+    academicYearId: row.academic_year_id,
+    academic_year_id: row.academic_year_id,
     date: row.date,
     subjectId: row.subject_id,
     topicId: row.topic_id,
@@ -25,7 +27,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     const body: any = await request.json();
 
@@ -63,7 +65,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
 
     await db.run('DELETE FROM study_blocks WHERE id = ?', [id]);

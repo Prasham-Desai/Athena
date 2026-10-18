@@ -7,13 +7,15 @@ export const dynamic = 'force-dynamic';
 async function ensureStudyTrackingTables(db: Database) {
   await db.run(
     `CREATE TABLE IF NOT EXISTS daily_progress (
-      date TEXT PRIMARY KEY,
+      date TEXT NOT NULL,
+      academic_year_id TEXT NOT NULL,
       study_minutes INTEGER DEFAULT 0,
       topics_completed INTEGER DEFAULT 0,
       tasks_completed INTEGER DEFAULT 0,
       revisions_completed INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (date, academic_year_id)
     )`
   );
 
@@ -21,14 +23,14 @@ async function ensureStudyTrackingTables(db: Database) {
     `CREATE TABLE IF NOT EXISTS study_sessions (
       id TEXT PRIMARY KEY,
       date TEXT NOT NULL,
+      academic_year_id TEXT,
       start_time DATETIME NOT NULL,
       end_time DATETIME NOT NULL,
       duration_minutes INTEGER NOT NULL,
       type TEXT NOT NULL,
       title TEXT,
       task_id TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (date) REFERENCES daily_progress(date) ON DELETE CASCADE
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`
   );
 
@@ -37,7 +39,7 @@ async function ensureStudyTrackingTables(db: Database) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
     const body: any = await request.json();
@@ -48,6 +50,7 @@ export async function POST(request: NextRequest) {
     }
     
     const id = session.id || generateId();
+    const academicYearId = body.academicYearId || body.academic_year_id || session.academicYearId || session.academic_year_id || 'year_3';
     
     // Always recalculate duration from the actual start/end times
     const startMs = new Date(session.startTime).getTime();
@@ -60,22 +63,25 @@ export async function POST(request: NextRequest) {
     const isBreak = session.type === 'break';
     const addedMinutes = isBreak ? 0 : calculatedDuration;
 
-    const existingProgress = await db.get('SELECT * FROM daily_progress WHERE date = ?', [date]);
+    const existingProgress = await db.get(
+      'SELECT * FROM daily_progress WHERE date = ? AND academic_year_id = ?',
+      [date, academicYearId]
+    );
     if (!existingProgress) {
       await db.run(
-        `INSERT INTO daily_progress (date, study_minutes) VALUES (?, ?)`,
-        [date, addedMinutes]
+        `INSERT INTO daily_progress (date, academic_year_id, study_minutes) VALUES (?, ?, ?)`,
+        [date, academicYearId, addedMinutes]
       );
     } else {
       await db.run(
-        `UPDATE daily_progress SET study_minutes = study_minutes + ? WHERE date = ?`,
-        [addedMinutes, date]
+        `UPDATE daily_progress SET study_minutes = study_minutes + ? WHERE date = ? AND academic_year_id = ?`,
+        [addedMinutes, date, academicYearId]
       );
     }
     
     await db.run(
-      `INSERT INTO study_sessions (id, date, start_time, end_time, duration_minutes, type, title, task_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO study_sessions (id, date, start_time, end_time, duration_minutes, type, title, task_id, academic_year_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         date,
@@ -84,11 +90,12 @@ export async function POST(request: NextRequest) {
         calculatedDuration,
         session.type,
         session.title || null,
-        session.taskId || null
+        session.taskId || null,
+        academicYearId
       ]
     );
     
-    return successResponse({ id }, 201);
+    return successResponse({ id, academicYearId }, 201);
   } catch (err: any) {
     return errorResponse(err.message, 500);
   }
@@ -96,7 +103,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
     const url = new URL(request.url);
@@ -107,16 +114,17 @@ export async function DELETE(request: NextRequest) {
       return errorResponse('id and date are required', 400);
     }
     
-    const session = await db.get('SELECT duration_minutes, type FROM study_sessions WHERE id = ?', [id]);
+    const session = await db.get('SELECT duration_minutes, type, academic_year_id FROM study_sessions WHERE id = ?', [id]);
     if (!session) {
       return errorResponse('session not found', 404);
     }
     
     // Deduct minutes if it wasn't a break
     if (session.type !== 'break') {
+      const yearId = session.academic_year_id || 'year_2';
       await db.run(
-        `UPDATE daily_progress SET study_minutes = MAX(0, study_minutes - ?) WHERE date = ?`,
-        [session.duration_minutes, date]
+        `UPDATE daily_progress SET study_minutes = MAX(0, study_minutes - ?) WHERE date = ? AND academic_year_id = ?`,
+        [session.duration_minutes, date, yearId]
       );
     }
     

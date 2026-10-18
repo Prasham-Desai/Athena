@@ -6,7 +6,7 @@ interface ExamsState {
   exams: Exam[];
   isLoading: boolean;
   error: string | null;
-  fetchExams: () => Promise<void>;
+  fetchExams: (academicYearId?: string) => Promise<void>;
   addExam: (exam: Omit<Exam, 'id' | 'completed'>) => Promise<void>;
   updateExam: (id: string, exam: Partial<Exam>) => Promise<void>;
   deleteExam: (id: string) => Promise<void>;
@@ -18,14 +18,16 @@ export const useExamsStore = create<ExamsState>((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchExams: async () => {
+  fetchExams: async (academicYearId?: string) => {
     set({ isLoading: true, error: null });
     try {
-      const res = await fetch('/api/exams');
+      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
+      const url = yearId ? `/api/exams?academic_year_id=${yearId}` : '/api/exams';
+      const res = await fetch(url);
       const data: any = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to fetch exams');
       
-      set({ exams: data.data });
+      set({ exams: data.data || [] });
       get().checkCompletedExams();
     } catch (error: any) {
       set({ error: error.message });
@@ -36,10 +38,11 @@ export const useExamsStore = create<ExamsState>((set, get) => ({
 
   addExam: async (examData) => {
     try {
+      const yearId = (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId || 'year_3';
       const res = await fetch('/api/exams', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(examData),
+        body: JSON.stringify({ ...examData, academicYearId: yearId, academic_year_id: yearId }),
       });
       const data: any = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to create exam');

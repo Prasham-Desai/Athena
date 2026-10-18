@@ -7,13 +7,15 @@ export const dynamic = 'force-dynamic';
 async function ensureStudyTrackingTables(db: Database) {
   await db.run(
     `CREATE TABLE IF NOT EXISTS daily_progress (
-      date TEXT PRIMARY KEY,
+      date TEXT NOT NULL,
+      academic_year_id TEXT NOT NULL,
       study_minutes INTEGER DEFAULT 0,
       topics_completed INTEGER DEFAULT 0,
       tasks_completed INTEGER DEFAULT 0,
       revisions_completed INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (date, academic_year_id)
     )`
   );
 
@@ -21,14 +23,14 @@ async function ensureStudyTrackingTables(db: Database) {
     `CREATE TABLE IF NOT EXISTS study_sessions (
       id TEXT PRIMARY KEY,
       date TEXT NOT NULL,
+      academic_year_id TEXT,
       start_time DATETIME NOT NULL,
       end_time DATETIME NOT NULL,
       duration_minutes INTEGER NOT NULL,
       type TEXT NOT NULL,
       title TEXT,
       task_id TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (date) REFERENCES daily_progress(date) ON DELETE CASCADE
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`
   );
 
@@ -37,34 +39,61 @@ async function ensureStudyTrackingTables(db: Database) {
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
     
-    // We get all dates that have ANY activity
-    const sessions = await db.query('SELECT * FROM study_sessions');
+    const academicYearId = request.nextUrl.searchParams.get('academic_year_id');
+
+    // We get all dates that have ANY activity scoped to the academic year
+    const sessions = academicYearId
+      ? await db.query('SELECT * FROM study_sessions WHERE academic_year_id = ?', [academicYearId])
+      : await db.query('SELECT * FROM study_sessions');
     
     // Aggregate dynamically
-    const tasksAgg = await db.query(`
-      SELECT date(completed_at) as dt, COUNT(*) as cnt 
-      FROM tasks 
-      WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL 
-      GROUP BY dt
-    `);
+    const tasksAgg = academicYearId
+      ? await db.query(`
+          SELECT date(completed_at) as dt, COUNT(*) as cnt 
+          FROM tasks 
+          WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL AND academic_year_id = ?
+          GROUP BY dt
+        `, [academicYearId])
+      : await db.query(`
+          SELECT date(completed_at) as dt, COUNT(*) as cnt 
+          FROM tasks 
+          WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL 
+          GROUP BY dt
+        `);
     
-    const topicsAgg = await db.query(`
-      SELECT date(completed_at) as dt, COUNT(*) as cnt 
-      FROM topics 
-      WHERE status IN ('completed', 'revised') AND completed_at IS NOT NULL 
-      GROUP BY dt
-    `);
+    const topicsAgg = academicYearId
+      ? await db.query(`
+          SELECT date(topics.completed_at) as dt, COUNT(*) as cnt 
+          FROM topics 
+          JOIN chapters ON topics.chapter_id = chapters.id 
+          JOIN subjects ON chapters.subject_id = subjects.id 
+          WHERE topics.status IN ('completed', 'revised') AND topics.completed_at IS NOT NULL AND subjects.academic_year_id = ?
+          GROUP BY dt
+        `, [academicYearId])
+      : await db.query(`
+          SELECT date(completed_at) as dt, COUNT(*) as cnt 
+          FROM topics 
+          WHERE status IN ('completed', 'revised') AND completed_at IS NOT NULL 
+          GROUP BY dt
+        `);
     
-    const revisionsAgg = await db.query(`
-      SELECT date(timestamp) as dt, COUNT(*) as cnt 
-      FROM activities 
-      WHERE type = 'topic-revised' 
-      GROUP BY dt
-    `);
+    const revisionsAgg = academicYearId
+      ? await db.query(`
+          SELECT date(timestamp) as dt, COUNT(*) as cnt 
+          FROM activities 
+          WHERE type = 'topic-revised' AND academic_year_id = ?
+          GROUP BY dt
+        `, [academicYearId])
+      : await db.query(`
+          SELECT date(timestamp) as dt, COUNT(*) as cnt 
+          FROM activities 
+          WHERE type = 'topic-revised' 
+          GROUP BY dt
+        `);
 
     // We need to merge all dates that appear in any of the above
     const dateMap = new Map<string, any>();
@@ -73,6 +102,7 @@ export async function GET(request: NextRequest) {
       if (!dateMap.has(dt)) {
         dateMap.set(dt, {
           date: dt,
+          academicYearId: academicYearId || undefined,
           studyMinutes: 0,
           topicsCompleted: 0,
           tasksCompleted: 0,
@@ -126,7 +156,9 @@ export async function GET(request: NextRequest) {
     });
     
     // Also include any explicitly stored dates in daily_progress just in case they have 0 sessions but are tracked
-    const progressRecords = await db.query('SELECT date FROM daily_progress');
+    const progressRecords = academicYearId
+      ? await db.query('SELECT date FROM daily_progress WHERE academic_year_id = ?', [academicYearId])
+      : await db.query('SELECT date FROM daily_progress');
     progressRecords.forEach((log: any) => {
       if (log.date) getOrInitDate(log.date);
     });
@@ -141,19 +173,21 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
     const body: any = await request.json();
     const { date, updates } = body;
+    const academicYearId = body.academicYearId || body.academic_year_id || 'year_3';
     
     if (!date) return errorResponse('date is required', 400);
     
-    const existing = await db.get('SELECT * FROM daily_progress WHERE date = ?', [date]);
+    const existing = await db.get(
+      'SELECT * FROM daily_progress WHERE date = ? AND academic_year_id = ?',
+      [date, academicYearId]
+    );
     
     if (existing) {
-      // For dynamic tracking, we don't strictly need to update topics/tasks/revisions counts here, 
-      // but we update them just in case the legacy data is useful or if study_minutes needs manual updates.
       await db.run(
         `UPDATE daily_progress SET 
           study_minutes = COALESCE(?, study_minutes),
@@ -161,18 +195,21 @@ export async function POST(request: NextRequest) {
           tasks_completed = COALESCE(?, tasks_completed),
           revisions_completed = COALESCE(?, revisions_completed),
           updated_at = CURRENT_TIMESTAMP
-        WHERE date = ?`,
-        [updates?.studyMinutes, updates?.topicsCompleted, updates?.tasksCompleted, updates?.revisionsCompleted, date]
+        WHERE date = ? AND academic_year_id = ?`,
+        [updates?.studyMinutes, updates?.topicsCompleted, updates?.tasksCompleted, updates?.revisionsCompleted, date, academicYearId]
       );
     } else {
       await db.run(
-        `INSERT INTO daily_progress (date, study_minutes, topics_completed, tasks_completed, revisions_completed)
-         VALUES (?, ?, ?, ?, ?)`,
-        [date, updates?.studyMinutes || 0, updates?.topicsCompleted || 0, updates?.tasksCompleted || 0, updates?.revisionsCompleted || 0]
+        `INSERT INTO daily_progress (date, academic_year_id, study_minutes, topics_completed, tasks_completed, revisions_completed)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [date, academicYearId, updates?.studyMinutes || 0, updates?.topicsCompleted || 0, updates?.tasksCompleted || 0, updates?.revisionsCompleted || 0]
       );
     }
     
-    const updated = await db.get('SELECT * FROM daily_progress WHERE date = ?', [date]);
+    const updated = await db.get(
+      'SELECT * FROM daily_progress WHERE date = ? AND academic_year_id = ?',
+      [date, academicYearId]
+    );
     return successResponse(updated, 200);
   } catch (err: any) {
     return errorResponse(err.message, 500);

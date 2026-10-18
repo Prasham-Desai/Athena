@@ -41,7 +41,7 @@ function snakeToCamel(obj: any) {
 
 export async function GET(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureSettingsTable(db);
     let settings = await db.get('SELECT * FROM user_settings WHERE id = ?', ['global']);
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const env = getEnv(request);
+    const env = await getEnv(request);
     const db = new Database(env.DB);
     await ensureSettingsTable(db);
     const body: any = await request.json();
