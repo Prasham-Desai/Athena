@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
     const db = new Database(env.DB);
     const academicYearId = request.nextUrl.searchParams.get('academic_year_id');
     const subjectId = request.nextUrl.searchParams.get('subject_id');
+    const chapterId = request.nextUrl.searchParams.get('chapter_id');
+    const topicId = request.nextUrl.searchParams.get('topic_id');
 
     let query = 'SELECT * FROM notes WHERE 1=1';
     const params: any[] = [];
@@ -24,6 +26,16 @@ export async function GET(request: NextRequest) {
     if (subjectId) {
       query += ' AND subject_id = ?';
       params.push(subjectId);
+    }
+
+    if (chapterId) {
+      query += ' AND chapter_id = ?';
+      params.push(chapterId);
+    }
+
+    if (topicId) {
+      query += ' AND topic_id = ?';
+      params.push(topicId);
     }
 
     query += ' ORDER BY created_at DESC';
@@ -49,6 +61,8 @@ export async function POST(request: NextRequest) {
     const academicYearId = formData.get('academic_year_id') as string | null;
     const title = (formData.get('title') as string | null)?.trim();
     const subtitle = (formData.get('subtitle') as string | null)?.trim() || null;
+    const chapterId = (formData.get('chapter_id') as string | null)?.trim() || null;
+    const topicId = (formData.get('topic_id') as string | null)?.trim() || null;
 
     if (!file) {
       return errorResponse('A document file (.pdf, .jpg, .jpeg, .png) is required', 400);
@@ -117,14 +131,16 @@ export async function POST(request: NextRequest) {
     // Insert record in D1
     await db.run(
       `INSERT INTO notes (
-        id, subject_id, academic_year_id, title, subtitle,
-        file_name, file_type, mime_type, file_size, kv_key,
+        id, subject_id, academic_year_id, chapter_id, topic_id,
+        title, subtitle, file_name, file_type, mime_type, file_size, kv_key,
         page_count, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         noteId,
         subjectId,
         academicYearId,
+        chapterId,
+        topicId,
         title,
         subtitle,
         originalName,

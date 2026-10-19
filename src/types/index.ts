@@ -258,6 +258,8 @@ export interface NoteDocument {
   id: string;
   subject_id: string;
   academic_year_id: string;
+  chapter_id?: string | null;
+  topic_id?: string | null;
   title: string;
   subtitle: string | null;
   file_name: string;

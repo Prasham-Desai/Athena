@@ -11,7 +11,7 @@ interface NotesState {
 
   fetchNotes: (academicYearId?: string, subjectId?: string) => Promise<NoteDocument[]>;
   uploadNote: (formData: FormData) => Promise<NoteDocument>;
-  updateNote: (id: string, updates: { title?: string; subtitle?: string }) => Promise<NoteDocument>;
+  updateNote: (id: string, updates: { title?: string; subtitle?: string; chapter_id?: string | null; topic_id?: string | null }) => Promise<NoteDocument>;
   deleteNote: (id: string) => Promise<void>;
   setActiveSubjectId: (subjectId: string | null) => void;
 }
@@ -79,7 +79,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
     }
   },
 
-  updateNote: async (id: string, updates: { title?: string; subtitle?: string }) => {
+  updateNote: async (id: string, updates: { title?: string; subtitle?: string; chapter_id?: string | null; topic_id?: string | null }) => {
     try {
       const res = await fetch(`/api/notes/${id}`, {
         method: 'PATCH',

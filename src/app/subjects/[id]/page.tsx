@@ -35,6 +35,7 @@ import {
   Headphones,
   type LucideIcon,
   Tag,
+  FileText,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useActivityStore } from '@/store/activity-store';
@@ -1045,6 +1046,13 @@ export default function SubjectDetailPage() {
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-500 text-xs font-medium">
               ◐ {stats.inProgress} in progress
             </span>
+            <Link
+              href={`/notes?subjectId=${subject.id}`}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-400 text-xs font-semibold border border-indigo-500/30 transition shadow-sm"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Subject Notes</span>
+            </Link>
           </div>
 
           {/* Progress ring */}

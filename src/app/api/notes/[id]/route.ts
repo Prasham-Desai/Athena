@@ -61,6 +61,16 @@ export async function PATCH(
       values.push(body.page_count);
     }
 
+    if (body.chapter_id !== undefined) {
+      updates.push('chapter_id = ?');
+      values.push(body.chapter_id ? body.chapter_id.trim() : null);
+    }
+
+    if (body.topic_id !== undefined) {
+      updates.push('topic_id = ?');
+      values.push(body.topic_id ? body.topic_id.trim() : null);
+    }
+
     if (updates.length === 0) {
       return errorResponse('No valid fields to update', 400);
     }

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, X, Repeat } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PlaylistItem {
   topicId: string;
@@ -18,6 +19,13 @@ interface AudioAutoplayBarProps {
   startIndex?: number;
 }
 
+const PLAYBACK_SPEEDS = [1, 1.5, 2, 0.5] as const;
+type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
+
+function formatSpeed(speed: number): string {
+  return `${speed}x`;
+}
+
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
@@ -31,6 +39,10 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
   const [duration, setDuration] = useState(0);
   const [showComplete, setShowComplete] = useState(false);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+
+  // Playback speed state (1x -> 1.5x -> 2x -> 0.5x -> 1x)
+  const [playbackSpeed, setPlaybackSpeed] = useState<PlaybackSpeed>(1);
+  const playbackSpeedRef = useRef<PlaybackSpeed>(1);
 
   // We need a ref for isAutoPlayEnabled to use inside the closure
   const isAutoPlayRef = useRef(isAutoPlayEnabled);
@@ -58,8 +70,19 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
         audio.pause();
       }
 
+      // Reset playback speed to 1x for a new note
+      setPlaybackSpeed(1);
+      playbackSpeedRef.current = 1;
+      audio.playbackRate = 1;
+
       audio.src = `/api/audio-notes/${track.noteId}`;
       audio.load();
+
+      audio.onplay = () => {
+        if (audio) {
+          audio.playbackRate = playbackSpeedRef.current;
+        }
+      };
 
       audio.onloadedmetadata = () => {
         // Only update if duration is actually valid and track.duration is missing
@@ -142,9 +165,24 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      audioRef.current.playbackRate = playbackSpeedRef.current;
       audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   }, [isPlaying]);
+
+  // Instagram-style speed cycle: 1x -> 1.5x -> 2x -> 0.5x -> 1x
+  const handleToggleSpeed = useCallback(() => {
+    const currIndex = PLAYBACK_SPEEDS.indexOf(playbackSpeedRef.current);
+    const nextIndex = (currIndex + 1) % PLAYBACK_SPEEDS.length;
+    const nextSpeed = PLAYBACK_SPEEDS[nextIndex];
+
+    setPlaybackSpeed(nextSpeed);
+    playbackSpeedRef.current = nextSpeed;
+
+    if (audioRef.current) {
+      audioRef.current.playbackRate = nextSpeed;
+    }
+  }, []);
 
   const handlePrev = useCallback(() => {
     if (currentIndex > 0) {
@@ -176,7 +214,10 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
   const handleClose = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.playbackRate = 1;
     }
+    setPlaybackSpeed(1);
+    playbackSpeedRef.current = 1;
     setIsPlaying(false);
     onClose();
   }, [onClose]);
@@ -317,10 +358,27 @@ export function AudioAutoplayBar({ playlist, isActive, onClose, startIndex = 0 }
                   <SkipForward className="w-5 h-5" />
                 </button>
 
+                {/* Instagram-Style Audio Playback Speed Control */}
+                <button
+                  type="button"
+                  onClick={handleToggleSpeed}
+                  className={cn(
+                    'flex items-center justify-center font-bold text-xs rounded-xl transition-all select-none active:scale-95',
+                    'min-w-[2.25rem] sm:min-w-[2.5rem] h-9 sm:h-10 px-2 sm:px-2.5',
+                    playbackSpeed === 1
+                      ? 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
+                      : 'text-[hsl(var(--primary))] bg-[hsl(var(--primary))/0.15] border border-[hsl(var(--primary))/0.3] hover:bg-[hsl(var(--primary))/0.22] font-black shadow-sm'
+                  )}
+                  title={`Playback speed: ${formatSpeed(playbackSpeed)} (click to cycle: 1x → 1.5x → 2x → 0.5x)`}
+                  aria-label={`Playback speed: ${formatSpeed(playbackSpeed)}`}
+                >
+                  <span className="tabular-nums tracking-tight">{formatSpeed(playbackSpeed)}</span>
+                </button>
+
                 {/* Close */}
                 <button
                   onClick={handleClose}
-                  className="flex items-center justify-center w-8 h-8 rounded-xl ml-2
+                  className="flex items-center justify-center w-8 h-8 rounded-xl ml-1 sm:ml-2
                              text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
                              hover:bg-[hsl(var(--muted))] transition-colors"
                 >
