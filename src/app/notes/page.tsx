@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText,
@@ -11,7 +11,6 @@ import {
   Edit3,
   Download,
   BookOpen,
-  Calendar,
   ChevronRight,
   ArrowLeft,
   Layers,
@@ -21,9 +20,7 @@ import {
   Image as ImageIcon,
   FolderOpen,
   Plus,
-  Bookmark,
   CheckCircle2,
-  ExternalLink,
   ChevronDown,
   Clock,
   Tag,
@@ -60,6 +57,30 @@ export default function NotesPage() {
   // Modals & Document Viewer
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [viewerNote, setViewerNote] = useState<NoteDocument | null>(null);
+
+  // Type-filter dropdown state
+  const [typeFilterOpen, setTypeFilterOpen] = useState<boolean>(false);
+  const typeFilterRef = useRef<HTMLDivElement>(null);
+
+  // Close type-filter dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (typeFilterRef.current && !typeFilterRef.current.contains(e.target as Node)) {
+        setTypeFilterOpen(false);
+      }
+    }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setTypeFilterOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Delete Confirmation Modal
   const [deleteTarget, setDeleteTarget] = useState<NoteDocument | null>(null);
@@ -694,176 +715,57 @@ export default function NotesPage() {
             </div>
           )}
 
-          {/* Chapter Filter Bar (Horizontal scrollable chips) */}
-          {activeSubject && activeSubject.chapters?.length > 0 && (
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between text-xs font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Filter by Chapter</span>
-                </span>
-                {selectedChapterId !== 'all' && (
-                  <button
-                    onClick={() => {
-                      setSelectedChapterId('all');
-                      setSelectedTopicId('all');
-                    }}
-                    className="text-indigo-400 hover:underline capitalize"
-                  >
-                    Reset Filter
-                  </button>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                {/* 'All Chapters' Chip */}
-                <button
-                  onClick={() => {
-                    setSelectedChapterId('all');
-                    setSelectedTopicId('all');
-                  }}
-                  className={cn(
-                    'px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border shrink-0',
-                    selectedChapterId === 'all'
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                      : 'bg-[hsl(var(--card))] hover:bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))]'
-                  )}
-                >
-                  All Chapters ({notes.filter((n) => n.subject_id === activeSubject.id).length})
-                </button>
-
-                {/* Individual Chapters */}
-                {activeSubject.chapters.map((chap, idx) => {
-                  const count = noteCountByChapter[chap.id] || 0;
-                  const isSelected = selectedChapterId === chap.id;
-
-                  return (
-                    <button
-                      key={chap.id}
-                      onClick={() => {
-                        setSelectedChapterId(chap.id);
-                        setSelectedTopicId('all');
-                      }}
-                      className={cn(
-                        'flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border shrink-0',
-                        isSelected
-                          ? 'bg-slate-900 text-white border-slate-700 shadow-sm dark:bg-white dark:text-slate-950 dark:border-white'
-                          : 'bg-[hsl(var(--card))] hover:bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border-[hsl(var(--border))]'
-                      )}
-                    >
-                      <span className="truncate max-w-[200px]">{chap.name}</span>
-                      {count > 0 && (
-                        <span
-                          className={cn(
-                            'px-1.5 py-0.2 rounded-full text-[10px] font-mono',
-                            isSelected
-                              ? 'bg-white/20 dark:bg-black/20 text-inherit'
-                              : 'bg-indigo-500/10 text-indigo-400'
-                          )}
-                        >
-                          {count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Topic Filter Chips (if a specific chapter with topics is selected) */}
-              {selectedChapterId !== 'all' && (
-                (() => {
-                  const activeChap = activeSubject.chapters.find((c) => c.id === selectedChapterId);
-                  if (!activeChap || !activeChap.topics || activeChap.topics.length === 0) return null;
-
-                  return (
-                    <div className="pt-1 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                      <span className="text-[11px] font-semibold text-[hsl(var(--muted-foreground))] shrink-0 mr-1 flex items-center gap-1">
-                        <Tag className="w-3 h-3 text-indigo-400" />
-                        <span>Topic:</span>
-                      </span>
-
-                      <button
-                        onClick={() => setSelectedTopicId('all')}
-                        className={cn(
-                          'px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all shrink-0',
-                          selectedTopicId === 'all'
-                            ? 'bg-indigo-500/20 text-indigo-400 font-bold border border-indigo-500/30'
-                            : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                        )}
-                      >
-                        All Topics
-                      </button>
-
-                      {activeChap.topics.map((top) => (
-                        <button
-                          key={top.id}
-                          onClick={() => setSelectedTopicId(top.id)}
-                          className={cn(
-                            'px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all shrink-0 max-w-[220px] truncate',
-                            selectedTopicId === top.id
-                              ? 'bg-indigo-500/20 text-indigo-400 font-bold border border-indigo-500/30'
-                              : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                          )}
-                        >
-                          {top.name}
-                        </button>
-                      ))}
-                    </div>
-                  );
-                })()
-              )}
-            </div>
-          )}
-
-          {/* Search, Format Filter & Sort Toolbar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-[hsl(var(--muted-foreground))] absolute left-3.5 top-1/2 -translate-y-1/2" />
+          {/* Search, Format Filter & Sort Toolbar — all on one row */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+            {/* Search bar */}
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-[hsl(var(--muted-foreground))] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search in ${activeSubject?.name || 'subject'} notes...`}
-                className="w-full bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl pl-9.5 pr-4 py-2 text-xs sm:text-sm text-[hsl(var(--foreground))] placeholder-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm"
+                className="w-full bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl pl-9 pr-4 py-2 text-xs sm:text-sm text-[hsl(var(--foreground))] placeholder-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm"
               />
             </div>
 
-            <div className="flex items-center gap-2 self-end sm:self-auto">
-              {/* Type Filter */}
-              <div className="flex items-center bg-[hsl(var(--card))] border border-[hsl(var(--border))] p-1 rounded-xl text-xs">
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Type-filter dropdown */}
+              <div ref={typeFilterRef} className="relative">
                 <button
-                  onClick={() => setTypeFilter('all')}
-                  className={cn(
-                    'px-2.5 py-1 rounded-lg font-medium transition-colors',
-                    typeFilter === 'all'
-                      ? 'bg-indigo-600 text-white font-semibold'
-                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                  )}
+                  onClick={() => setTypeFilterOpen((v) => !v)}
+                  className="flex items-center gap-1.5 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl px-3 py-2 text-xs font-medium text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm transition-colors"
+                  aria-haspopup="listbox"
+                  aria-expanded={typeFilterOpen}
                 >
-                  All
+                  <Filter className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
+                  <span>
+                    {typeFilter === 'all' ? 'All' : typeFilter === 'pdf' ? 'PDFs' : 'Images'}
+                  </span>
+                  <ChevronDown className={cn('w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] transition-transform', typeFilterOpen && 'rotate-180')} />
                 </button>
-                <button
-                  onClick={() => setTypeFilter('pdf')}
-                  className={cn(
-                    'px-2.5 py-1 rounded-lg font-medium transition-colors',
-                    typeFilter === 'pdf'
-                      ? 'bg-indigo-600 text-white font-semibold'
-                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                  )}
-                >
-                  PDFs
-                </button>
-                <button
-                  onClick={() => setTypeFilter('image')}
-                  className={cn(
-                    'px-2.5 py-1 rounded-lg font-medium transition-colors',
-                    typeFilter === 'image'
-                      ? 'bg-indigo-600 text-white font-semibold'
-                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                  )}
-                >
-                  Images
-                </button>
+
+                {typeFilterOpen && (
+                  <div className="absolute right-0 top-full mt-1.5 w-36 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl shadow-xl overflow-hidden z-20 py-1" role="listbox">
+                    {(['all', 'pdf', 'image'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        role="option"
+                        aria-selected={typeFilter === opt}
+                        onClick={() => { setTypeFilter(opt); setTypeFilterOpen(false); }}
+                        className={cn(
+                          'w-full text-left px-3.5 py-2 text-xs font-medium transition-colors flex items-center gap-2',
+                          typeFilter === opt
+                            ? 'bg-indigo-600/15 text-indigo-400 font-semibold'
+                            : 'text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
+                        )}
+                      >
+                        {typeFilter === opt && <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+                        {opt === 'all' ? 'All' : opt === 'pdf' ? 'PDFs' : 'Images'}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Sort Selector */}

@@ -25,12 +25,11 @@ import {
   CheckCheck,
   Loader2,
   AlertCircle,
-  Menu,
   X,
-  Sliders,
   Layers,
   Edit2,
-  Eye,
+  BookOpen,
+  Columns2,
 } from 'lucide-react';
 import type { NoteDocument, AnnotationItem, AnnotationPoint, AnnotationToolType } from '@/types';
 import { cn } from '@/lib/utils';
@@ -85,11 +84,36 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
 
+  // View mode: single page or two pages side-by-side
+  const [viewMode, setViewMode] = useState<'single' | 'double'>('single');
+
+  // Screen responsiveness: automatically fall back to single page mode on narrow screens
+  const [isWideScreen, setIsWideScreen] = useState<boolean>(true);
+  useEffect(() => {
+    function handleResize() {
+      setIsWideScreen(window.innerWidth >= 768);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const effectiveViewMode = isPdf && numPages > 1 && viewMode === 'double' && isWideScreen ? 'double' : 'single';
+
+  // Second page canvas refs (for two-page mode)
+  const docCanvas2Ref = useRef<HTMLCanvasElement>(null);
+  const drawCanvas2Ref = useRef<HTMLCanvasElement>(null);
+  const renderTask2Ref = useRef<any>(null);
+
+  // Active page being annotated/drawn on (currentPage or currentPage + 1)
+  const activeDrawingPageRef = useRef<number>(1);
+
   // Text tool prompt modal state
-  const [textModal, setTextModal] = useState<{ x: number; y: number; isOpen: boolean }>({
+  const [textModal, setTextModal] = useState<{ x: number; y: number; isOpen: boolean; page: number }>({
     x: 0,
     y: 0,
     isOpen: false,
+    page: 1,
   });
   const [textContent, setTextContent] = useState<string>('');
   const [textSize, setTextSize] = useState<number>(18);
@@ -224,8 +248,42 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
     };
   }, [isPdf, fileUrl]);
 
+  // Reset viewport scroll to top whenever page changes
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+    }
+  }, [currentPage]);
+
+  // Keyboard navigation shortcuts: Arrow keys / PageUp / PageDown / Escape
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (textModal.isOpen || isRenameOpen) return;
+      const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea') return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        const step = effectiveViewMode === 'double' ? 2 : 1;
+        setCurrentPage((p) => Math.max(1, p - step));
+      } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        const step = effectiveViewMode === 'double' ? 2 : 1;
+        setCurrentPage((p) => Math.min(numPages, p + step));
+      } else if (e.key === 'Escape') {
+        if (isSidebarOpen) {
+          setIsSidebarOpen(false);
+        } else {
+          onClose();
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [effectiveViewMode, numPages, isSidebarOpen, onClose, textModal.isOpen, isRenameOpen]);
+
   // -------------------------------------------------------------------------
-  // 3. Render Page (PDF or Image) onto docCanvasRef
+  // 3. Render Page (PDF or Image) onto docCanvasRef & docCanvas2Ref
   // -------------------------------------------------------------------------
   const renderDocumentPage = useCallback(async () => {
     const docCanvas = docCanvasRef.current;
@@ -235,7 +293,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
     if (isPdf) {
       if (!pdfDoc) return;
       try {
-        // Cancel existing render if any
+        // Cancel existing renders if any
         if (renderTaskRef.current) {
           try {
             renderTaskRef.current.cancel();
@@ -243,32 +301,70 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             // ignore cancel error
           }
         }
+        if (renderTask2Ref.current) {
+          try {
+            renderTask2Ref.current.cancel();
+          } catch (e) {
+            // ignore cancel error
+          }
+        }
 
-        const page = await pdfDoc.getPage(currentPage);
-        const viewport = page.getViewport({ scale: zoomScale * 1.5 });
+        // Render Page 1 (currentPage)
+        const page1 = await pdfDoc.getPage(currentPage);
+        const viewport1 = page1.getViewport({ scale: zoomScale * 1.5 });
 
         // Set dimensions (accounting for devicePixelRatio for ultra-sharp text)
-        docCanvas.width = viewport.width;
-        docCanvas.height = viewport.height;
-        docCanvas.style.width = `${viewport.width / 1.5}px`;
-        docCanvas.style.height = `${viewport.height / 1.5}px`;
+        docCanvas.width = viewport1.width;
+        docCanvas.height = viewport1.height;
+        docCanvas.style.width = `${viewport1.width / 1.5}px`;
+        docCanvas.style.height = `${viewport1.height / 1.5}px`;
 
-        drawCanvas.width = viewport.width;
-        drawCanvas.height = viewport.height;
-        drawCanvas.style.width = `${viewport.width / 1.5}px`;
-        drawCanvas.style.height = `${viewport.height / 1.5}px`;
+        drawCanvas.width = viewport1.width;
+        drawCanvas.height = viewport1.height;
+        drawCanvas.style.width = `${viewport1.width / 1.5}px`;
+        drawCanvas.style.height = `${viewport1.height / 1.5}px`;
 
-        const ctx = docCanvas.getContext('2d');
-        if (!ctx) return;
+        const ctx1 = docCanvas.getContext('2d');
+        if (ctx1) {
+          const renderContext1 = {
+            canvasContext: ctx1,
+            viewport: viewport1,
+          };
+          const task1 = page1.render(renderContext1);
+          renderTaskRef.current = task1;
+          await task1.promise;
+        }
 
-        const renderContext = {
-          canvasContext: ctx,
-          viewport: viewport,
-        };
+        // Render Page 2 if double mode is active and next page exists
+        if (effectiveViewMode === 'double' && currentPage < numPages) {
+          const docCanvas2 = docCanvas2Ref.current;
+          const drawCanvas2 = drawCanvas2Ref.current;
+          if (docCanvas2 && drawCanvas2) {
+            const page2 = await pdfDoc.getPage(currentPage + 1);
+            const viewport2 = page2.getViewport({ scale: zoomScale * 1.5 });
 
-        const task = page.render(renderContext);
-        renderTaskRef.current = task;
-        await task.promise;
+            docCanvas2.width = viewport2.width;
+            docCanvas2.height = viewport2.height;
+            docCanvas2.style.width = `${viewport2.width / 1.5}px`;
+            docCanvas2.style.height = `${viewport2.height / 1.5}px`;
+
+            drawCanvas2.width = viewport2.width;
+            drawCanvas2.height = viewport2.height;
+            drawCanvas2.style.width = `${viewport2.width / 1.5}px`;
+            drawCanvas2.style.height = `${viewport2.height / 1.5}px`;
+
+            const ctx2 = docCanvas2.getContext('2d');
+            if (ctx2) {
+              const renderContext2 = {
+                canvasContext: ctx2,
+                viewport: viewport2,
+              };
+              const task2 = page2.render(renderContext2);
+              renderTask2Ref.current = task2;
+              await task2.promise;
+            }
+          }
+        }
       } catch (err: any) {
         if (err?.name !== 'RenderingCancelledException') {
           console.error('Error rendering PDF page:', err);
@@ -300,29 +396,48 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         }
       };
     }
-  }, [isPdf, pdfDoc, currentPage, zoomScale, fileUrl]);
+  }, [isPdf, pdfDoc, currentPage, zoomScale, fileUrl, effectiveViewMode, numPages]);
 
   // -------------------------------------------------------------------------
-  // 4. Draw page annotations onto drawCanvasRef
+  // 4. Draw page annotations onto drawCanvasRef & drawCanvas2Ref
   // -------------------------------------------------------------------------
   const redrawAnnotations = useCallback(() => {
+    // Redraw Page 1
     const drawCanvas = drawCanvasRef.current;
-    if (!drawCanvas) return;
-    const ctx = drawCanvas.getContext('2d');
-    if (!ctx) return;
+    if (drawCanvas) {
+      const ctx = drawCanvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        const items = pageAnnotations[currentPage] || [];
+        const w = drawCanvas.width;
+        const h = drawCanvas.height;
 
-    ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-
-    const items = pageAnnotations[currentPage] || [];
-    const w = drawCanvas.width;
-    const h = drawCanvas.height;
-
-    for (const item of items) {
-      renderAnnotationItem(ctx, item, w, h);
+        for (const item of items) {
+          renderAnnotationItem(ctx, item, w, h);
+        }
+      }
     }
-  }, [currentPage, pageAnnotations]);
 
-  // Trigger render on page / zoom change
+    // Redraw Page 2 (if in double mode)
+    if (effectiveViewMode === 'double' && currentPage < numPages) {
+      const drawCanvas2 = drawCanvas2Ref.current;
+      if (drawCanvas2) {
+        const ctx2 = drawCanvas2.getContext('2d');
+        if (ctx2) {
+          ctx2.clearRect(0, 0, drawCanvas2.width, drawCanvas2.height);
+          const items2 = pageAnnotations[currentPage + 1] || [];
+          const w2 = drawCanvas2.width;
+          const h2 = drawCanvas2.height;
+
+          for (const item of items2) {
+            renderAnnotationItem(ctx2, item, w2, h2);
+          }
+        }
+      }
+    }
+  }, [currentPage, pageAnnotations, effectiveViewMode, numPages]);
+
+  // Trigger render on page / zoom / viewMode change
   useEffect(() => {
     renderDocumentPage();
   }, [renderDocumentPage]);
@@ -489,15 +604,15 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
   // 7. Push Annotation & History Stack
   // -------------------------------------------------------------------------
   const pushNewAnnotation = useCallback(
-    (item: AnnotationItem) => {
-      const currentList = pageAnnotations[currentPage] || [];
+    (item: AnnotationItem, targetPage: number = activeDrawingPageRef.current) => {
+      const currentList = pageAnnotations[targetPage] || [];
       const updatedList = [...currentList, item];
 
       // Update history for Undo/Redo
-      const curHistory = history[currentPage] || { past: [], future: [] };
+      const curHistory = history[targetPage] || { past: [], future: [] };
       setHistory((prev) => ({
         ...prev,
-        [currentPage]: {
+        [targetPage]: {
           past: [...curHistory.past, currentList],
           future: [],
         },
@@ -506,26 +621,36 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       // Update annotations state
       setPageAnnotations((prev) => ({
         ...prev,
-        [currentPage]: updatedList,
+        [targetPage]: updatedList,
       }));
 
       // Autosave
-      triggerAutosave(currentPage, updatedList);
+      triggerAutosave(targetPage, updatedList);
     },
-    [currentPage, pageAnnotations, history, triggerAutosave]
+    [pageAnnotations, history, triggerAutosave]
   );
 
   const handleUndo = useCallback(() => {
-    const curHistory = history[currentPage];
+    const activePage = activeDrawingPageRef.current;
+    const pageToUndo =
+      (history[activePage]?.past?.length || 0) > 0
+        ? activePage
+        : (history[currentPage]?.past?.length || 0) > 0
+        ? currentPage
+        : effectiveViewMode === 'double' && (history[currentPage + 1]?.past?.length || 0) > 0
+        ? currentPage + 1
+        : currentPage;
+
+    const curHistory = history[pageToUndo];
     if (!curHistory || curHistory.past.length === 0) return;
 
     const previousState = curHistory.past[curHistory.past.length - 1];
     const newPast = curHistory.past.slice(0, curHistory.past.length - 1);
-    const currentList = pageAnnotations[currentPage] || [];
+    const currentList = pageAnnotations[pageToUndo] || [];
 
     setHistory((prev) => ({
       ...prev,
-      [currentPage]: {
+      [pageToUndo]: {
         past: newPast,
         future: [currentList, ...curHistory.future],
       },
@@ -533,23 +658,33 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
     setPageAnnotations((prev) => ({
       ...prev,
-      [currentPage]: previousState,
+      [pageToUndo]: previousState,
     }));
 
-    triggerAutosave(currentPage, previousState);
-  }, [currentPage, history, pageAnnotations, triggerAutosave]);
+    triggerAutosave(pageToUndo, previousState);
+  }, [currentPage, effectiveViewMode, history, pageAnnotations, triggerAutosave]);
 
   const handleRedo = useCallback(() => {
-    const curHistory = history[currentPage];
+    const activePage = activeDrawingPageRef.current;
+    const pageToRedo =
+      (history[activePage]?.future?.length || 0) > 0
+        ? activePage
+        : (history[currentPage]?.future?.length || 0) > 0
+        ? currentPage
+        : effectiveViewMode === 'double' && (history[currentPage + 1]?.future?.length || 0) > 0
+        ? currentPage + 1
+        : currentPage;
+
+    const curHistory = history[pageToRedo];
     if (!curHistory || curHistory.future.length === 0) return;
 
     const nextState = curHistory.future[0];
     const newFuture = curHistory.future.slice(1);
-    const currentList = pageAnnotations[currentPage] || [];
+    const currentList = pageAnnotations[pageToRedo] || [];
 
     setHistory((prev) => ({
       ...prev,
-      [currentPage]: {
+      [pageToRedo]: {
         past: [...curHistory.past, currentList],
         future: newFuture,
       },
@@ -557,20 +692,25 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
     setPageAnnotations((prev) => ({
       ...prev,
-      [currentPage]: nextState,
+      [pageToRedo]: nextState,
     }));
 
-    triggerAutosave(currentPage, nextState);
-  }, [currentPage, history, pageAnnotations, triggerAutosave]);
+    triggerAutosave(pageToRedo, nextState);
+  }, [currentPage, effectiveViewMode, history, pageAnnotations, triggerAutosave]);
 
   const handleClearPage = useCallback(() => {
-    if (confirm('Clear all annotations on this page?')) {
-      const currentList = pageAnnotations[currentPage] || [];
-      const curHistory = history[currentPage] || { past: [], future: [] };
+    const pageToClear =
+      effectiveViewMode === 'double' && activeDrawingPageRef.current === currentPage + 1
+        ? currentPage + 1
+        : currentPage;
+
+    if (confirm(`Clear all annotations on Page ${pageToClear}?`)) {
+      const currentList = pageAnnotations[pageToClear] || [];
+      const curHistory = history[pageToClear] || { past: [], future: [] };
 
       setHistory((prev) => ({
         ...prev,
-        [currentPage]: {
+        [pageToClear]: {
           past: [...curHistory.past, currentList],
           future: [],
         },
@@ -578,19 +718,19 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
       setPageAnnotations((prev) => ({
         ...prev,
-        [currentPage]: [],
+        [pageToClear]: [],
       }));
 
-      triggerAutosave(currentPage, []);
+      triggerAutosave(pageToClear, []);
     }
-  }, [currentPage, pageAnnotations, history, triggerAutosave]);
+  }, [currentPage, effectiveViewMode, pageAnnotations, history, triggerAutosave]);
 
   // -------------------------------------------------------------------------
   // 8. Eraser tool: Remove strokes / shapes on click or swipe
   // -------------------------------------------------------------------------
   const eraseNearPoint = useCallback(
-    (normX: number, normY: number) => {
-      const items = pageAnnotations[currentPage] || [];
+    (normX: number, normY: number, targetPage: number = activeDrawingPageRef.current) => {
+      const items = pageAnnotations[targetPage] || [];
       if (items.length === 0) return;
 
       const threshold = 0.035; // Normalized hit detection threshold
@@ -650,10 +790,10 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       }
 
       if (erasedAny) {
-        const curHistory = history[currentPage] || { past: [], future: [] };
+        const curHistory = history[targetPage] || { past: [], future: [] };
         setHistory((prev) => ({
           ...prev,
-          [currentPage]: {
+          [targetPage]: {
             past: [...curHistory.past, items],
             future: [],
           },
@@ -661,21 +801,20 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
         setPageAnnotations((prev) => ({
           ...prev,
-          [currentPage]: remaining,
+          [targetPage]: remaining,
         }));
 
-        triggerAutosave(currentPage, remaining);
+        triggerAutosave(targetPage, remaining);
       }
     },
-    [currentPage, pageAnnotations, history, triggerAutosave]
+    [pageAnnotations, history, triggerAutosave]
   );
 
   // -------------------------------------------------------------------------
   // 9. Pointer Event Handlers for Drawing & Shapes
   // -------------------------------------------------------------------------
   const getCanvasCoords = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    const canvas = drawCanvasRef.current;
-    if (!canvas) return { x: 0, y: 0, normX: 0, normY: 0 };
+    const canvas = e.currentTarget;
     const rect = canvas.getBoundingClientRect();
     const clientX = e.clientX - rect.left;
     const clientY = e.clientY - rect.top;
@@ -686,18 +825,22 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
     return { x: clientX, y: clientY, normX, normY };
   };
 
-  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const handlePointerDown = (
+    e: React.PointerEvent<HTMLCanvasElement>,
+    targetPage: number = currentPage
+  ) => {
     e.currentTarget.setPointerCapture(e.pointerId);
+    activeDrawingPageRef.current = targetPage;
     const { normX, normY } = getCanvasCoords(e);
 
     if (activeTool === 'eraser') {
       isDrawingRef.current = true;
-      eraseNearPoint(normX, normY);
+      eraseNearPoint(normX, normY, targetPage);
       return;
     }
 
     if (activeTool === 'text') {
-      setTextModal({ x: normX, y: normY, isOpen: true });
+      setTextModal({ x: normX, y: normY, isOpen: true, page: targetPage });
       return;
     }
 
@@ -712,22 +855,23 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawingRef.current) return;
     const { normX, normY } = getCanvasCoords(e);
+    const targetPage = activeDrawingPageRef.current;
 
     if (activeTool === 'eraser') {
-      eraseNearPoint(normX, normY);
+      eraseNearPoint(normX, normY, targetPage);
       return;
     }
+
+    const targetCanvas =
+      targetPage === currentPage ? drawCanvasRef.current : drawCanvas2Ref.current;
+    if (!targetCanvas) return;
+    const ctx = targetCanvas.getContext('2d');
+    if (!ctx) return;
 
     if (activeTool === 'pen' || activeTool === 'highlighter') {
       currentPointsRef.current.push({ x: normX, y: normY });
 
       // Immediate visual preview of the active freehand stroke
-      const drawCanvas = drawCanvasRef.current;
-      if (!drawCanvas) return;
-      const ctx = drawCanvas.getContext('2d');
-      if (!ctx) return;
-
-      // Redraw existing plus current in-flight stroke
       redrawAnnotations();
       renderAnnotationItem(
         ctx,
@@ -739,19 +883,14 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           strokeWidth: activeTool === 'pen' ? penWidth : highlighterWidth,
           opacity: activeTool === 'pen' ? 1.0 : 0.35,
         },
-        drawCanvas.width,
-        drawCanvas.height
+        targetCanvas.width,
+        targetCanvas.height
       );
       return;
     }
 
     // Dynamic shape preview while dragging
     if (['rect', 'circle', 'line', 'arrow'].includes(activeTool) && startPointRef.current) {
-      const drawCanvas = drawCanvasRef.current;
-      if (!drawCanvas) return;
-      const ctx = drawCanvas.getContext('2d');
-      if (!ctx) return;
-
       redrawAnnotations();
 
       const start = startPointRef.current;
@@ -800,27 +939,31 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         };
       }
 
-      renderAnnotationItem(ctx, tempItem, drawCanvas.width, drawCanvas.height);
+      renderAnnotationItem(ctx, tempItem, targetCanvas.width, targetCanvas.height);
     }
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawingRef.current) return;
     isDrawingRef.current = false;
+    const targetPage = activeDrawingPageRef.current;
     const { normX, normY } = getCanvasCoords(e);
 
     if (activeTool === 'eraser') return;
 
     if (activeTool === 'pen' || activeTool === 'highlighter') {
       if (currentPointsRef.current.length > 0) {
-        pushNewAnnotation({
-          id: `anno_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-          type: activeTool,
-          points: [...currentPointsRef.current],
-          color: activeTool === 'pen' ? selectedColor : highlighterColor,
-          strokeWidth: activeTool === 'pen' ? penWidth : highlighterWidth,
-          opacity: activeTool === 'pen' ? 1.0 : 0.35,
-        });
+        pushNewAnnotation(
+          {
+            id: `anno_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+            type: activeTool,
+            points: [...currentPointsRef.current],
+            color: activeTool === 'pen' ? selectedColor : highlighterColor,
+            strokeWidth: activeTool === 'pen' ? penWidth : highlighterWidth,
+            opacity: activeTool === 'pen' ? 1.0 : 0.35,
+          },
+          targetPage
+        );
       }
       currentPointsRef.current = [];
       return;
@@ -836,17 +979,20 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         const width = Math.abs(normX - start.x);
         const height = Math.abs(normY - start.y);
         if (width > 0.005 || height > 0.005) {
-          pushNewAnnotation({
-            id: `anno_${Date.now()}`,
-            type: 'rect',
-            x,
-            y,
-            width,
-            height,
-            color: selectedColor,
-            strokeWidth: penWidth,
-            opacity: 1.0,
-          });
+          pushNewAnnotation(
+            {
+              id: `anno_${Date.now()}`,
+              type: 'rect',
+              x,
+              y,
+              width,
+              height,
+              color: selectedColor,
+              strokeWidth: penWidth,
+              opacity: 1.0,
+            },
+            targetPage
+          );
         }
       } else if (activeTool === 'circle') {
         const x = Math.min(start.x, normX);
@@ -854,29 +1000,35 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         const width = Math.abs(normX - start.x);
         const height = Math.abs(normY - start.y);
         if (width > 0.005 || height > 0.005) {
-          pushNewAnnotation({
-            id: `anno_${Date.now()}`,
-            type: 'circle',
-            x,
-            y,
-            width,
-            height,
-            color: selectedColor,
-            strokeWidth: penWidth,
-            opacity: 1.0,
-          });
+          pushNewAnnotation(
+            {
+              id: `anno_${Date.now()}`,
+              type: 'circle',
+              x,
+              y,
+              width,
+              height,
+              color: selectedColor,
+              strokeWidth: penWidth,
+              opacity: 1.0,
+            },
+            targetPage
+          );
         }
       } else {
         const dist = Math.hypot(normX - start.x, normY - start.y);
         if (dist > 0.01) {
-          pushNewAnnotation({
-            id: `anno_${Date.now()}`,
-            type: activeTool,
-            points: [start, { x: normX, y: normY }],
-            color: selectedColor,
-            strokeWidth: penWidth,
-            opacity: 1.0,
-          });
+          pushNewAnnotation(
+            {
+              id: `anno_${Date.now()}`,
+              type: activeTool,
+              points: [start, { x: normX, y: normY }],
+              color: selectedColor,
+              strokeWidth: penWidth,
+              opacity: 1.0,
+            },
+            targetPage
+          );
         }
       }
     }
@@ -885,24 +1037,28 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
   // Submit text annotation
   const handleAddText = () => {
     if (!textContent.trim()) {
-      setTextModal({ x: 0, y: 0, isOpen: false });
+      setTextModal({ x: 0, y: 0, isOpen: false, page: currentPage });
       return;
     }
 
-    pushNewAnnotation({
-      id: `anno_${Date.now()}`,
-      type: 'text',
-      x: textModal.x,
-      y: textModal.y,
-      text: textContent.trim(),
-      color: selectedColor,
-      fontSize: textSize,
-      strokeWidth: 2,
-      opacity: 1.0,
-    });
+    const targetPage = textModal.page || currentPage;
+    pushNewAnnotation(
+      {
+        id: `anno_${Date.now()}`,
+        type: 'text',
+        x: textModal.x,
+        y: textModal.y,
+        text: textContent.trim(),
+        color: selectedColor,
+        fontSize: textSize,
+        strokeWidth: 2,
+        opacity: 1.0,
+      },
+      targetPage
+    );
 
     setTextContent('');
-    setTextModal({ x: 0, y: 0, isOpen: false });
+    setTextModal({ x: 0, y: 0, isOpen: false, page: currentPage });
   };
 
   // -------------------------------------------------------------------------
@@ -915,15 +1071,43 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       const drawCanvas = drawCanvasRef.current;
       if (!docCanvas || !drawCanvas) return;
 
-      // Merge base canvas + annotation overlay
+      // Merge base canvas + annotation overlay (if two-page mode, merge both pages side by side)
       const exportCanvas = document.createElement('canvas');
-      exportCanvas.width = docCanvas.width;
-      exportCanvas.height = docCanvas.height;
-      const exportCtx = exportCanvas.getContext('2d');
-      if (!exportCtx) return;
+      const isTwoPage =
+        effectiveViewMode === 'double' &&
+        currentPage < numPages &&
+        Boolean(docCanvas2Ref.current) &&
+        Boolean(drawCanvas2Ref.current);
 
-      exportCtx.drawImage(docCanvas, 0, 0);
-      exportCtx.drawImage(drawCanvas, 0, 0);
+      if (isTwoPage) {
+        const docCanvas2 = docCanvas2Ref.current!;
+        const drawCanvas2 = drawCanvas2Ref.current!;
+        const gap = 24;
+        exportCanvas.width = docCanvas.width + docCanvas2.width + gap;
+        exportCanvas.height = Math.max(docCanvas.height, docCanvas2.height);
+        const exportCtx = exportCanvas.getContext('2d');
+        if (!exportCtx) return;
+
+        // Dark background for book spread
+        exportCtx.fillStyle = '#0f172a';
+        exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+        // Page 1
+        exportCtx.drawImage(docCanvas, 0, 0);
+        exportCtx.drawImage(drawCanvas, 0, 0);
+
+        // Page 2
+        exportCtx.drawImage(docCanvas2, docCanvas.width + gap, 0);
+        exportCtx.drawImage(drawCanvas2, docCanvas.width + gap, 0);
+      } else {
+        exportCanvas.width = docCanvas.width;
+        exportCanvas.height = docCanvas.height;
+        const exportCtx = exportCanvas.getContext('2d');
+        if (!exportCtx) return;
+
+        exportCtx.drawImage(docCanvas, 0, 0);
+        exportCtx.drawImage(drawCanvas, 0, 0);
+      }
 
       // Download as high-resolution PNG
       exportCanvas.toBlob((blob) => {
@@ -931,7 +1115,10 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${note.title}_Page${currentPage}_Annotated.png`;
+        const pageLabel = isTwoPage
+          ? `Pages${currentPage}-${currentPage + 1}`
+          : `Page${currentPage}`;
+        a.download = `${note.title}_${pageLabel}_Annotated.png`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -967,8 +1154,12 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
     }
   };
 
-  const canUndo = (history[currentPage]?.past?.length || 0) > 0;
-  const canRedo = (history[currentPage]?.future?.length || 0) > 0;
+  const canUndo =
+    (history[currentPage]?.past?.length || 0) > 0 ||
+    (effectiveViewMode === 'double' && (history[currentPage + 1]?.past?.length || 0) > 0);
+  const canRedo =
+    (history[currentPage]?.future?.length || 0) > 0 ||
+    (effectiveViewMode === 'double' && (history[currentPage + 1]?.future?.length || 0) > 0);
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950 text-slate-100 overflow-hidden font-sans">
@@ -1012,28 +1203,83 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           </div>
         </div>
 
-        {/* Center: PDF Page Navigation */}
-        {isPdf && numPages > 1 && (
-          <div className="flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1 rounded-xl border border-slate-700/60 shrink-0">
-            <button
-              disabled={currentPage <= 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 disabled:hover:text-slate-300 transition-colors"
-              title="Previous Page"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <span className="text-xs font-medium text-slate-300 px-1 select-none">
-              {currentPage} / {numPages}
-            </span>
-            <button
-              disabled={currentPage >= numPages}
-              onClick={() => setCurrentPage((p) => Math.min(numPages, p + 1))}
-              className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 disabled:hover:text-slate-300 transition-colors"
-              title="Next Page"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+        {/* Center: PDF Page Navigation + View Mode Toggle */}
+        {isPdf && numPages > 0 && (
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Page navigation */}
+            <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-xl border border-slate-700/60">
+              <button
+                disabled={currentPage <= 1}
+                onClick={() => {
+                  const step = effectiveViewMode === 'double' ? 2 : 1;
+                  setCurrentPage((p) => Math.max(1, p - step));
+                }}
+                className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 transition-colors"
+                title="Previous Page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-xs font-medium text-slate-300 px-1 select-none min-w-[56px] text-center">
+                {effectiveViewMode === 'double' && currentPage < numPages
+                  ? `${currentPage}–${currentPage + 1} / ${numPages}`
+                  : `${currentPage} / ${numPages}`}
+              </span>
+              <button
+                disabled={
+                  effectiveViewMode === 'double'
+                    ? currentPage + 1 >= numPages
+                    : currentPage >= numPages
+                }
+                onClick={() => {
+                  const step = effectiveViewMode === 'double' ? 2 : 1;
+                  setCurrentPage((p) => Math.min(numPages, p + step));
+                }}
+                className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 transition-colors"
+                title="Next Page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* View mode toggle (single / two-page) — only for multi-page PDFs */}
+            {numPages > 1 && (
+              <div className="flex items-center bg-slate-800/80 p-0.5 rounded-xl border border-slate-700/60">
+                <button
+                  onClick={() => setViewMode('single')}
+                  title="Single Page View"
+                  className={cn(
+                    'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors',
+                    effectiveViewMode === 'single'
+                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  )}
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Single</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setViewMode('double');
+                    // Ensure currentPage is odd so it pairs 1-2, 3-4, 5-6, etc.
+                    setCurrentPage((p) => (p % 2 === 0 ? Math.max(1, p - 1) : p));
+                  }}
+                  title={
+                    !isWideScreen
+                      ? 'Two-page view (automatically falls back on small screens)'
+                      : 'Two Pages Side-by-Side'
+                  }
+                  className={cn(
+                    'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors',
+                    effectiveViewMode === 'double'
+                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  )}
+                >
+                  <Columns2 className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Two Pages</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -1124,127 +1370,88 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       </header>
 
       {/* ================= SECONDARY ANNOTATION TOOLBAR ================= */}
-      <div className="h-14 px-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-3 overflow-x-auto select-none z-10 shrink-0">
-        {/* Left: Annotation Tools Palette */}
-        <div className="flex items-center gap-1.5">
-          {/* Pen */}
+      <div className="px-3 bg-slate-900 border-b border-slate-800 flex items-center gap-2 overflow-x-auto select-none z-10 shrink-0 min-h-[52px] py-1.5">
+
+        {/* GROUP A: Drawing tools */}
+        <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => setActiveTool('pen')}
             className={cn(
-              'p-2 rounded-xl flex items-center gap-1.5 text-xs font-medium transition-all',
+              'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'pen'
-                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             )}
-            title="Pen (Freehand Drawing)"
+            title="Pen"
           >
-            <Pen className="w-4 h-4" />
-            <span className="hidden sm:inline">Pen</span>
+            <Pen className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Pen</span>
           </button>
 
-          {/* Highlighter */}
           <button
             onClick={() => setActiveTool('highlighter')}
             className={cn(
-              'p-2 rounded-xl flex items-center gap-1.5 text-xs font-medium transition-all',
+              'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'highlighter'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             )}
-            title="Highlighter (Translucent)"
+            title="Highlighter"
           >
-            <Highlighter className="w-4 h-4" />
-            <span className="hidden sm:inline">Highlight</span>
+            <Highlighter className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Highlight</span>
           </button>
 
-          {/* Eraser */}
           <button
             onClick={() => setActiveTool('eraser')}
             className={cn(
-              'p-2 rounded-xl flex items-center gap-1.5 text-xs font-medium transition-all',
+              'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'eraser'
-                ? 'bg-slate-700 text-white border border-slate-500 shadow-sm'
+                ? 'bg-slate-700 text-white border border-slate-500'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             )}
-            title="Eraser (Erase annotations)"
+            title="Eraser"
           >
-            <Eraser className="w-4 h-4" />
-            <span className="hidden sm:inline">Eraser</span>
-          </button>
-
-          <div className="h-5 w-[1px] bg-slate-800 mx-1" />
-
-          {/* Shapes & Text */}
-          <button
-            onClick={() => setActiveTool('text')}
-            className={cn(
-              'p-2 rounded-xl text-slate-400 hover:text-white transition-all',
-              activeTool === 'text'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                : 'hover:bg-slate-800'
-            )}
-            title="Add Text Note"
-          >
-            <Type className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={() => setActiveTool('rect')}
-            className={cn(
-              'p-2 rounded-xl text-slate-400 hover:text-white transition-all',
-              activeTool === 'rect'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                : 'hover:bg-slate-800'
-            )}
-            title="Rectangle"
-          >
-            <Square className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={() => setActiveTool('circle')}
-            className={cn(
-              'p-2 rounded-xl text-slate-400 hover:text-white transition-all',
-              activeTool === 'circle'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                : 'hover:bg-slate-800'
-            )}
-            title="Circle"
-          >
-            <Circle className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={() => setActiveTool('line')}
-            className={cn(
-              'p-2 rounded-xl text-slate-400 hover:text-white transition-all',
-              activeTool === 'line'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                : 'hover:bg-slate-800'
-            )}
-            title="Line"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={() => setActiveTool('arrow')}
-            className={cn(
-              'p-2 rounded-xl text-slate-400 hover:text-white transition-all',
-              activeTool === 'arrow'
-                ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                : 'hover:bg-slate-800'
-            )}
-            title="Arrow"
-          >
-            <MoveRight className="w-4 h-4" />
+            <Eraser className="w-3.5 h-3.5" />
+            <span className="hidden md:inline text-[11px]">Erase</span>
           </button>
         </div>
 
-        {/* Center: Color & Thickness pickers */}
-        <div className="flex items-center gap-3">
+        {/* Separator */}
+        <div className="h-6 w-px bg-slate-700/70 shrink-0" />
+
+        {/* GROUP B: Shapes & text */}
+        <div className="flex items-center gap-1 shrink-0">
+          {[
+            { tool: 'text' as const, icon: <Type className="w-3.5 h-3.5" />, label: 'Text' },
+            { tool: 'rect' as const, icon: <Square className="w-3.5 h-3.5" />, label: 'Rect' },
+            { tool: 'circle' as const, icon: <Circle className="w-3.5 h-3.5" />, label: 'Circle' },
+            { tool: 'line' as const, icon: <Minus className="w-3.5 h-3.5" />, label: 'Line' },
+            { tool: 'arrow' as const, icon: <MoveRight className="w-3.5 h-3.5" />, label: 'Arrow' },
+          ].map(({ tool, icon, label }) => (
+            <button
+              key={tool}
+              onClick={() => setActiveTool(tool)}
+              className={cn(
+                'p-2 rounded-xl transition-all',
+                activeTool === tool
+                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              )}
+              title={label}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
+
+        {/* Separator */}
+        <div className="h-6 w-px bg-slate-700/70 shrink-0" />
+
+        {/* GROUP C: Color palette + thickness — context-sensitive */}
+        <div className="flex items-center gap-2 shrink-0">
           {activeTool === 'highlighter' ? (
-            <div className="flex items-center gap-1.5">
+            <>
               {HIGHLIGHTER_COLORS.map((c) => (
                 <button
                   key={c.name}
@@ -1252,97 +1459,106 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   className={cn(
                     'w-5 h-5 rounded-full transition-transform',
                     highlighterColor === c.hex
-                      ? 'scale-125 ring-2 ring-white ring-offset-2 ring-offset-slate-900'
+                      ? 'scale-125 ring-2 ring-white ring-offset-1 ring-offset-slate-900'
                       : 'hover:scale-110 opacity-80'
                   )}
                   style={{ backgroundColor: c.hex }}
                   title={c.name}
                 />
               ))}
-              <div className="h-4 w-[1px] bg-slate-800 mx-1" />
-              <div className="flex items-center gap-1">
+              <div className="h-4 w-px bg-slate-700" />
+              <div className="flex items-center gap-0.5">
                 {HIGHLIGHTER_WIDTHS.map((w) => (
                   <button
                     key={w}
                     onClick={() => setHighlighterWidth(w)}
                     className={cn(
-                      'px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors',
+                      'px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors',
                       highlighterWidth === w
                         ? 'bg-slate-700 text-white font-bold'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-slate-500 hover:text-white'
                     )}
                   >
-                    {w}px
+                    {w}
                   </button>
                 ))}
               </div>
-            </div>
-          ) : (
-            activeTool !== 'eraser' && (
-              <div className="flex items-center gap-1.5">
-                {PALETTE_COLORS.map((c) => (
+            </>
+          ) : activeTool !== 'eraser' ? (
+            <>
+              {/* Current color swatch */}
+              <div
+                className="w-5 h-5 rounded-full border-2 border-slate-600 shrink-0"
+                style={{ backgroundColor: selectedColor }}
+                title={`Current color: ${selectedColor}`}
+              />
+              {PALETTE_COLORS.map((c) => (
+                <button
+                  key={c.name}
+                  onClick={() => setSelectedColor(c.hex)}
+                  className={cn(
+                    'w-4 h-4 rounded-full border border-slate-700 transition-transform',
+                    selectedColor === c.hex
+                      ? 'scale-125 ring-2 ring-indigo-400 ring-offset-1 ring-offset-slate-900'
+                      : 'hover:scale-110 opacity-70 hover:opacity-100'
+                  )}
+                  style={{ backgroundColor: c.hex }}
+                  title={c.name}
+                />
+              ))}
+              <div className="h-4 w-px bg-slate-700" />
+              <div className="flex items-center gap-0.5">
+                {PEN_WIDTHS.map((w) => (
                   <button
-                    key={c.name}
-                    onClick={() => setSelectedColor(c.hex)}
+                    key={w}
+                    onClick={() => setPenWidth(w)}
                     className={cn(
-                      'w-5 h-5 rounded-full border border-slate-700 transition-transform',
-                      selectedColor === c.hex
-                        ? 'scale-125 ring-2 ring-indigo-400 ring-offset-2 ring-offset-slate-900'
-                        : 'hover:scale-110 opacity-80'
+                      'px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors',
+                      penWidth === w
+                        ? 'bg-slate-700 text-white font-bold'
+                        : 'text-slate-500 hover:text-white'
                     )}
-                    style={{ backgroundColor: c.hex }}
-                    title={c.name}
-                  />
+                  >
+                    {w}
+                  </button>
                 ))}
-                <div className="h-4 w-[1px] bg-slate-800 mx-1" />
-                <div className="flex items-center gap-1">
-                  {PEN_WIDTHS.map((w) => (
-                    <button
-                      key={w}
-                      onClick={() => setPenWidth(w)}
-                      className={cn(
-                        'px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors',
-                        penWidth === w
-                          ? 'bg-slate-700 text-white font-bold'
-                          : 'text-slate-400 hover:text-white'
-                      )}
-                    >
-                      {w}px
-                    </button>
-                  ))}
-                </div>
               </div>
-            )
+            </>
+          ) : (
+            <span className="text-[11px] text-slate-500 italic">Tap a stroke to erase</span>
           )}
         </div>
 
-        {/* Right: Undo, Redo, Clear Page, Thumbnails Toggle */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        {/* Spacer pushes edit actions to the right */}
+        <div className="flex-1 min-w-3" />
+
+        {/* GROUP D: Edit actions */}
+        <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={handleUndo}
             disabled={!canUndo}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 transition-colors"
             title="Undo"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={handleRedo}
             disabled={!canRedo}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 transition-colors"
             title="Redo"
           >
-            <RotateCw className="w-4 h-4" />
+            <RotateCw className="w-3.5 h-3.5" />
           </button>
 
-          <div className="h-5 w-[1px] bg-slate-800 mx-1" />
+          <div className="h-5 w-px bg-slate-700/70" />
 
           <button
             onClick={handleClearPage}
-            className="p-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
+            className="p-2 rounded-xl text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
             title="Clear Current Page"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
 
           {isPdf && numPages > 1 && (
@@ -1356,7 +1572,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               )}
               title="Page Thumbnails"
             >
-              <Layers className="w-4 h-4" />
+              <Layers className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -1367,58 +1583,68 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         {/* Document Canvas Container */}
         <div
           ref={containerRef}
-          className="flex-1 overflow-auto flex items-center justify-center p-4 sm:p-8 relative"
+          className="flex-1 overflow-auto p-4 sm:p-8 relative"
         >
           {isLoadingDoc && (
-            <div className="flex flex-col items-center gap-3 text-slate-400">
+            <div className="flex flex-col items-center gap-3 text-slate-400 min-h-full justify-center flex">
               <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
               <p className="text-sm font-medium">Loading document...</p>
             </div>
           )}
 
           {docLoadError && (
-            <div className="p-6 max-w-md bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center">
-              <AlertCircle className="w-10 h-10 text-rose-400 mx-auto mb-3" />
-              <h3 className="text-base font-semibold text-rose-200 mb-1">
-                Failed to open document
-              </h3>
-              <p className="text-xs text-rose-300 mb-4">{docLoadError}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold"
-              >
-                Reload Athena
-              </button>
+            <div className="flex items-center justify-center min-h-full">
+              <div className="p-6 max-w-md bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center">
+                <AlertCircle className="w-10 h-10 text-rose-400 mx-auto mb-3" />
+                <h3 className="text-base font-semibold text-rose-200 mb-1">Failed to open document</h3>
+                <p className="text-xs text-rose-300 mb-4">{docLoadError}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold"
+                >
+                  Reload Athena
+                </button>
+              </div>
             </div>
           )}
 
-          {/* Canvas Wrapper */}
+          {/* Canvas Wrapper — single page or two-page side by side */}
           <div
             className={cn(
-              'relative shadow-2xl rounded-lg overflow-hidden bg-white select-none transition-transform duration-75',
+              'flex items-start justify-center gap-4',
               (isLoadingDoc || docLoadError) && 'hidden'
             )}
             style={{
-              cursor:
-                activeTool === 'eraser'
-                  ? 'crosshair'
-                  : activeTool === 'text'
-                  ? 'text'
-                  : 'crosshair',
+              cursor: activeTool === 'text' ? 'text' : 'crosshair',
             }}
           >
-            {/* Base Document Canvas */}
-            <canvas ref={docCanvasRef} className="block pointer-events-none" />
+            {/* Page 1 (Current Page) */}
+            <div className="relative shadow-2xl rounded-lg overflow-hidden bg-white select-none shrink-0">
+              <canvas ref={docCanvasRef} className="block pointer-events-none" />
+              <canvas
+                ref={drawCanvasRef}
+                onPointerDown={(e) => handlePointerDown(e, currentPage)}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+                className="absolute inset-0 touch-none"
+              />
+            </div>
 
-            {/* Interactive Annotation Canvas Overlay */}
-            <canvas
-              ref={drawCanvasRef}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-              className="absolute inset-0 touch-none"
-            />
+            {/* Page 2 — rendered in double-page mode when a second page exists */}
+            {effectiveViewMode === 'double' && isPdf && currentPage < numPages && (
+              <div className="relative shadow-2xl rounded-lg overflow-hidden bg-white select-none shrink-0 border-l border-slate-300/40">
+                <canvas ref={docCanvas2Ref} className="block pointer-events-none" />
+                <canvas
+                  ref={drawCanvas2Ref}
+                  onPointerDown={(e) => handlePointerDown(e, currentPage + 1)}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerLeave={handlePointerUp}
+                  className="absolute inset-0 touch-none"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -1450,11 +1676,18 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   return (
                     <button
                       key={p}
-                      onClick={() => setCurrentPage(p)}
+                      onClick={() => {
+                        if (effectiveViewMode === 'double' && p % 2 === 0) {
+                          setCurrentPage(p - 1);
+                        } else {
+                          setCurrentPage(p);
+                        }
+                      }}
                       className={cn(
                         'flex flex-col items-center p-2 rounded-xl border text-center transition-all',
-                        currentPage === p
-                          ? 'border-indigo-500 bg-indigo-500/10 shadow-sm'
+                        currentPage === p ||
+                          (effectiveViewMode === 'double' && currentPage + 1 === p)
+                          ? 'border-indigo-500 bg-indigo-500/15 shadow-sm ring-1 ring-indigo-500/30'
                           : 'border-slate-800 bg-slate-800/40 hover:border-slate-700'
                       )}
                     >
@@ -1496,7 +1729,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   <Type className="w-4 h-4 text-indigo-400" /> Add Text Note
                 </h3>
                 <button
-                  onClick={() => setTextModal({ x: 0, y: 0, isOpen: false })}
+                  onClick={() => setTextModal((prev) => ({ ...prev, isOpen: false }))}
                   className="text-slate-400 hover:text-white"
                 >
                   <X className="w-4 h-4" />
@@ -1532,7 +1765,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
               <div className="flex items-center justify-end gap-2">
                 <button
-                  onClick={() => setTextModal({ x: 0, y: 0, isOpen: false })}
+                  onClick={() => setTextModal((prev) => ({ ...prev, isOpen: false }))}
                   className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white"
                 >
                   Cancel
