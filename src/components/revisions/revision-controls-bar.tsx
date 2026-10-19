@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, LayoutGroup } from 'framer-motion';
 import {
   Search,
   X,
@@ -110,43 +110,52 @@ export function RevisionControlsBar({
       {/* ----------------------------------------------------------------- */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between min-w-0">
         {/* Filter pills — horizontal scroll on mobile, wrap on desktop */}
-        <div
-          className={cn(
-            'flex gap-2 sm:flex-wrap w-full sm:w-auto',
-            'flex-nowrap overflow-x-auto pb-2 sm:pb-0 sm:overflow-x-visible',
-            '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
-          )}
-        >
-          {FILTER_OPTIONS.map((opt) => {
-            const isActive = filter === opt.value;
-            const count = filterCounts[opt.countKey];
+        <LayoutGroup id="revision-filter-tabs">
+          <div
+            className={cn(
+              'flex gap-1.5 sm:flex-wrap w-full sm:w-auto relative items-center p-1 rounded-xl bg-[hsl(var(--muted))]/60 border border-[hsl(var(--border))]/50',
+              'flex-nowrap overflow-x-auto pb-1 sm:pb-1 sm:overflow-x-visible',
+              '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
+            )}
+          >
+            {FILTER_OPTIONS.map((opt) => {
+              const isActive = filter === opt.value;
+              const count = filterCounts[opt.countKey];
 
-            return (
-              <button
-                key={opt.value}
-                onClick={() => onFilterChange(opt.value)}
-                className={cn(
-                  'flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap',
-                  isActive
-                    ? 'bg-[hsl(var(--primary))] text-white'
-                    : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))]'
-                )}
-              >
-                {opt.label}
-                <span
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => onFilterChange(opt.value)}
                   className={cn(
-                    'ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-[1.125rem] px-1 rounded-full text-[0.625rem] font-semibold',
+                    'relative flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 cursor-pointer whitespace-nowrap',
                     isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
+                      ? 'text-white'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                   )}
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  {isActive && (
+                    <motion.div
+                      layoutId="revision-filter-active-pill"
+                      className="absolute inset-0 bg-[hsl(var(--primary))] rounded-lg shadow-sm"
+                      transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                    />
+                  )}
+                  <span className="relative z-10">{opt.label}</span>
+                  <span
+                    className={cn(
+                      'relative z-10 ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-[1.125rem] px-1 rounded-full text-[0.625rem] font-semibold transition-colors duration-150',
+                      isActive
+                        ? 'bg-white/25 text-white'
+                        : 'bg-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
+                    )}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
 
         {/* Right side controls */}
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
@@ -169,32 +178,48 @@ export function RevisionControlsBar({
           </select>
 
           {/* View toggle */}
-          <div className="flex items-center rounded-lg border border-[hsl(var(--border))] overflow-hidden">
-            <button
-              onClick={() => onViewModeChange('list')}
-              className={cn(
-                'p-1.5 transition-colors',
-                viewMode === 'list'
-                  ? 'bg-[hsl(var(--primary))] text-white'
-                  : 'bg-[hsl(var(--card))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))]'
-              )}
-              aria-label="List view"
-            >
-              <List className="h-3.5 w-3.5" />
-            </button>
-            <button
-              onClick={() => onViewModeChange('grid')}
-              className={cn(
-                'p-1.5 transition-colors',
-                viewMode === 'grid'
-                  ? 'bg-[hsl(var(--primary))] text-white'
-                  : 'bg-[hsl(var(--card))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))]'
-              )}
-              aria-label="Grid view"
-            >
-              <LayoutGrid className="h-3.5 w-3.5" />
-            </button>
-          </div>
+          <LayoutGroup id="revision-view-mode-tabs">
+            <div className="relative flex items-center p-0.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50">
+              <button
+                onClick={() => onViewModeChange('list')}
+                className={cn(
+                  'relative z-10 p-1.5 rounded-md transition-colors duration-150',
+                  viewMode === 'list'
+                    ? 'text-white'
+                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                )}
+                aria-label="List view"
+              >
+                {viewMode === 'list' && (
+                  <motion.div
+                    layoutId="revision-view-mode-pill"
+                    className="absolute inset-0 bg-[hsl(var(--primary))] rounded-md shadow-sm"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                  />
+                )}
+                <List className="relative z-10 h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => onViewModeChange('grid')}
+                className={cn(
+                  'relative z-10 p-1.5 rounded-md transition-colors duration-150',
+                  viewMode === 'grid'
+                    ? 'text-white'
+                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                )}
+                aria-label="Grid view"
+              >
+                {viewMode === 'grid' && (
+                  <motion.div
+                    layoutId="revision-view-mode-pill"
+                    className="absolute inset-0 bg-[hsl(var(--primary))] rounded-md shadow-sm"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                  />
+                )}
+                <LayoutGrid className="relative z-10 h-3.5 w-3.5" />
+              </button>
+            </div>
+          </LayoutGroup>
         </div>
       </div>
     </motion.div>

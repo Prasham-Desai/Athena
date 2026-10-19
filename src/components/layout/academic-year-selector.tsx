@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { Scroll, Stethoscope, GraduationCap, Loader2, type LucideIcon } from 'lucide-react';
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { cn } from '@/lib/utils';
@@ -96,36 +96,42 @@ export function AcademicYearNavSection({
       </AnimatePresence>
 
       {/* Year buttons inline with other navbar buttons */}
-      {years.map((year) => {
-        const theme = YEAR_THEMES[year.id] || DEFAULT_THEME;
-        const Icon = theme.icon;
-        const isActive = activeYearId === year.id;
+      <LayoutGroup id={`${idPrefix}-academic-years`}>
+        {years.map((year) => {
+          const theme = YEAR_THEMES[year.id] || DEFAULT_THEME;
+          const Icon = theme.icon;
+          const isActive = activeYearId === year.id;
 
-        return (
-          <button
-            key={year.id}
-            type="button"
-            onClick={() => setActiveYearId(year.id)}
-            disabled={isSwitching}
-            title={year.name}
-            className={cn(
-              'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative w-full text-left',
-              isActive
-                ? 'text-white'
-                : cn(
-                    'text-[hsl(var(--muted-foreground))]',
-                    theme.inactiveHoverText,
-                    theme.inactiveHoverBg
-                  )
-            )}
-          >
-            {isActive && (
-              <motion.div
-                layoutId={`${idPrefix}-year-active-pill`}
-                className={cn('absolute inset-0 rounded-xl', theme.activeBg, theme.activeShadow)}
-                transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-              />
-            )}
+          return (
+            <button
+              key={year.id}
+              type="button"
+              onClick={() => setActiveYearId(year.id)}
+              disabled={isSwitching}
+              title={year.name}
+              className={cn(
+                'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 relative w-full text-left select-none',
+                isActive
+                  ? 'text-white'
+                  : cn(
+                      'text-[hsl(var(--muted-foreground))]',
+                      theme.inactiveHoverText,
+                      theme.inactiveHoverBg
+                    )
+              )}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId={`${idPrefix}-year-active-pill`}
+                  className={cn('absolute inset-0 rounded-xl ring-1 ring-white/15', theme.activeBg, theme.activeShadow)}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 400,
+                    damping: 32,
+                    mass: 0.8,
+                  }}
+                />
+              )}
 
             {/* Icon */}
             {isSwitching && isActive ? (
@@ -163,6 +169,7 @@ export function AcademicYearNavSection({
           </button>
         );
       })}
+      </LayoutGroup>
     </div>
   );
 }

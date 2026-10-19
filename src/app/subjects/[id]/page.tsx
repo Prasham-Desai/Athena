@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   ArrowLeft,
   Plus,
@@ -1068,31 +1068,33 @@ export default function SubjectDetailPage() {
 
       {/* Paper Tabs */}
       {availablePapers.length > 1 && (
-        <div className="flex items-center gap-2 p-1.5 bg-[hsl(var(--muted))] rounded-2xl w-fit">
-          {availablePapers.map((paper) => (
-            <button
-              key={paper}
-              onClick={() => setActivePaper(paper)}
-              className={cn(
-                'relative px-5 py-2.5 text-sm font-semibold rounded-xl transition-all',
-                activePaper === paper
-                  ? 'text-white shadow-md'
-                  : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
-              )}
-            >
-              {activePaper === paper && (
-                <motion.div
-                  layoutId="paperTab"
-                  className="absolute inset-0 rounded-xl"
-                  style={{ backgroundColor: subject.color }}
-                  initial={false}
-                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10">{paper}</span>
-            </button>
-          ))}
-        </div>
+        <LayoutGroup id="subject-paper-tabs">
+          <div className="flex items-center gap-2 p-1.5 bg-[hsl(var(--muted))] rounded-2xl w-fit">
+            {availablePapers.map((paper) => (
+              <button
+                key={paper}
+                onClick={() => setActivePaper(paper)}
+                className={cn(
+                  'relative px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors duration-150',
+                  activePaper === paper
+                    ? 'text-white shadow-md'
+                    : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
+                )}
+              >
+                {activePaper === paper && (
+                  <motion.div
+                    layoutId="paperTab"
+                    className="absolute inset-0 rounded-xl"
+                    style={{ backgroundColor: subject.color }}
+                    initial={false}
+                    transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                  />
+                )}
+                <span className="relative z-10">{paper}</span>
+              </button>
+            ))}
+          </div>
+        </LayoutGroup>
       )}
 
       {/* Search Input */}

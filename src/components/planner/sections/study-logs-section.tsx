@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   BookOpen,
   Plus,
@@ -333,32 +333,48 @@ export function StudyLogsSection({
 
             <div className="flex items-center gap-2 shrink-0">
               {/* Quick Toggle Tabs */}
-              <div className="flex items-center p-0.5 rounded-xl bg-[hsl(var(--muted))] text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('selected')}
-                  className={cn(
-                    'px-2.5 py-1 rounded-lg transition-all',
-                    viewMode === 'selected'
-                      ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm'
-                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                  )}
-                >
-                  Selected Date
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('all')}
-                  className={cn(
-                    'px-2.5 py-1 rounded-lg transition-all',
-                    viewMode === 'all'
-                      ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm'
-                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-                  )}
-                >
-                  All Dates ({studyBlocks.length})
-                </button>
-              </div>
+              <LayoutGroup id="study-logs-view-tabs">
+                <div className="relative flex items-center p-1 rounded-xl bg-[hsl(var(--muted))]/80 text-xs font-medium border border-[hsl(var(--border))]/50">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('selected')}
+                    className={cn(
+                      'relative z-10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150',
+                      viewMode === 'selected'
+                        ? 'text-[hsl(var(--foreground))]'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                    )}
+                  >
+                    {viewMode === 'selected' && (
+                      <motion.div
+                        layoutId="study-logs-view-pill"
+                        className="absolute inset-0 bg-[hsl(var(--card))] rounded-lg shadow-sm border border-[hsl(var(--border))]/50"
+                        transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      />
+                    )}
+                    <span className="relative z-10">Selected Date</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('all')}
+                    className={cn(
+                      'relative z-10 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150',
+                      viewMode === 'all'
+                        ? 'text-[hsl(var(--foreground))]'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                    )}
+                  >
+                    {viewMode === 'all' && (
+                      <motion.div
+                        layoutId="study-logs-view-pill"
+                        className="absolute inset-0 bg-[hsl(var(--card))] rounded-lg shadow-sm border border-[hsl(var(--border))]/50"
+                        transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      />
+                    )}
+                    <span className="relative z-10">All Dates ({studyBlocks.length})</span>
+                  </button>
+                </div>
+              </LayoutGroup>
 
               {/* Total Duration Pill */}
               <div className="text-[11px] font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-lg shrink-0">

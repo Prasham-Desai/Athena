@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   Activity,
   Layers,
@@ -76,57 +76,59 @@ export default function AnatomyPage() {
       {/* Top Controls: Male/Female Selector + Regional Systems */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-sm">
         {/* Male vs Female Anatomy Segmented Pill */}
-        <div
-          role="tablist"
-          aria-label="Anatomy Gender Selection"
-          className="flex items-center p-1 rounded-xl bg-[hsl(var(--muted)/0.6)] border border-[hsl(var(--border))] gap-1 shrink-0"
-        >
-          {(['male', 'female'] as AnatomyGender[]).map((gender) => {
-            const config = ANATOMY_GENDER_CONFIGS[gender];
-            const isSelected = selectedGender === gender;
+        <LayoutGroup id="anatomy-gender-tabs">
+          <div
+            role="tablist"
+            aria-label="Anatomy Gender Selection"
+            className="flex items-center p-1 rounded-xl bg-[hsl(var(--muted)/0.6)] border border-[hsl(var(--border))] gap-1 shrink-0"
+          >
+            {(['male', 'female'] as AnatomyGender[]).map((gender) => {
+              const config = ANATOMY_GENDER_CONFIGS[gender];
+              const isSelected = selectedGender === gender;
 
-            return (
-              <button
-                key={gender}
-                type="button"
-                role="tab"
-                aria-selected={isSelected}
-                onClick={() => handleGenderSwitch(gender)}
-                className={cn(
-                  'relative px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2 select-none z-10',
-                  isSelected
-                    ? 'text-white'
-                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent)/0.5)]'
-                )}
-              >
-                {isSelected && (
-                  <motion.div
-                    layoutId="anatomy-gender-active"
-                    className={cn(
-                      'absolute inset-0 rounded-lg',
-                      config.activeGradient,
-                      config.activeShadow
-                    )}
-                    transition={{ type: 'spring', bounce: 0.15, duration: 0.4 }}
-                  />
-                )}
-                <span className="relative z-20 flex items-center gap-1.5 whitespace-nowrap">
-                  <span>{config.label}</span>
-                  <span
-                    className={cn(
-                      'text-[10px] font-bold px-1.5 py-0.2 rounded border',
-                      isSelected
-                        ? 'border-white/30 bg-white/20 text-white'
-                        : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
-                    )}
-                  >
-                    {config.badge}
+              return (
+                <button
+                  key={gender}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => handleGenderSwitch(gender)}
+                  className={cn(
+                    'relative px-4 py-2 rounded-lg text-xs font-semibold transition-colors duration-150 flex items-center gap-2 select-none z-10',
+                    isSelected
+                      ? 'text-white'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent)/0.5)]'
+                  )}
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="anatomy-gender-active"
+                      className={cn(
+                        'absolute inset-0 rounded-lg',
+                        config.activeGradient,
+                        config.activeShadow
+                      )}
+                      transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                    />
+                  )}
+                  <span className="relative z-20 flex items-center gap-1.5 whitespace-nowrap">
+                    <span>{config.label}</span>
+                    <span
+                      className={cn(
+                        'text-[10px] font-bold px-1.5 py-0.2 rounded border transition-colors duration-150',
+                        isSelected
+                          ? 'border-white/30 bg-white/20 text-white'
+                          : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'
+                      )}
+                    >
+                      {config.badge}
+                    </span>
                   </span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
 
         {/* Regional Systems for the active gender */}
         {genderConfig.systems.length > 1 && (
@@ -134,26 +136,35 @@ export default function AnatomyPage() {
             <span className="text-[11px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider px-1 shrink-0 hidden md:inline">
               System:
             </span>
-            <div className="flex items-center gap-1.5">
-              {genderConfig.systems.map((sys) => {
-                const isCurrent = activeSystem.id === sys.id;
-                return (
-                  <button
-                    key={sys.id}
-                    type="button"
-                    onClick={() => setActiveSystemId(sys.id)}
-                    className={cn(
-                      'px-3 py-1.5 rounded-xl text-xs font-medium transition-all shrink-0',
-                      isCurrent
-                        ? 'bg-[hsl(var(--foreground))] text-[hsl(var(--background))] font-semibold shadow-sm'
-                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
-                    )}
-                  >
-                    {sys.name}
-                  </button>
-                );
-              })}
-            </div>
+            <LayoutGroup id="anatomy-systems-tabs">
+              <div className="relative flex items-center gap-1.5 p-1 rounded-xl bg-[hsl(var(--muted))]/50 border border-[hsl(var(--border))]/40">
+                {genderConfig.systems.map((sys) => {
+                  const isCurrent = activeSystem.id === sys.id;
+                  return (
+                    <button
+                      key={sys.id}
+                      type="button"
+                      onClick={() => setActiveSystemId(sys.id)}
+                      className={cn(
+                        'relative px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 shrink-0',
+                        isCurrent
+                          ? 'text-[hsl(var(--background))] font-semibold'
+                          : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                      )}
+                    >
+                      {isCurrent && (
+                        <motion.div
+                          layoutId="anatomy-system-active"
+                          className="absolute inset-0 bg-[hsl(var(--foreground))] rounded-lg shadow-sm"
+                          transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                        />
+                      )}
+                      <span className="relative z-10">{sys.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
           </div>
         )}
       </div>

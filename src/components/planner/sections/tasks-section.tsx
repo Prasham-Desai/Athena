@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   CheckSquare,
   Plus,
@@ -129,61 +129,62 @@ export function TasksSection({
       {/* Filter Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4 min-w-0">
         {/* Status Tabs with Counts */}
-        <div className="flex items-center p-1 rounded-xl bg-[hsl(var(--muted))] text-xs font-semibold shrink-0">
-          <button
-            onClick={() => {
-              setStatusFilter('all');
-              setDisplayLimit(15);
-            }}
-            className={cn(
-              'px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5',
-              statusFilter === 'all'
-                ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm'
-                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-            )}
-          >
-            <span>All</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[hsl(var(--muted-foreground))]/15">
-              {tasks.length}
-            </span>
-          </button>
-          <button
-            onClick={() => {
-              setStatusFilter('active');
-              setDisplayLimit(15);
-            }}
-            className={cn(
-              'px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5',
-              statusFilter === 'active'
-                ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm'
-                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-            )}
-          >
-            <span>Active</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400">
-              {tasks.filter((t) => !t.completed).length}
-            </span>
-          </button>
-          <button
-            onClick={() => {
-              setStatusFilter('completed');
-              setDisplayLimit(15);
-            }}
-            className={cn(
-              'px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5',
-              statusFilter === 'completed'
-                ? 'bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-sm'
-                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-            )}
-          >
-            <span>Completed</span>
-            {tasks.filter((t) => t.completed).length > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-400 font-bold">
-                {tasks.filter((t) => t.completed).length}
-              </span>
-            )}
-          </button>
-        </div>
+        <LayoutGroup id="tasks-status-tabs">
+          <div className="flex items-center p-1 rounded-xl bg-[hsl(var(--muted))] text-xs font-semibold shrink-0 relative select-none">
+            {STATUS_TABS.map((tab) => {
+              const isSelected = statusFilter === tab.value;
+              const count =
+                tab.value === 'all'
+                  ? tasks.length
+                  : tab.value === 'active'
+                  ? tasks.filter((t) => !t.completed).length
+                  : tasks.filter((t) => t.completed).length;
+
+              return (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => {
+                    setStatusFilter(tab.value);
+                    setDisplayLimit(15);
+                  }}
+                  className={cn(
+                    'relative px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 flex items-center gap-1.5 z-10',
+                    isSelected
+                      ? 'text-[hsl(var(--foreground))] font-bold'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                  )}
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="tasks-status-active-pill"
+                      className="absolute inset-0 bg-[hsl(var(--card))] rounded-lg shadow-sm border border-[hsl(var(--border))]/60"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 32,
+                        mass: 0.8,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                  <span
+                    className={cn(
+                      'relative z-10 text-[10px] px-1.5 py-0.5 rounded-md font-mono transition-colors',
+                      tab.value === 'active'
+                        ? 'bg-emerald-500/15 text-emerald-400 font-bold'
+                        : tab.value === 'completed'
+                        ? 'bg-indigo-500/15 text-indigo-400 font-bold'
+                        : 'bg-[hsl(var(--muted-foreground))]/15'
+                    )}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
 
         {/* Category & Search */}
         <div className="flex items-center gap-2 flex-1 sm:max-w-md min-w-0">

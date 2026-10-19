@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, LayoutGroup } from 'framer-motion';
 import { Moon, Plus } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { useStoriesStore } from '@/store/stories-store';
@@ -102,28 +102,46 @@ export default function StoriesPage() {
 
       {/* Tabs */}
       <motion.div variants={itemVariants} className="flex justify-center">
-        <div className="inline-flex p-1 bg-[hsl(var(--muted))] rounded-xl">
-          <button
-            onClick={() => setActiveTab('story')}
-            className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === 'story'
-                ? 'bg-[hsl(var(--background))] text-[hsl(var(--foreground))] shadow-sm'
-                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-            }`}
-          >
-            Stories
-          </button>
-          <button
-            onClick={() => setActiveTab('imagination')}
-            className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === 'imagination'
-                ? 'bg-[hsl(var(--background))] text-[hsl(var(--foreground))] shadow-sm'
-                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
-            }`}
-          >
-            Imaginations
-          </button>
-        </div>
+        <LayoutGroup id="stories-tabs">
+          <div className="relative inline-flex p-1 bg-[hsl(var(--muted))] rounded-xl border border-[hsl(var(--border))]/50">
+            <button
+              type="button"
+              onClick={() => setActiveTab('story')}
+              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+                activeTab === 'story'
+                  ? 'text-[hsl(var(--foreground))]'
+                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+              }`}
+            >
+              {activeTab === 'story' && (
+                <motion.div
+                  layoutId="stories-active-tab-pill"
+                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                />
+              )}
+              <span className="relative z-10">Stories</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('imagination')}
+              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+                activeTab === 'imagination'
+                  ? 'text-[hsl(var(--foreground))]'
+                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+              }`}
+            >
+              {activeTab === 'imagination' && (
+                <motion.div
+                  layoutId="stories-active-tab-pill"
+                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm"
+                  transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                />
+              )}
+              <span className="relative z-10">Imaginations</span>
+            </button>
+          </div>
+        </LayoutGroup>
       </motion.div>
 
       {/* Stats/Info Card */}

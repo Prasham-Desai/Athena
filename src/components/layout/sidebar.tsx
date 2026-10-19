@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   LayoutDashboard,
   BookOpen,
@@ -18,7 +19,6 @@ import {
   // Activity, // Kept for future use (Human Anatomy Lab)
   FileText,
 } from 'lucide-react';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { AcademicYearNavSection, AcademicYearMobileBadge } from './academic-year-selector';
 
@@ -36,13 +36,20 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [optimisticPath, setOptimisticPath] = useState(pathname);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Sync optimistic path when route changes through browser history
+  useEffect(() => {
+    setOptimisticPath(pathname);
+  }, [pathname]);
+
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    if (href === '/planner') return pathname === '/planner' || pathname === '/tasks';
-    return pathname.startsWith(href);
+    const current = optimisticPath;
+    if (href === '/') return current === '/';
+    if (href === '/planner') return current === '/planner' || current === '/tasks';
+    return current.startsWith(href);
   };
 
   const getSidebarContent = (idPrefix: string) => (
@@ -73,44 +80,64 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative',
-                active
-                  ? 'text-white'
-                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))]'
-              )}
-            >
-              {active && (
-                <motion.div
-                  layoutId={`${idPrefix}-sidebar-active`}
-                  className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/20"
-                  transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <Icon className={cn('w-[18px] h-[18px] shrink-0 relative z-10', active && 'text-white')} />
-              <AnimatePresence>
-                {!collapsed && (
-                  <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    className="relative z-10 whitespace-nowrap overflow-hidden"
-                  >
-                    {item.label}
-                  </motion.span>
+        <LayoutGroup id={`${idPrefix}-sidebar-nav`}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => {
+                  setOptimisticPath(item.href);
+                  setMobileOpen(false);
+                }}
+                className={cn(
+                  'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 relative select-none',
+                  active
+                    ? 'text-white'
+                    : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))]'
                 )}
-              </AnimatePresence>
-            </Link>
-          );
-        })}
+              >
+                {active && (
+                  <motion.div
+                    layoutId={`${idPrefix}-sidebar-active`}
+                    className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/25 ring-1 ring-white/15"
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 32,
+                      mass: 0.8,
+                    }}
+                  />
+                )}
+                <Icon
+                  className={cn(
+                    'w-[18px] h-[18px] shrink-0 relative z-10 transition-transform duration-200',
+                    active
+                      ? 'text-white scale-105'
+                      : 'text-[hsl(var(--muted-foreground))] group-hover:scale-105'
+                  )}
+                />
+                <AnimatePresence>
+                  {!collapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: 'auto' }}
+                      exit={{ opacity: 0, width: 0 }}
+                      className={cn(
+                        'relative z-10 whitespace-nowrap overflow-hidden',
+                        active ? 'font-semibold text-white' : 'font-medium'
+                      )}
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </Link>
+            );
+          })}
+        </LayoutGroup>
 
         {/* Academic Year Navigation Section - Inline below items after divider line */}
         <AcademicYearNavSection collapsed={collapsed} idPrefix={idPrefix} />

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   ArrowLeft,
   ZoomIn,
@@ -1243,42 +1243,58 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
             {/* View mode toggle (single / two-page) — only for multi-page PDFs */}
             {numPages > 1 && (
-              <div className="flex items-center bg-slate-800/80 p-0.5 rounded-xl border border-slate-700/60">
-                <button
-                  onClick={() => setViewMode('single')}
-                  title="Single Page View"
-                  className={cn(
-                    'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors',
-                    effectiveViewMode === 'single'
-                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  )}
-                >
-                  <BookOpen className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Single</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setViewMode('double');
-                    // Ensure currentPage is odd so it pairs 1-2, 3-4, 5-6, etc.
-                    setCurrentPage((p) => (p % 2 === 0 ? Math.max(1, p - 1) : p));
-                  }}
-                  title={
-                    !isWideScreen
-                      ? 'Two-page view (automatically falls back on small screens)'
-                      : 'Two Pages Side-by-Side'
-                  }
-                  className={cn(
-                    'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors',
-                    effectiveViewMode === 'double'
-                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  )}
-                >
-                  <Columns2 className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline">Two Pages</span>
-                </button>
-              </div>
+              <LayoutGroup id="doc-viewer-view-mode-tabs">
+                <div className="relative flex items-center bg-slate-800/80 p-0.5 rounded-xl border border-slate-700/60">
+                  <button
+                    onClick={() => setViewMode('single')}
+                    title="Single Page View"
+                    className={cn(
+                      'relative z-10 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors duration-150',
+                      effectiveViewMode === 'single'
+                        ? 'text-white font-semibold'
+                        : 'text-slate-400 hover:text-white'
+                    )}
+                  >
+                    {effectiveViewMode === 'single' && (
+                      <motion.div
+                        layoutId="doc-view-mode-pill"
+                        className="absolute inset-0 bg-indigo-600 rounded-lg shadow-sm"
+                        transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      />
+                    )}
+                    <BookOpen className="relative z-10 w-3.5 h-3.5" />
+                    <span className="relative z-10 hidden md:inline">Single</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setViewMode('double');
+                      // Ensure currentPage is odd so it pairs 1-2, 3-4, 5-6, etc.
+                      setCurrentPage((p) => (p % 2 === 0 ? Math.max(1, p - 1) : p));
+                    }}
+                    title={
+                      !isWideScreen
+                        ? 'Two-page view (automatically falls back on small screens)'
+                        : 'Two Pages Side-by-Side'
+                    }
+                    className={cn(
+                      'relative z-10 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors duration-150',
+                      effectiveViewMode === 'double'
+                        ? 'text-white font-semibold'
+                        : 'text-slate-400 hover:text-white'
+                    )}
+                  >
+                    {effectiveViewMode === 'double' && (
+                      <motion.div
+                        layoutId="doc-view-mode-pill"
+                        className="absolute inset-0 bg-indigo-600 rounded-lg shadow-sm"
+                        transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      />
+                    )}
+                    <Columns2 className="relative z-10 w-3.5 h-3.5" />
+                    <span className="relative z-10 hidden md:inline">Two Pages</span>
+                  </button>
+                </div>
+              </LayoutGroup>
             )}
           </div>
         )}
