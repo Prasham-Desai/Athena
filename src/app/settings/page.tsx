@@ -153,7 +153,7 @@ export default function SettingsPage() {
   // Loading skeleton
   if (!hydrated) {
     return (
-      <div className="space-y-4 animate-pulse">
+      <div className="mx-auto max-w-2xl space-y-4 animate-pulse">
         <div className="h-8 w-48 rounded-lg bg-[hsl(var(--muted))]" />
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="h-36 rounded-2xl bg-[hsl(var(--muted))]" />
@@ -169,10 +169,10 @@ export default function SettingsPage() {
   ] as const;
 
   return (
-    <>
+    <div className="mx-auto max-w-2xl">
       <PageHeader title="Settings" description="Personalize Athena to fit your study style perfectly ⚙️" />
 
-      <div className="space-y-6 max-w-2xl">
+      <div className="space-y-6">
         {/* ---- Appearance ---- */}
         <SettingsSection title="Appearance" description="Customize how the app looks" delay={0.05}>
           <div className="flex flex-wrap gap-3">
@@ -320,6 +320,6 @@ export default function SettingsPage() {
         message="This will permanently delete ALL your data including subjects, tasks, planner entries, and activity logs. This cannot be undone. Are you sure?"
         confirmText="Reset Everything"
       />
-    </>
+    </div>
   );
 }

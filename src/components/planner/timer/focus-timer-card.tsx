@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Timer, Play, Pause, Save, RotateCcw, Clock, Target, BookOpen, CheckSquare, Sparkles } from 'lucide-react';
+import { Timer, Play, Pause, Save, RotateCcw, Clock, Target, BookOpen, CheckSquare, Sparkles, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, getToday } from '@/lib/utils';
 import { useTimerStore, type ActiveTimerTarget } from '@/store/timer-store';
@@ -13,10 +13,12 @@ export function FocusTimerCard({
   date = getToday(),
   todayActualMinutes,
   onSwitchActivityPrompt,
+  onOpenAddHours,
 }: {
   date?: string;
   todayActualMinutes?: number;
   onSwitchActivityPrompt?: (newTarget: ActiveTimerTarget) => void;
+  onOpenAddHours?: () => void;
 }) {
   const {
     isMainRunning,
@@ -187,6 +189,18 @@ export function FocusTimerCard({
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset
+              </button>
+            )}
+
+            {onOpenAddHours && (
+              <button
+                type="button"
+                onClick={onOpenAddHours}
+                className="inline-flex items-center gap-1.5 px-4 py-3 rounded-2xl bg-[hsl(var(--background))] hover:bg-[hsl(var(--muted))] text-xs font-semibold text-[hsl(var(--foreground))] border border-[hsl(var(--border))] shadow-sm transition active:scale-95"
+                title="Manually log hours studied offline"
+              >
+                <Plus className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Add Hours</span>
               </button>
             )}
           </div>

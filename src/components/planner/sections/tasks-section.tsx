@@ -69,7 +69,7 @@ export function TasksSection({
   const [displayLimit, setDisplayLimit] = useState(15);
 
   const filteredTasks = useMemo(() => {
-    return tasks.filter((task) => {
+    const list = tasks.filter((task) => {
       // Status
       if (statusFilter === 'active' && task.completed) return false;
       if (statusFilter === 'completed' && !task.completed) return false;
@@ -87,6 +87,48 @@ export function TasksSection({
 
       return true;
     });
+
+    if (statusFilter === 'completed') {
+      // Latest completed tasks first, older ones last
+      return [...list].sort((a, b) => {
+        const timeA = a.completedAt
+          ? new Date(a.completedAt).getTime()
+          : a.createdAt
+          ? new Date(a.createdAt).getTime()
+          : 0;
+        const timeB = b.completedAt
+          ? new Date(b.completedAt).getTime()
+          : b.createdAt
+          ? new Date(b.createdAt).getTime()
+          : 0;
+        return timeB - timeA;
+      });
+    }
+
+    if (statusFilter === 'all') {
+      // Active tasks first; for completed tasks, latest completed first
+      return [...list].sort((a, b) => {
+        if (a.completed !== b.completed) {
+          return a.completed ? 1 : -1;
+        }
+        if (a.completed) {
+          const timeA = a.completedAt
+            ? new Date(a.completedAt).getTime()
+            : a.createdAt
+            ? new Date(a.createdAt).getTime()
+            : 0;
+          const timeB = b.completedAt
+            ? new Date(b.completedAt).getTime()
+            : b.createdAt
+            ? new Date(b.createdAt).getTime()
+            : 0;
+          return timeB - timeA;
+        }
+        return 0;
+      });
+    }
+
+    return list;
   }, [tasks, statusFilter, categoryFilter, searchQuery]);
 
   const displayedTasks = useMemo(() => {

@@ -228,6 +228,7 @@ function DayflowContent() {
       <FocusTimerCard
         date={today}
         todayActualMinutes={metrics.actualStudyMinutes}
+        onOpenAddHours={() => setShowLogModal(true)}
       />
 
       {/* 2. STUDY BLOCKS / STUDY LOGS SECTION */}
@@ -240,6 +241,12 @@ function DayflowContent() {
         onOpenLogModal={() => setShowLogModal(true)}
         onEditBlock={(block) => setEditingBlock(block)}
         onDeleteBlock={(id) => setConfirmDelete({ type: 'block', id })}
+        onDeleteSession={(sessionDate, sessionId) => {
+          removeStudySession(sessionDate, sessionId);
+          window.dispatchEvent(
+            new CustomEvent('toast', { detail: { message: 'Study session removed', type: 'info' } })
+          );
+        }}
         onStartFocus={handleStartFocus}
       />
 
@@ -275,15 +282,25 @@ function DayflowContent() {
         onAddTask={addTask}
       />
 
-      {/* Modal: Log Study Time (Retrospective) */}
+      {/* Modal: Log Study Time (Manual Hours) */}
       <LogStudyTimeModal
         open={showLogModal}
         initialDate={today}
-        subjects={subjects}
-        tasks={tasks}
-        sessions={todaySessions}
         onClose={() => setShowLogModal(false)}
-        onAddStudyLog={addStudyBlock}
+        onAddHours={async ({ durationMinutes, date, notes }) => {
+          const now = new Date();
+          const sessionDate = date || today;
+          const endIso = now.toISOString();
+          const startIso = new Date(now.getTime() - durationMinutes * 60000).toISOString();
+
+          await addStudySession(sessionDate, {
+            startTime: startIso,
+            endTime: endIso,
+            durationMinutes,
+            type: 'manual',
+            title: notes?.trim() || 'Manual Study Time',
+          });
+        }}
       />
 
       {/* Modal: Edit Task */}

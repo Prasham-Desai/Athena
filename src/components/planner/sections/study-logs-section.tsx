@@ -45,6 +45,7 @@ interface StudyLogsSectionProps {
   onOpenLogModal: () => void;
   onEditBlock: (block: StudyBlock) => void;
   onDeleteBlock: (id: string) => void;
+  onDeleteSession?: (date: string, sessionId: string) => void;
   onStartFocus: (target: ActiveTimerTarget) => void;
 }
 
@@ -57,6 +58,7 @@ export function StudyLogsSection({
   onOpenLogModal,
   onEditBlock,
   onDeleteBlock,
+  onDeleteSession,
   onStartFocus,
 }: StudyLogsSectionProps) {
   // Calendar and date selection state
@@ -592,6 +594,17 @@ export function StudyLogsSection({
                         </p>
                       </div>
                     </div>
+
+                    {onDeleteSession && (
+                      <button
+                        type="button"
+                        onClick={() => onDeleteSession(session.date || selectedDateStr, session.id)}
+                        title="Delete session"
+                        className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:bg-red-500/10 hover:text-red-400 transition self-end sm:self-center shrink-0"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </motion.div>
                 ))}
               </AnimatePresence>

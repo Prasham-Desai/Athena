@@ -111,21 +111,27 @@ export function calculateDayStudyMetrics({
 
   let rawTimerMinutes = 0;
   let rawManualMinutes = 0;
+  let standaloneManualMinutes = 0;
 
   // 1. Process Timer Sessions
   for (const session of sessions) {
     if (session.type === 'break') continue;
     const dur = Number(session.durationMinutes) || 0;
-    rawTimerMinutes += dur;
 
-    const sStart = new Date(session.startTime);
-    const sEnd = new Date(session.endTime);
-    if (!isNaN(sStart.getTime()) && !isNaN(sEnd.getTime())) {
-      const sessStart = sStart.getHours() * 60 + sStart.getMinutes();
-      let sessEnd = sEnd.getHours() * 60 + sEnd.getMinutes();
-      if (sessEnd < sessStart) sessEnd += 24 * 60;
-      for (let m = sessStart; m < sessEnd && m < 1440; m++) {
-        minuteSet.add(m);
+    if (session.type === 'manual') {
+      standaloneManualMinutes += dur;
+    } else {
+      rawTimerMinutes += dur;
+
+      const sStart = new Date(session.startTime);
+      const sEnd = new Date(session.endTime);
+      if (!isNaN(sStart.getTime()) && !isNaN(sEnd.getTime())) {
+        const sessStart = sStart.getHours() * 60 + sStart.getMinutes();
+        let sessEnd = sEnd.getHours() * 60 + sEnd.getMinutes();
+        if (sessEnd < sessStart) sessEnd += 24 * 60;
+        for (let m = sessStart; m < sessEnd && m < 1440; m++) {
+          minuteSet.add(m);
+        }
       }
     }
   }
@@ -149,13 +155,11 @@ export function calculateDayStudyMetrics({
     }
   }
 
-  // If timestamps were available, the union size is the exact deduplicated study time.
-  // If no timestamp intervals were populated, fall back to safe sum.
-  const deduplicatedMinutes = minuteSet.size > 0 
-    ? minuteSet.size 
-    : (rawTimerMinutes + rawManualMinutes);
+  // Deduplicated time: timer/block intervals + any manual additions
+  const timedMinutes = minuteSet.size > 0 ? minuteSet.size : (rawTimerMinutes + rawManualMinutes);
+  const deduplicatedMinutes = timedMinutes + standaloneManualMinutes;
 
-  const overlappingMinutes = Math.max(0, (rawTimerMinutes + rawManualMinutes) - deduplicatedMinutes);
+  const overlappingMinutes = Math.max(0, (rawTimerMinutes + rawManualMinutes) - timedMinutes);
 
   const completedTasksCount = dayTasks.filter((t) => t.completed).length;
   const pendingTasksCount = tasks.filter((t) => !t.completed).length;
