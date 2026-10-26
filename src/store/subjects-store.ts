@@ -29,11 +29,14 @@ interface SubjectsState {
   setSubjects: (subjects: Subject[]) => void;
 }
 
+let subjectsFetchId = 0;
+
 export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   subjects: [],
   isLoading: false,
 
   fetchSubjects: async (academicYearId?: string) => {
+    const requestId = ++subjectsFetchId;
     set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
@@ -41,12 +44,12 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
       const response = await fetch(url);
       if (response.ok) {
         const { data } = (await response.json()) as any;
-        set({ subjects: data || [] });
+        if (requestId === subjectsFetchId) set({ subjects: data || [] });
       }
     } catch (error) {
       console.error('Failed to fetch subjects', error);
     } finally {
-      set({ isLoading: false });
+      if (requestId === subjectsFetchId) set({ isLoading: false });
     }
   },
 

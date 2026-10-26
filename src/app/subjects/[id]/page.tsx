@@ -317,6 +317,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
   const deleteTopic = useSubjectsStore((s) => s.deleteTopic);
   const addActivity = useActivityStore((s) => s.addActivity);
   const subjects = useSubjectsStore((s) => s.subjects);
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
   const audioNotes = useAudioStore((s) => s.audioNotes[topic.id]) || [];
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -894,6 +895,7 @@ export default function SubjectDetailPage() {
   const id = params.id as string;
 
   const subjects = useSubjectsStore((s) => s.subjects);
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
   const addChapter = useSubjectsStore((s) => s.addChapter);
 
   const [newChapterName, setNewChapterName] = useState('');
@@ -963,6 +965,10 @@ export default function SubjectDetailPage() {
 
   // ---------- Loading ----------
   if (!hydrated) {
+    return <PageLoader label="Loading subject details" variant="detail" />;
+  }
+
+  if (subjectsLoading) {
     return <PageLoader label="Loading subject details" variant="detail" />;
   }
 

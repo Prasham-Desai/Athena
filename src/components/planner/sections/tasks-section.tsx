@@ -18,6 +18,7 @@ import {
 import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG } from '@/lib/utils';
 import type { Task, TaskCategory, Priority } from '@/types';
 import type { ActiveTimerTarget } from '@/store/timer-store';
+import { SectionLoader, Skeleton } from '@/components/ui/loading';
 
 type StatusFilter = 'all' | 'active' | 'completed';
 
@@ -46,6 +47,7 @@ const CATEGORY_COLORS: Record<TaskCategory, string> = {
 
 interface TasksSectionProps {
   tasks: Task[];
+  isLoading?: boolean;
   todayStr: string;
   onOpenAddTaskModal: () => void;
   onToggleTask: (id: string) => void;
@@ -56,6 +58,7 @@ interface TasksSectionProps {
 
 export function TasksSection({
   tasks,
+  isLoading = false,
   todayStr,
   onOpenAddTaskModal,
   onToggleTask,
@@ -212,7 +215,7 @@ export function TasksSection({
                     />
                   )}
                   <span className="relative z-10">{tab.label}</span>
-                  <span
+                  {isLoading ? <Skeleton className="relative z-10 h-4 w-5 rounded-md" /> : <span
                     className={cn(
                       'relative z-10 text-[10px] px-1.5 py-0.5 rounded-md font-mono transition-colors',
                       tab.value === 'active'
@@ -223,7 +226,7 @@ export function TasksSection({
                     )}
                   >
                     {count}
-                  </span>
+                  </span>}
                 </button>
               );
             })}
@@ -261,7 +264,9 @@ export function TasksSection({
       </div>
 
       {/* Task List */}
-      {filteredTasks.length === 0 ? (
+      {isLoading ? (
+        <SectionLoader rows={4} />
+      ) : filteredTasks.length === 0 ? (
         <div className="py-12 text-center flex flex-col items-center justify-center rounded-2xl border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 p-6 min-w-0">
           <div className="w-12 h-12 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-3 text-[hsl(var(--muted-foreground))]">
             <CheckSquare className="w-6 h-6" />

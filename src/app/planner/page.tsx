@@ -32,10 +32,10 @@ function DayflowContent() {
   const today = useToday();
 
   // Stores
-  const { tasks, addTask, updateTask, deleteTask, toggleTask } = useTasksStore();
-  const { studyBlocks, addStudyBlock, updateStudyBlock, deleteStudyBlock } = usePlannerStore();
-  const subjects = useSubjectsStore((s) => s.subjects);
-  const { dailyLogs, addStudySession, removeStudySession, addActivity } = useActivityStore();
+  const { tasks, isLoading: tasksLoading, addTask, updateTask, deleteTask, toggleTask } = useTasksStore();
+  const { studyBlocks, isLoading: studyBlocksLoading, addStudyBlock, updateStudyBlock, deleteStudyBlock } = usePlannerStore();
+  const { subjects, isLoading: subjectsLoading } = useSubjectsStore();
+  const { dailyLogs, isLoadingDailyLogs: dailyLogsLoading, addStudySession, removeStudySession, addActivity } = useActivityStore();
 
   const {
     isMainRunning,
@@ -221,6 +221,7 @@ function DayflowContent() {
       <FocusTimerCard
         date={today}
         todayActualMinutes={metrics.actualStudyMinutes}
+        isLoading={dailyLogsLoading}
         onOpenAddHours={() => setShowLogModal(true)}
       />
 
@@ -230,6 +231,7 @@ function DayflowContent() {
         tasks={tasks}
         subjects={subjects}
         dailyLogs={dailyLogs}
+        isLoading={studyBlocksLoading || dailyLogsLoading || tasksLoading || subjectsLoading}
         todayStr={today}
         onOpenLogModal={() => setShowLogModal(true)}
         onEditBlock={(block) => setEditingBlock(block)}
@@ -245,6 +247,7 @@ function DayflowContent() {
 
       {/* 3. DAILY SUMMARY CARDS */}
       <DailySummarySection
+        isLoading={tasksLoading || dailyLogsLoading || studyBlocksLoading}
         completedTasksCount={metrics.completedTasksCount}
         totalTasksTodayCount={metrics.totalTasksTodayCount}
         pendingTasksCount={metrics.pendingTasksCount}
@@ -258,6 +261,7 @@ function DayflowContent() {
       <div id="tasks">
         <TasksSection
           tasks={tasks}
+          isLoading={tasksLoading}
           todayStr={today}
           onOpenAddTaskModal={() => setShowAddTaskModal(true)}
           onToggleTask={handleToggleTask}

@@ -35,12 +35,14 @@ import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG } from '@/lib/utils';
 import { formatDurationHuman, calculateMinutesFromRange } from '@/lib/study-analytics';
 import type { StudyBlock, Task, DailyLog } from '@/types';
 import type { ActiveTimerTarget } from '@/store/timer-store';
+import { Skeleton } from '@/components/ui/loading';
 
 interface StudyLogsSectionProps {
   studyBlocks: StudyBlock[];
   tasks: Task[];
   subjects: { id: string; name: string; color: string }[];
   dailyLogs?: DailyLog[];
+  isLoading?: boolean;
   todayStr: string;
   onOpenLogModal: () => void;
   onEditBlock: (block: StudyBlock) => void;
@@ -54,6 +56,7 @@ export function StudyLogsSection({
   tasks,
   subjects,
   dailyLogs = [],
+  isLoading = false,
   todayStr,
   onOpenLogModal,
   onEditBlock,
@@ -165,7 +168,7 @@ export function StudyLogsSection({
   };
 
   return (
-    <section className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6 shadow-sm min-w-0">
+    <section className="relative rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 sm:p-6 shadow-sm min-w-0">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-[hsl(var(--border))] min-w-0">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -176,7 +179,7 @@ export function StudyLogsSection({
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-lg font-bold text-[hsl(var(--foreground))]">Study Blocks & Logs</h2>
               <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-semibold">
-                {studyBlocks.length} {studyBlocks.length === 1 ? 'record' : 'records'}
+                {isLoading ? 'Loading' : `${studyBlocks.length} ${studyBlocks.length === 1 ? 'record' : 'records'}`}
               </span>
             </div>
             <p className="text-xs text-[hsl(var(--muted-foreground))] truncate">
@@ -195,6 +198,18 @@ export function StudyLogsSection({
           <span>Log Study Time</span>
         </button>
       </div>
+
+      {isLoading && (
+        <div
+          role="status"
+          aria-busy="true"
+          className="absolute inset-x-4 bottom-4 top-24 z-10 grid grid-cols-1 gap-4 rounded-2xl bg-[hsl(var(--card))]/90 p-2 backdrop-blur-sm lg:grid-cols-12"
+        >
+          <span className="sr-only">Loading study logs and calendar</span>
+          <Skeleton className="h-72 rounded-2xl lg:col-span-4" />
+          <Skeleton className="h-72 rounded-2xl lg:col-span-8" />
+        </div>
+      )}
 
       {/* Main 30% / 70% Layout Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start min-w-0">

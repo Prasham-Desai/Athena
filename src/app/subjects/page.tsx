@@ -31,7 +31,7 @@ import {
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
-import { PageLoader } from '@/components/ui/loading';
+import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 import { EmptyState } from '@/components/shared/empty-state';
 import { cn, SUBJECT_COLORS, SUBJECT_ICONS } from '@/lib/utils';
 
@@ -440,6 +440,7 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
 export default function SubjectsPage() {
   const hydrated = useHydration();
   const subjects = useSubjectsStore((s) => s.subjects);
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
   const addSubject = useSubjectsStore((s) => s.addSubject);
   const deleteSubject = useSubjectsStore((s) => s.deleteSubject);
   const updateSubject = useSubjectsStore((s) => s.updateSubject);
@@ -494,7 +495,9 @@ export default function SubjectsPage() {
         </button>
       </PageHeader>
 
-      {subjects.length === 0 ? (
+      {subjectsLoading ? (
+        <CardGridLoader cards={6} />
+      ) : subjects.length === 0 ? (
         <EmptyState
           icon={FolderOpen}
           title="No subjects yet"

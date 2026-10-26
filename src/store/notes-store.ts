@@ -16,6 +16,8 @@ interface NotesState {
   setActiveSubjectId: (subjectId: string | null) => void;
 }
 
+let notesFetchId = 0;
+
 export const useNotesStore = create<NotesState>((set, get) => ({
   notes: [],
   activeSubjectId: null,
@@ -24,6 +26,7 @@ export const useNotesStore = create<NotesState>((set, get) => ({
   error: null,
 
   fetchNotes: async (academicYearId?: string, subjectId?: string) => {
+    const requestId = ++notesFetchId;
     set({ isLoading: true, error: null });
     try {
       const yearId =
@@ -44,11 +47,11 @@ export const useNotesStore = create<NotesState>((set, get) => ({
       }
 
       const list: NoteDocument[] = data.data || [];
-      set({ notes: list, isLoading: false });
+      if (requestId === notesFetchId) set({ notes: list, isLoading: false });
       return list;
     } catch (err: any) {
       console.error('Error fetching notes:', err);
-      set({ error: err.message, isLoading: false });
+      if (requestId === notesFetchId) set({ error: err.message, isLoading: false });
       return [];
     }
   },

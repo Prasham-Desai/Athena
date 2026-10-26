@@ -57,7 +57,7 @@ export class SubjectService {
    * This is the primary data source for the frontend store.
    */
   async getAllWithHierarchy(academicYearId?: string): Promise<any[]> {
-    const subjects = academicYearId
+    const subjects = (academicYearId && academicYearId !== 'all')
       ? await this.db.query<any>('SELECT * FROM subjects WHERE academic_year_id = ? ORDER BY created_at DESC', [academicYearId])
       : await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
     if (!subjects.length) return [];

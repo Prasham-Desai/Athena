@@ -15,12 +15,14 @@ import { StatCard } from '@/components/shared/stat-card';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import type { Subject } from '@/types';
 import { isOverdue, isToday, getToday } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/loading';
 
 interface RevisionStatsHeaderProps {
   subjects: Subject[];
+  isLoading?: boolean;
 }
 
-export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
+export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionStatsHeaderProps) {
   const stats = useMemo(() => {
     let totalTopics = 0;
     let completedTopics = 0;
@@ -79,6 +81,7 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
           icon={BookOpen}
           color="#6366f1"
           subtitle={`${stats.completedTopics} completed`}
+          isLoading={isLoading}
         />
         <StatCard
           title="Revised Today"
@@ -86,6 +89,7 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
           icon={Flame}
           color="#f97316"
           subtitle={stats.revisedToday > 0 ? 'Keep it up! 🔥' : 'Start revising!'}
+          isLoading={isLoading}
         />
         <StatCard
           title="Due for Revision"
@@ -93,6 +97,7 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
           icon={Calendar}
           color={stats.dueForRevision > 0 ? '#ef4444' : '#22c55e'}
           subtitle={stats.dueForRevision > 0 ? 'Topics need attention' : 'All caught up!'}
+          isLoading={isLoading}
         />
         <StatCard
           title="Coverage"
@@ -100,11 +105,19 @@ export function RevisionStatsHeader({ subjects }: RevisionStatsHeaderProps) {
           icon={Target}
           color="#8b5cf6"
           subtitle={`${stats.revisedAtLeastOnce} of ${stats.totalTopics} revised`}
+          isLoading={isLoading}
         />
       </div>
 
       {/* Revision Completion Analysis Card */}
-      {subjects.length > 0 && (
+      {isLoading ? (
+        <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 space-y-4" role="status" aria-busy="true">
+          <Skeleton className="h-5 w-44" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-5/6" />
+          <span className="sr-only">Loading revision coverage</span>
+        </div>
+      ) : subjects.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

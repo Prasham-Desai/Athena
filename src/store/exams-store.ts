@@ -13,12 +13,15 @@ interface ExamsState {
   checkCompletedExams: () => Promise<void>;
 }
 
+let examsFetchId = 0;
+
 export const useExamsStore = create<ExamsState>((set, get) => ({
   exams: [],
   isLoading: false,
   error: null,
 
   fetchExams: async (academicYearId?: string) => {
+    const requestId = ++examsFetchId;
     set({ isLoading: true, error: null });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
@@ -27,12 +30,14 @@ export const useExamsStore = create<ExamsState>((set, get) => ({
       const data: any = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to fetch exams');
       
-      set({ exams: data.data || [] });
-      get().checkCompletedExams();
+      if (requestId === examsFetchId) {
+        set({ exams: data.data || [] });
+        get().checkCompletedExams();
+      }
     } catch (error: any) {
-      set({ error: error.message });
+      if (requestId === examsFetchId) set({ error: error.message });
     } finally {
-      set({ isLoading: false });
+      if (requestId === examsFetchId) set({ isLoading: false });
     }
   },
 

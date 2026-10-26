@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
     const env = await getEnv(request);
     const db = new Database(env.DB);
     
-    const academicYearId = request.nextUrl.searchParams.get('academic_year_id');
+    const rawYear = request.nextUrl.searchParams.get('academic_year_id');
+    const academicYearId = (rawYear && rawYear !== 'all') ? rawYear : null;
 
     // 1. Fetch raw activities for custom events (milestone, subject-added, etc.)
     const legacyActivities = academicYearId

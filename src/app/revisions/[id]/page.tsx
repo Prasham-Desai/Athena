@@ -338,6 +338,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   const router = useRouter();
   
   const subjects = useSubjectsStore((s) => s.subjects);
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
   const subject = subjects.find((s) => s.id === id);
 
   const HeaderIcon = getIcon(subject?.icon);
@@ -365,6 +366,10 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   }, [subject, searchQuery]);
 
   if (!hydrated) {
+    return <PageLoader label="Loading revision details" variant="detail" />;
+  }
+
+  if (subjectsLoading) {
     return <PageLoader label="Loading revision details" variant="detail" />;
   }
 

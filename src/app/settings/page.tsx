@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { PageLoader } from '@/components/ui/loading';
+import { SectionLoader } from '@/components/ui/loading';
 import { useState } from 'react';
 // Section wrapper
 // ---------------------------------------------------------------------------
@@ -23,11 +24,13 @@ function SettingsSection({
   description,
   children,
   delay = 0,
+  isLoading = false,
 }: {
   title: string;
   description?: string;
   children: React.ReactNode;
   delay?: number;
+  isLoading?: boolean;
 }) {
   return (
     <motion.div
@@ -41,7 +44,7 @@ function SettingsSection({
         <p className="text-xs text-[hsl(var(--muted-foreground))] mb-5">{description}</p>
       )}
       {!description && <div className="mb-5" />}
-      {children}
+      {isLoading ? <SectionLoader rows={2} /> : children}
     </motion.div>
   );
 }
@@ -53,11 +56,11 @@ function SettingsSection({
 export default function SettingsPage() {
   const hydrated = useHydration();
   const { theme, setTheme } = useTheme();
-  const { settings, updateSettings, resetSettings } = useSettingsStore();
-  const { subjects, setSubjects } = useSubjectsStore();
-  const { studyBlocks, setStudyBlocks } = usePlannerStore();
-  const { tasks, setTasks } = useTasksStore();
-  const { activities, dailyLogs, setActivities, setDailyLogs } = useActivityStore();
+  const { settings, isLoading: settingsLoading, updateSettings, resetSettings } = useSettingsStore();
+  const { subjects, isLoading: subjectsLoading, setSubjects } = useSubjectsStore();
+  const { studyBlocks, isLoading: blocksLoading, setStudyBlocks } = usePlannerStore();
+  const { tasks, isLoading: tasksLoading, setTasks } = useTasksStore();
+  const { activities, dailyLogs, isLoadingActivities: activitiesLoading, isLoadingDailyLogs: logsLoading, setActivities, setDailyLogs } = useActivityStore();
   
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -168,7 +171,7 @@ export default function SettingsPage() {
 
       <div className="space-y-6">
         {/* ---- Appearance ---- */}
-        <SettingsSection title="Appearance" description="Customize how the app looks" delay={0.05}>
+        <SettingsSection title="Appearance" description="Customize how the app looks" delay={0.05} isLoading={settingsLoading}>
           <div className="flex flex-wrap gap-3">
             {themeOptions.map(({ value, label, icon: Icon }) => (
               <button
@@ -192,7 +195,7 @@ export default function SettingsPage() {
         </SettingsSection>
 
         {/* ---- Font Size ---- */}
-        <SettingsSection title="Font Size" description="Adjust text size across the app" delay={0.07}>
+        <SettingsSection title="Font Size" description="Adjust text size across the app" delay={0.07} isLoading={settingsLoading}>
           <div className="flex flex-wrap gap-3">
             {([
               { value: 'small' as const, label: 'Small', preview: 'Aa' },
@@ -218,7 +221,7 @@ export default function SettingsPage() {
         </SettingsSection>
 
         {/* ---- Study Goals ---- */}
-        <SettingsSection title="Study Goals" description="Set your daily study targets" delay={0.1}>
+        <SettingsSection title="Study Goals" description="Set your daily study targets" delay={0.1} isLoading={settingsLoading}>
           <div className="flex items-center gap-4">
             <Target className="h-5 w-5 text-[hsl(var(--muted-foreground))] shrink-0" />
             <div className="flex-1">
@@ -240,7 +243,7 @@ export default function SettingsPage() {
 
 
         {/* ---- Data Management ---- */}
-        <SettingsSection title="Data Management" description="Export, import, or reset your study data" delay={0.2}>
+        <SettingsSection title="Data Management" description="Export, import, or reset your study data" delay={0.2} isLoading={subjectsLoading || blocksLoading || tasksLoading || activitiesLoading || logsLoading}>
           <div className="space-y-3">
             {/* Export */}
             <button

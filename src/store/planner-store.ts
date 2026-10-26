@@ -30,11 +30,14 @@ async function saveStudyBlock(block: StudyBlock, method: 'POST' | 'PUT' = 'POST'
   return payload.data as StudyBlock;
 }
 
+let studyBlocksFetchId = 0;
+
 export const usePlannerStore = create<PlannerState>()((set, get) => ({
   studyBlocks: [],
   isLoading: false,
 
   fetchStudyBlocks: async (academicYearId?: string) => {
+    const requestId = ++studyBlocksFetchId;
     set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
@@ -44,12 +47,12 @@ export const usePlannerStore = create<PlannerState>()((set, get) => ({
 
       const payload = (await response.json()) as { data?: StudyBlock[] };
       if (payload?.data) {
-        set({ studyBlocks: payload.data as StudyBlock[] });
+        if (requestId === studyBlocksFetchId) set({ studyBlocks: payload.data as StudyBlock[] });
       }
     } catch (error) {
       console.error('Failed to fetch study blocks', error);
     } finally {
-      set({ isLoading: false });
+      if (requestId === studyBlocksFetchId) set({ isLoading: false });
     }
   },
 

@@ -23,7 +23,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 import { StatCard } from '@/components/shared/stat-card';
 import { PageHeader } from '@/components/shared/page-header';
-import { PageLoader } from '@/components/ui/loading';
+import { PageLoader, Skeleton } from '@/components/ui/loading';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -81,7 +81,8 @@ function ChartTooltip({ active, payload, label }: any) {
 export default function AnalyticsPage() {
   const hydrated = useHydration();
   const subjects = useSubjectsStore((s) => s.subjects);
-  const { dailyLogs } = useActivityStore();
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
+  const { dailyLogs, isLoadingDailyLogs: dailyLogsLoading } = useActivityStore();
 
   const [range, setRange] = useState<TimeRange>('weekly');
 
@@ -196,10 +197,10 @@ export default function AnalyticsPage() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <StatCard title="Total Study Hours" value={totalStudyHours.toFixed(1)} icon={Clock} color="#6366f1" />
-        <StatCard title="Topics Completed" value={topicsCompleted} icon={BookOpen} color="#22c55e" />
-        <StatCard title="Revisions Done" value={revisionsDone} icon={RotateCcw} color="#8b5cf6" />
-        <StatCard title="Avg Daily Hours" value={avgDailyHours.toFixed(1)} icon={TrendingUp} color="#f59e0b" />
+        <StatCard title="Total Study Hours" value={totalStudyHours.toFixed(1)} icon={Clock} color="#6366f1" isLoading={dailyLogsLoading} />
+        <StatCard title="Topics Completed" value={topicsCompleted} icon={BookOpen} color="#22c55e" isLoading={dailyLogsLoading} />
+        <StatCard title="Revisions Done" value={revisionsDone} icon={RotateCcw} color="#8b5cf6" isLoading={dailyLogsLoading} />
+        <StatCard title="Avg Daily Hours" value={avgDailyHours.toFixed(1)} icon={TrendingUp} color="#f59e0b" isLoading={dailyLogsLoading} />
       </div>
 
       {/* Charts grid */}
@@ -216,7 +217,7 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-semibold">Study Hours Trend</h3>
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
-            <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
+            {dailyLogsLoading ? <Skeleton className="h-full w-full rounded-xl" /> : <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
               <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <AreaChart data={studyHoursData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -241,7 +242,7 @@ export default function AnalyticsPage() {
                 />
               </AreaChart>
             </ResponsiveContainer>
-            </div>
+            </div>}
           </div>
         </motion.div>
 
@@ -257,7 +258,9 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-semibold">Subject Completion</h3>
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
-            {subjectData.length === 0 ? (
+            {subjectsLoading ? (
+              <Skeleton className="h-full w-full rounded-xl" />
+            ) : subjectData.length === 0 ? (
               <div className="h-full flex items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
                 No subjects added yet
               </div>
@@ -293,7 +296,7 @@ export default function AnalyticsPage() {
             <h3 className="text-sm font-semibold">Daily Activity</h3>
           </div>
           <div className="h-48 sm:h-56 lg:h-64">
-            <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
+            {dailyLogsLoading ? <Skeleton className="h-full w-full rounded-xl" /> : <div style={{ display: 'block', minHeight: '200px', width: '100%', height: '100%' }}>
               <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <BarChart data={dailyActivityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
@@ -310,7 +313,7 @@ export default function AnalyticsPage() {
                   <Bar dataKey="Revisions" stackId="a" fill="#f59e0b" radius={[6, 6, 0, 0]} maxBarSize={32} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </div>}
           </div>
         </motion.div>
       </div>

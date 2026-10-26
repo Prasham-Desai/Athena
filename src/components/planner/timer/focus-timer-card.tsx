@@ -8,15 +8,18 @@ import { useTimerStore, type ActiveTimerTarget } from '@/store/timer-store';
 import { useActivityStore } from '@/store/activity-store';
 import { useSettingsStore } from '@/store/settings-store';
 import { ProgressRing } from '@/components/shared/progress-ring';
+import { Skeleton } from '@/components/ui/loading';
 
 export function FocusTimerCard({
   date = getToday(),
   todayActualMinutes,
+  isLoading = false,
   onSwitchActivityPrompt,
   onOpenAddHours,
 }: {
   date?: string;
   todayActualMinutes?: number;
+  isLoading?: boolean;
   onSwitchActivityPrompt?: (newTarget: ActiveTimerTarget) => void;
   onOpenAddHours?: () => void;
 }) {
@@ -31,7 +34,8 @@ export function FocusTimerCard({
   } = useTimerStore();
 
   const { addStudySession, dailyLogs } = useActivityStore();
-  const { settings } = useSettingsStore();
+  const { settings, isLoading: settingsLoading } = useSettingsStore();
+  const progressLoading = isLoading || settingsLoading;
 
   const log = dailyLogs.find((l) => l.date === date);
   const totalMinutes = todayActualMinutes !== undefined ? todayActualMinutes : (log?.studyMinutes ?? 0);
@@ -208,21 +212,27 @@ export function FocusTimerCard({
 
         {/* Right: Daily Progress Ring */}
         <div className="flex flex-col items-center justify-center shrink-0 p-3 rounded-2xl bg-[hsl(var(--card))]/60 border border-[hsl(var(--border))] backdrop-blur-sm">
-          <ProgressRing
-            value={progressPct}
-            size={110}
-            strokeWidth={8}
-            color={progressPct >= 100 ? '#22c55e' : '#6366f1'}
-            bgColor="hsl(var(--muted))"
-            sublabel="daily goal"
-          />
+          {progressLoading ? (
+            <Skeleton className="h-[110px] w-[110px] rounded-full" />
+          ) : (
+            <ProgressRing
+              value={progressPct}
+              size={110}
+              strokeWidth={8}
+              color={progressPct >= 100 ? '#22c55e' : '#6366f1'}
+              bgColor="hsl(var(--muted))"
+              sublabel="daily goal"
+            />
+          )}
           <div className="mt-2 text-center">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
               Total Studied Today
             </p>
-            <p className="text-sm font-bold text-emerald-500">
-              {Math.floor(totalMinutes / 60)}h {(totalMinutes % 60).toString().padStart(2, '0')}m
-            </p>
+            {progressLoading ? <Skeleton className="mx-auto mt-1 h-4 w-16 rounded-md" /> : (
+              <p className="text-sm font-bold text-emerald-500">
+                {Math.floor(totalMinutes / 60)}h {(totalMinutes % 60).toString().padStart(2, '0')}m
+              </p>
+            )}
           </div>
         </div>
       </div>

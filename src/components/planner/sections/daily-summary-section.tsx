@@ -2,6 +2,7 @@
 
 import { CheckSquare, BookOpen, Clock, Sparkles } from 'lucide-react';
 import { formatDurationHuman } from '@/lib/study-analytics';
+import { Skeleton } from '@/components/ui/loading';
 
 interface DailySummarySectionProps {
   completedTasksCount: number;
@@ -11,6 +12,7 @@ interface DailySummarySectionProps {
   manualLogMinutes: number;
   actualStudyMinutes: number;
   overlappingMinutes: number;
+  isLoading?: boolean;
 }
 
 export function DailySummarySection({
@@ -21,6 +23,7 @@ export function DailySummarySection({
   manualLogMinutes,
   actualStudyMinutes,
   overlappingMinutes,
+  isLoading = false,
 }: DailySummarySectionProps) {
   return (
     <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 min-w-0">
@@ -32,14 +35,16 @@ export function DailySummarySection({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-black text-[hsl(var(--foreground))]">
-            {completedTasksCount}
+            {isLoading ? <Skeleton className="h-8 w-12 rounded-md" /> : completedTasksCount}
           </span>
-          <span className="text-xs text-[hsl(var(--muted-foreground))]">
-            / {totalTasksTodayCount} today
-          </span>
+          {isLoading ? <Skeleton className="h-3 w-16 rounded-md" /> : (
+            <span className="text-xs text-[hsl(var(--muted-foreground))]">
+              / {totalTasksTodayCount} today
+            </span>
+          )}
         </div>
         <p className="mt-1.5 text-[11px] text-[hsl(var(--muted-foreground))] truncate">
-          {totalTasksTodayCount === 0
+          {isLoading ? <Skeleton className="h-3 w-28 rounded-md" /> : totalTasksTodayCount === 0
             ? 'No tasks due today'
             : completedTasksCount >= totalTasksTodayCount
             ? 'All tasks completed! 🎉'
@@ -55,14 +60,14 @@ export function DailySummarySection({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-black text-[hsl(var(--foreground))]">
-            {studyLogsCount}
+            {isLoading ? <Skeleton className="h-8 w-12 rounded-md" /> : studyLogsCount}
           </span>
           <span className="text-xs text-indigo-400 font-semibold">
-            ({formatDurationHuman(manualLogMinutes)})
+            {isLoading ? <Skeleton className="h-4 w-14 rounded-md" /> : `(${formatDurationHuman(manualLogMinutes)})`}
           </span>
         </div>
         <p className="mt-1.5 text-[11px] text-[hsl(var(--muted-foreground))] truncate">
-          {studyLogsCount === 0 ? 'No logs added today' : `${studyLogsCount} logged study sessions`}
+          {isLoading ? <Skeleton className="h-3 w-32 rounded-md" /> : studyLogsCount === 0 ? 'No logs added today' : `${studyLogsCount} logged study sessions`}
         </p>
       </div>
 
@@ -74,11 +79,11 @@ export function DailySummarySection({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-black text-emerald-500">
-            {formatDurationHuman(actualStudyMinutes)}
+            {isLoading ? <Skeleton className="h-8 w-24 rounded-md" /> : formatDurationHuman(actualStudyMinutes)}
           </span>
         </div>
         <p className="mt-1.5 text-[11px] text-emerald-600/80 dark:text-emerald-400/80 truncate">
-          {overlappingMinutes > 0
+          {isLoading ? <Skeleton className="h-3 w-32 rounded-md" /> : overlappingMinutes > 0
             ? `Verified (${overlappingMinutes}m overlap deduplicated)`
             : 'Verified timer & study logs'}
         </p>
@@ -92,12 +97,12 @@ export function DailySummarySection({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-black text-[hsl(var(--foreground))]">
-            {pendingTasksCount}
+            {isLoading ? <Skeleton className="h-8 w-12 rounded-md" /> : pendingTasksCount}
           </span>
           <span className="text-xs text-[hsl(var(--muted-foreground))]">pending</span>
         </div>
         <p className="mt-1.5 text-[11px] text-[hsl(var(--muted-foreground))] truncate">
-          {pendingTasksCount === 0 ? 'Queue is clear!' : `${pendingTasksCount} total tasks in queue`}
+          {isLoading ? <Skeleton className="h-3 w-28 rounded-md" /> : pendingTasksCount === 0 ? 'Queue is clear!' : `${pendingTasksCount} total tasks in queue`}
         </p>
       </div>
     </section>

@@ -70,7 +70,7 @@ export function AcademicYearNavSection({
   collapsed: boolean;
   idPrefix?: string;
 }) {
-  const { years, activeYearId, setActiveYearId, isSwitching } = useAcademicYearStore();
+  const { years, activeYearId, setActiveYearId, isLoading, isSwitching } = useAcademicYearStore();
 
   return (
     <div className="space-y-1">
@@ -134,7 +134,7 @@ export function AcademicYearNavSection({
               )}
 
             {/* Icon */}
-            {isSwitching && isActive ? (
+            {(isLoading || isSwitching) && isActive ? (
               <Loader2 className="w-[18px] h-[18px] shrink-0 relative z-10 animate-spin text-white" />
             ) : (
               <Icon
@@ -179,7 +179,7 @@ export function AcademicYearNavSection({
  * Compact colorful pill for mobile header that lets the user toggle years with vibrant highlighting.
  */
 export function AcademicYearMobileBadge() {
-  const { years, activeYearId, setActiveYearId, isSwitching } = useAcademicYearStore();
+  const { years, activeYearId, setActiveYearId, isLoading, isSwitching } = useAcademicYearStore();
 
   const nextYear = years.find((y) => y.id !== activeYearId) || years[0];
   const activeYear = years.find((y) => y.id === activeYearId) || years[0];
@@ -200,7 +200,7 @@ export function AcademicYearMobileBadge() {
         activeTheme.activeShadow
       )}
     >
-      {isSwitching ? (
+      {isLoading || isSwitching ? (
         <Loader2 className="w-3.5 h-3.5 animate-spin" />
       ) : (
         <ActiveIcon className="w-3.5 h-3.5 text-white" />

@@ -15,12 +15,13 @@ import type { Subject } from '@/types';
 import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
 import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
 import { RevisionSubjectCard } from '@/components/revisions/revision-subject-card';
-import { PageLoader } from '@/components/ui/loading';
+import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 
 export default function RevisionsPage() {
   const hydrated = useHydration();
 
   const subjects = useSubjectsStore((s) => s.subjects);
+  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
   // Local state
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<RevisionFilter>('all');
@@ -132,11 +133,13 @@ export default function RevisionsPage() {
         description="Repetition is the mother of learning — each revision makes you stronger! 🧠"
       />
 
-      <RevisionStatsHeader subjects={subjects} />
+      <RevisionStatsHeader subjects={subjects} isLoading={subjectsLoading} />
 
       <div className="my-6" />
 
-      {subjects.length > 0 ? (
+      {subjectsLoading ? (
+        <CardGridLoader cards={4} />
+      ) : subjects.length > 0 ? (
         <>
           <RevisionControlsBar
             searchQuery={searchQuery}

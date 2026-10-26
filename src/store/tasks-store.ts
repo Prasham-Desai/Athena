@@ -13,11 +13,14 @@ interface TasksState {
   fetchTasks: (academicYearId?: string) => Promise<void>;
 }
 
+let tasksFetchId = 0;
+
 export const useTasksStore = create<TasksState>((set, get) => ({
   tasks: [],
   isLoading: false,
 
   fetchTasks: async (academicYearId?: string) => {
+    const requestId = ++tasksFetchId;
     set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
@@ -25,12 +28,12 @@ export const useTasksStore = create<TasksState>((set, get) => ({
       const response = await fetch(url);
       if (response.ok) {
         const { data } = (await response.json()) as any;
-        set({ tasks: data || [] });
+        if (requestId === tasksFetchId) set({ tasks: data || [] });
       }
     } catch (error) {
       console.error('Failed to fetch tasks', error);
     } finally {
-      set({ isLoading: false });
+      if (requestId === tasksFetchId) set({ isLoading: false });
     }
   },
 

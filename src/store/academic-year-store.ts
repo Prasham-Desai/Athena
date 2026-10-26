@@ -54,7 +54,7 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
   years: INITIAL_YEARS,
   activeYearId: _restoredYearId,
   activeYear: _restoredYear,
-  isLoading: false,
+  isLoading: true,
   isSwitching: false,
   error: null,
 

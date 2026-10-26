@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
     const db = new Database(env.DB);
     await ensureStudyTrackingTables(db);
     
-    const academicYearId = request.nextUrl.searchParams.get('academic_year_id');
+    const rawYear = request.nextUrl.searchParams.get('academic_year_id');
+    const academicYearId = (rawYear && rawYear !== 'all') ? rawYear : null;
 
     // We get all dates that have ANY activity scoped to the academic year
     const sessions = academicYearId
