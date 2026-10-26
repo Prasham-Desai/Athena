@@ -1,81 +1,42 @@
 'use client';
 
-import { useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import type { Variants } from "framer-motion";
-import { format, subDays } from 'date-fns';
+import { format, formatDistanceToNow, subDays } from 'date-fns';
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-import {
-  Target,
-  RotateCcw,
-  Flame,
-  CheckSquare,
-  ArrowRight,
-  BookOpen,
-  Clock,
-  Calendar,
-  Timer,
+  Activity, ArrowDownWideNarrow, ArrowRight, Atom, BookOpen, Calculator,
+  CalendarDays, Check, CheckCircle2, CheckSquare, Clock3, Code, Compass,
+  Flame, FlaskConical, Globe, GraduationCap, Languages, Lightbulb, ListTodo,
+  Microscope, Music, Palette, PenTool, Play, RotateCcw, Scale, Settings2,
+  Target, TriangleAlert, Brain,
+  type LucideIcon,
 } from 'lucide-react';
+import {
+  Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
 
 import { useSubjectsStore } from '@/store/subjects-store';
 import { usePlannerStore } from '@/store/planner-store';
 import { useTasksStore } from '@/store/tasks-store';
 import { useActivityStore } from '@/store/activity-store';
 import { useExamsStore } from '@/store/exams-store';
-
-import { ProgressRing } from '@/components/shared/progress-ring';
-import { StatCard } from '@/components/shared/stat-card';
-import { ExamTimer } from '@/components/shared/exam-timer';
-import { PageHeader } from '@/components/shared/page-header';
-import { CardGridLoader, PageLoader, SectionLoader, Skeleton } from '@/components/ui/loading';
-
+import { useSettingsStore } from '@/store/settings-store';
+import { useTimerStore } from '@/store/timer-store';
 import { useHydration } from '@/hooks/use-hydration';
-import {
-  cn,
-  getToday,
-  getStreakCount,
-  formatDate,
-  getRelativeDate,
-  STATUS_CONFIG,
-  PRIORITY_CONFIG,
-} from '@/lib/utils';
 import { useToday } from '@/hooks/use-today';
+import { calculateDayStudyMetrics, formatDurationHuman } from '@/lib/study-analytics';
+import { getRelativeDate, getStreakCount, PRIORITY_CONFIG } from '@/lib/utils';
+import { AddTaskModal } from '@/components/planner/modals/add-task-modal';
+import { EditTaskModal } from '@/components/planner/modals/edit-task-modal';
+import { PageLoader, SectionLoader, Skeleton } from '@/components/ui/loading';
+import type { Task, Topic } from '@/types';
 
-// ---------------------------------------------------------------------------
-// Animation variants
-// ---------------------------------------------------------------------------
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
-};
+type SubjectSort = 'attention' | 'completion' | 'remaining' | 'revisions' | 'activity';
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      bounce: 0.3,
-    },
-  },
-} satisfies Variants;
-// ---------------------------------------------------------------------------
-// Greeting helper
-// ---------------------------------------------------------------------------
-function getGreeting(): string {
+const surface = 'rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]';
+const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--background))]';
+
+function greeting() {
   const hour = new Date().getHours();
   if (hour < 5) return 'Good night';
   if (hour < 12) return 'Good morning';
@@ -83,597 +44,336 @@ function getGreeting(): string {
   return 'Good evening';
 }
 
-const MOTIVATIONAL_QUOTES = [
-  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-  { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
-  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
-  { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
-  { text: "Education is the passport to the future.", author: "Malcolm X" },
-  { text: "The more that you read, the more things you will know.", author: "Dr. Seuss" },
-  { text: "Study hard what interests you the most in the most undisciplined way.", author: "Richard Feynman" },
-  { text: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin" },
-  { text: "The beautiful thing about learning is nobody can take it away from you.", author: "B.B. King" },
-  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-  { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" },
-  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
-  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-  { text: "Push yourself, because no one else is going to do it for you.", author: "" },
-  { text: "Small daily improvements are the key to staggering long-term results.", author: "Robin Sharma" },
-];
-
-function getDailyQuote() {
-  const day = Math.floor(Date.now() / 86400000); // changes daily
-  return MOTIVATIONAL_QUOTES[day % MOTIVATIONAL_QUOTES.length];
+function dateLabel(date: string) {
+  return new Date(`${date}T12:00:00`).toLocaleDateString(undefined, {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+  });
 }
 
-function getEncouragement(completionPercent: number, streak: number): string {
-  if (streak >= 7) return "🔥 Incredible streak! You're unstoppable!";
-  if (streak >= 3) return "💪 Great consistency! Keep the momentum going!";
-  if (completionPercent >= 80) return "🌟 Almost there! You're doing amazing work!";
-  if (completionPercent >= 50) return "👏 Halfway through — you're making solid progress!";
-  if (completionPercent >= 20) return "🚀 Great start! Every topic counts!";
-  return "✨ Every journey starts with a single step. You've got this!";
+function timeAgo(value: string) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Recently' : formatDistanceToNow(date, { addSuffix: true });
 }
 
-// ---------------------------------------------------------------------------
-// Custom chart tooltip
-// ---------------------------------------------------------------------------
-function ChartTooltip({ active, payload, label }: any) {
-  if (!active || !payload?.length) return null;
+function activityDateLabel(value: string) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Recently' : `${timeAgo(value)} · ${format(date, 'MMM d, h:mm a')}`;
+}
+
+function IconForSubject({ name, color }: { name: string; color: string }) {
+  const iconMap: Record<string, LucideIcon> = {
+    BookOpen, Calculator, Atom, Globe, Code, Palette, Music, FlaskConical,
+    Scale, Languages, Brain, Lightbulb, GraduationCap, Microscope, Compass, PenTool,
+  };
+  const Icon = iconMap[name] || BookOpen;
+  return <Icon className="h-4 w-4" style={{ color }} aria-hidden="true" />;
+}
+
+function SectionHeading({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 shadow-lg text-xs">
-      <p className="font-medium">{label}</p>
-      <p className="text-[hsl(var(--muted-foreground))] mt-0.5">
-        {payload[0].value} min studied
-      </p>
+    <div className="mb-4 flex items-start justify-between gap-3">
+      <div>
+        <h2 className="text-base font-semibold tracking-tight sm:text-lg">{title}</h2>
+        {subtitle && <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{subtitle}</p>}
+      </div>
+      {action}
     </div>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Dashboard page
-// ---------------------------------------------------------------------------
+function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; payload?: { recorded?: boolean } }>; label?: string }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-xs shadow-xl">
+      <p className="font-medium">{label}</p>
+      <p className="mt-1 text-[hsl(var(--muted-foreground))]">{payload[0].payload?.recorded ? formatDurationHuman(payload[0].value) : 'No study log recorded'}</p>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const hydrated = useHydration();
-
+  const today = useToday();
   const { subjects, isLoading: subjectsLoading } = useSubjectsStore();
-  const { tasks, isLoading: tasksLoading } = useTasksStore();
-  const { activities, isLoadingActivities: activitiesLoading, dailyLogs, isLoadingDailyLogs: dailyLogsLoading } = useActivityStore();
-  const { studyBlocks, isLoading: studyBlocksLoading } = usePlannerStore();
+  const { tasks, isLoading: tasksLoading, addTask, updateTask } = useTasksStore();
+  const { studyBlocks, isLoading: blocksLoading } = usePlannerStore();
+  const { activities, isLoadingActivities: activitiesLoading, dailyLogs, isLoadingDailyLogs: logsLoading, addActivity } = useActivityStore();
+  const { exams, fetchExams } = useExamsStore();
+  const { settings } = useSettingsStore();
+  const { isMainRunning, mainSeconds, activeTarget, startTargetSession, toggleMain } = useTimerStore();
+  const [subjectSort, setSubjectSort] = useState<SubjectSort>('attention');
+  const [selectedSubjectId, setSelectedSubjectId] = useState('');
+  const [selectedTopicId, setSelectedTopicId] = useState('');
+  const [showAddTask, setShowAddTask] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  const { exams, fetchExams, isLoading: examsLoading } = useExamsStore();
+  useEffect(() => { void fetchExams(); }, [fetchExams]);
 
-  // Fetch exams on load
-  useEffect(() => {
-    fetchExams();
-  }, [fetchExams]);
-
-  // -----------------------------------------------------------------------
-  // Derived data
-  // -----------------------------------------------------------------------
-
-  // All topics flattened
-  const allTopics = useMemo(
-    () => subjects.flatMap((s) => s.chapters.flatMap((c) => c.topics)),
-    [subjects]
-  );
-
+  const allTopics = useMemo(() => subjects.flatMap((subject) => subject.chapters.flatMap((chapter) =>
+    chapter.topics.map((topic) => ({ ...topic, subjectId: subject.id, subjectName: subject.name, subjectColor: subject.color, chapterName: chapter.name }))
+  )), [subjects]);
   const totalTopics = allTopics.length;
-  const completedTopics = allTopics.filter(
-    (t) => t.status === 'completed' || t.status === 'revised'
-  ).length;
-  const revisedTopics = allTopics.filter((t) => t.status === 'revised').length;
-
-  const overallCompletion =
-    totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
-  const revisionProgress =
-    completedTopics > 0
-      ? Math.round((revisedTopics / completedTopics) * 100)
-      : 0;
-
+  const completedTopics = allTopics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length;
+  const completionPercent = totalTopics ? Math.round((completedTopics / totalTopics) * 100) : 0;
   const streak = useMemo(() => getStreakCount(dailyLogs), [dailyLogs]);
 
-  const today = useToday();
-  const tasksDueToday = useMemo(
-    () => tasks.filter((t) => !t.completed && t.date === today).length,
-    [tasks, today]
-  );
+  const todayLog = dailyLogs.find((log) => log.date === today);
+  const todaySessions = useMemo(() => todayLog?.sessions || [], [todayLog]);
+  const todayMetrics = useMemo(() => calculateDayStudyMetrics({ date: today, studyBlocks, sessions: todaySessions, tasks }), [today, studyBlocks, todaySessions, tasks]);
+  const studyMinutes = todayMetrics.actualStudyMinutes;
+  const goalMinutes = Math.max(0, Number(settings.dailyStudyGoalHours) || 0) * 60;
+  const goalPercent = goalMinutes ? Math.min(100, Math.round((studyMinutes / goalMinutes) * 100)) : 0;
+  const focusTasks = useMemo(() => tasks.filter((task) => !task.completed && task.date === today), [tasks, today]);
+  const completedToday = useMemo(() => tasks.filter((task) => task.completed && task.completedAt?.slice(0, 10) === today).length, [tasks, today]);
+  const finishedFocusTasks = useMemo(() => tasks.filter((task) => task.completed && task.date === today), [tasks, today]);
+  const recentActivities = useMemo(() => {
+    const seen = new Set<string>();
+    return [...activities].sort((a, b) => b.timestamp.localeCompare(a.timestamp)).filter((activity) => {
+      const key = `${activity.type}:${activity.description}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 6);
+  }, [activities]);
 
-  // Time studied today
-  const todayLog = dailyLogs.find((l) => l.date === today);
-  const todayMinutes = todayLog?.studyMinutes ?? 0;
-  const todayHours = Math.floor(todayMinutes / 60);
-  const todayMins = todayMinutes % 60;
-  const timeStudiedDisplay = `${todayHours}h ${todayMins.toString().padStart(2, '0')}m`;
+  const blockByTaskId = useMemo(() => {
+    const map = new Map<string, (typeof studyBlocks)[number]>();
+    studyBlocks.forEach((block) => {
+      const taskId = block.taskId || block.task_id;
+      if (taskId && !map.has(taskId)) map.set(taskId, block);
+    });
+    return map;
+  }, [studyBlocks]);
+  const subjectById = useMemo(() => new Map(subjects.map((subject) => [subject.id, subject])), [subjects]);
+  const subjectForTask = (task: Task) => {
+    const block = blockByTaskId.get(task.id);
+    return block ? subjectById.get(block.subjectId) : undefined;
+  };
 
-  // Subject progress cards data
-  const subjectProgress = useMemo(
-    () =>
-      subjects.map((s) => {
-        const topics = s.chapters.flatMap((c) => c.topics);
-        const total = topics.length;
-        const completed = topics.filter(
-          (t) => t.status === 'completed' || t.status === 'revised'
-        ).length;
-        return {
-          id: s.id,
-          name: s.name,
-          color: s.color,
-          icon: s.icon,
-          total,
-          completed,
-          percent: total > 0 ? Math.round((completed / total) * 100) : 0,
-        };
-      }),
-    [subjects]
-  );
+  const revisionQueue = useMemo(() => allTopics.filter((topic) =>
+    (topic.status === 'completed' || topic.status === 'revised') && topic.revisionCount > 0 && topic.nextRevisionDue && topic.nextRevisionDue <= today
+  ).sort((a, b) => (a.nextRevisionDue || '').localeCompare(b.nextRevisionDue || '')).map((topic) => ({ kind: 'revision' as const, topic })), [allTopics, today]);
+  const overdueTasks = useMemo(() => tasks.filter((task) => !task.completed && task.date && task.date < today).sort((a, b) => a.date.localeCompare(b.date)), [tasks, today]);
+  const upcomingTasks = useMemo(() => tasks.filter((task) => !task.completed && task.date && task.date >= today).sort((a, b) => a.date.localeCompare(b.date) || (['urgent', 'high', 'medium', 'low'].indexOf(a.priority) - ['urgent', 'high', 'medium', 'low'].indexOf(b.priority))).slice(0, 5), [tasks, today]);
 
-  // Weekly chart data (last 7 days)
-  const chartData = useMemo(() => {
-    const data = [];
-    for (let i = 6; i >= 0; i--) {
-      const date = subDays(new Date(), i);
-      const dateStr = format(date, 'yyyy-MM-dd');
-      const log = dailyLogs.find((l) => l.date === dateStr);
-      data.push({
-        day: format(date, 'EEE'),
-        minutes: log?.studyMinutes ?? 0,
-      });
+  const subjectProgress = useMemo(() => {
+    const recentSubjectIds = new Map<string, number>();
+    activities.forEach((activity) => {
+      if (activity.subjectId) recentSubjectIds.set(activity.subjectId, Math.max(recentSubjectIds.get(activity.subjectId) || 0, new Date(activity.timestamp).getTime() || 0));
+    });
+    dailyLogs.flatMap((log) => log.sessions || []).forEach((session) => {
+      if (session.studyBlockId) {
+        const block = studyBlocks.find((entry) => entry.id === session.studyBlockId);
+        if (block) recentSubjectIds.set(block.subjectId, Math.max(recentSubjectIds.get(block.subjectId) || 0, new Date(session.endTime).getTime()));
+      }
+    });
+    return subjects.map((subject) => {
+      const topics = subject.chapters.flatMap((chapter) => chapter.topics);
+      const done = topics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length;
+      const dueRevisions = topics.filter((topic) => (topic.status === 'completed' || topic.status === 'revised') && topic.revisionCount > 0 && topic.nextRevisionDue && topic.nextRevisionDue <= today).length;
+      const remaining = topics.length - done;
+      return { subject, total: topics.length, done, remaining, dueRevisions, percent: topics.length ? Math.round(done / topics.length * 100) : 0, lastStudied: recentSubjectIds.get(subject.id) || 0 };
+    }).sort((a, b) => {
+      if (subjectSort === 'completion') return b.percent - a.percent;
+      if (subjectSort === 'remaining') return b.remaining - a.remaining;
+      if (subjectSort === 'revisions') return b.dueRevisions - a.dueRevisions;
+      if (subjectSort === 'activity') return b.lastStudied - a.lastStudied;
+      return (b.dueRevisions - a.dueRevisions) || (b.remaining - a.remaining);
+    });
+  }, [subjects, today, subjectSort, dailyLogs, studyBlocks, activities]);
+
+  const chartData = useMemo(() => Array.from({ length: 7 }, (_, index) => {
+    const date = subDays(new Date(`${today}T12:00:00`), 6 - index);
+    const dateKey = format(date, 'yyyy-MM-dd');
+    const log = dailyLogs.find((entry) => entry.date === dateKey);
+    const metrics = calculateDayStudyMetrics({ date: dateKey, studyBlocks, sessions: log?.sessions || [], tasks });
+    return { date: dateKey, day: format(date, 'EEE'), minutes: metrics.actualStudyMinutes, recorded: Boolean(log || studyBlocks.some((block) => block.date === dateKey)) };
+  }), [today, dailyLogs, studyBlocks, tasks]);
+  const weeklyTotal = chartData.reduce((sum, day) => sum + day.minutes, 0);
+  const activeDays = chartData.filter((day) => day.minutes > 0).length;
+  const hasWeeklyHistory = chartData.some((day) => day.minutes > 0);
+
+  const attentionItems = useMemo(() => [
+    ...overdueTasks.map((task) => ({ key: `task-${task.id}`, title: task.title, detail: `Overdue · ${getRelativeDate(task.date)}`, href: '/planner?view=tasks', urgent: true, task })),
+    ...revisionQueue.map(({ topic }) => ({ key: `revision-${topic.id}`, title: topic.name, detail: `${topic.subjectName} · ${topic.nextRevisionDue === today ? 'Revision due today' : `Overdue · ${getRelativeDate(topic.nextRevisionDue || today)}`}`, href: `/revisions/${topic.subjectId}`, urgent: topic.nextRevisionDue !== today, task: undefined })),
+  ].slice(0, 5), [overdueTasks, revisionQueue, today]);
+
+  const selectedSubject = subjects.find((subject) => subject.id === selectedSubjectId) || subjects[0];
+  const selectableTopics = selectedSubject?.chapters.flatMap((chapter) => chapter.topics) || [];
+  const selectedTopic: Topic | undefined = selectableTopics.find((topic) => topic.id === selectedTopicId) || selectableTopics.find((topic) => topic.status !== 'completed' && topic.status !== 'revised') || selectableTopics[0];
+  const nextExam = [...exams].filter((exam) => !exam.completed && exam.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
+
+  const startStudying = () => {
+    if (!selectedSubject) return;
+    if (isMainRunning) return;
+    if (activeTarget && activeTarget.title && mainSeconds > 0) {
+      toggleMain();
+      return;
     }
-    return data;
-  }, [dailyLogs]);
+    const title = selectedTopic ? `${selectedSubject.name} · ${selectedTopic.name}` : selectedSubject.name;
+    startTargetSession({ type: 'general', id: selectedTopic?.id || selectedSubject.id, title, subjectId: selectedSubject.id });
+  };
 
-  // Upcoming tasks (max 5, incomplete, sorted by due date)
-  const upcomingTasks = useMemo(
-    () =>
-      tasks
-        .filter((t) => !t.completed && t.date)
-        .sort((a, b) => (a.date! > b.date! ? 1 : -1))
-        .slice(0, 5),
-    [tasks]
-  );
+  const startTaskSession = (task: Task) => {
+    const target = { type: 'task' as const, id: task.id, taskId: task.id, title: task.title, subjectId: subjectForTask(task)?.id };
+    if (isMainRunning) {
+      window.location.assign('/planner?view=tasks');
+      return;
+    }
+    if (activeTarget?.taskId === task.id && mainSeconds > 0) toggleMain();
+    else startTargetSession(target);
+  };
 
-  // Recent activities (max 6)
-  const recentActivities = useMemo(
-    () => activities.slice(0, 6),
-    [activities]
-  );
+  const toggleComplete = async (task: Task) => {
+    const completed = !task.completed;
+    await updateTask(task.id, { completed, completedAt: completed ? new Date().toISOString() : null });
+    if (completed) {
+      await addActivity({ type: 'task-completed', description: `Completed "${task.title}"`, color: '#22c55e' });
+      window.dispatchEvent(new CustomEvent('toast', { detail: { message: `Completed “${task.title}”`, type: 'success' } }));
+    }
+  };
 
-  // Next upcoming exam
-  const nextExam = useMemo(() => {
-    const upcoming = exams.filter(e => !e.completed).sort((a, b) => a.date > b.date ? 1 : -1);
-    return upcoming.length > 0 ? upcoming[0] : null;
-  }, [exams]);
+  if (!hydrated) return <PageLoader label="Loading your dashboard" />;
 
-  const daysToNextExam = useMemo(() => {
-    if (!nextExam) return null;
-    const diff = new Date(nextExam.date).getTime() - new Date(today).getTime();
-    return Math.ceil(diff / (1000 * 3600 * 24));
-  }, [nextExam, today]);
-
-  // -----------------------------------------------------------------------
-  // Loading state
-  // -----------------------------------------------------------------------
-  if (!hydrated) {
-    return <PageLoader label="Loading your dashboard" />;
-  }
-
-  // -----------------------------------------------------------------------
-  // Render
-  // -----------------------------------------------------------------------
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 sm:space-y-8 lg:space-y-10 pb-12 sm:pb-16"
-    >
-      {/* ---- Header + Quote ---- */}
-      <motion.div variants={itemVariants}>
-        <PageHeader
-          title="Dashboard"
-          description={`${getGreeting()}! Here's your study overview.`}
-        />
-      </motion.div>
-
-      {/* ---- Upcoming Exam Widget ---- */}
-      {examsLoading && !nextExam ? (
-        <Skeleton className="h-32 rounded-2xl" />
-      ) : nextExam && (
-        <motion.div variants={itemVariants}>
-          <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-4 sm:p-5 shadow-sm">
-            <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-indigo-500/10 blur-3xl" />
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
-                  <BookOpen className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold tracking-tight text-indigo-500 flex items-center gap-2 mb-1">
-                    Upcoming {nextExam.type === 'exam' ? 'University Exam' : 'Unit Test'}
-                  </h3>
-                  <p className="text-xl font-bold">{nextExam.title}</p>
-                  <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] mt-1">
-                    Tentative Start: {formatDate(nextExam.date)}
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                <ExamTimer targetDate={nextExam.date} />
-                <Link
-                  href="/exams"
-                  className="px-5 py-2.5 bg-white dark:bg-[hsl(var(--card))] text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 rounded-xl text-sm font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all text-center w-full sm:w-auto"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* ---- Motivational Quote ---- */}
-      <motion.div variants={itemVariants}>
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/5 via-purple-500/5 to-pink-500/5 p-5">
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-indigo-500/5 blur-3xl" />
-          <div className="relative">
-            <p className="text-sm font-medium italic leading-relaxed">
-              "{getDailyQuote().text}"
-            </p>
-            {getDailyQuote().author && (
-              <p className="text-xs text-[hsl(var(--muted-foreground))] mt-2">
-                — {getDailyQuote().author}
-              </p>
-            )}
-            <p className="text-xs font-medium text-indigo-400 mt-3">
-              {getEncouragement(overallCompletion, streak)}
-            </p>
-          </div>
+    <main className="mx-auto w-full max-w-[1440px] space-y-6 pb-10 sm:space-y-8">
+      <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-400"><CalendarDays className="h-3.5 w-3.5" />{dateLabel(today)}</p>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{greeting()}</h1>
+          <p className="mt-1.5 text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let’s make the first one count.` : 'A clear plan makes it easier to begin. Choose a subject and start a focus session.'}</p>
         </div>
-      </motion.div>
-
-      {/* ---- Top stat cards ---- */}
-      <motion.div
-        variants={containerVariants}
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5"
-      >
-        <motion.div variants={itemVariants}>
-          <StatCard
-            title="Overall Completion"
-            value={`${overallCompletion}%`}
-            subtitle={`${completedTopics} / ${totalTopics} topics`}
-            icon={Target}
-            color="#6366f1"
-            isLoading={subjectsLoading}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <StatCard
-            title="Revision Progress"
-            value={`${revisionProgress}%`}
-            subtitle={`${revisedTopics} revised`}
-            icon={RotateCcw}
-            color="#8b5cf6"
-            isLoading={subjectsLoading}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <StatCard
-            title="Daily Streak"
-            value={streak}
-            subtitle={streak === 1 ? '1 day' : `${streak} days`}
-            icon={Flame}
-            color="#f97316"
-            isLoading={dailyLogsLoading}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <StatCard
-            title="Tasks Due Today"
-            value={tasksDueToday}
-            subtitle={tasksDueToday === 1 ? '1 task remaining' : `${tasksDueToday} tasks remaining`}
-            icon={CheckSquare}
-            color="#22c55e"
-            isLoading={tasksLoading}
-          />
-        </motion.div>
-        <motion.div variants={itemVariants}>
-          <StatCard
-            title="Studied Today"
-            value={timeStudiedDisplay}
-            subtitle="Logged in planner"
-            icon={Timer}
-            color="#14b8a6"
-            isLoading={dailyLogsLoading || studyBlocksLoading}
-          />
-        </motion.div>
-      </motion.div>
-
-      {/* ---- Subject Progress Cards ---- */}
-      <motion.div variants={itemVariants}>
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold tracking-tight">Subject Progress</h2>
-          <Link
-            href="/subjects"
-            className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors flex items-center gap-1"
-          >
-            View all <ArrowRight className="w-3 h-3" />
-          </Link>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[330px] sm:items-end">
+          <div className="flex items-center gap-3 self-stretch sm:self-auto">
+            <div className="min-w-0 flex-1 sm:w-48 sm:flex-none">
+              <label htmlFor="start-subject" className="sr-only">Choose a subject</label>
+              <select id="start-subject" value={selectedSubject?.id || ''} onChange={(event) => { setSelectedSubjectId(event.target.value); setSelectedTopicId(''); }} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs ${focusRing}`}>
+                <option value="">Choose subject</option>
+                {subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}
+              </select>
+            </div>
+            <div className="min-w-0 flex-1 sm:w-48 sm:flex-none">
+              <label htmlFor="start-topic" className="sr-only">Choose a topic</label>
+              <select id="start-topic" value={selectedTopic?.id || ''} onChange={(event) => setSelectedTopicId(event.target.value)} disabled={!selectableTopics.length} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs disabled:opacity-50 ${focusRing}`}>
+                <option value="">{selectableTopics.length ? 'Choose topic' : 'No topics'}</option>
+                {selectableTopics.map((topic) => <option key={topic.id} value={topic.id}>{topic.name}</option>)}
+              </select>
+            </div>
+            <button type="button" onClick={startStudying} disabled={!selectedSubject || isMainRunning} className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}>
+              <Play className="h-4 w-4" />{isMainRunning ? 'Session running' : activeTarget && mainSeconds > 0 ? 'Resume session' : 'Start studying'}
+            </button>
+          </div>
+          <Link href="/planner" className={`${focusRing} text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]`}>{isMainRunning ? `Manage ${activeTarget?.title || 'current session'} · ${formatDurationHuman(Math.floor(mainSeconds / 60))}` : 'Open study planner'} <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
         </div>
-        {subjectsLoading ? (
-          <CardGridLoader cards={4} className="xl:grid-cols-4" />
-        ) : subjectProgress.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
-          >
-            {subjectProgress.map((sp) => (
-              <motion.div key={sp.id} variants={itemVariants}>
-                <Link href="/subjects">
-                  <div className="group relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 transition-all hover:border-[hsl(var(--ring))] hover:shadow-md">
-                    {/* Accent glow */}
-                    <div
-                      className="absolute top-0 right-0 w-20 h-20 rounded-full blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"
-                      style={{ background: sp.color }}
-                    />
+      </section>
 
-                    <div className="flex items-center gap-3 mb-4 relative z-10">
-                      <div
-                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                        style={{ background: `${sp.color}20` }}
-                      >
-                        <BookOpen className="w-4 h-4" style={{ color: sp.color }} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold truncate">{sp.name}</p>
-                        <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
-                          {sp.completed}/{sp.total} topics
-                        </p>
-                      </div>
-                    </div>
+      {nextExam && <Link href="/exams" className={`${surface} ${focusRing} flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition hover:border-indigo-400/50`}><span className="flex items-center gap-2 text-sm font-medium"><GraduationCap className="h-4 w-4 text-indigo-400" />Next exam: {nextExam.title}</span><span className="text-xs text-[hsl(var(--muted-foreground))]">{getRelativeDate(nextExam.date)} <ArrowRight className="ml-1 inline h-3 w-3" /></span></Link>}
 
-                    {/* Progress bar */}
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
-                          Progress
-                        </span>
-                        <span className="text-[11px] font-bold" style={{ color: sp.color }}>
-                          {sp.percent}%
-                        </span>
-                      </div>
-                      <div className="h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden">
-                        <motion.div
-                          className="h-full rounded-full"
-                          style={{ background: sp.color }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${sp.percent}%` }}
-                          transition={{ duration: 1, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
-                        />
-                      </div>
-                    </div>
+      <section className={`${surface} overflow-hidden border-indigo-500/25`} aria-labelledby="focus-heading">
+        <div className="grid gap-0 lg:grid-cols-[minmax(0,1.55fr)_minmax(260px,0.75fr)]">
+          <div className="p-4 sm:p-6">
+            <SectionHeading title="Today's Focus" subtitle="Your planned work, ready when you are." action={<button type="button" onClick={() => setShowAddTask(true)} className={`${focusRing} inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-xs font-medium hover:bg-[hsl(var(--muted))]`}><ListTodo className="h-3.5 w-3.5" />Add task</button>} />
+            <h2 id="focus-heading" className="sr-only">Today&apos;s Focus</h2>
+            {tasksLoading ? <SectionLoader rows={3} /> : focusTasks.length || finishedFocusTasks.length ? <div className="space-y-2">
+              {[...focusTasks, ...finishedFocusTasks].slice(0, 6).map((task) => {
+                const subject = subjectForTask(task);
+                const isActive = activeTarget?.taskId === task.id || (activeTarget?.type === 'task' && activeTarget.id === task.id);
+                const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
+                return <div key={task.id} className={`flex items-center gap-3 rounded-xl border px-3 py-3 ${isActive ? 'border-indigo-500/35 bg-indigo-500/5' : 'border-[hsl(var(--border))] bg-[hsl(var(--background))]'}`}>
+                  <button type="button" onClick={() => void toggleComplete(task)} aria-label={task.completed ? `Reopen ${task.title}` : `Complete ${task.title}`} className={`${focusRing} flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${task.completed ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[hsl(var(--border))] text-transparent hover:border-emerald-500 hover:text-emerald-500'}`}><Check className="h-3.5 w-3.5" /></button>
+                  <div className="min-w-0 flex-1">
+                    <p className={`truncate text-sm font-medium ${task.completed ? 'text-[hsl(var(--muted-foreground))] line-through' : ''}`}>{task.title}</p>
+                    <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[hsl(var(--muted-foreground))]">
+                      {subject && <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: subject.color }} />{subject.name}</span>}
+                      {!subject && <span className="capitalize">{task.category.replace('-', ' ')}</span>}
+                      {task.estimatedMinutes && <span>{task.estimatedMinutes} min</span>}
+                      <span>{task.completed ? 'Completed' : isActive ? 'In progress' : 'Up next'}</span>
+                    </p>
                   </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8 text-center flex flex-col items-center justify-center">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-3">
-              <BookOpen className="w-6 h-6 text-indigo-500" />
-            </div>
-            <p className="text-sm font-semibold">No subjects yet</p>
-            <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1 max-w-sm mb-4">
-              Add your curriculum subjects to start tracking chapters, topics, and revision progress.
-            </p>
-            <Link
-              href="/subjects"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20 hover:opacity-90 transition-opacity"
-            >
-              Add Subjects <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        )}
-      </motion.div>
-
-      {/* ---- Middle section: Chart + Upcoming Tasks ---- */}
-      <motion.div
-        variants={containerVariants}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
-      >
-        {/* Weekly Productivity Chart */}
-        <motion.div variants={itemVariants}>
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 h-full">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-lg font-semibold tracking-tight">Weekly Productivity</h2>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
-                  Study minutes over the last 7 days
-                </p>
-              </div>
-              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                <Clock className="w-4 h-4 text-indigo-500" />
-              </div>
-            </div>
-
-            <div className="h-[220px] -mx-2">
-              {dailyLogsLoading ? <Skeleton className="h-full w-full rounded-xl" /> : <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#6366f1" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="hsl(var(--border))"
-                    vertical={false}
-                  />
-                  <XAxis
-                    dataKey="day"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
-                    dy={8}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
-                    dx={-5}
-                  />
-                  <Tooltip content={<ChartTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="minutes"
-                    stroke="#6366f1"
-                    strokeWidth={2.5}
-                    fill="url(#chartGradient)"
-                    dot={{ r: 3, fill: '#6366f1', strokeWidth: 0 }}
-                    activeDot={{ r: 5, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Upcoming Tasks */}
-        <motion.div variants={itemVariants}>
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h2 className="text-lg font-semibold tracking-tight">Upcoming Tasks</h2>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
-                  Your next deadlines
-                </p>
-              </div>
-              <Link
-                href="/planner?view=tasks"
-                className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors flex items-center gap-1"
-              >
-                View all <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            {tasksLoading ? (
-              <SectionLoader rows={3} className="flex-1" />
-            ) : upcomingTasks.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3">
-                  <CheckSquare className="w-6 h-6 text-emerald-500" />
-                </div>
-                <p className="text-sm font-medium">All caught up!</p>
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
-                  No upcoming tasks. Enjoy your free time!
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-2 flex-1">
-                {upcomingTasks.map((task) => {
-                  const priorityConf =
-                    PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
-                  return (
-                    <motion.div
-                      key={task.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-3 transition-colors hover:bg-[hsl(var(--muted))]"
-                    >
-                      <div
-                        className={cn(
-                          'w-2 h-2 rounded-full shrink-0',
-                          priorityConf?.bg
-                        )}
-                        style={{ background: priorityConf?.color }}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{task.title}</p>
-                        {task.date && (
-                          <p className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1 mt-0.5">
-                            <Calendar className="w-3 h-3" />
-                            {getRelativeDate(task.date)}
-                          </p>
-                        )}
-                      </div>
-                      <span
-                        className={cn(
-                          'text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0',
-                          priorityConf?.bg,
-                          priorityConf?.text
-                        )}
-                      >
-                        {priorityConf?.label}
-                      </span>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* ---- Recent Activity ---- */}
-      <motion.div variants={itemVariants}>
-        <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight">Recent Activity</h2>
-              <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
-                Your latest study actions
-              </p>
-            </div>
-          </div>
-
-          {activitiesLoading ? (
-            <SectionLoader rows={4} />
-          ) : recentActivities.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-10">
-              <div className="w-12 h-12 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-3">
-                <Clock className="w-6 h-6 text-[hsl(var(--muted-foreground))]" />
-              </div>
-              <p className="text-sm font-medium">No activity yet</p>
-              <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
-                Start studying to see your progress here.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-1">
-              {recentActivities.map((activity, idx) => {
-                const isLast = idx === recentActivities.length - 1;
-                const timeAgo = getRelativeDate(
-                  activity.timestamp.split('T')[0]
-                );
-                return (
-                  <div key={activity.id} className="flex gap-3 group">
-                    {/* Timeline dot + line */}
-                    <div className="flex flex-col items-center pt-1.5">
-                      <div
-                        className="w-2.5 h-2.5 rounded-full shrink-0 ring-2 ring-[hsl(var(--card))]"
-                        style={{
-                          background: activity.color || '#6366f1',
-                        }}
-                      />
-                      {!isLast && (
-                        <div className="w-px flex-1 bg-[hsl(var(--border))] mt-1" />
-                      )}
-                    </div>
-                    {/* Content */}
-                    <div className={cn('pb-4', isLast && 'pb-0')}>
-                      <p className="text-sm leading-snug">{activity.description}</p>
-                      <p className="text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5">
-                        {timeAgo}
-                      </p>
-                    </div>
-                  </div>
-                );
+                  {!task.completed && <span className="hidden rounded-md px-2 py-1 text-[10px] font-semibold uppercase sm:inline" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span>}
+                  {!task.completed && <button type="button" onClick={() => startTaskSession(task)} className={`${focusRing} rounded-lg bg-indigo-500/10 px-2.5 py-1.5 text-xs font-medium text-indigo-300 hover:bg-indigo-500/20`}>{isActive ? 'Active' : activeTarget?.taskId === task.id && !isMainRunning ? 'Resume' : 'Start'}</button>}
+                  {!task.completed && <button type="button" onClick={() => setEditingTask(task)} className={`${focusRing} rounded-lg p-2 text-xs text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]`} aria-label={`Open ${task.title}`}>Open</button>}
+                </div>;
               })}
+            </div> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center">
+              <CheckCircle2 className="mx-auto h-7 w-7 text-emerald-400" />
+              <p className="mt-2 text-sm font-medium">No tasks scheduled for today</p>
+              <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Add a task to give your next study session a clear finish line.</p>
+              <button type="button" onClick={() => setShowAddTask(true)} className={`${focusRing} mt-3 rounded-lg bg-[hsl(var(--muted))] px-3 py-2 text-xs font-medium hover:bg-[hsl(var(--muted))]/70`}>Schedule a task</button>
+            </div>}
+            <div className="mt-4 flex items-center justify-between border-t border-[hsl(var(--border))] pt-3 text-xs">
+              <span className="text-[hsl(var(--muted-foreground))]">{finishedFocusTasks.length} of {finishedFocusTasks.length + focusTasks.length} scheduled tasks complete</span>
+              <Link href="/planner?view=tasks" className={`${focusRing} font-medium text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
             </div>
-          )}
+          </div>
+          <div className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]/45 p-4 sm:p-6 lg:border-l lg:border-t-0">
+            <div className="flex items-center justify-between gap-3">
+              <div><p className="text-xs font-medium text-[hsl(var(--muted-foreground))]">DAILY STUDY GOAL</p><p className="mt-1 text-2xl font-semibold tabular-nums">{formatDurationHuman(studyMinutes)} <span className="text-sm font-normal text-[hsl(var(--muted-foreground))]">/ {goalMinutes ? formatDurationHuman(goalMinutes) : 'not set'}</span></p></div>
+              <div role="progressbar" aria-label="Daily study goal" aria-valuemin={0} aria-valuemax={100} aria-valuenow={goalMinutes ? goalPercent : 0} className="relative flex h-14 w-14 items-center justify-center rounded-full" style={{ background: goalMinutes ? `conic-gradient(#818cf8 ${goalPercent}%, hsl(var(--muted)) ${goalPercent}% 100%)` : 'hsl(var(--muted))' }}><div className="flex h-11 w-11 items-center justify-center rounded-full bg-[hsl(var(--card))]"><span className="text-xs font-semibold tabular-nums">{goalMinutes ? `${goalPercent}%` : '—'}</span></div></div>
+            </div>
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full bg-indigo-400 transition-[width]" style={{ width: `${goalPercent}%` }} /></div>
+            <p className="mt-2 text-xs text-[hsl(var(--muted-foreground))]">{goalMinutes ? goalPercent >= 100 ? 'Daily goal reached. Great work.' : `${formatDurationHuman(goalMinutes - studyMinutes)} left to reach your goal` : 'Set your daily target in settings to track goal progress.'}</p>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3"><div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><CheckSquare className="h-3.5 w-3.5 text-emerald-400" />Tasks done today</div><p className="mt-1.5 text-lg font-semibold tabular-nums">{completedToday}</p></div>
+              <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3"><div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><Flame className="h-3.5 w-3.5 text-orange-400" />Study streak</div><p className="mt-1.5 text-lg font-semibold tabular-nums">{streak}<span className="ml-1 text-xs font-normal text-[hsl(var(--muted-foreground))]">days</span></p></div>
+            </div>
+            <Link href="/settings" className={`${focusRing} mt-3 inline-flex items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]`}><Settings2 className="h-3.5 w-3.5" />Adjust daily goal</Link>
+          </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </section>
+
+      <section>
+        <SectionHeading title="Subject progress" subtitle={`${completedTopics} of ${totalTopics} topics complete · revision work is tracked separately`} action={<label className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><ArrowDownWideNarrow className="h-3.5 w-3.5" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={subjectSort} onChange={(event) => setSubjectSort(event.target.value as SubjectSort)} className={`rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-2.5 py-2 text-xs text-[hsl(var(--foreground))] ${focusRing}`}><option value="attention">Needs attention</option><option value="completion">Most complete</option><option value="remaining">Most topics left</option><option value="revisions">Revisions due</option><option value="activity">Recently studied</option></select></label>} />
+        {subjectsLoading ? <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-32 rounded-xl" />)}</div> : subjectProgress.length ? <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {subjectProgress.map(({ subject, total, done, remaining, dueRevisions, percent }) => <Link key={subject.id} href={`/subjects/${subject.id}`} className={`${surface} ${focusRing} group block p-4 transition hover:border-indigo-400/40`}>
+            <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2.5"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="truncate text-sm font-semibold">{subject.name}</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-sm font-semibold tabular-nums" style={{ color: subject.color }}>{percent}%</span></div>
+            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full transition-[width]" style={{ width: `${percent}%`, backgroundColor: subject.color }} /></div>
+            <div className="mt-2.5 flex items-center justify-between gap-2 text-[11px] text-[hsl(var(--muted-foreground))]"><span>{remaining} remaining</span><span className={dueRevisions ? 'text-purple-300' : ''}>{dueRevisions ? `${dueRevisions} revision${dueRevisions === 1 ? '' : 's'} due` : 'No revisions due'}</span></div>
+          </Link>)}
+        </div> : <div className={`${surface} p-6 text-center`}><p className="text-sm font-medium">No subjects yet</p><Link href="/subjects" className={`${focusRing} mt-2 inline-flex items-center gap-1 text-xs text-indigo-400`}>Add subjects <ArrowRight className="h-3 w-3" /></Link></div>}
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className={`${surface} p-4 sm:p-5`}>
+          <SectionHeading title="Needs Attention" subtitle="Overdue tasks and scheduled revisions, ordered by urgency" action={<Link href="/revisions" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>Revision queue <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
+          {tasksLoading || subjectsLoading ? <SectionLoader rows={3} /> : attentionItems.length ? <ul className="space-y-2">{attentionItems.map((item) => <li key={item.key} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3">
+            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.urgent ? 'bg-rose-500/10 text-rose-400' : 'bg-purple-500/10 text-purple-300'}`}>{item.urgent ? <TriangleAlert className="h-4 w-4" /> : <RotateCcw className="h-4 w-4" />}</span>
+            <div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{item.title}</p><p className="mt-0.5 truncate text-[11px] text-[hsl(var(--muted-foreground))]">{item.detail}</p></div>
+            {item.task && <button type="button" onClick={() => void toggleComplete(item.task!)} className={`${focusRing} rounded-lg border border-[hsl(var(--border))] px-2.5 py-1.5 text-xs hover:bg-[hsl(var(--muted))]`}>Complete</button>}
+            <Link href={item.href} aria-label={`Open ${item.title}`} className={`${focusRing} rounded-lg p-2 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]`}><ArrowRight className="h-4 w-4" /></Link>
+          </li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckCircle2 className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">You&apos;re up to date</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">No overdue tasks or scheduled revisions need attention.</p></div>}
+        </div>
+        <div className={`${surface} p-4 sm:p-5`}>
+          <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href="/planner?view=tasks" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
+          {tasksLoading ? <SectionLoader rows={3} /> : upcomingTasks.length ? <ul className="space-y-2">{upcomingTasks.map((task) => {
+            const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
+            const subject = subjectForTask(task);
+            return <li key={task.id} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3"><button type="button" onClick={() => void toggleComplete(task)} aria-label={`Complete ${task.title}`} className={`${focusRing} h-5 w-5 shrink-0 rounded-full border border-[hsl(var(--border))] hover:border-emerald-400`} /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{task.title}</p><p className="mt-0.5 truncate text-[11px] text-[hsl(var(--muted-foreground))]">{subject?.name ? `${subject.name} · ` : ''}{getRelativeDate(task.date)}{task.estimatedMinutes ? ` · ${task.estimatedMinutes} min` : ''}</p></div><span className="rounded px-2 py-1 text-[10px] font-semibold uppercase" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span><button type="button" onClick={() => setEditingTask(task)} aria-label={`Edit ${task.title}`} className={`${focusRing} rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]`}><ArrowRight className="h-4 w-4" /></button></li>;
+          })}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckSquare className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">No upcoming deadlines</p><button type="button" onClick={() => setShowAddTask(true)} className={`${focusRing} mt-2 text-xs text-indigo-400`}>Schedule a task</button></div>}
+        </div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+        <div className={`${surface} p-4 sm:p-5`}>
+          <SectionHeading title="Weekly productivity" subtitle="Recorded study time · last 7 days" action={<Link href="/analytics" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>Analytics <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
+          {logsLoading || blocksLoading ? <Skeleton className="h-52 rounded-xl" /> : !hasWeeklyHistory ? <div className="flex h-44 flex-col items-center justify-center rounded-xl border border-dashed border-[hsl(var(--border))] text-center"><Activity className="h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No study sessions recorded this week</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Start a focus session to see your weekly progress.</p></div> : <>
+            <div className="mb-2 flex gap-5 text-xs"><span><strong className="text-sm tabular-nums">{formatDurationHuman(weeklyTotal)}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">total</span></span><span><strong className="text-sm tabular-nums">{activeDays}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">active days</span></span></div>
+            <div className="h-44 w-full sm:h-52"><ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}><AreaChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}><defs><linearGradient id="dashboardStudyGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#818cf8" stopOpacity={0.28} /><stop offset="100%" stopColor="#818cf8" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} /><YAxis axisLine={false} tickLine={false} width={40} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={(value: number) => value >= 60 ? `${(value / 60).toFixed(value % 60 ? 1 : 0)}h` : `${value}m`} /><Tooltip content={<ChartTooltip />} /><Area type="monotone" dataKey="minutes" stroke="#818cf8" strokeWidth={2} fill="url(#dashboardStudyGradient)" activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div>
+          </>}
+        </div>
+        <div className={`${surface} p-4 sm:p-5`}>
+          <SectionHeading title="Recent activity" subtitle="Latest study milestones and updates" />
+          {activitiesLoading ? <SectionLoader rows={4} /> : recentActivities.length ? <ul className="space-y-0.5">{recentActivities.map((activity, index) => <li key={activity.id} className="flex gap-3"><div className="flex flex-col items-center"><span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-[hsl(var(--card))]" style={{ backgroundColor: activity.color || '#818cf8' }} />{index < recentActivities.length - 1 && <span className="my-1 w-px flex-1 bg-[hsl(var(--border))]" />}</div><div className="min-w-0 pb-3"><p className="text-sm leading-snug">{activity.description}</p><p className="mt-1 text-[11px] text-[hsl(var(--muted-foreground))]">{activityDateLabel(activity.timestamp)}</p></div></li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-7 text-center"><Clock3 className="mx-auto h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No activity recorded yet</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Completed tasks and study milestones will show here.</p></div>}
+        </div>
+      </section>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[hsl(var(--border))] px-4 py-3 text-xs text-[hsl(var(--muted-foreground))]">
+        <span><Target className="mr-1.5 inline h-3.5 w-3.5 text-indigo-400" />Syllabus completion: <strong className="text-[hsl(var(--foreground))]">{completionPercent}%</strong> · revisions are scheduled independently from topic completion.</span>
+        <Link href="/subjects" className={`${focusRing} font-medium text-indigo-400`}>View syllabus <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+      </div>
+
+      <AddTaskModal open={showAddTask} initialDate={today} onClose={() => setShowAddTask(false)} onAddTask={addTask} />
+      <EditTaskModal open={!!editingTask} task={editingTask} onClose={() => setEditingTask(null)} />
+    </main>
   );
 }

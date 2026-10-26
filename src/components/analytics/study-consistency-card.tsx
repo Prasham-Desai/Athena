@@ -4,7 +4,8 @@ import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Flame, Trophy, CalendarCheck2, Activity, Zap, TrendingUp } from 'lucide-react';
 import { format, subDays, parseISO } from 'date-fns';
-import type { StreakStats, DailyLog } from '@/lib/analytics-calculations';
+import type { StreakStats } from '@/lib/analytics-calculations';
+import type { DailyLog } from '@/types';
 import { cn } from '@/lib/utils';
 
 interface StudyConsistencyCardProps {

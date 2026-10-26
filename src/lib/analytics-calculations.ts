@@ -14,6 +14,7 @@ import {
   endOfYear,
 } from 'date-fns';
 import type { DailyLog, StudySession, Subject, ActivityEntry, StudyBlock, Task } from '@/types';
+export type { DailyLog, StudySession, Subject, ActivityEntry, StudyBlock, Task };
 
 // ---------------------------------------------------------------------------
 // Constants & Types
