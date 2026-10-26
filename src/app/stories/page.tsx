@@ -10,6 +10,7 @@ import { StoryModal } from '@/components/stories/story-modal';
 import { StoryPlayerBar } from '@/components/stories/story-player-bar';
 import { Story } from '@/types';
 import { useHydration } from '@/hooks/use-hydration';
+import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 import type { Variants } from 'framer-motion';
 
 const containerVariants: Variants = {
@@ -72,7 +73,7 @@ export default function StoriesPage() {
     setIsModalOpen(true);
   };
 
-  if (!hydrated) return null;
+  if (!hydrated) return <PageLoader label="Loading stories" variant="cards" />;
 
   return (
     <motion.div
@@ -164,11 +165,7 @@ export default function StoriesPage() {
 
       {/* Stories Grid */}
       {loadingStories && stories.length === 0 ? (
-        <div className="flex items-center justify-center min-h-[40vh]">
-          <div className="text-[hsl(var(--muted-foreground))] animate-pulse text-sm">
-            Loading...
-          </div>
-        </div>
+        <CardGridLoader cards={3} className="sm:grid-cols-2 lg:grid-cols-3" />
       ) : displayedStories.length === 0 ? (
         <motion.div variants={itemVariants} className="flex flex-col items-center justify-center text-center py-20">
           <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-4">

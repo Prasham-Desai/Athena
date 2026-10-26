@@ -5,6 +5,7 @@ import { INITIAL_SUBJECTS } from '@/lib/curriculum-data';
 
 interface SubjectsState {
   subjects: Subject[];
+  isLoading: boolean;
   fetchSubjects: (academicYearId?: string) => Promise<void>;
   addSubject: (name: string, color: string, icon: string) => Promise<void>;
   updateSubject: (id: string, updates: Partial<Omit<Subject, 'id' | 'createdAt'>>) => Promise<void>;
@@ -30,8 +31,10 @@ interface SubjectsState {
 
 export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   subjects: [],
+  isLoading: false,
 
   fetchSubjects: async (academicYearId?: string) => {
+    set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
       const url = yearId ? `/api/subjects?academic_year_id=${yearId}` : '/api/subjects';
@@ -42,6 +45,8 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
       }
     } catch (error) {
       console.error('Failed to fetch subjects', error);
+    } finally {
+      set({ isLoading: false });
     }
   },
 

@@ -3,6 +3,7 @@ import type { UserSettings } from '@/types';
 
 interface SettingsState {
   settings: UserSettings;
+  isLoading: boolean;
   fetchSettings: () => Promise<UserSettings | null>;
   updateSettings: (updates: Partial<UserSettings>) => Promise<UserSettings | null>;
   resetSettings: () => Promise<UserSettings | null>;
@@ -33,8 +34,10 @@ async function saveSettings(updates: Partial<UserSettings>) {
 
 export const useSettingsStore = create<SettingsState>()((set, get) => ({
   settings: defaultSettings,
+  isLoading: false,
 
   fetchSettings: async () => {
+    set({ isLoading: true });
     try {
       const response = await fetch('/api/settings');
       if (!response.ok) return null;
@@ -48,6 +51,8 @@ export const useSettingsStore = create<SettingsState>()((set, get) => ({
     } catch (error) {
       console.error('Failed to fetch settings', error);
       return null;
+    } finally {
+      set({ isLoading: false });
     }
   },
 

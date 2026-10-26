@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { Skeleton } from '@/components/ui/loading';
 
 interface StatCardProps {
   title: string;
@@ -12,9 +13,10 @@ interface StatCardProps {
   color?: string;
   trend?: { value: number; positive: boolean };
   className?: string;
+  isLoading?: boolean;
 }
 
-export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1', trend, className }: StatCardProps) {
+export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1', trend, className, isLoading = false }: StatCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,15 +35,21 @@ export function StatCard({ title, value, subtitle, icon: Icon, color = '#6366f1'
       <div className="flex items-start justify-between relative z-10">
         <div>
           <p className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">{title}</p>
-          <motion.p
-            className="text-lg sm:text-2xl font-bold mt-1"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
-          >
-            {value}
-          </motion.p>
-          {subtitle && (
+          {isLoading ? (
+            <Skeleton className="mt-2 h-7 w-20 rounded-md" />
+          ) : (
+            <motion.p
+              className="text-lg sm:text-2xl font-bold mt-1"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
+            >
+              {value}
+            </motion.p>
+          )}
+          {isLoading ? (
+            <Skeleton className="mt-2 h-3 w-24 rounded-md" />
+          ) : subtitle && (
             <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">{subtitle}</p>
           )}
           {trend && (

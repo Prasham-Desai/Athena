@@ -23,6 +23,7 @@ import { EditTaskModal } from '@/components/planner/modals/edit-task-modal';
 import { EditStudyLogModal } from '@/components/planner/modals/edit-study-log-modal';
 import { TimerConflictModal } from '@/components/planner/modals/timer-conflict-modal';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
+import { PageLoader } from '@/components/ui/loading';
 
 import type { Task, StudyBlock } from '@/types';
 
@@ -199,15 +200,7 @@ function DayflowContent() {
   }, [confirmDelete, deleteTask, deleteStudyBlock]);
 
   if (!hydrated) {
-    return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-12 w-64 rounded-2xl bg-[hsl(var(--muted))]" />
-        <div className="h-64 w-full rounded-3xl bg-[hsl(var(--muted))]" />
-        <div className="h-48 w-full rounded-3xl bg-[hsl(var(--muted))]" />
-        <div className="h-28 w-full rounded-2xl bg-[hsl(var(--muted))]" />
-        <div className="h-64 w-full rounded-3xl bg-[hsl(var(--muted))]" />
-      </div>
-    );
+    return <PageLoader label="Loading your planner" />;
   }
 
   return (

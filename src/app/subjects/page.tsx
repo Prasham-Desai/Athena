@@ -31,6 +31,7 @@ import {
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
+import { PageLoader } from '@/components/ui/loading';
 import { EmptyState } from '@/components/shared/empty-state';
 import { cn, SUBJECT_COLORS, SUBJECT_ICONS } from '@/lib/utils';
 
@@ -478,19 +479,7 @@ export default function SubjectsPage() {
 
   // Loading skeleton
   if (!hydrated) {
-    return (
-      <div className="space-y-6">
-        <div className="h-10 w-48 rounded-xl bg-[hsl(var(--muted))] animate-pulse" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="h-48 rounded-2xl bg-[hsl(var(--muted))] animate-pulse"
-            />
-          ))}
-        </div>
-      </div>
-    );
+    return <PageLoader label="Loading subjects" variant="cards" />;
   }
 
   return (

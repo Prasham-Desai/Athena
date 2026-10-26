@@ -88,41 +88,43 @@ export function TasksSection({
       return true;
     });
 
+    const compareCompletedTasks = (a: Task, b: Task) => {
+      const compDateA = (a.completedAt || (a as any).completed_at || '').slice(0, 10);
+      const compDateB = (b.completedAt || (b as any).completed_at || '').slice(0, 10);
+
+      // 1. More recently completed calendar day first (e.g. today before earlier dates)
+      const compDateDiff = compDateB.localeCompare(compDateA);
+      if (compDateDiff !== 0) return compDateDiff;
+
+      // 2. If completed on the same date (e.g. bulk completed), the task with the later curriculum/study date is on top
+      const taskDateA = (a.date || '').slice(0, 10);
+      const taskDateB = (b.date || '').slice(0, 10);
+      const taskDateDiff = taskDateB.localeCompare(taskDateA);
+      if (taskDateDiff !== 0) return taskDateDiff;
+
+      // 3. Exact completedAt timestamp descending
+      const compAtA = a.completedAt || (a as any).completed_at || '';
+      const compAtB = b.completedAt || (b as any).completed_at || '';
+      const compAtDiff = compAtB.localeCompare(compAtA);
+      if (compAtDiff !== 0) return compAtDiff;
+
+      // 4. Fallback to createdAt descending
+      return (b.createdAt || '').localeCompare(a.createdAt || '');
+    };
+
     if (statusFilter === 'completed') {
-      // Latest completed tasks first, older ones last
-      return [...list].sort((a, b) => {
-        const timeA = a.completedAt
-          ? new Date(a.completedAt).getTime()
-          : a.createdAt
-          ? new Date(a.createdAt).getTime()
-          : 0;
-        const timeB = b.completedAt
-          ? new Date(b.completedAt).getTime()
-          : b.createdAt
-          ? new Date(b.createdAt).getTime()
-          : 0;
-        return timeB - timeA;
-      });
+      // Latest completed tasks on top, older ones at the bottom
+      return [...list].sort(compareCompletedTasks);
     }
 
     if (statusFilter === 'all') {
-      // Active tasks first; for completed tasks, latest completed first
+      // Active tasks first; for completed tasks, latest completed on top
       return [...list].sort((a, b) => {
         if (a.completed !== b.completed) {
           return a.completed ? 1 : -1;
         }
         if (a.completed) {
-          const timeA = a.completedAt
-            ? new Date(a.completedAt).getTime()
-            : a.createdAt
-            ? new Date(a.createdAt).getTime()
-            : 0;
-          const timeB = b.completedAt
-            ? new Date(b.completedAt).getTime()
-            : b.createdAt
-            ? new Date(b.createdAt).getTime()
-            : 0;
-          return timeB - timeA;
+          return compareCompletedTasks(a, b);
         }
         return 0;
       });

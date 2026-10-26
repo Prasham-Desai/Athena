@@ -10,6 +10,7 @@ import { useSubjectsStore } from '@/store/subjects-store';
 import { PageHeader } from '@/components/shared/page-header';
 import { getRelativeDate, cn } from '@/lib/utils';
 import type { ExamType, ExamSubject } from '@/types';
+import { SectionLoader } from '@/components/ui/loading';
 
 export default function ExamsPage() {
   const { exams, fetchExams, addExam, updateExam, deleteExam, isLoading } = useExamsStore();
@@ -249,9 +250,7 @@ export default function ExamsPage() {
       </div>
 
       {isLoading && exams.length === 0 ? (
-        <div className="flex items-center justify-center min-h-[40vh]">
-          <div className="animate-pulse text-sm text-[hsl(var(--muted-foreground))]">Loading exams...</div>
-        </div>
+        <SectionLoader rows={4} />
       ) : (
         <div className="space-y-10">
           <section>

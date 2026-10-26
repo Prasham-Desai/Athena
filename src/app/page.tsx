@@ -36,6 +36,7 @@ import { ProgressRing } from '@/components/shared/progress-ring';
 import { StatCard } from '@/components/shared/stat-card';
 import { ExamTimer } from '@/components/shared/exam-timer';
 import { PageHeader } from '@/components/shared/page-header';
+import { CardGridLoader, PageLoader, SectionLoader, Skeleton } from '@/components/ui/loading';
 
 import { useHydration } from '@/hooks/use-hydration';
 import {
@@ -135,12 +136,12 @@ function ChartTooltip({ active, payload, label }: any) {
 export default function DashboardPage() {
   const hydrated = useHydration();
 
-  const subjects = useSubjectsStore((s) => s.subjects);
-  const tasks = useTasksStore((s) => s.tasks);
-  const activities = useActivityStore((s) => s.activities);
-  const dailyLogs = useActivityStore((s) => s.dailyLogs);
+  const { subjects, isLoading: subjectsLoading } = useSubjectsStore();
+  const { tasks, isLoading: tasksLoading } = useTasksStore();
+  const { activities, isLoadingActivities: activitiesLoading, dailyLogs, isLoadingDailyLogs: dailyLogsLoading } = useActivityStore();
+  const { studyBlocks, isLoading: studyBlocksLoading } = usePlannerStore();
 
-  const { exams, fetchExams } = useExamsStore();
+  const { exams, fetchExams, isLoading: examsLoading } = useExamsStore();
 
   // Fetch exams on load
   useEffect(() => {
@@ -254,13 +255,7 @@ export default function DashboardPage() {
   // Loading state
   // -----------------------------------------------------------------------
   if (!hydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-[hsl(var(--muted-foreground))] animate-pulse text-sm">
-          Loading...
-        </div>
-      </div>
-    );
+    return <PageLoader label="Loading your dashboard" />;
   }
 
   // -----------------------------------------------------------------------
@@ -282,7 +277,9 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* ---- Upcoming Exam Widget ---- */}
-      {nextExam && (
+      {examsLoading && !nextExam ? (
+        <Skeleton className="h-32 rounded-2xl" />
+      ) : nextExam && (
         <motion.div variants={itemVariants}>
           <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-4 sm:p-5 shadow-sm">
             <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-indigo-500/10 blur-3xl" />
@@ -347,6 +344,7 @@ export default function DashboardPage() {
             subtitle={`${completedTopics} / ${totalTopics} topics`}
             icon={Target}
             color="#6366f1"
+            isLoading={subjectsLoading}
           />
         </motion.div>
         <motion.div variants={itemVariants}>
@@ -356,6 +354,7 @@ export default function DashboardPage() {
             subtitle={`${revisedTopics} revised`}
             icon={RotateCcw}
             color="#8b5cf6"
+            isLoading={subjectsLoading}
           />
         </motion.div>
         <motion.div variants={itemVariants}>
@@ -365,6 +364,7 @@ export default function DashboardPage() {
             subtitle={streak === 1 ? '1 day' : `${streak} days`}
             icon={Flame}
             color="#f97316"
+            isLoading={dailyLogsLoading}
           />
         </motion.div>
         <motion.div variants={itemVariants}>
@@ -374,6 +374,7 @@ export default function DashboardPage() {
             subtitle={tasksDueToday === 1 ? '1 task remaining' : `${tasksDueToday} tasks remaining`}
             icon={CheckSquare}
             color="#22c55e"
+            isLoading={tasksLoading}
           />
         </motion.div>
         <motion.div variants={itemVariants}>
@@ -383,6 +384,7 @@ export default function DashboardPage() {
             subtitle="Logged in planner"
             icon={Timer}
             color="#14b8a6"
+            isLoading={dailyLogsLoading || studyBlocksLoading}
           />
         </motion.div>
       </motion.div>
@@ -398,7 +400,9 @@ export default function DashboardPage() {
             View all <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
-        {subjectProgress.length > 0 ? (
+        {subjectsLoading ? (
+          <CardGridLoader cards={4} className="xl:grid-cols-4" />
+        ) : subjectProgress.length > 0 ? (
           <motion.div
             variants={containerVariants}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
@@ -493,7 +497,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="h-[220px] -mx-2">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+              {dailyLogsLoading ? <Skeleton className="h-full w-full rounded-xl" /> : <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -530,7 +534,7 @@ export default function DashboardPage() {
                     activeDot={{ r: 5, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
                   />
                 </AreaChart>
-              </ResponsiveContainer>
+              </ResponsiveContainer>}
             </div>
           </div>
         </motion.div>
@@ -553,7 +557,9 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            {upcomingTasks.length === 0 ? (
+            {tasksLoading ? (
+              <SectionLoader rows={3} className="flex-1" />
+            ) : upcomingTasks.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-3">
                   <CheckSquare className="w-6 h-6 text-emerald-500" />
@@ -621,7 +627,9 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {recentActivities.length === 0 ? (
+          {activitiesLoading ? (
+            <SectionLoader rows={4} />
+          ) : recentActivities.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center py-10">
               <div className="w-12 h-12 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mb-3">
                 <Clock className="w-6 h-6 text-[hsl(var(--muted-foreground))]" />

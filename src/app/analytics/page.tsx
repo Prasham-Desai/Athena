@@ -23,6 +23,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 import { StatCard } from '@/components/shared/stat-card';
 import { PageHeader } from '@/components/shared/page-header';
+import { PageLoader } from '@/components/ui/loading';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -168,17 +169,7 @@ export default function AnalyticsPage() {
 
   // Loading skeleton
   if (!hydrated) {
-    return (
-      <div className="space-y-4 animate-pulse">
-        <div className="h-8 w-48 rounded-lg bg-[hsl(var(--muted))]" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-28 rounded-2xl bg-[hsl(var(--muted))]" />
-          ))}
-        </div>
-        <div className="h-72 rounded-2xl bg-[hsl(var(--muted))]" />
-      </div>
-    );
+    return <PageLoader label="Loading analytics" variant="analytics" />;
   }
 
   return (

@@ -13,6 +13,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 import { PageHeader } from '@/components/shared/page-header';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
+import { PageLoader } from '@/components/ui/loading';
 import { useState } from 'react';
 // Section wrapper
 // ---------------------------------------------------------------------------
@@ -152,14 +153,7 @@ export default function SettingsPage() {
 
   // Loading skeleton
   if (!hydrated) {
-    return (
-      <div className="mx-auto max-w-2xl space-y-4 animate-pulse">
-        <div className="h-8 w-48 rounded-lg bg-[hsl(var(--muted))]" />
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-36 rounded-2xl bg-[hsl(var(--muted))]" />
-        ))}
-      </div>
-    );
+    return <PageLoader label="Loading settings" variant="settings" className="max-w-2xl" />;
   }
 
   const themeOptions = [

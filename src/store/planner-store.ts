@@ -4,6 +4,7 @@ import { generateId } from '@/lib/utils';
 
 interface PlannerState {
   studyBlocks: StudyBlock[];
+  isLoading: boolean;
   fetchStudyBlocks: (academicYearId?: string) => Promise<void>;
   addStudyBlock: (block: Omit<StudyBlock, 'id'>) => Promise<void>;
   updateStudyBlock: (id: string, updates: Partial<StudyBlock>) => Promise<void>;
@@ -31,8 +32,10 @@ async function saveStudyBlock(block: StudyBlock, method: 'POST' | 'PUT' = 'POST'
 
 export const usePlannerStore = create<PlannerState>()((set, get) => ({
   studyBlocks: [],
+  isLoading: false,
 
   fetchStudyBlocks: async (academicYearId?: string) => {
+    set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
       const url = yearId ? `/api/study-blocks?academic_year_id=${yearId}` : '/api/study-blocks';
@@ -45,6 +48,8 @@ export const usePlannerStore = create<PlannerState>()((set, get) => ({
       }
     } catch (error) {
       console.error('Failed to fetch study blocks', error);
+    } finally {
+      set({ isLoading: false });
     }
   },
 

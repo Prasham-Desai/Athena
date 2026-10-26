@@ -5,6 +5,8 @@ import { generateId, getToday } from '@/lib/utils';
 interface ActivityState {
   activities: ActivityEntry[];
   dailyLogs: DailyLog[];
+  isLoadingActivities: boolean;
+  isLoadingDailyLogs: boolean;
   fetchActivities: (academicYearId?: string) => Promise<void>;
   fetchDailyLogs: (academicYearId?: string) => Promise<void>;
   addActivity: (activity: Omit<ActivityEntry, 'id' | 'timestamp'>) => Promise<void>;
@@ -32,8 +34,11 @@ async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void, academ
 export const useActivityStore = create<ActivityState>()((set, get) => ({
   activities: [],
   dailyLogs: [],
+  isLoadingActivities: false,
+  isLoadingDailyLogs: false,
 
   fetchActivities: async (academicYearId?: string) => {
+    set({ isLoadingActivities: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
       const url = yearId ? `/api/activities?academic_year_id=${yearId}` : '/api/activities';
@@ -46,14 +51,19 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
       }
     } catch (error) {
       console.error('Failed to fetch activities', error);
+    } finally {
+      set({ isLoadingActivities: false });
     }
   },
 
   fetchDailyLogs: async (academicYearId?: string) => {
+    set({ isLoadingDailyLogs: true });
     try {
       await refreshDailyLogs((logs) => set({ dailyLogs: logs }), academicYearId);
     } catch (error) {
       console.error('Failed to fetch daily logs', error);
+    } finally {
+      set({ isLoadingDailyLogs: false });
     }
   },
 

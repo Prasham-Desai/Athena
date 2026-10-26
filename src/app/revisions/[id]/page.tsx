@@ -32,6 +32,7 @@ import {
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
+import { PageLoader } from '@/components/ui/loading';
 import { cn, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
 import type { Topic, Chapter, Subtopic } from '@/types';
 
@@ -364,11 +365,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   }, [subject, searchQuery]);
 
   if (!hydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 rounded-full border-4 border-[hsl(var(--primary))]/30 border-t-[hsl(var(--primary))] animate-spin" />
-      </div>
-    );
+    return <PageLoader label="Loading revision details" variant="detail" />;
   }
 
   if (!subject) {

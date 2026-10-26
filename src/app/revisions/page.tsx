@@ -15,6 +15,7 @@ import type { Subject } from '@/types';
 import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
 import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
 import { RevisionSubjectCard } from '@/components/revisions/revision-subject-card';
+import { PageLoader } from '@/components/ui/loading';
 
 export default function RevisionsPage() {
   const hydrated = useHydration();
@@ -121,11 +122,7 @@ export default function RevisionsPage() {
   }, [subjects, searchQuery, filter, sortBy]);
 
   if (!hydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-[hsl(var(--muted-foreground))] animate-pulse text-sm">Loading...</div>
-      </div>
-    );
+    return <PageLoader label="Loading revisions" variant="cards" />;
   }
 
   return (

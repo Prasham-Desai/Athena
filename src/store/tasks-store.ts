@@ -4,6 +4,7 @@ import { generateId } from '@/lib/utils';
 
 interface TasksState {
   tasks: Task[];
+  isLoading: boolean;
   addTask: (task: Omit<Task, 'id' | 'createdAt' | 'completedAt' | 'completed'>) => Promise<void>;
   updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
@@ -14,8 +15,10 @@ interface TasksState {
 
 export const useTasksStore = create<TasksState>((set, get) => ({
   tasks: [],
+  isLoading: false,
 
   fetchTasks: async (academicYearId?: string) => {
+    set({ isLoading: true });
     try {
       const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
       const url = yearId ? `/api/tasks?academic_year_id=${yearId}` : '/api/tasks';
@@ -26,6 +29,8 @@ export const useTasksStore = create<TasksState>((set, get) => ({
       }
     } catch (error) {
       console.error('Failed to fetch tasks', error);
+    } finally {
+      set({ isLoading: false });
     }
   },
 

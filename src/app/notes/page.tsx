@@ -37,6 +37,7 @@ import { DocumentViewer } from '@/components/notes/document-viewer';
 import type { NoteDocument, Subject, Chapter, Topic } from '@/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 
 export default function NotesPage() {
   const isHydrated = useHydration();
@@ -328,11 +329,7 @@ export default function NotesPage() {
   };
 
   if (!isHydrated) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-      </div>
-    );
+    return <PageLoader label="Loading notes" variant="cards" />;
   }
 
   // Chapters of current edit target subject
@@ -783,11 +780,8 @@ export default function NotesPage() {
           </div>
 
           {/* Notes Grid */}
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-24 text-[hsl(var(--muted-foreground))]">
-              <Loader2 className="w-8 h-8 animate-spin text-indigo-500 mb-2" />
-              <p className="text-xs font-medium">Loading documents...</p>
-            </div>
+          {isLoading && displayedNotes.length === 0 ? (
+            <CardGridLoader cards={6} />
           ) : displayedNotes.length === 0 ? (
             <EmptyState
               icon={FileText}

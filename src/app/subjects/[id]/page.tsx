@@ -43,6 +43,7 @@ import { useAudioStore } from '@/store/audio-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import { PageHeader } from '@/components/shared/page-header';
+import { PageLoader } from '@/components/ui/loading';
 import { AudioRecorder } from '@/components/shared/audio-recorder';
 import { AudioAutoplayBar } from '@/components/shared/audio-autoplay-bar';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
@@ -962,17 +963,7 @@ export default function SubjectDetailPage() {
 
   // ---------- Loading ----------
   if (!hydrated) {
-    return (
-      <div className="space-y-6">
-        <div className="h-8 w-24 rounded-lg bg-[hsl(var(--muted))] animate-pulse" />
-        <div className="h-40 rounded-2xl bg-[hsl(var(--muted))] animate-pulse" />
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-20 rounded-2xl bg-[hsl(var(--muted))] animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <PageLoader label="Loading subject details" variant="detail" />;
   }
 
   // ---------- Not Found ----------
