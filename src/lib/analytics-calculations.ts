@@ -504,7 +504,10 @@ export function calculateSubjectSummaries(
 
   const totalCurriculumStudyMinutes = Array.from(subjectMinutesMap.values()).reduce((a, b) => a + b, 0);
 
-  return subjects.map((subject) => {
+  // Filter to subjects that have actual chapters and topics (exclude 0-topic placeholder subjects)
+  const validSubjects = subjects.filter((s) => s.chapters.some((c) => c.topics.length > 0));
+
+  return validSubjects.map((subject) => {
     let totalTopics = 0;
     let completedTopics = 0;
     let revisedTopics = 0;
@@ -521,8 +524,14 @@ export function calculateSubjectSummaries(
       });
     });
 
-    const completionPercent = totalTopics > 0 ? Math.round((completedTopics / totalTopics) * 100) : 0;
-    const revisionCoveragePercent = totalTopics > 0 ? Math.round((revisedTopics / totalTopics) * 100) : 0;
+    const completionPercent =
+      totalTopics > 0 && completedTopics > 0
+        ? Math.round((completedTopics / totalTopics) * 100)
+        : 0;
+    const revisionCoveragePercent =
+      totalTopics > 0 && revisedTopics > 0
+        ? Math.round((revisedTopics / totalTopics) * 100)
+        : 0;
     const remainingTopics = Math.max(0, totalTopics - completedTopics);
 
     const studyMinutes = subjectMinutesMap.get(subject.id) || 0;

@@ -87,7 +87,7 @@ export function Toaster() {
   };
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 z-[100] flex flex-col gap-2 sm:max-w-sm">
+    <div aria-live="polite" aria-relevant="additions" className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 z-[100] flex flex-col gap-2 sm:max-w-sm">
       <AnimatePresence>
         {toasts.map((toast) => {
           const Icon = icons[toast.type];
@@ -107,6 +107,7 @@ export function Toaster() {
               <button
                 onClick={() => removeToast(toast.id)}
                 className="shrink-0 p-0.5 rounded-lg hover:bg-white/10 transition"
+                aria-label="Dismiss notification"
               >
                 <X className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
               </button>

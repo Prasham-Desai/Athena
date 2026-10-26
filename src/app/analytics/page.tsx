@@ -71,10 +71,10 @@ export default function AnalyticsPage() {
     fetchActivities('all');
     fetchStudyBlocks('all');
     fetchSettings();
-  }, [fetchDailyLogs, fetchSubjects, fetchActivities, fetchStudyBlocks, fetchSettings]);
+  }, [activeYearId, fetchDailyLogs, fetchSubjects, fetchActivities, fetchStudyBlocks, fetchSettings]);
 
   // Date range filter
-  const [rangePreset, setRangePreset] = useState<DateRangePreset>('this-month');
+  const [rangePreset, setRangePreset] = useState<DateRangePreset>('this-year');
   const [customStart, setCustomStart] = useState<string>('');
   const [customEnd, setCustomEnd] = useState<string>('');
   const [showCustomPicker, setShowCustomPicker] = useState<boolean>(false);

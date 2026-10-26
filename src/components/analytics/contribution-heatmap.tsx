@@ -334,15 +334,16 @@ export function ContributionHeatmap({
       <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10">
         <div className="min-w-[760px] select-none">
           {/* Month Header Row */}
-          <div className="flex pl-8 mb-1.5 text-[11px] font-medium text-[hsl(var(--muted-foreground))] h-4 relative">
+          <div className="mb-1.5 text-[11px] font-medium text-[hsl(var(--muted-foreground))] h-4 relative">
             {grid.monthHeaders.map((mh, idx) => {
-              // Calculate left offset based on week column index (each cell ~13px + 3px gap = 16px)
-              const leftOffset = mh.weekColumn * 16;
+              // Week column starts after weekday labels (w-6 = 24px + gap-2 = 8px => 32px)
+              // Each cell is 12px + 3px gap = 15px
+              const leftOffset = 32 + mh.weekColumn * 15;
               return (
                 <span
                   key={idx}
                   className="absolute transform text-[10px] tracking-wide uppercase text-zinc-400 font-semibold"
-                  style={{ left: `${leftOffset + 32}px` }}
+                  style={{ left: `${leftOffset}px` }}
                 >
                   {mh.shortName}
                 </span>

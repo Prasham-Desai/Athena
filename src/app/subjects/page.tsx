@@ -26,6 +26,8 @@ import {
   PenTool,
   FolderOpen,
   ChevronRight,
+  Search,
+  ArrowDownWideNarrow,
   type LucideIcon,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
@@ -33,7 +35,8 @@ import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 import { EmptyState } from '@/components/shared/empty-state';
-import { cn, SUBJECT_COLORS, SUBJECT_ICONS } from '@/lib/utils';
+import { cn, SUBJECT_COLORS, SUBJECT_ICONS, getToday } from '@/lib/utils';
+import { useActivityStore } from '@/store/activity-store';
 
 // ---------------------------------------------------------------------------
 // Icon map – keeps the dynamic look-up type-safe
@@ -308,17 +311,22 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
     let completed = 0;
     let revised = 0;
     let inProgress = 0;
+    let revisionCount = 0;
+    let dueRevisions = 0;
+    const today = getToday();
     for (const ch of subject.chapters) {
       for (const t of ch.topics) {
         totalTopics++;
         if (t.status === 'completed') completed++;
         if (t.status === 'revised') revised++;
         if (t.status === 'in-progress') inProgress++;
+        revisionCount += t.revisionCount || 0;
+        if ((t.status === 'completed' || t.status === 'revised') && t.nextRevisionDue && t.nextRevisionDue <= today) dueRevisions++;
       }
     }
     const done = completed + revised;
     const percent = totalTopics > 0 ? Math.round((done / totalTopics) * 100) : 0;
-    return { totalTopics, completed, revised, inProgress, percent };
+    return { totalTopics, completed, revised, inProgress, percent, revisionCount, dueRevisions };
   }, [subject.chapters]);
 
   return (
@@ -329,107 +337,72 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
       transition={{ delay: index * 0.05, type: 'spring', stiffness: 300, damping: 24 }}
       layout
     >
-      <Link
-        href={`/subjects/${subject.id}`}
-        className="group block relative rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300 hover:-translate-y-0.5"
-      >
-        {/* Accent top bar */}
-        <div className="h-1.5 w-full" style={{ backgroundColor: subject.color }} />
-
-        <div className="p-3 sm:p-4">
+      <article className="group relative h-full overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] transition-colors hover:border-[hsl(var(--ring))]/60">
+        <div className="absolute inset-y-0 left-0 w-1" style={{ backgroundColor: subject.color }} />
+        <div className="p-4 pl-5">
           {/* Header row */}
-          <div className="flex items-start justify-between mb-3 gap-2">
-            <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex items-start justify-between gap-3">
+            <Link href={`/subjects/${subject.id}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
               <div
-                className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl text-white shadow-lg shrink-0"
-                style={{ backgroundColor: subject.color }}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                style={{ backgroundColor: `${subject.color}22`, color: subject.color }}
               >
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Icon className="h-5 w-5" />
               </div>
               <div className="min-w-0 pr-1">
-                <h3 className="font-semibold text-sm sm:text-base group-hover:text-[hsl(var(--primary))] transition-colors truncate">
+                <h3 className="truncate text-sm font-semibold group-hover:text-[hsl(var(--primary))] transition-colors">
                   {subject.name}
                 </h3>
-                <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] text-[hsl(var(--muted-foreground))] mt-0.5 font-medium">
-                  <span>{subject.chapters.length} {subject.chapters.length === 1 ? 'chapter' : 'chapters'}</span>
+                <div className="mt-1 text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
+                  {subject.chapters.length} {subject.chapters.length === 1 ? 'chapter' : 'chapters'}
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Actions */}
-            <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
+            <div className="flex shrink-0 items-center gap-1">
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                type="button"
+                onClick={() => {
                   onEdit(subject.id);
                 }}
-                className="p-1.5 rounded-lg hover:bg-indigo-500/10 hover:text-indigo-500 transition-all"
+                aria-label={`Edit ${subject.name}`}
+                className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/10 hover:text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
               >
-                <Pencil className="w-4 h-4" />
+                <Pencil className="h-4 w-4" />
               </button>
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                type="button"
+                onClick={() => {
                   onDelete(subject.id);
                 }}
-                className="p-1.5 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-all"
+                aria-label={`Delete ${subject.name}`}
+                className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] transition hover:bg-red-500/10 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Topic stats pills */}
-          {stats.totalTopics > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
-              {stats.completed > 0 && (
-                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] sm:text-[11px] font-medium">
-                  ✓ {stats.completed}
-                </span>
-              )}
-              {stats.revised > 0 && (
-                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-500 text-[10px] sm:text-[11px] font-medium">
-                  ↻ {stats.revised}
-                </span>
-              )}
-              {stats.inProgress > 0 && (
-                <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-[10px] sm:text-[11px] font-medium">
-                  ◐ {stats.inProgress}
-                </span>
-              )}
-              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] text-[10px] sm:text-[11px] font-medium">
-                {stats.totalTopics} topics
-              </span>
+          <Link href={`/subjects/${subject.id}`} className="mt-4 block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
+            <div className="grid grid-cols-3 gap-2 border-y border-[hsl(var(--border))] py-3">
+              <div><p className="text-base font-semibold tabular-nums">{stats.totalTopics}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Topics</p></div>
+              <div><p className="text-base font-semibold tabular-nums">{stats.completed + stats.revised}<span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">/{stats.totalTopics}</span></p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Completed</p></div>
+              <div><p className="text-base font-semibold tabular-nums">{stats.dueRevisions || stats.revisionCount}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">{stats.dueRevisions ? 'Revisions due' : 'Revisions logged'}</p></div>
             </div>
-          )}
-
-          {/* Progress bar */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[10px] sm:text-xs">
-              <span className="text-[hsl(var(--muted-foreground))]">Progress</span>
-              <span className="font-semibold" style={{ color: subject.color }}>
-                {stats.percent}%
-              </span>
+            <div className="mt-3 flex items-center gap-3">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[hsl(var(--muted))]">
+                <motion.div className="h-full rounded-full" style={{ backgroundColor: subject.color }} initial={{ width: 0 }} animate={{ width: `${stats.percent}%` }} transition={{ duration: 0.6, delay: index * 0.04 }} />
+              </div>
+              <span className="min-w-9 text-right text-xs font-semibold tabular-nums" style={{ color: subject.color }}>{stats.percent}%</span>
             </div>
-            <div className="h-2 rounded-full bg-[hsl(var(--muted))] overflow-hidden">
-              <motion.div
-                className="h-full rounded-full"
-                style={{ backgroundColor: subject.color }}
-                initial={{ width: 0 }}
-                animate={{ width: `${stats.percent}%` }}
-                transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: index * 0.05 + 0.2 }}
-              />
+            <div className="mt-3 flex items-center justify-between text-[11px] text-[hsl(var(--muted-foreground))]">
+              <span>{stats.inProgress} in progress</span>
+              <span className="inline-flex items-center gap-1 text-indigo-400">Open subject <ChevronRight className="h-3.5 w-3.5" /></span>
             </div>
-          </div>
-
-          {/* Arrow hint */}
-          <div className="flex items-center justify-end mt-3">
-            <ChevronRight className="w-4 h-4 text-[hsl(var(--muted-foreground))] sm:opacity-0 sm:group-hover:opacity-100 transition-all group-hover:translate-x-0.5" />
-          </div>
+          </Link>
         </div>
-      </Link>
+      </article>
     </motion.div>
   );
 }
@@ -444,13 +417,36 @@ export default function SubjectsPage() {
   const addSubject = useSubjectsStore((s) => s.addSubject);
   const deleteSubject = useSubjectsStore((s) => s.deleteSubject);
   const updateSubject = useSubjectsStore((s) => s.updateSubject);
+  const activities = useActivityStore((s) => s.activities);
 
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editTarget, setEditTarget] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<'attention' | 'progress' | 'remaining' | 'activity'>('attention');
 
   const subjectToEdit = editTarget ? subjects.find((s) => s.id === editTarget) : null;
   const subjectToDelete = deleteTarget ? subjects.find((s) => s.id === deleteTarget) : null;
+  const syllabusStats = useMemo(() => {
+    const topics = subjects.flatMap((subject) => subject.chapters.flatMap((chapter) => chapter.topics));
+    const completed = topics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length;
+    return { total: topics.length, completed, percent: topics.length ? Math.round(completed / topics.length * 100) : 0 };
+  }, [subjects]);
+  const visibleSubjects = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return subjects.filter((subject) => !query || subject.name.toLowerCase().includes(query)).map((subject) => {
+      const topics = subject.chapters.flatMap((chapter) => chapter.topics);
+      const completed = topics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length;
+      const dueRevisions = topics.filter((topic) => (topic.status === 'completed' || topic.status === 'revised') && topic.nextRevisionDue && topic.nextRevisionDue <= getToday()).length;
+      const lastActivity = activities.filter((activity) => activity.subjectId === subject.id).reduce((latest, activity) => Math.max(latest, new Date(activity.timestamp).getTime() || 0), 0);
+      return { subject, completed, remaining: topics.length - completed, dueRevisions, percent: topics.length ? Math.round(completed / topics.length * 100) : 0, lastActivity };
+    }).sort((a, b) => {
+      if (sort === 'progress') return b.percent - a.percent;
+      if (sort === 'remaining') return b.remaining - a.remaining;
+      if (sort === 'activity') return b.lastActivity - a.lastActivity;
+      return (b.dueRevisions - a.dueRevisions) || (b.remaining - a.remaining);
+    }).map(({ subject }) => subject);
+  }, [subjects, activities, search, sort]);
 
   const handleAdd = (name: string, color: string, icon: string) => {
     addSubject(name, color, icon);
@@ -485,7 +481,7 @@ export default function SubjectsPage() {
 
   return (
     <>
-      <PageHeader title="Subjects" description="Organize your knowledge — every chapter mastered is a victory! 📚">
+      <PageHeader title="Subjects" description="Your syllabus, organized into focused learning spaces." className="mb-5">
         <button
           onClick={() => setShowAddDialog(true)}
           className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl text-sm font-medium hover:opacity-90 transition shadow-lg shadow-indigo-500/20"
@@ -494,6 +490,18 @@ export default function SubjectsPage() {
           Add Subject
         </button>
       </PageHeader>
+
+      <section className="mb-5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:flex sm:items-center sm:justify-between sm:gap-6" aria-label="Syllabus overview">
+        <div className="mb-4 flex items-center gap-4 sm:mb-0">
+          <div className="min-w-20"><p className="text-2xl font-semibold tabular-nums">{syllabusStats.percent}%</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">syllabus complete</p></div>
+          <div className="h-9 w-px bg-[hsl(var(--border))]" />
+          <p className="text-xs text-[hsl(var(--muted-foreground))]"><span className="font-medium text-[hsl(var(--foreground))]">{subjects.length} subjects</span><br />{syllabusStats.completed} of {syllabusStats.total} topics complete</p>
+        </div>
+        <div className="grid gap-2 sm:flex sm:flex-1 sm:justify-end">
+          <label className="relative block sm:w-60"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Search subjects</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search subjects" className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" /></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-4 w-4 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="h-10 min-w-36 bg-transparent text-xs outline-none"><option value="attention">Needs attention</option><option value="progress">Progress</option><option value="remaining">Topics remaining</option><option value="activity">Recent activity</option></select></label>
+        </div>
+      </section>
 
       {subjectsLoading ? (
         <CardGridLoader cards={6} />
@@ -506,9 +514,9 @@ export default function SubjectsPage() {
           onAction={() => setShowAddDialog(true)}
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <AnimatePresence mode="popLayout">
-            {subjects.map((subject, idx) => (
+            {visibleSubjects.map((subject, idx) => (
               <SubjectCard
                 key={subject.id}
                 subject={subject}
@@ -518,6 +526,7 @@ export default function SubjectsPage() {
               />
             ))}
           </AnimatePresence>
+          {visibleSubjects.length === 0 && <div className="col-span-full rounded-xl border border-dashed border-[hsl(var(--border))] py-12 text-center"><Search className="mx-auto h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No subjects match “{search}”</p><button type="button" onClick={() => setSearch('')} className="mt-2 text-xs text-indigo-400 hover:text-indigo-300">Clear search</button></div>}
         </div>
       )}
 

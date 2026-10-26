@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
@@ -31,10 +31,10 @@ import {
   Microscope,
   Compass,
   PenTool,
-  Target,
   Headphones,
+  SlidersHorizontal,
+  ArrowDownWideNarrow,
   type LucideIcon,
-  Tag,
   FileText,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
@@ -42,13 +42,12 @@ import { useActivityStore } from '@/store/activity-store';
 import { useAudioStore } from '@/store/audio-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { ProgressRing } from '@/components/shared/progress-ring';
-import { PageHeader } from '@/components/shared/page-header';
 import { PageLoader } from '@/components/ui/loading';
 import { AudioRecorder } from '@/components/shared/audio-recorder';
 import { AudioAutoplayBar } from '@/components/shared/audio-autoplay-bar';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
-import { cn, STATUS_CONFIG, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
-import type { TopicStatus, Topic, Chapter, ImportanceTag } from '@/types';
+import { cn, STATUS_CONFIG, getToday } from '@/lib/utils';
+import type { TopicStatus, Topic, Chapter } from '@/types';
 
 // ---------------------------------------------------------------------------
 // Notes parser – extracts sub-sub-topics and metadata from topic.notes
@@ -98,6 +97,19 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 function getIcon(name: string): LucideIcon {
   return ICON_MAP[name] ?? BookOpen;
+}
+
+type RevisionFilter = 'all' | 'scheduled' | 'due' | 'not-scheduled';
+
+function matchesTopicFilters(topic: Topic, chapterName: string, query: string, statusFilter: TopicStatus | 'all', importanceFilter: string, revisionFilter: RevisionFilter, today: string) {
+  const search = query.trim().toLowerCase();
+  const searchMatches = !search || chapterName.toLowerCase().includes(search) || topic.name.toLowerCase().includes(search) || topic.subtopics?.some((sub: { name: string }) => sub.name.toLowerCase().includes(search)) || topic.notes?.toLowerCase().includes(search);
+  const statusMatches = statusFilter === 'all' || topic.status === statusFilter;
+  const importanceMatches = importanceFilter === 'all' || (importanceFilter === 'not-specified' ? !topic.importance || topic.importance === 'Not Specified' : topic.importance === importanceFilter);
+  const hasRevisionSchedule = (topic.status === 'completed' || topic.status === 'revised') && Boolean(topic.nextRevisionDue);
+  const revisionDue = hasRevisionSchedule && (topic.nextRevisionDue || '') <= today;
+  const revisionMatches = revisionFilter === 'all' || (revisionFilter === 'scheduled' && hasRevisionSchedule) || (revisionFilter === 'due' && revisionDue) || (revisionFilter === 'not-scheduled' && !hasRevisionSchedule);
+  return Boolean(searchMatches && statusMatches && importanceMatches && revisionMatches);
 }
 
 // ---------------------------------------------------------------------------
@@ -190,9 +202,12 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
   return (
     <div ref={ref} className="relative">
       <button
+        type="button"
         onClick={() => setOpen(!open)}
+        aria-haspopup="menu"
+        aria-expanded={open}
         className={cn(
-          'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium transition-all',
+          'inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]',
           config.bg, config.text
         )}
       >
@@ -205,6 +220,8 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
+            role="menu"
+            aria-label="Topic status"
             className="absolute right-0 top-full mt-1 z-20 min-w-[140px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl overflow-hidden"
           >
             {(Object.keys(STATUS_CONFIG) as TopicStatus[]).map((s) => {
@@ -212,7 +229,10 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
               return (
                 <button
                   key={s}
+                  type="button"
                   onClick={() => { onChange(s); setOpen(false); }}
+                  role="menuitemradio"
+                  aria-checked={s === status}
                   className={cn(
                     'w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[hsl(var(--muted))] transition-colors',
                     s === status && 'bg-[hsl(var(--muted))]'
@@ -261,9 +281,12 @@ function ImportanceSelect({ importance, onChange }: { importance?: string | null
   return (
     <div ref={ref} className="relative inline-block">
       <button
+        type="button"
         onClick={(e) => { e.stopPropagation(); setOpen(!open); }}
+        aria-haspopup="menu"
+        aria-expanded={open}
         className={cn(
-          'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all hover:opacity-80 shrink-0 cursor-pointer',
+          'inline-flex shrink-0 cursor-pointer items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold transition-all hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]',
           current.bg, current.text
         )}
       >
@@ -276,12 +299,17 @@ function ImportanceSelect({ importance, onChange }: { importance?: string | null
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
+            role="menu"
+            aria-label="Topic importance"
             className="absolute left-0 top-full mt-1 z-20 min-w-[150px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl overflow-hidden"
           >
             {IMPORTANCE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
+                type="button"
                 onClick={(e) => { e.stopPropagation(); onChange(opt.value); setOpen(false); }}
+                role="menuitemradio"
+                aria-checked={opt.value === current.value}
                 className={cn(
                   'w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-[hsl(var(--muted))] transition-colors',
                   opt.value === current.value && 'bg-[hsl(var(--muted))]'
@@ -307,10 +335,11 @@ interface TopicRowProps {
   subjectId: string;
   chapterId: string;
   subjectColor: string;
+  isVisible?: boolean;
   onPlayGlobal?: (topicId: string, audioId?: string) => void;
 }
 
-function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: TopicRowProps) {
+function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true, onPlayGlobal }: TopicRowProps) {
   const updateTopic = useSubjectsStore((s) => s.updateTopic);
   const setTopicStatus = useSubjectsStore((s) => s.setTopicStatus);
   const markTopicRevised = useSubjectsStore((s) => s.markTopicRevised);
@@ -395,6 +424,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
       exit={{ opacity: 0, x: 10, height: 0, marginBottom: 0 }}
       className={cn(
         'group rounded-xl border px-3 sm:px-4 py-2.5 sm:py-3 hover:shadow-sm transition-all',
+        !isVisible && 'hidden',
         isCompleted
           ? 'bg-emerald-500/5 border-emerald-500/20'
           : 'bg-[hsl(var(--background))] border-[hsl(var(--border))]'
@@ -404,8 +434,11 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
         <div className="flex items-start gap-3 flex-1 min-w-0 w-full">
           {/* Completion checkbox */}
         <button
+          type="button"
           onClick={handleToggleComplete}
           className="shrink-0 transition-transform hover:scale-110 mt-0.5"
+          aria-label={isCompleted ? `Unmark ${topic.name} as complete` : `Mark ${topic.name} as complete`}
+          aria-pressed={isCompleted}
           title={isCompleted ? 'Unmark completed' : 'Mark as completed'}
         >
           {isCompleted ? (
@@ -518,7 +551,9 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
           {/* Revise button */}
           {isCompleted && (
             <button
+              type="button"
               onClick={handleRevise}
+              aria-label={`Record a revision for ${topic.name}`}
               className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-500/10 transition-colors shrink-0"
               title="Mark as revised"
             >
@@ -538,7 +573,9 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, onPlayGlobal }: T
 
           {/* Delete */}
           <button
+            type="button"
             onClick={handleDelete}
+            aria-label={`Delete topic ${topic.name}`}
             className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all shrink-0"
             title="Delete topic"
           >
@@ -568,17 +605,23 @@ interface ChapterAccordionProps {
   subjectColor: string;
   defaultOpen?: boolean;
   searchQuery?: string;
+  statusFilter?: TopicStatus | 'all';
+  importanceFilter?: string;
+  revisionFilter?: RevisionFilter;
+  hasTopicFilters?: boolean;
+  isVisible?: boolean;
   onPlayAll?: (playlist: any[], startIndex?: number) => void;
 }
 
-function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '', onPlayAll }: ChapterAccordionProps) {
+function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = false, searchQuery = '', statusFilter = 'all', importanceFilter = 'all', revisionFilter = 'all', hasTopicFilters = false, isVisible = true, onPlayAll }: ChapterAccordionProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const isOpen = open;
   const [newTopicName, setNewTopicName] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    if (searchQuery) setOpen(true);
-  }, [searchQuery]);
+    if ((searchQuery || hasTopicFilters) && isVisible) setOpen(true);
+  }, [searchQuery, hasTopicFilters, isVisible]);
 
   const updateChapter = useSubjectsStore((s) => s.updateChapter);
   const deleteChapter = useSubjectsStore((s) => s.deleteChapter);
@@ -655,25 +698,9 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
   }, [chapter.topics]);
 
   const displayedTopics = useMemo(() => {
-    if (!searchQuery) return chapter.topics;
-    const q = searchQuery.toLowerCase();
-    
-    // If chapter name matches search, show all topics
-    if (chapter.name.toLowerCase().includes(q)) {
-      return chapter.topics;
-    }
-
-    return chapter.topics.filter(t => {
-      if (t.name.toLowerCase().includes(q)) return true;
-      if (t.subtopics?.some((s: any) => s.name.toLowerCase().includes(q))) return true;
-      if (t.notes?.toLowerCase().includes(q)) return true;
-      return false;
-    });
-  }, [chapter.topics, chapter.name, searchQuery]);
-
-  if (searchQuery && displayedTopics.length === 0) {
-    return null;
-  }
+    const today = getToday();
+    return chapter.topics.filter((topic) => matchesTopicFilters(topic, chapter.name, searchQuery, statusFilter, importanceFilter, revisionFilter, today));
+  }, [chapter.topics, chapter.name, searchQuery, statusFilter, importanceFilter, revisionFilter]);
 
   const handleToggleChapter = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -729,32 +756,20 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10, height: 0 }}
-      className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden"
+      className={cn('rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]', !isVisible && 'hidden')}
     >
       {/* Chapter header */}
-      <div
-        onClick={() => setOpen(!open)}
-        className={cn(
-          'group w-full flex items-start sm:items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4 hover:bg-[hsl(var(--muted))]/50 transition-colors cursor-pointer',
-          chapterStats.allDone && 'bg-emerald-500/5'
-        )}
-        role="button"
-        tabIndex={0}
-      >
-        <motion.div
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="mt-1 sm:mt-0"
-        >
-          <ChevronDown className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
-        </motion.div>
+      <div className={cn('group flex items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-4', chapterStats.allDone && 'bg-emerald-500/5')}>
+        <button type="button" onClick={() => setOpen(!isOpen)} aria-expanded={isOpen} aria-controls={`chapter-content-${chapter.id}`} aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${chapter.name}`} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
+          <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="flex"><ChevronDown className="h-4 w-4" /></motion.span>
+        </button>
 
         {/* Chapter completion checkbox */}
-        <div
+        <button
+          type="button"
           onClick={handleToggleChapter}
-          className="shrink-0 transition-transform hover:scale-110 mt-0.5 sm:mt-0"
-          role="button"
-          tabIndex={0}
+          className="shrink-0 transition-transform hover:scale-110"
+          aria-label={chapterStats.allDone ? `Unmark all topics in ${chapter.name}` : `Complete all topics in ${chapter.name}`}
           title={chapterStats.allDone ? 'Uncheck all topics' : 'Mark all topics as completed'}
         >
           {chapterStats.allDone ? (
@@ -769,7 +784,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
           ) : (
             <Circle className="w-5 h-5 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
           )}
-        </div>
+        </button>
 
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-center gap-2 w-full">
@@ -780,48 +795,49 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
               inputClassName="w-full"
             />
           </div>
-          <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
+          <p className="mt-0.5 text-[11px] text-[hsl(var(--muted-foreground))]">
             {chapterStats.done}/{chapterStats.total} topics · {chapterStats.percent}%
           </p>
         </div>
         {/* Mini progress bar */}
-        <div className="w-20 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden hidden sm:block">
+        <div className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-[hsl(var(--muted))] sm:block" aria-label={`${chapterStats.percent}% complete`}>
           <div
             className="h-full rounded-full transition-all duration-500"
             style={{ width: `${chapterStats.percent}%`, backgroundColor: subjectColor }}
           />
         </div>
 
-        <div className="flex items-center gap-1 transition-opacity">
+        <div className="flex shrink-0 items-center gap-1">
           {/* Play All Audio */}
           {playlist.length > 0 && (
-            <div
-              onClick={(e) => { e.stopPropagation(); onPlayAll?.(playlist); }}
-              className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors shrink-0"
-              role="button"
-              tabIndex={0}
+            <button
+              type="button"
+              onClick={() => onPlayAll?.(playlist)}
+              className="rounded-lg p-2 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+              aria-label={`Play all ${playlist.length} audio notes in ${chapter.name}`}
               title={`Play all ${playlist.length} audio notes in this chapter`}
             >
               <Headphones className="w-3.5 h-3.5" />
-            </div>
+            </button>
           )}
 
           {/* Delete */}
-          <div
-            onClick={(e) => { e.stopPropagation(); handleDeleteChapter(); }}
-            className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all"
-            role="button"
-            tabIndex={0}
+          <button
+            type="button"
+            onClick={handleDeleteChapter}
+            aria-label={`Delete ${chapter.name}`}
+            className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] transition-all hover:bg-red-500/10 hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           >
             <Trash2 className="w-3.5 h-3.5" />
-          </div>
+          </button>
         </div>
       </div>
 
       {/* Content */}
       <AnimatePresence initial={false}>
-        {open && (
+        {isOpen && (
           <motion.div
+            id={`chapter-content-${chapter.id}`}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -831,20 +847,21 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
             <div className="px-3 sm:px-5 pb-4 sm:pb-5 pt-3 pl-3 sm:pl-11 space-y-2">
               {/* Topic list */}
               <AnimatePresence mode="popLayout">
-                {displayedTopics.map((topic) => (
+                {chapter.topics.map((topic) => (
                   <TopicRow
                     key={topic.id}
                     topic={topic}
                     subjectId={subjectId}
                     chapterId={chapter.id}
                     subjectColor={subjectColor}
+                    isVisible={displayedTopics.some((displayed) => displayed.id === topic.id)}
                     onPlayGlobal={handlePlayGlobal}
                   />
                 ))}
               </AnimatePresence>
 
 
-              {displayedTopics.length === 0 && (
+              {displayedTopics.length === 0 && !searchQuery && !hasTopicFilters && (
                 <p className="text-xs text-[hsl(var(--muted-foreground))] text-center py-4">
                   No topics yet. Add one below.
                 </p>
@@ -891,7 +908,6 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
 export default function SubjectDetailPage() {
   const hydrated = useHydration();
   const params = useParams();
-  const router = useRouter();
   const id = params.id as string;
 
   const subjects = useSubjectsStore((s) => s.subjects);
@@ -900,6 +916,10 @@ export default function SubjectDetailPage() {
 
   const [newChapterName, setNewChapterName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<TopicStatus | 'all'>('all');
+  const [importanceFilter, setImportanceFilter] = useState('all');
+  const [revisionFilter, setRevisionFilter] = useState<RevisionFilter>('all');
+  const [chapterSort, setChapterSort] = useState<'custom' | 'name' | 'progress'>('custom');
   
   const [activePlaylist, setActivePlaylist] = useState<any[]>([]);
   const [autoplayActive, setAutoplayActive] = useState(false);
@@ -920,19 +940,13 @@ export default function SubjectDetailPage() {
   }, [subject]);
 
   const [activePaper, setActivePaper] = useState<string>("Paper 1");
-  
-  // Keep activePaper valid if we switch subjects
-  useEffect(() => {
-    if (availablePapers.length > 0 && !availablePapers.includes(activePaper)) {
-      setActivePaper(availablePapers[0]);
-    }
-  }, [availablePapers, activePaper]);
+  const currentPaper = availablePapers.includes(activePaper) ? activePaper : (availablePapers[0] || 'Paper 1');
 
   const stats = useMemo(() => {
-    if (!subject) return { total: 0, completed: 0, revised: 0, inProgress: 0, percent: 0 };
+    if (!subject) return { total: 0, completed: 0, revised: 0, inProgress: 0, done: 0, percent: 0 };
     let total = 0, completed = 0, revised = 0, inProgress = 0;
     for (const ch of subject.chapters) {
-      if ((ch.paper || "Paper 1") !== activePaper) continue;
+      if ((ch.paper || "Paper 1") !== currentPaper) continue;
       for (const t of ch.topics) {
         total++;
         if (t.status === 'completed') completed++;
@@ -942,26 +956,53 @@ export default function SubjectDetailPage() {
     }
     const done = completed + revised;
     const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-    return { total, completed, revised, inProgress, percent };
-  }, [subject, activePaper]);
+    return { total, completed, revised, inProgress, done, percent };
+  }, [subject, currentPaper]);
+
+  const overallStats = useMemo(() => {
+    if (!subject) return { chapters: 0, total: 0, done: 0, completed: 0, revised: 0, inProgress: 0, revisions: 0, dueRevisions: 0, percent: 0 };
+    let total = 0, completed = 0, revised = 0, inProgress = 0, revisions = 0, dueRevisions = 0;
+    const today = getToday();
+    for (const chapter of subject.chapters) for (const topic of chapter.topics) {
+      total++;
+      if (topic.status === 'completed') completed++;
+      if (topic.status === 'revised') revised++;
+      if (topic.status === 'in-progress') inProgress++;
+      revisions += topic.revisionCount || 0;
+      if ((topic.status === 'completed' || topic.status === 'revised') && topic.nextRevisionDue && topic.nextRevisionDue <= today) dueRevisions++;
+    }
+    const done = completed + revised;
+    return { chapters: subject.chapters.length, total, done, completed, revised, inProgress, revisions, dueRevisions, percent: total ? Math.round(done / total * 100) : 0 };
+  }, [subject]);
 
   const handleAddChapter = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       const trimmed = newChapterName.trim();
       if (!trimmed) return;
-      addChapter(id, trimmed, activePaper);
+      addChapter(id, trimmed, currentPaper);
       setNewChapterName('');
       window.dispatchEvent(
-        new CustomEvent('add-toast', { detail: { message: `Chapter "${trimmed}" added to ${activePaper}!`, type: 'success' } })
+        new CustomEvent('add-toast', { detail: { message: `Chapter "${trimmed}" added to ${currentPaper}!`, type: 'success' } })
       );
     },
-    [newChapterName, addChapter, id, activePaper]
+    [newChapterName, addChapter, id, currentPaper]
   );
 
   const filteredChapters = useMemo(() => {
-    return subject?.chapters.filter(ch => (ch.paper || "Paper 1") === activePaper) || [];
-  }, [subject, activePaper]);
+    const chapters = subject?.chapters.map((chapter, index) => ({ chapter, index })).filter(({ chapter }) => (chapter.paper || 'Paper 1') === currentPaper) || [];
+    if (chapterSort === 'name') chapters.sort((a, b) => a.chapter.name.localeCompare(b.chapter.name));
+    if (chapterSort === 'progress') chapters.sort((a, b) => {
+      const percent = (chapter: Chapter) => chapter.topics.length ? chapter.topics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length / chapter.topics.length : 0;
+      return percent(b.chapter) - percent(a.chapter) || a.index - b.index;
+    });
+    return chapters.map(({ chapter }) => chapter);
+  }, [subject, currentPaper, chapterSort]);
+  const hasTopicFilters = statusFilter !== 'all' || importanceFilter !== 'all' || revisionFilter !== 'all';
+  const hasActiveFilters = Boolean(searchQuery.trim()) || hasTopicFilters;
+  const matchingChapterIds = useMemo(() => new Set(filteredChapters.filter((chapter) =>
+    !hasActiveFilters || chapter.topics.some((topic) => matchesTopicFilters(topic, chapter.name, searchQuery, statusFilter, importanceFilter, revisionFilter, getToday()))
+  ).map((chapter) => chapter.id)), [filteredChapters, hasActiveFilters, searchQuery, statusFilter, importanceFilter, revisionFilter]);
 
   // ---------- Loading ----------
   if (!hydrated) {
@@ -994,91 +1035,53 @@ export default function SubjectDetailPage() {
   const Icon = getIcon(subject.icon);
 
   return (
-    <div className="space-y-8">
-      {/* Back button + header */}
-      <PageHeader title={subject.name}>
-        <Link
-          href="/subjects"
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-[hsl(var(--muted))] transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Link>
-      </PageHeader>
-
-      {/* Hero card */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]"
-      >
-        {/* Gradient top */}
-        <div className="h-2" style={{ backgroundColor: subject.color }} />
-
-        <div className="flex flex-col sm:flex-row items-center gap-6 p-6">
-          {/* Icon + info */}
-          <div className="flex items-center gap-4 flex-1">
-            <div
-              className="flex items-center justify-center w-14 h-14 rounded-2xl text-white shadow-lg"
-              style={{ backgroundColor: subject.color }}
-            >
-              <Icon className="w-7 h-7" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold">{subject.name}</h2>
-              <p className="text-sm text-[hsl(var(--muted-foreground))]">
-                {subject.chapters.length} chapters · {stats.total} topics
-              </p>
-            </div>
-          </div>
-
-          {/* Stats pills */}
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-medium">
-              <Check className="w-3 h-3" /> {stats.completed} completed
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 text-violet-500 text-xs font-medium">
-              <RotateCcw className="w-3 h-3" /> {stats.revised} revised
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-500 text-xs font-medium">
-              ◐ {stats.inProgress} in progress
-            </span>
-            <Link
-              href={`/notes?subjectId=${subject.id}`}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-400 text-xs font-semibold border border-indigo-500/30 transition shadow-sm"
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Subject Notes</span>
+    <div className="space-y-5 sm:space-y-6">
+      <section className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <Link href="/subjects" aria-label="Back to subjects" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
+              <ArrowLeft className="h-4 w-4" />
             </Link>
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${subject.color}20`, color: subject.color }}><Icon className="h-5 w-5" /></div>
+            <div className="min-w-0">
+              <h1 className="truncate text-xl font-semibold tracking-tight sm:text-2xl">{subject.name}</h1>
+              <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{overallStats.chapters} chapters · {overallStats.total} topics across this subject</p>
+            </div>
           </div>
-
-          {/* Progress ring */}
-          <ProgressRing
-            value={stats.percent}
-            size={80}
-            strokeWidth={6}
-            color={subject.color}
-            sublabel="complete"
-          />
+          <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+            <Link href={`/notes?subjectId=${subject.id}`} className="inline-flex h-9 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-3 text-xs font-medium text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"><FileText className="h-3.5 w-3.5" />Subject notes</Link>
+            <div className="flex items-center gap-3 rounded-lg bg-[hsl(var(--background))] px-3 py-2">
+              <div className="text-right"><p className="text-lg font-semibold tabular-nums">{overallStats.percent}%</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">complete</p></div>
+              <ProgressRing value={overallStats.percent} size={42} strokeWidth={4} color={subject.color} />
+            </div>
+          </div>
         </div>
-      </motion.div>
+        <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[hsl(var(--border))] pt-3 sm:grid-cols-4">
+          <div><p className="text-sm font-semibold tabular-nums">{overallStats.done}<span className="font-normal text-[hsl(var(--muted-foreground))]">/{overallStats.total}</span></p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Topics complete</p></div>
+          <div><p className="text-sm font-semibold tabular-nums">{overallStats.chapters}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Chapters</p></div>
+          <div><p className="text-sm font-semibold tabular-nums">{overallStats.revised}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Topics revised</p></div>
+          <div><p className="text-sm font-semibold tabular-nums">{overallStats.dueRevisions}<span className="ml-1 text-[10px] font-normal text-[hsl(var(--muted-foreground))]">due</span></p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Revision queue · {overallStats.revisions} logged</p></div>
+        </div>
+      </section>
 
       {/* Paper Tabs */}
       {availablePapers.length > 1 && (
         <LayoutGroup id="subject-paper-tabs">
-          <div className="flex items-center gap-2 p-1.5 bg-[hsl(var(--muted))] rounded-2xl w-fit">
+          <div role="group" aria-label="Subject papers" className="inline-flex max-w-full items-center gap-1 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-1">
             {availablePapers.map((paper) => (
               <button
                 key={paper}
                 onClick={() => setActivePaper(paper)}
+                type="button"
+                aria-pressed={currentPaper === paper}
                 className={cn(
-                  'relative px-5 py-2.5 text-sm font-semibold rounded-xl transition-colors duration-150',
-                  activePaper === paper
-                    ? 'text-white shadow-md'
+                  'relative rounded-lg px-4 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]',
+                  currentPaper === paper
+                    ? 'text-white'
                     : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
                 )}
               >
-                {activePaper === paper && (
+                {currentPaper === paper && (
                   <motion.div
                     layoutId="paperTab"
                     className="absolute inset-0 rounded-xl"
@@ -1094,48 +1097,31 @@ export default function SubjectDetailPage() {
         </LayoutGroup>
       )}
 
-      {/* Search Input */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[hsl(var(--muted-foreground))]" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={`Search in ${activePaper}...`}
-          className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-10 pr-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition shadow-sm"
-        />
-      </div>
-
-      {/* Add chapter form */}
-      <motion.form
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        onSubmit={handleAddChapter}
-        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
-      >
-        <input
-          type="text"
-          value={newChapterName}
-          onChange={(e) => setNewChapterName(e.target.value)}
-          placeholder={`New chapter for ${activePaper}…`}
-          className="flex-1 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[hsl(var(--ring))] transition"
-        />
-        <button
-          type="submit"
-          disabled={!newChapterName.trim()}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium text-white transition disabled:opacity-40 shadow-lg"
-          style={{ backgroundColor: subject.color }}
-        >
-          <Plus className="w-4 h-4" />
-          Add Chapter
-        </button>
-      </motion.form>
+      <section className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3 sm:p-4" aria-label="Chapter and topic tools">
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-[minmax(220px,1.5fr)_repeat(4,minmax(130px,1fr))]">
+          <label className="relative block sm:col-span-2 xl:col-span-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" />
+            <span className="sr-only">Search chapters and topics</span>
+            <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder={`Search ${currentPaper} chapters and topics`} className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" />
+          </label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Filter topic status</span><select aria-label="Filter topic status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as TopicStatus | 'all')} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All statuses</option>{(Object.keys(STATUS_CONFIG) as TopicStatus[]).map((status) => <option key={status} value={status}>{STATUS_CONFIG[status].label}</option>)}</select></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" /><span className="sr-only">Filter topic importance</span><select aria-label="Filter topic importance" value={importanceFilter} onChange={(event) => setImportanceFilter(event.target.value)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All importance</option><option>Must Know</option><option>Required to Know</option><option>Desirable to Know</option><option value="not-specified">Not Specified</option></select></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><RotateCcw className="h-3.5 w-3.5 shrink-0 text-purple-300" /><span className="sr-only">Filter revision state</span><select aria-label="Filter revision state" value={revisionFilter} onChange={(event) => setRevisionFilter(event.target.value as RevisionFilter)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All revisions</option><option value="due">Due now</option><option value="scheduled">Scheduled</option><option value="not-scheduled">No schedule</option></select></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort chapters</span><select aria-label="Sort chapters" value={chapterSort} onChange={(event) => setChapterSort(event.target.value as typeof chapterSort)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="custom">Original order</option><option value="name">Name A–Z</option><option value="progress">Completion</option></select></label>
+        </div>
+        <div className="mt-3 flex flex-col gap-2 border-t border-[hsl(var(--border))] pt-3 sm:flex-row">
+          <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleAddChapter} className="flex min-w-0 flex-1 gap-2">
+            <input type="text" value={newChapterName} onChange={(event) => setNewChapterName(event.target.value)} placeholder={`New chapter for ${currentPaper}…`} className="h-10 min-w-0 flex-1 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" />
+            <button type="submit" disabled={!newChapterName.trim()} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-xs font-semibold text-white transition hover:brightness-110 disabled:opacity-40 sm:px-4" style={{ backgroundColor: subject.color }}><Plus className="h-4 w-4" />Add chapter</button>
+          </motion.form>
+          <p className="flex items-center text-[11px] text-[hsl(var(--muted-foreground))] sm:px-2">{stats.done}/{stats.total} topics complete in {currentPaper}</p>
+        </div>
+      </section>
 
       {/* Chapters list */}
-      <div className="space-y-4">
+      <div className="space-y-2">
         <AnimatePresence mode="popLayout">
-          {filteredChapters.length === 0 ? (
+          {filteredChapters.length === 0 || (hasActiveFilters && matchingChapterIds.size === 0) ? (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}
@@ -1145,9 +1131,9 @@ export default function SubjectDetailPage() {
               <div className="w-14 h-14 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mx-auto mb-3">
                 <BookOpen className="w-7 h-7 text-[hsl(var(--muted-foreground))]" />
               </div>
-              <h3 className="font-semibold mb-1">No chapters yet in {activePaper}</h3>
+              <h3 className="font-semibold mb-1">{searchQuery || hasTopicFilters ? 'No matching chapters or topics' : `No chapters yet in ${currentPaper}`}</h3>
               <p className="text-sm text-[hsl(var(--muted-foreground))]">
-                Add your first chapter to start organising topics.
+                {searchQuery || hasTopicFilters ? 'Try adjusting the search or clearing one of the filters.' : 'Add your first chapter to start organising topics.'}
               </p>
             </motion.div>
           ) : (
@@ -1157,8 +1143,13 @@ export default function SubjectDetailPage() {
                 chapter={ch}
                 subjectId={subject.id}
                 subjectColor={subject.color}
-                defaultOpen={idx === 0}
+                defaultOpen={idx === 0 && (!hasActiveFilters || matchingChapterIds.has(ch.id))}
                 searchQuery={searchQuery}
+                statusFilter={statusFilter}
+                importanceFilter={importanceFilter}
+                revisionFilter={revisionFilter}
+                hasTopicFilters={hasTopicFilters}
+                isVisible={matchingChapterIds.has(ch.id)}
                 onPlayAll={handlePlayAll}
               />
             ))

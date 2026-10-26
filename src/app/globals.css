@@ -25,6 +25,15 @@
   --ring: 243 75% 59%;
   --radius: 0.75rem;
   --sidebar-width: 260px;
+  --motion-fast: 120ms;
+  --motion-standard: 180ms;
+  --motion-emphasis: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --z-sticky: 20;
+  --z-navigation: 40;
+  --z-popover: 50;
+  --z-modal: 70;
+  --z-toast: 100;
 }
 
 .dark {
@@ -59,6 +68,12 @@ body {
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shared keyboard focus treatment for controls that do not define their own. */
+:where(a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }
 
 html {
@@ -345,6 +360,19 @@ html.font-extra-large { font-size: 18px; }
 .animate-audio-wave {
   animation: audioWave 1.2s ease-in-out infinite;
   transform-origin: bottom;
+}
+
+/* Motion stays decorative: every animated state remains legible without it. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }
 
 /* Mic pulse animation */

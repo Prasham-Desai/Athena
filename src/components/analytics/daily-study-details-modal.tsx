@@ -17,7 +17,7 @@ import {
   FileText,
   Target,
 } from 'lucide-react';
-import { format, parseISO, addDays, subDays } from 'date-fns';
+import { format, parseISO, addDays, subDays, differenceInCalendarDays, startOfYear } from 'date-fns';
 import type { DailyLog, Subject, StudyBlock, ActivityEntry, StudySession } from '@/types';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -123,15 +123,31 @@ export function DailyStudyDetailsModal({
       return currentLog.sessions;
     }
     // If no direct sessions stored, map studyBlocks for that day
-    return dayBlocks.map((b) => ({
-      id: b.id,
-      startTime: `${b.date}T${b.startTime || '00:00'}:00`,
-      endTime: `${b.date}T${b.endTime || '00:00'}:00`,
-      durationMinutes: b.durationMinutes || 0,
-      type: 'study-block' as const,
-      title: b.title,
-      studyBlockId: b.id,
-    }));
+    if (dayBlocks.length > 0) {
+      return dayBlocks.map((b) => ({
+        id: b.id,
+        startTime: `${b.date}T${b.startTime || '00:00'}:00`,
+        endTime: `${b.date}T${b.endTime || '00:00'}:00`,
+        durationMinutes: b.durationMinutes || 0,
+        type: 'study-block' as const,
+        title: b.title,
+        studyBlockId: b.id,
+      }));
+    }
+    // If daily_progress has recorded study minutes, provide a clear session entry
+    if (totalMinutes > 0) {
+      return [
+        {
+          id: `log-${dateStr}`,
+          startTime: `${dateStr}T09:00:00`,
+          endTime: `${dateStr}T${9 + Math.floor(totalMinutes / 60)}:${totalMinutes % 60}:00`,
+          durationMinutes: totalMinutes,
+          type: 'manual' as const,
+          title: 'Recorded Study Time',
+        },
+      ];
+    }
+    return [];
   }, [currentLog, dayBlocks]);
 
   const handlePrevDay = () => {
@@ -191,7 +207,7 @@ export function DailyStudyDetailsModal({
                 {currentDateFormatted}
               </h2>
               <span className="text-[11px] text-[hsl(var(--muted-foreground))]">
-                Day {format(activeDate, 'DDD')} of {format(activeDate, 'yyyy')}
+                Day {differenceInCalendarDays(activeDate, startOfYear(activeDate)) + 1} of {format(activeDate, 'yyyy')}
               </span>
             </div>
           </div>
@@ -364,9 +380,9 @@ export function DailyStudyDetailsModal({
                 Topics Completed First Time ({completedActivities.length})
               </h3>
               <div className="space-y-1.5">
-                {completedActivities.map((act) => (
+                {completedActivities.map((act, idx) => (
                   <div
-                    key={act.id}
+                    key={act.id || `comp-${idx}`}
                     className="flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 px-3 py-2 text-xs"
                   >
                     <BookOpen className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
@@ -385,9 +401,9 @@ export function DailyStudyDetailsModal({
                 Revision Events ({revisedActivities.length})
               </h3>
               <div className="space-y-1.5">
-                {revisedActivities.map((act) => (
+                {revisedActivities.map((act, idx) => (
                   <div
-                    key={act.id}
+                    key={act.id || `rev-${idx}`}
                     className="flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 px-3 py-2 text-xs"
                   >
                     <RotateCcw className="h-3.5 w-3.5 text-purple-400 shrink-0" />
