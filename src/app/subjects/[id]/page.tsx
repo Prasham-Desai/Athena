@@ -39,7 +39,7 @@ import {
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useResolvedSubject } from '@/hooks/use-resolved-subject';
-import { getSubjectDisplayName } from '@/lib/subject-display';
+import { getSubjectDisplayName, getSubjectEnglishTitle } from '@/lib/subject-display';
 import { subjectNotesHref } from '@/lib/routes';
 import { useActivityStore } from '@/store/activity-store';
 import { useAudioStore } from '@/store/audio-store';
@@ -1043,6 +1043,7 @@ export default function SubjectDetailPage() {
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${subject.color}20`, color: subject.color }}><Icon className="h-5 w-5" /></div>
             <div className="min-w-0">
               <h1 className="break-words text-xl font-semibold tracking-tight sm:text-2xl [overflow-wrap:anywhere]">{getSubjectDisplayName(subject)}</h1>
+              {getSubjectEnglishTitle(subject) && <p className="mt-0.5 text-sm text-[hsl(var(--muted-foreground))] [overflow-wrap:anywhere]">{getSubjectEnglishTitle(subject)}</p>}
               <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">{overallStats.chapters} chapters · {overallStats.total} topics across this subject</p>
             </div>
           </div>

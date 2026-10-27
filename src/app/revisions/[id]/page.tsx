@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useResolvedSubject } from '@/hooks/use-resolved-subject';
-import { getSubjectDisplayName } from '@/lib/subject-display';
+import { getSubjectDisplayName, getSubjectEnglishTitle } from '@/lib/subject-display';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { PageLoader } from '@/components/ui/loading';
@@ -401,6 +401,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
             <div className="flex min-w-0 flex-col break-words [overflow-wrap:anywhere]">
               <span className="text-[hsl(var(--muted-foreground))] text-xs sm:text-sm font-medium -mb-0.5">Revise</span>
               <span style={{ color: subject.color }}>{getSubjectDisplayName(subject)}</span>
+              {getSubjectEnglishTitle(subject) && <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">{getSubjectEnglishTitle(subject)}</span>}
             </div>
           </div>
         }
