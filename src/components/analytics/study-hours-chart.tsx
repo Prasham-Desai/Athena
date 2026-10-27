@@ -40,12 +40,12 @@ function CustomChartTooltip({ active, payload, label }: any) {
   const m = Math.round((value - h) * 60);
 
   return (
-    <div className="rounded-xl border border-zinc-700/80 bg-zinc-950/95 backdrop-blur-md px-3.5 py-2 shadow-xl text-xs space-y-1">
-      <div className="font-semibold text-zinc-100">{label}</div>
+    <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/95 backdrop-blur-md px-3.5 py-2 shadow-xl text-xs space-y-1">
+      <div className="font-semibold text-[hsl(var(--foreground))]">{label}</div>
       <div className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-indigo-400" />
-        <span className="text-zinc-400">Study Time:</span>
-        <span className="font-bold text-indigo-300">
+        <span className="h-2 w-2 rounded-full bg-indigo-500" />
+        <span className="text-[hsl(var(--muted-foreground))]">Study Time:</span>
+        <span className="font-bold text-indigo-600 dark:text-indigo-400">
           {h > 0 ? `${h}h ${m}m` : `${m}m`} ({value.toFixed(1)} hrs)
         </span>
       </div>

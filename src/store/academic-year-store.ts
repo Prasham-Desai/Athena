@@ -42,13 +42,16 @@ interface AcademicYearState {
 
 // Fallback initial years while fetching from API
 const INITIAL_YEARS: AcademicYear[] = [
+  { id: 'year_1', name: 'First Year', code: 'first_year', order_index: 1 },
   { id: 'year_2', name: 'Second Year', code: 'second_year', order_index: 2 },
   { id: 'year_3', name: 'Third Year', code: 'third_year', order_index: 3 },
 ];
 
 // Restore from localStorage if available, otherwise fall back to year_3.
 const _restoredYearId = readPersistedYearId() ?? 'year_3';
-const _restoredYear = INITIAL_YEARS.find((y) => y.id === _restoredYearId) ?? INITIAL_YEARS[1];
+const _restoredYear =
+  INITIAL_YEARS.find((y) => y.id === _restoredYearId) ??
+  INITIAL_YEARS.find((y) => y.id === 'year_3')!;
 
 export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
   years: INITIAL_YEARS,

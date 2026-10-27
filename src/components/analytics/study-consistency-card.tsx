@@ -59,7 +59,7 @@ export function StudyConsistencyCard({ stats, dailyLogs }: StudyConsistencyCardP
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
+        <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
           {stats.consistencyRate}% Consistency
         </span>
       </div>
@@ -134,13 +134,13 @@ export function StudyConsistencyCard({ stats, dailyLogs }: StudyConsistencyCardP
                 className={cn(
                   'w-full aspect-square rounded-[4px] border transition-all duration-200 flex items-center justify-center text-[10px] font-bold',
                   day.isActive
-                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                    : 'bg-zinc-800/40 border-white/[0.04] text-zinc-600'
+                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-zinc-100 dark:bg-zinc-800/40 border-zinc-200 dark:border-white/[0.04] text-zinc-400 dark:text-zinc-600'
                 )}
               >
                 {day.dateNum}
               </div>
-              <span className="text-[8px] text-zinc-500 uppercase">{day.dayShort[0]}</span>
+              <span className="text-[8px] text-[hsl(var(--muted-foreground))] uppercase">{day.dayShort[0]}</span>
             </div>
           ))}
         </div>

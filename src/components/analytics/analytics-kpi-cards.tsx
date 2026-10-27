@@ -46,8 +46,8 @@ export function AnalyticsKPICards({
         className={cn(
           'inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-semibold',
           isPositive
-            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+            : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
         )}
       >
         {isPositive ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
@@ -69,7 +69,7 @@ export function AnalyticsKPICards({
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
             Total Study Hours
           </span>
-          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
             <Clock className="h-4 w-4" />
           </div>
         </div>
@@ -98,7 +98,7 @@ export function AnalyticsKPICards({
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
             Topics Completed
           </span>
-          <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
+          <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
             <BookOpen className="h-4 w-4" />
           </div>
         </div>
@@ -127,7 +127,7 @@ export function AnalyticsKPICards({
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
             Revisions Done
           </span>
-          <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400">
+          <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
             <RotateCcw className="h-4 w-4" />
           </div>
         </div>
@@ -156,13 +156,13 @@ export function AnalyticsKPICards({
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
             Avg Daily Hours
           </span>
-          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <TrendingUp className="h-4 w-4" />
           </div>
         </div>
 
         <div className="mt-3 flex items-baseline gap-2">
-          <span className="text-2xl sm:text-3xl font-extrabold text-[hsl(var(--foreground))] tracking-tight text-amber-400">
+          <span className="text-2xl sm:text-3xl font-extrabold text-[hsl(var(--foreground))] tracking-tight">
             {avgHoursPerActiveDay.toFixed(1)}
           </span>
           <span className="text-xs text-[hsl(var(--muted-foreground))] font-medium">h / active day</span>

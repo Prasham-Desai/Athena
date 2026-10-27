@@ -231,7 +231,7 @@ export function SubjectCard({
                   {chaptersCount} {chaptersCount === 1 ? 'Chapter' : 'Chapters'}
                 </span>
               </div>
-              <h3 className="break-words text-base font-bold leading-snug text-[hsl(var(--foreground))] transition-colors group-hover:text-indigo-400 [overflow-wrap:anywhere]">
+              <h3 className="break-words text-base font-bold leading-snug text-[hsl(var(--foreground))] transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-400 [overflow-wrap:anywhere]">
                 {displayName}
               </h3>
             </div>
@@ -250,7 +250,7 @@ export function SubjectCard({
                       onEdit(subject.id);
                     }}
                     aria-label={`Edit ${displayName}`}
-                    className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/15 hover:text-indigo-300"
+                    className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-300"
                   >
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
@@ -264,7 +264,7 @@ export function SubjectCard({
                       onDelete(subject.id);
                     }}
                     aria-label={`Delete ${displayName}`}
-                    className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-rose-500/15 hover:text-rose-400"
+                    className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -275,12 +275,12 @@ export function SubjectCard({
             {variant === 'revisions' && (
               <>
                 {stats.dueRevisions > 0 ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30 shadow-sm animate-pulse">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 shadow-sm animate-pulse">
                     <RotateCcw className="w-3 h-3" />
                     <span>{stats.dueRevisions} Due</span>
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
                     <CheckCircle2 className="w-3 h-3" />
                     <span>Up to date</span>
                   </span>
@@ -307,7 +307,7 @@ export function SubjectCard({
         </div>
 
         {/* ── 2. Stat Pods Grid (3 Modern Metric Pods) ────────────────────── */}
-        <div className="grid grid-cols-3 gap-2 rounded-xl bg-white/[0.03] dark:bg-white/[0.02] border border-[hsl(var(--border))]/70 p-2.5 sm:p-3">
+        <div className="grid grid-cols-3 gap-2 rounded-xl bg-[hsl(var(--muted))]/50 dark:bg-white/[0.02] border border-[hsl(var(--border))]/70 p-2.5 sm:p-3">
           {variant === 'subjects' && (
             <>
               {/* Pod 1: Topics */}
@@ -341,7 +341,7 @@ export function SubjectCard({
                 <p
                   className={cn(
                     'mt-0.5 text-base font-bold tabular-nums',
-                    stats.dueRevisions > 0 ? 'text-rose-400' : 'text-[hsl(var(--foreground))]'
+                    stats.dueRevisions > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-[hsl(var(--foreground))]'
                   )}
                 >
                   {stats.dueRevisions}
@@ -373,7 +373,7 @@ export function SubjectCard({
                 <p className="text-[10px] font-medium uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
                   Revised
                 </p>
-                <p className="mt-0.5 text-base font-bold tabular-nums text-violet-400">
+                <p className="mt-0.5 text-base font-bold tabular-nums text-violet-600 dark:text-violet-400">
                   {stats.revised}
                   <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">
                     /{stats.totalTopics}
@@ -389,7 +389,7 @@ export function SubjectCard({
                 <p
                   className={cn(
                     'mt-0.5 text-base font-bold tabular-nums',
-                    stats.dueRevisions > 0 ? 'text-rose-400' : 'text-emerald-400'
+                    stats.dueRevisions > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
                   )}
                 >
                   {stats.dueRevisions}
@@ -415,7 +415,7 @@ export function SubjectCard({
 
               {/* Pod 2: PDFs */}
               <div className="text-left border-l border-[hsl(var(--border))]/50 pl-2.5">
-                <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-rose-400">
+                <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-rose-600 dark:text-rose-400">
                   <FileText className="w-3 h-3" />
                   <span>PDFs</span>
                 </div>
@@ -426,7 +426,7 @@ export function SubjectCard({
 
               {/* Pod 3: Images */}
               <div className="text-left border-l border-[hsl(var(--border))]/50 pl-2.5">
-                <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-emerald-400">
+                <div className="flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                   <ImageIcon className="w-3 h-3" />
                   <span>Images</span>
                 </div>
@@ -531,7 +531,7 @@ export function SubjectCard({
       </div>
 
       {/* ── 4. Card Footer Row ───────────────────────────────────────────── */}
-      <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-t border-[hsl(var(--border))]/70 bg-white/[0.01] dark:bg-white/[0.015] flex items-center justify-between text-xs">
+      <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-t border-[hsl(var(--border))]/70 bg-[hsl(var(--muted))]/30 dark:bg-white/[0.015] flex items-center justify-between text-xs">
         <span className="text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
           {variant === 'subjects' && (
             <>
@@ -559,7 +559,7 @@ export function SubjectCard({
         </span>
 
         {/* Action text + Animated Arrow */}
-        <span className="inline-flex items-center gap-1 font-semibold text-indigo-400 group-hover:text-indigo-300 transition-colors">
+        <span className="inline-flex items-center gap-1 font-semibold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">
           <span>
             {variant === 'subjects'
               ? 'Open subject'

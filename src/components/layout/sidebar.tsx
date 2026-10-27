@@ -67,7 +67,7 @@ export function Sidebar() {
               exit={{ opacity: 0, width: 0 }}
               className="overflow-hidden"
             >
-              <h1 className="text-base font-bold whitespace-nowrap bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-base font-bold whitespace-nowrap bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                 Athena
               </h1>
               <p className="text-[10px] text-[hsl(var(--muted-foreground))] whitespace-nowrap">

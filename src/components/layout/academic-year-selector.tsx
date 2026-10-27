@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { Scroll, Stethoscope, GraduationCap, Loader2, type LucideIcon } from 'lucide-react';
+import { Scroll, Stethoscope, GraduationCap, BookOpen, Loader2, type LucideIcon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { cn } from '@/lib/utils';
@@ -34,13 +34,25 @@ interface YearTheme {
 }
 
 const YEAR_THEMES: Record<string, YearTheme> = {
+  year_1: {
+    icon: BookOpen,
+    badge: '1st',
+    activeBg: 'bg-gradient-to-r from-emerald-600 to-teal-600',
+    activeShadow: 'shadow-md shadow-emerald-500/25',
+    activeBadge: 'bg-white/20 text-white border-white/30',
+    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors',
+    inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
+    inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
+    inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
+    dotColor: 'bg-emerald-400',
+  },
   year_2: {
     icon: Scroll,
     badge: '2nd',
     activeBg: 'bg-gradient-to-r from-blue-600 to-indigo-600',
     activeShadow: 'shadow-md shadow-blue-500/25',
     activeBadge: 'bg-white/20 text-white border-white/30',
-    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-blue-400 transition-colors',
+    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors',
     inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
     inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
     inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
@@ -52,7 +64,7 @@ const YEAR_THEMES: Record<string, YearTheme> = {
     activeBg: 'bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-700',
     activeShadow: 'shadow-md shadow-purple-500/25',
     activeBadge: 'bg-white/20 text-white border-white/30',
-    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-purple-400 transition-colors',
+    inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors',
     inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
     inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
     inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
@@ -66,7 +78,7 @@ const DEFAULT_THEME: YearTheme = {
   activeBg: 'bg-gradient-to-r from-indigo-600 to-purple-600',
   activeShadow: 'shadow-md shadow-indigo-500/20',
   activeBadge: 'bg-white/20 text-white border-white/30',
-  inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-indigo-400 transition-colors',
+  inactiveIcon: 'text-[hsl(var(--muted-foreground))] group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors',
   inactiveHoverText: 'hover:text-[hsl(var(--foreground))]',
   inactiveHoverBg: 'hover:bg-[hsl(var(--accent))]',
   inactiveBadge: 'text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))] bg-[hsl(var(--muted))]/50',
@@ -105,7 +117,7 @@ export function AcademicYearNavSection({
             className="px-3 pb-1 overflow-hidden"
           >
             <p className="text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
-              Academic Year
+              UG (Undergraduate)
             </p>
           </motion.div>
         )}

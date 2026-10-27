@@ -24,22 +24,22 @@ function CustomBarTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
   const data = payload[0].payload as SubjectAnalyticsSummary;
   return (
-    <div className="rounded-xl border border-zinc-700/80 bg-zinc-950/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl text-xs space-y-1">
-      <div className="flex items-center gap-2 font-semibold text-zinc-100">
+    <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl text-xs space-y-1 text-[hsl(var(--foreground))]">
+      <div className="flex items-center gap-2 font-semibold text-[hsl(var(--foreground))]">
         <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.color }} />
         <span>{data.name}</span>
       </div>
-      <div className="text-zinc-300 flex items-center justify-between gap-4">
-        <span className="text-zinc-400">Completion:</span>
-        <span className="font-bold text-emerald-400">{data.completionPercent}%</span>
+      <div className="text-[hsl(var(--muted-foreground))] flex items-center justify-between gap-4">
+        <span>Completion:</span>
+        <span className="font-bold text-emerald-600 dark:text-emerald-400">{data.completionPercent}%</span>
       </div>
-      <div className="text-zinc-300 flex items-center justify-between gap-4">
-        <span className="text-zinc-400">Completed topics:</span>
-        <span>{data.completedTopics} / {data.totalTopics}</span>
+      <div className="text-[hsl(var(--muted-foreground))] flex items-center justify-between gap-4">
+        <span>Completed topics:</span>
+        <span className="font-semibold text-[hsl(var(--foreground))]">{data.completedTopics} / {data.totalTopics}</span>
       </div>
-      <div className="text-zinc-300 flex items-center justify-between gap-4">
-        <span className="text-zinc-400">Remaining:</span>
-        <span className="text-amber-400">{data.remainingTopics} topics</span>
+      <div className="text-[hsl(var(--muted-foreground))] flex items-center justify-between gap-4">
+        <span>Remaining:</span>
+        <span className="font-semibold text-amber-600 dark:text-amber-400">{data.remainingTopics} topics</span>
       </div>
     </div>
   );

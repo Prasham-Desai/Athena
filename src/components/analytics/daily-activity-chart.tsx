@@ -25,15 +25,15 @@ interface DailyActivityChartProps {
 function CustomActivityTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-zinc-700/80 bg-zinc-950/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl text-xs space-y-1.5">
-      <div className="font-semibold text-zinc-100">{label}</div>
+    <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/95 backdrop-blur-md px-3.5 py-2.5 shadow-xl text-xs space-y-1.5 text-[hsl(var(--foreground))]">
+      <div className="font-semibold text-[hsl(var(--foreground))]">{label}</div>
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
-            <span className="text-zinc-400">{p.name}:</span>
+            <span className="text-[hsl(var(--muted-foreground))]">{p.name}:</span>
           </div>
-          <span className="font-semibold text-zinc-200">{p.value}</span>
+          <span className="font-semibold text-[hsl(var(--foreground))]">{p.value}</span>
         </div>
       ))}
     </div>

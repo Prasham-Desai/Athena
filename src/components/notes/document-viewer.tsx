@@ -1162,9 +1162,9 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
     (effectiveViewMode === 'double' && (history[currentPage + 1]?.future?.length || 0) > 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950 text-slate-100 overflow-hidden font-sans">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[hsl(var(--background))] text-[hsl(var(--foreground))] overflow-hidden font-sans">
       {/* ================= TOP TOOLBAR ================= */}
-      <header className="h-16 px-4 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 flex items-center justify-between z-20 shrink-0 gap-3">
+      <header className="h-16 px-4 bg-[hsl(var(--card))]/95 backdrop-blur-md border-b border-[hsl(var(--border))] flex items-center justify-between z-20 shrink-0 gap-3">
         {/* Left: Back, Title & Subtitle */}
         <div className="flex items-center gap-3 min-w-0">
           <button
@@ -1176,7 +1176,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               }
               onClose();
             }}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
+            className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition-colors shrink-0"
             title="Back to Notes"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -1184,19 +1184,19 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
 
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-white truncate max-w-[200px] sm:max-w-xs md:max-w-md">
+              <h2 className="text-sm font-semibold text-[hsl(var(--foreground))] truncate max-w-[200px] sm:max-w-xs md:max-w-md">
                 {note.title}
               </h2>
               <button
                 onClick={() => setIsRenameOpen(true)}
-                className="p-1 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
+                className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition-colors"
                 title="Edit Title & Subtitle"
               >
                 <Edit2 className="w-3.5 h-3.5" />
               </button>
             </div>
             {note.subtitle && (
-              <p className="text-xs text-slate-400 truncate max-w-[240px] sm:max-w-sm">
+              <p className="text-xs text-[hsl(var(--muted-foreground))] truncate max-w-[240px] sm:max-w-sm">
                 {note.subtitle}
               </p>
             )}
@@ -1207,19 +1207,19 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         {isPdf && numPages > 0 && (
           <div className="flex items-center gap-2 shrink-0">
             {/* Page navigation */}
-            <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-xl border border-slate-700/60">
+            <div className="flex items-center gap-1 bg-[hsl(var(--muted))] px-2 py-1 rounded-xl border border-[hsl(var(--border))]">
               <button
                 disabled={currentPage <= 1}
                 onClick={() => {
                   const step = effectiveViewMode === 'double' ? 2 : 1;
                   setCurrentPage((p) => Math.max(1, p - step));
                 }}
-                className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 transition-colors"
+                className="p-1 rounded text-[hsl(var(--foreground))] hover:opacity-75 disabled:opacity-30 transition-colors"
                 title="Previous Page"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-xs font-medium text-slate-300 px-1 select-none min-w-[56px] text-center">
+              <span className="text-xs font-medium text-[hsl(var(--foreground))] px-1 select-none min-w-[56px] text-center">
                 {effectiveViewMode === 'double' && currentPage < numPages
                   ? `${currentPage}–${currentPage + 1} / ${numPages}`
                   : `${currentPage} / ${numPages}`}
@@ -1234,7 +1234,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   const step = effectiveViewMode === 'double' ? 2 : 1;
                   setCurrentPage((p) => Math.min(numPages, p + step));
                 }}
-                className="p-1 rounded text-slate-300 hover:text-white disabled:opacity-40 transition-colors"
+                className="p-1 rounded text-[hsl(var(--foreground))] hover:opacity-75 disabled:opacity-30 transition-colors"
                 title="Next Page"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -1244,7 +1244,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             {/* View mode toggle (single / two-page) — only for multi-page PDFs */}
             {numPages > 1 && (
               <LayoutGroup id="doc-viewer-view-mode-tabs">
-                <div className="relative flex items-center bg-slate-800/80 p-0.5 rounded-xl border border-slate-700/60">
+                <div className="relative flex items-center bg-[hsl(var(--muted))] p-0.5 rounded-xl border border-[hsl(var(--border))]">
                   <button
                     onClick={() => setViewMode('single')}
                     title="Single Page View"
@@ -1252,7 +1252,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                       'relative z-10 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors duration-150',
                       effectiveViewMode === 'single'
                         ? 'text-white font-semibold'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                     )}
                   >
                     {effectiveViewMode === 'single' && (

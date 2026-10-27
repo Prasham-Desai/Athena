@@ -54,41 +54,41 @@ function getCellColorClass(cell: CalendarDayCell | null): {
 
   if (cell.isFuture) {
     return {
-      bg: 'bg-[#0d1117]/40',
-      border: 'border-dashed border-white/[0.05]',
+      bg: 'bg-zinc-100/40 dark:bg-[#0d1117]/40',
+      border: 'border-dashed border-zinc-200/80 dark:border-white/[0.05]',
     };
   }
 
   switch (cell.intensity) {
     case 1:
       return {
-        bg: 'bg-[#0e4429]',
-        border: 'border-[#006d32]/30',
-        glow: 'hover:shadow-[0_0_8px_rgba(14,68,41,0.6)]',
+        bg: 'bg-[#9be9a8] dark:bg-[#0e4429]',
+        border: 'border-[#40c463]/40 dark:border-[#006d32]/30',
+        glow: 'hover:shadow-[0_0_8px_rgba(64,196,99,0.5)] dark:hover:shadow-[0_0_8px_rgba(14,68,41,0.6)]',
       };
     case 2:
       return {
-        bg: 'bg-[#006d32]',
-        border: 'border-[#26a641]/30',
-        glow: 'hover:shadow-[0_0_10px_rgba(0,109,50,0.7)]',
+        bg: 'bg-[#40c463] dark:bg-[#006d32]',
+        border: 'border-[#30a14e]/40 dark:border-[#26a641]/30',
+        glow: 'hover:shadow-[0_0_10px_rgba(48,161,78,0.6)] dark:hover:shadow-[0_0_10px_rgba(0,109,50,0.7)]',
       };
     case 3:
       return {
-        bg: 'bg-[#26a641]',
-        border: 'border-[#39d353]/40',
-        glow: 'hover:shadow-[0_0_12px_rgba(38,166,65,0.8)]',
+        bg: 'bg-[#30a14e] dark:bg-[#26a641]',
+        border: 'border-[#216e39]/50 dark:border-[#39d353]/40',
+        glow: 'hover:shadow-[0_0_12px_rgba(33,110,57,0.7)] dark:hover:shadow-[0_0_12px_rgba(38,166,65,0.8)]',
       };
     case 4:
       return {
-        bg: 'bg-[#39d353]',
-        border: 'border-[#7ee787]/50',
-        glow: 'hover:shadow-[0_0_14px_rgba(57,211,83,0.9)]',
+        bg: 'bg-[#216e39] dark:bg-[#39d353]',
+        border: 'border-[#1b4728]/60 dark:border-[#7ee787]/50',
+        glow: 'hover:shadow-[0_0_14px_rgba(27,71,40,0.8)] dark:hover:shadow-[0_0_14px_rgba(57,211,83,0.9)]',
       };
     case 0:
     default:
       return {
-        bg: 'bg-[#161b22]',
-        border: 'border-white/[0.04]',
+        bg: 'bg-zinc-100 dark:bg-[#161b22]',
+        border: 'border-zinc-200/90 dark:border-white/[0.04]',
       };
   }
 }
@@ -343,7 +343,7 @@ export function ContributionHeatmap({
               return (
                 <span
                   key={idx}
-                  className="absolute transform text-[10px] tracking-wide uppercase text-zinc-400 font-semibold"
+                  className="absolute transform text-[10px] tracking-wide uppercase text-[hsl(var(--muted-foreground))] font-semibold"
                   style={{ left: `${leftOffset}px` }}
                 >
                   {mh.shortName}
@@ -355,7 +355,7 @@ export function ContributionHeatmap({
           {/* Calendar Grid with Weekday Labels on Left */}
           <div className="flex items-start gap-2">
             {/* Weekday labels */}
-            <div className="flex flex-col gap-[3px] text-[10px] font-medium text-zinc-500 w-6 pt-[1px] text-right pr-1">
+            <div className="flex flex-col gap-[3px] text-[10px] font-medium text-[hsl(var(--muted-foreground))] w-6 pt-[1px] text-right pr-1">
               {weekdays.map((wd, idx) => (
                 <div key={idx} className="h-3 leading-3 flex items-center justify-end">
                   {wd}
@@ -426,13 +426,13 @@ export function ContributionHeatmap({
 
         {/* Legend */}
         <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
-          <span className="text-[11px] text-zinc-400 mr-1">Less</span>
-          <div className="w-3 h-3 rounded-[2.5px] bg-[#161b22] border border-white/[0.04]" title="0" />
-          <div className="w-3 h-3 rounded-[2.5px] bg-[#0e4429] border border-[#006d32]/30" title="Low" />
-          <div className="w-3 h-3 rounded-[2.5px] bg-[#006d32] border border-[#26a641]/30" title="Medium" />
-          <div className="w-3 h-3 rounded-[2.5px] bg-[#26a641] border border-[#39d353]/40" title="High" />
-          <div className="w-3 h-3 rounded-[2.5px] bg-[#39d353] border border-[#7ee787]/50" title="Very high" />
-          <span className="text-[11px] text-zinc-400 ml-1">More</span>
+          <span className="text-[11px] text-[hsl(var(--muted-foreground))] mr-1">Less</span>
+          <div className="w-3 h-3 rounded-[2.5px] bg-zinc-100 dark:bg-[#161b22] border border-zinc-200/90 dark:border-white/[0.04]" title="0" />
+          <div className="w-3 h-3 rounded-[2.5px] bg-[#9be9a8] dark:bg-[#0e4429] border border-[#40c463]/40 dark:border-[#006d32]/30" title="Low" />
+          <div className="w-3 h-3 rounded-[2.5px] bg-[#40c463] dark:bg-[#006d32] border border-[#30a14e]/40 dark:border-[#26a641]/30" title="Medium" />
+          <div className="w-3 h-3 rounded-[2.5px] bg-[#30a14e] dark:bg-[#26a641] border border-[#216e39]/50 dark:border-[#39d353]/40" title="High" />
+          <div className="w-3 h-3 rounded-[2.5px] bg-[#216e39] dark:bg-[#39d353] border border-[#1b4728]/60 dark:border-[#7ee787]/50" title="Very high" />
+          <span className="text-[11px] text-[hsl(var(--muted-foreground))] ml-1">More</span>
         </div>
       </div>
 
@@ -521,7 +521,7 @@ export function ContributionHeatmap({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.12 }}
-            className="absolute z-50 pointer-events-none rounded-xl border border-zinc-700/80 bg-zinc-950/95 backdrop-blur-md px-3.5 py-2.5 shadow-2xl text-xs w-64 max-w-[90vw]"
+            className="absolute z-50 pointer-events-none rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/95 backdrop-blur-md px-3.5 py-2.5 shadow-2xl text-xs w-64 max-w-[90vw] text-[hsl(var(--foreground))]"
             style={{
               left: `${Math.min(
                 Math.max(130, tooltipPos.x),
@@ -532,20 +532,20 @@ export function ContributionHeatmap({
             }}
           >
             {/* Date and Day */}
-            <div className="font-semibold text-zinc-100 flex items-center justify-between border-b border-zinc-800 pb-1.5 mb-2">
+            <div className="font-semibold text-[hsl(var(--foreground))] flex items-center justify-between border-b border-[hsl(var(--border))] pb-1.5 mb-2">
               <span>{format(parseISO(hoveredCell.date), 'EEEE, MMMM d, yyyy')}</span>
               {hoveredCell.isFuture && (
-                <span className="text-[10px] text-zinc-500 font-normal">Future</span>
+                <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-normal">Future</span>
               )}
             </div>
 
             {/* Study Duration */}
-            <div className="flex items-center justify-between text-zinc-300 mb-1">
-              <span className="flex items-center gap-1.5 text-zinc-400">
-                <Clock className="h-3.5 w-3.5 text-emerald-400" />
+            <div className="flex items-center justify-between text-[hsl(var(--muted-foreground))] mb-1">
+              <span className="flex items-center gap-1.5 text-[hsl(var(--muted-foreground))]">
+                <Clock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                 Study Duration:
               </span>
-              <span className="font-bold text-emerald-400">
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
                 {hoveredCell.studyMinutes > 0
                   ? `${Math.floor(hoveredCell.studyMinutes / 60)}h ${hoveredCell.studyMinutes % 60}m`
                   : '0m (No activity)'}
@@ -554,20 +554,20 @@ export function ContributionHeatmap({
 
             {/* Sessions count */}
             {hoveredCell.sessionsCount > 0 && (
-              <div className="flex items-center justify-between text-zinc-300 mb-1">
-                <span className="text-zinc-400">Sessions recorded:</span>
-                <span className="font-medium text-zinc-200">{hoveredCell.sessionsCount}</span>
+              <div className="flex items-center justify-between text-[hsl(var(--muted-foreground))] mb-1">
+                <span className="text-[hsl(var(--muted-foreground))]">Sessions recorded:</span>
+                <span className="font-medium text-[hsl(var(--foreground))]">{hoveredCell.sessionsCount}</span>
               </div>
             )}
 
             {/* Topics & Revisions */}
             {(hoveredCell.topicsCompleted > 0 || hoveredCell.revisionsCompleted > 0) && (
-              <div className="grid grid-cols-2 gap-2 text-[11px] py-1 border-t border-zinc-800/80 my-1">
-                <div className="flex items-center gap-1 text-cyan-300">
+              <div className="grid grid-cols-2 gap-2 text-[11px] py-1 border-t border-[hsl(var(--border))] my-1">
+                <div className="flex items-center gap-1 text-cyan-600 dark:text-cyan-300">
                   <BookOpen className="h-3 w-3" />
                   <span>{hoveredCell.topicsCompleted} topics</span>
                 </div>
-                <div className="flex items-center gap-1 text-purple-300">
+                <div className="flex items-center gap-1 text-purple-600 dark:text-purple-300">
                   <RotateCcw className="h-3 w-3" />
                   <span>{hoveredCell.revisionsCompleted} revisions</span>
                 </div>
@@ -576,25 +576,25 @@ export function ContributionHeatmap({
 
             {/* Subjects Studied */}
             {hoveredCell.subjectsStudied.length > 0 && (
-              <div className="mt-1 pt-1 border-t border-zinc-800/80 text-[10px] text-zinc-400 truncate">
-                Subjects: <span className="text-zinc-200">{hoveredCell.subjectsStudied.join(', ')}</span>
+              <div className="mt-1 pt-1 border-t border-[hsl(var(--border))] text-[10px] text-[hsl(var(--muted-foreground))] truncate">
+                Subjects: <span className="text-[hsl(var(--foreground))]">{hoveredCell.subjectsStudied.join(', ')}</span>
               </div>
             )}
 
             {/* Daily Goal Progress Bar */}
             {dailyGoalHours > 0 && !hoveredCell.isFuture && (
-              <div className="mt-2 pt-1.5 border-t border-zinc-800">
-                <div className="flex items-center justify-between text-[10px] text-zinc-400 mb-1">
+              <div className="mt-2 pt-1.5 border-t border-[hsl(var(--border))]">
+                <div className="flex items-center justify-between text-[10px] text-[hsl(var(--muted-foreground))] mb-1">
                   <span>Daily Goal ({dailyGoalHours}h)</span>
-                  <span className="font-semibold text-zinc-200">
+                  <span className="font-semibold text-[hsl(var(--foreground))]">
                     {Math.round((hoveredCell.studyHours / dailyGoalHours) * 100)}%
                   </span>
                 </div>
-                <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                <div className="w-full bg-[hsl(var(--muted))] rounded-full h-1.5 overflow-hidden">
                   <div
                     className={cn(
                       'h-full rounded-full transition-all',
-                      hoveredCell.studyHours >= dailyGoalHours ? 'bg-emerald-400' : 'bg-indigo-500'
+                      hoveredCell.studyHours >= dailyGoalHours ? 'bg-emerald-500' : 'bg-indigo-500'
                     )}
                     style={{
                       width: `${Math.min(100, Math.round((hoveredCell.studyHours / dailyGoalHours) * 100))}%`,
@@ -604,7 +604,7 @@ export function ContributionHeatmap({
               </div>
             )}
 
-            <div className="text-[9px] text-zinc-500 text-center mt-2">
+            <div className="text-[9px] text-[hsl(var(--muted-foreground))] text-center mt-2">
               Click date to view detailed session log
             </div>
           </motion.div>

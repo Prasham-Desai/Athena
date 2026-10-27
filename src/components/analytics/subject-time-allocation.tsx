@@ -44,7 +44,7 @@ export function SubjectTimeAllocation({ summaries }: SubjectTimeAllocationProps)
             </p>
           </div>
         </div>
-        <span className="text-xs font-semibold text-zinc-300">
+        <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))]">
           {totalCurriculumHours} total hrs
         </span>
       </div>
@@ -56,7 +56,7 @@ export function SubjectTimeAllocation({ summaries }: SubjectTimeAllocationProps)
       ) : (
         <div className="space-y-4">
           {/* Segmented Stacked Bar */}
-          <div className="w-full h-3 rounded-full bg-zinc-800/80 flex overflow-hidden">
+          <div className="w-full h-3 rounded-full bg-[hsl(var(--muted))] flex overflow-hidden">
             {sorted.map((s) => {
               if (s.timeSharePercent <= 0) return null;
               return (
