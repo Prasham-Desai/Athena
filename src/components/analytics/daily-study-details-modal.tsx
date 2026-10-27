@@ -22,6 +22,7 @@ import type { DailyLog, Subject, StudyBlock, ActivityEntry, StudySession } from 
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { getSubjectDisplayName } from '@/lib/subject-display';
+import { plannerDateHref } from '@/lib/routes';
 
 interface DailyStudyDetailsModalProps {
   isOpen: boolean;
@@ -419,7 +420,7 @@ export function DailyStudyDetailsModal({
         {/* Footer */}
         <div className="p-3.5 sm:p-4 border-t border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30 flex items-center justify-between">
           <Link
-            href={`/planner?date=${dateStr}`}
+            href={plannerDateHref(dateStr)}
             onClick={onClose}
             className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
           >

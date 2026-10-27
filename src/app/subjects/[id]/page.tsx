@@ -40,6 +40,7 @@ import {
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useResolvedSubject } from '@/hooks/use-resolved-subject';
 import { getSubjectDisplayName } from '@/lib/subject-display';
+import { subjectNotesHref } from '@/lib/routes';
 import { useActivityStore } from '@/store/activity-store';
 import { useAudioStore } from '@/store/audio-store';
 import { useHydration } from '@/hooks/use-hydration';
@@ -1029,9 +1030,7 @@ export default function SubjectDetailPage() {
   }
 
   const Icon = getIcon(subject.icon);
-  const notesQuery = new URLSearchParams({ subjectId: subject.id });
   const subjectYearId = subject.academicYearId || subject.academic_year_id;
-  if (subjectYearId) notesQuery.set('yearId', subjectYearId);
 
   return (
     <div className="space-y-5 sm:space-y-6">
@@ -1048,7 +1047,7 @@ export default function SubjectDetailPage() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 lg:justify-end">
-            <Link href={`/notes?${notesQuery.toString()}`} className="inline-flex h-9 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-3 text-xs font-medium text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"><FileText className="h-3.5 w-3.5" />Subject notes</Link>
+            <Link href={subjectNotesHref(subject.id, subjectYearId)} className="inline-flex h-9 items-center gap-2 rounded-lg border border-[hsl(var(--border))] px-3 text-xs font-medium text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"><FileText className="h-3.5 w-3.5" />Subject notes</Link>
             <div className="flex items-center gap-3 rounded-lg bg-[hsl(var(--background))] px-3 py-2">
               <div className="text-right"><p className="text-lg font-semibold tabular-nums">{overallStats.percent}%</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">complete</p></div>
               <ProgressRing value={overallStats.percent} size={42} strokeWidth={4} color={subject.color} />

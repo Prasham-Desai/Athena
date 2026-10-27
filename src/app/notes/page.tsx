@@ -88,6 +88,7 @@ export default function NotesPage() {
       if (!firstYearLoad) {
         const url = new URL(window.location.href);
         url.searchParams.delete('subjectId');
+        url.searchParams.set('yearId', activeYearId);
         window.history.replaceState({}, '', url.toString());
       }
       fetchNotes(activeYearId);
@@ -128,12 +129,14 @@ export default function NotesPage() {
       const url = new URL(window.location.href);
       if (subjectId) {
         url.searchParams.set('subjectId', subjectId);
+        url.searchParams.set('yearId', activeYearId);
       } else {
         url.searchParams.delete('subjectId');
+        url.searchParams.set('yearId', activeYearId);
       }
       window.history.replaceState({}, '', url.toString());
     }
-  }, []);
+  }, [activeYearId]);
 
   // Active Subject details
   const activeSubject = useMemo(() => {

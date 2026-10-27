@@ -14,7 +14,7 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
   const years = useAcademicYearStore((state) => state.years);
   const isSwitching = useAcademicYearStore((state) => state.isSwitching);
   const setActiveYearId = useAcademicYearStore((state) => state.setActiveYearId);
-  const [lookupState, setLookupState] = useState<'idle' | 'loading' | 'missing'>('idle');
+  const [missingSubjectId, setMissingSubjectId] = useState<string | null>(null);
   const resolvedId = useRef<string | null>(null);
 
   const subject = useMemo(() => subjects.find((candidate) => {
@@ -28,7 +28,6 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
 
     if (subject) {
       resolvedId.current = subjectId;
-      setLookupState('idle');
       return;
     }
 
@@ -36,20 +35,18 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
     resolvedId.current = subjectId;
 
     let cancelled = false;
-    setLookupState('loading');
-
     void (async () => {
       try {
         const response = await fetch(`/api/subjects/${encodeURIComponent(subjectId)}`, { cache: 'no-store' });
         if (!response.ok) {
-          if (!cancelled) setLookupState('missing');
+          if (!cancelled) setMissingSubjectId(subjectId);
           return;
         }
 
         const payload = (await response.json()) as { data?: { academic_year_id?: string; academicYearId?: string } };
         const targetYearId = payload.data?.academic_year_id || payload.data?.academicYearId;
         if (!targetYearId || !years.some((year) => year.id === targetYearId)) {
-          if (!cancelled) setLookupState('missing');
+          if (!cancelled) setMissingSubjectId(subjectId);
           return;
         }
 
@@ -60,10 +57,10 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
         }
 
         const wasLoaded = useSubjectsStore.getState().subjects.some((candidate) => candidate.id === subjectId);
-        if (!cancelled) setLookupState(wasLoaded ? 'idle' : 'missing');
+        if (!cancelled && !wasLoaded) setMissingSubjectId(subjectId);
       } catch (error) {
         console.error('Failed to resolve subject link', error);
-        if (!cancelled) setLookupState('missing');
+        if (!cancelled) setMissingSubjectId(subjectId);
       }
     })();
 
@@ -74,6 +71,6 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
 
   return {
     subject: subject as Subject | undefined,
-    isResolving: !subject && (subjectsLoading || isSwitching || lookupState !== 'missing'),
+    isResolving: !subject && (subjectsLoading || isSwitching || missingSubjectId !== subjectId),
   };
 }

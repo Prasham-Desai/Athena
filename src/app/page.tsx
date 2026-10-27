@@ -27,6 +27,7 @@ import { useToday } from '@/hooks/use-today';
 import { calculateDayStudyMetrics, formatDurationHuman } from '@/lib/study-analytics';
 import { getRelativeDate, getStreakCount, PRIORITY_CONFIG } from '@/lib/utils';
 import { getSubjectDisplayName } from '@/lib/subject-display';
+import { plannerTasksHref, subjectDetailHref } from '@/lib/routes';
 import { AddTaskModal } from '@/components/planner/modals/add-task-modal';
 import { EditTaskModal } from '@/components/planner/modals/edit-task-modal';
 import { PageLoader, SectionLoader, Skeleton } from '@/components/ui/loading';
@@ -195,7 +196,7 @@ export default function DashboardPage() {
   const hasWeeklyHistory = chartData.some((day) => day.minutes > 0);
 
   const attentionItems = useMemo(() => [
-    ...overdueTasks.map((task) => ({ key: `task-${task.id}`, title: task.title, detail: `Overdue · ${getRelativeDate(task.date)}`, href: '/planner#tasks', urgent: true, task })),
+    ...overdueTasks.map((task) => ({ key: `task-${task.id}`, title: task.title, detail: `Overdue · ${getRelativeDate(task.date)}`, href: plannerTasksHref(), urgent: true, task })),
     ...revisionQueue.map(({ topic }) => ({ key: `revision-${topic.id}`, title: topic.name, detail: `${topic.subjectName} · ${topic.nextRevisionDue === today ? 'Revision due today' : `Overdue · ${getRelativeDate(topic.nextRevisionDue || today)}`}`, href: `/revisions/${topic.subjectId}`, urgent: topic.nextRevisionDue !== today, task: undefined })),
   ].slice(0, 5), [overdueTasks, revisionQueue, today]);
 
@@ -218,7 +219,7 @@ export default function DashboardPage() {
   const startTaskSession = (task: Task) => {
     const target = { type: 'task' as const, id: task.id, taskId: task.id, title: task.title, subjectId: subjectForTask(task)?.id };
     if (isMainRunning) {
-      window.location.assign('/planner#tasks');
+      window.location.assign(plannerTasksHref());
       return;
     }
     if (activeTarget?.taskId === task.id && mainSeconds > 0) toggleMain();
@@ -304,7 +305,7 @@ export default function DashboardPage() {
             </div>}
             <div className="mt-4 flex items-center justify-between border-t border-[hsl(var(--border))] pt-3 text-xs">
               <span className="text-[hsl(var(--muted-foreground))]">{finishedFocusTasks.length} of {finishedFocusTasks.length + focusTasks.length} scheduled tasks complete</span>
-              <Link href="/planner#tasks" className={`${focusRing} font-medium text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+              <Link href={plannerTasksHref()} className={`${focusRing} font-medium text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
             </div>
           </div>
           <div className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]/45 p-4 sm:p-6 lg:border-l lg:border-t-0">
@@ -326,7 +327,7 @@ export default function DashboardPage() {
       <section>
         <SectionHeading title="Subject progress" subtitle={`${completedTopics} of ${totalTopics} topics complete · revision work is tracked separately`} action={<label className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><ArrowDownWideNarrow className="h-3.5 w-3.5" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={subjectSort} onChange={(event) => setSubjectSort(event.target.value as SubjectSort)} className={`rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-2.5 py-2 text-xs text-[hsl(var(--foreground))] ${focusRing}`}><option value="attention">Needs attention</option><option value="completion">Most complete</option><option value="remaining">Most topics left</option><option value="revisions">Revisions due</option><option value="activity">Recently studied</option></select></label>} />
         {subjectsLoading ? <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-32 rounded-xl" />)}</div> : subjectProgress.length ? <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {subjectProgress.map(({ subject, total, done, remaining, dueRevisions, percent }) => <Link key={subject.id} href={`/subjects/${subject.id}`} className={`${surface} ${focusRing} group block p-4 transition hover:border-indigo-400/40`}>
+          {subjectProgress.map(({ subject, total, done, remaining, dueRevisions, percent }) => <Link key={subject.id} href={subjectDetailHref(subject.id)} className={`${surface} ${focusRing} group block p-4 transition hover:border-indigo-400/40`}>
             <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2.5"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="break-words text-sm font-semibold leading-snug [overflow-wrap:anywhere]">{getSubjectDisplayName(subject)}</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-sm font-semibold tabular-nums" style={{ color: subject.color }}>{percent}%</span></div>
             <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full transition-[width]" style={{ width: `${percent}%`, backgroundColor: subject.color }} /></div>
             <div className="mt-2.5 flex items-center justify-between gap-2 text-[11px] text-[hsl(var(--muted-foreground))]"><span>{remaining} remaining</span><span className={dueRevisions ? 'text-purple-300' : ''}>{dueRevisions ? `${dueRevisions} revision${dueRevisions === 1 ? '' : 's'} due` : 'No revisions due'}</span></div>
@@ -345,7 +346,7 @@ export default function DashboardPage() {
           </li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckCircle2 className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">You&apos;re up to date</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">No overdue tasks or scheduled revisions need attention.</p></div>}
         </div>
         <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
-          <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href="/planner#tasks" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
+          <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href={plannerTasksHref()} className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {tasksLoading ? <SectionLoader rows={3} /> : upcomingTasks.length ? <ul className="space-y-2">{upcomingTasks.map((task) => {
             const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
             const subject = subjectForTask(task);

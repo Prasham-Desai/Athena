@@ -110,8 +110,23 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
     // Persist the manual selection so ordinary reloads restore it.
     persistYearId(yearId);
 
+    // Clear collections that belong exclusively to the previous year so
+    // destination pages cannot briefly render stale subjects or schedules.
+    useSubjectsStore.setState({ subjects: [], isLoading: true });
+    useTasksStore.setState({ tasks: [], isLoading: true });
+    usePlannerStore.setState({ studyBlocks: [], isLoading: true });
+    useActivityStore.setState({
+      activities: [],
+      dailyLogs: [],
+      isLoadingActivities: true,
+      isLoadingDailyLogs: true,
+    });
+    useExamsStore.setState({ exams: [], isLoading: true, error: null });
+
     try {
       // Invalidate and reload all year-aware stores in parallel
+      const { useNotesStore } = await import('./notes-store');
+      useNotesStore.setState({ notes: [], activeSubjectId: null, isLoading: true, error: null });
       await Promise.all([
         useSubjectsStore.getState().fetchSubjects(yearId),
         useTasksStore.getState().fetchTasks(yearId),
@@ -119,7 +134,7 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
         useActivityStore.getState().fetchActivities(yearId),
         useActivityStore.getState().fetchDailyLogs(yearId),
         useExamsStore.getState().fetchExams(yearId),
-        (await import('./notes-store')).useNotesStore.getState().fetchNotes(yearId),
+        useNotesStore.getState().fetchNotes(yearId),
       ]);
     } catch (error) {
       console.error('Failed to reload data for academic year', yearId, error);

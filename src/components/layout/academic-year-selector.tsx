@@ -5,6 +5,7 @@ import { Scroll, Stethoscope, GraduationCap, Loader2, type LucideIcon } from 'lu
 import { usePathname, useRouter } from 'next/navigation';
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { cn } from '@/lib/utils';
+import { subjectListHref } from '@/lib/routes';
 
 function useAcademicYearSwitch() {
   const router = useRouter();
@@ -15,7 +16,7 @@ function useAcademicYearSwitch() {
   return async (yearId: string) => {
     const leavingSubjectDetail = /^\/(?:subjects|revisions)\/[^/]+\/?$/.test(pathname) && yearId !== activeYearId;
     await setActiveYearId(yearId);
-    if (leavingSubjectDetail) router.replace('/subjects');
+    if (leavingSubjectDetail) router.replace(subjectListHref());
   };
 }
 

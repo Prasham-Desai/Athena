@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { cn, isOverdue, isToday } from '@/lib/utils';
 import { getSubjectDisplayName } from '@/lib/subject-display';
+import { revisionSubjectHref, subjectDetailHref } from '@/lib/routes';
 import type { Subject } from '@/types';
 
 // ---------------------------------------------------------------------------
@@ -155,9 +156,9 @@ export function SubjectCard({
   // Determine destination URL
   const href =
     variant === 'subjects'
-      ? `/subjects/${subject.id}`
+      ? subjectDetailHref(subject.id)
       : variant === 'revisions'
-      ? `/revisions/${subject.id}`
+      ? revisionSubjectHref(subject.id)
       : undefined;
 
   // Click handler when not using a direct <Link>
