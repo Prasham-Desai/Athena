@@ -2088,7 +2088,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "order": 0,
             "notes": "",
             "completedAt": null,
-            "importance": null
+            "importance": "Not Specified"
           },
           {
             "id": "2272d74f",
@@ -2100,7 +2100,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "order": 1,
             "notes": "",
             "completedAt": null,
-            "importance": null
+            "importance": "Not Specified"
           },
           {
             "id": "41e49677",
@@ -2112,7 +2112,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "order": 2,
             "notes": "",
             "completedAt": null,
-            "importance": null
+            "importance": "Not Specified"
           },
           {
             "id": "a8b4e3fe",
@@ -2124,7 +2124,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "order": 3,
             "notes": "",
             "completedAt": null,
-            "importance": null
+            "importance": "Not Specified"
           },
           {
             "id": "c72a9fc5",
@@ -21032,7 +21032,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
             "order": 10,
             "notes": "* Ascariasis\n* Hook worm\n* Tape worm",
             "completedAt": null,
-            "importance": null
+            "importance": "Not Specified"
           },
           {
             "id": "e476eb3a",

@@ -53,16 +53,17 @@ for (const file of files) {
   colorIndex++;
   iconIndex++;
 
-  sql += `INSERT INTO subjects (id, name, color, icon, details) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}') ON CONFLICT(id) DO UPDATE SET name=excluded.name;\n`;
+  sql += `INSERT INTO subjects (id, name, color, icon, details, academic_year_id) VALUES ('${subjectId}', '${escapeSql(subjectName)}', '${color}', '${icon}', '{}', 'year_2') ON CONFLICT(id) DO UPDATE SET name=excluded.name, academic_year_id='year_2';\n`;
   chapterOrder = 0;
 
   function flushTopic() {
     if (topicId) {
-      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, ${currentTopicImportance ? `'${escapeSql(currentTopicImportance)}'` : 'NULL'}, '${escapeSql(currentTopicNotes)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, importance=excluded.importance, notes=excluded.notes;\n`;
+      const importance = currentTopicImportance || 'Not Specified';
+      sql += `INSERT INTO topics (id, chapter_id, name, order_index, status, revision_count, importance, notes) VALUES ('${topicId}', '${chapterId}', '${escapeSql(currentTopicName)}', ${topicOrder - 1}, 'not-started', 0, '${escapeSql(importance)}', '${escapeSql(currentTopicNotes)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, importance=excluded.importance, notes=excluded.notes;\n`;
       let subOrder = 0;
       for (const st of currentSubtopics) {
         const stId = generateId('subtopic:' + topicId + ':' + st);
-        sql += `INSERT INTO subtopics (id, topic_id, name, content, status, order_index) VALUES ('${stId}', '${topicId}', '${escapeSql(st)}', '', 'not-started', ${subOrder++}) ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index;\n`;
+        sql += `INSERT INTO subtopics (id, topic_id, name, content, status, order_index, importance) VALUES ('${stId}', '${topicId}', '${escapeSql(st)}', '', 'not-started', ${subOrder++}, '${escapeSql(importance)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, importance=excluded.importance;\n`;
       }
     }
     topicId = '';
