@@ -912,9 +912,7 @@ export default function SubjectDetailPage() {
 
   const subjects = useSubjectsStore((s) => s.subjects);
   const subjectsLoading = useSubjectsStore((s) => s.isLoading);
-  const addChapter = useSubjectsStore((s) => s.addChapter);
 
-  const [newChapterName, setNewChapterName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<TopicStatus | 'all'>('all');
   const [importanceFilter, setImportanceFilter] = useState('all');
@@ -974,20 +972,6 @@ export default function SubjectDetailPage() {
     const done = completed + revised;
     return { chapters: subject.chapters.length, total, done, completed, revised, inProgress, revisions, dueRevisions, percent: total ? Math.round(done / total * 100) : 0 };
   }, [subject]);
-
-  const handleAddChapter = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      const trimmed = newChapterName.trim();
-      if (!trimmed) return;
-      addChapter(id, trimmed, currentPaper);
-      setNewChapterName('');
-      window.dispatchEvent(
-        new CustomEvent('add-toast', { detail: { message: `Chapter "${trimmed}" added to ${currentPaper}!`, type: 'success' } })
-      );
-    },
-    [newChapterName, addChapter, id, currentPaper]
-  );
 
   const filteredChapters = useMemo(() => {
     const chapters = subject?.chapters.map((chapter, index) => ({ chapter, index })).filter(({ chapter }) => (chapter.paper || 'Paper 1') === currentPaper) || [];
@@ -1109,12 +1093,9 @@ export default function SubjectDetailPage() {
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><RotateCcw className="h-3.5 w-3.5 shrink-0 text-purple-300" /><span className="sr-only">Filter revision state</span><select aria-label="Filter revision state" value={revisionFilter} onChange={(event) => setRevisionFilter(event.target.value as RevisionFilter)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All revisions</option><option value="due">Due now</option><option value="scheduled">Scheduled</option><option value="not-scheduled">No schedule</option></select></label>
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort chapters</span><select aria-label="Sort chapters" value={chapterSort} onChange={(event) => setChapterSort(event.target.value as typeof chapterSort)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="custom">Original order</option><option value="name">Name A–Z</option><option value="progress">Completion</option></select></label>
         </div>
-        <div className="mt-3 flex flex-col gap-2 border-t border-[hsl(var(--border))] pt-3 sm:flex-row">
-          <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleAddChapter} className="flex min-w-0 flex-1 gap-2">
-            <input type="text" value={newChapterName} onChange={(event) => setNewChapterName(event.target.value)} placeholder={`New chapter for ${currentPaper}…`} className="h-10 min-w-0 flex-1 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" />
-            <button type="submit" disabled={!newChapterName.trim()} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-xs font-semibold text-white transition hover:brightness-110 disabled:opacity-40 sm:px-4" style={{ backgroundColor: subject.color }}><Plus className="h-4 w-4" />Add chapter</button>
-          </motion.form>
-          <p className="flex items-center text-[11px] text-[hsl(var(--muted-foreground))] sm:px-2">{stats.done}/{stats.total} topics complete in {currentPaper}</p>
+        <div className="mt-3 flex items-center justify-between border-t border-[hsl(var(--border))] pt-3 text-xs text-[hsl(var(--muted-foreground))]">
+          <span>{filteredChapters.length} chapters in {currentPaper}</span>
+          <span>{stats.done}/{stats.total} topics complete in {currentPaper} ({stats.percent}%)</span>
         </div>
       </section>
 

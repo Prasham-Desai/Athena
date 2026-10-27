@@ -26,8 +26,9 @@ import {
   PenTool,
   FolderOpen,
   ChevronRight,
-  Search,
   ArrowDownWideNarrow,
+  Layers,
+  Search,
   type LucideIcon,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
@@ -310,23 +311,16 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
     let totalTopics = 0;
     let completed = 0;
     let revised = 0;
-    let inProgress = 0;
-    let revisionCount = 0;
-    let dueRevisions = 0;
-    const today = getToday();
     for (const ch of subject.chapters) {
       for (const t of ch.topics) {
         totalTopics++;
         if (t.status === 'completed') completed++;
         if (t.status === 'revised') revised++;
-        if (t.status === 'in-progress') inProgress++;
-        revisionCount += t.revisionCount || 0;
-        if ((t.status === 'completed' || t.status === 'revised') && t.nextRevisionDue && t.nextRevisionDue <= today) dueRevisions++;
       }
     }
     const done = completed + revised;
     const percent = totalTopics > 0 ? Math.round((done / totalTopics) * 100) : 0;
-    return { totalTopics, completed, revised, inProgress, percent, revisionCount, dueRevisions };
+    return { totalTopics, percent };
   }, [subject.chapters]);
 
   return (
@@ -337,68 +331,108 @@ function SubjectCard({ subject, index, onDelete, onEdit }: SubjectCardProps) {
       transition={{ delay: index * 0.05, type: 'spring', stiffness: 300, damping: 24 }}
       layout
     >
-      <article className="group relative h-full overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] transition-colors hover:border-[hsl(var(--ring))]/60">
+      <article className="group relative h-full overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] transition-all duration-300 hover:border-[hsl(var(--ring))]/60 hover:shadow-lg hover:shadow-black/20">
+        {/* Ambient glow */}
+        <div
+          className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 blur-2xl transition-opacity group-hover:opacity-20"
+          style={{ backgroundColor: subject.color }}
+        />
+        {/* Left accent strip */}
         <div className="absolute inset-y-0 left-0 w-1" style={{ backgroundColor: subject.color }} />
+        
         <div className="p-4 pl-5">
           {/* Header row */}
           <div className="flex items-start justify-between gap-3">
-            <Link href={`/subjects/${subject.id}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
+            <Link
+              href={`/subjects/${subject.id}`}
+              className="flex min-w-0 flex-1 items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+            >
               <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-105"
                 style={{ backgroundColor: `${subject.color}22`, color: subject.color }}
               >
                 <Icon className="h-5 w-5" />
               </div>
               <div className="min-w-0 pr-1">
-                <h3 className="truncate text-sm font-semibold group-hover:text-[hsl(var(--primary))] transition-colors">
+                <h3 className="truncate text-sm font-semibold transition-colors group-hover:text-[hsl(var(--primary))]">
                   {subject.name}
                 </h3>
-                <div className="mt-1 text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
+                <div className="mt-0.5 text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
                   {subject.chapters.length} {subject.chapters.length === 1 ? 'chapter' : 'chapters'}
                 </div>
               </div>
             </Link>
 
             {/* Actions */}
-            <div className="flex shrink-0 items-center gap-1">
+            <div className="flex shrink-0 items-center gap-0.5">
               <button
                 type="button"
-                onClick={() => {
-                  onEdit(subject.id);
-                }}
+                onClick={() => onEdit(subject.id)}
                 aria-label={`Edit ${subject.name}`}
-                className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/10 hover:text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+                className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/10 hover:text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil className="h-3.5 w-3.5" />
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  onDelete(subject.id);
-                }}
+                onClick={() => onDelete(subject.id)}
                 aria-label={`Delete ${subject.name}`}
-                className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] transition hover:bg-red-500/10 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-red-500/10 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
 
-          <Link href={`/subjects/${subject.id}`} className="mt-4 block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
-            <div className="grid grid-cols-3 gap-2 border-y border-[hsl(var(--border))] py-3">
-              <div><p className="text-base font-semibold tabular-nums">{stats.totalTopics}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Topics</p></div>
-              <div><p className="text-base font-semibold tabular-nums">{stats.completed + stats.revised}<span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">/{stats.totalTopics}</span></p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">Completed</p></div>
-              <div><p className="text-base font-semibold tabular-nums">{stats.dueRevisions || stats.revisionCount}</p><p className="text-[10px] text-[hsl(var(--muted-foreground))]">{stats.dueRevisions ? 'Revisions due' : 'Revisions logged'}</p></div>
-            </div>
-            <div className="mt-3 flex items-center gap-3">
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[hsl(var(--muted))]">
-                <motion.div className="h-full rounded-full" style={{ backgroundColor: subject.color }} initial={{ width: 0 }} animate={{ width: `${stats.percent}%` }} transition={{ duration: 0.6, delay: index * 0.04 }} />
+          <Link
+            href={`/subjects/${subject.id}`}
+            className="mt-4 block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+          >
+            {/* Topics Stat Box */}
+            <div className="rounded-xl border border-[hsl(var(--border))]/60 bg-white/[0.02] p-3 transition-colors group-hover:bg-white/[0.04]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className="flex h-7 w-7 items-center justify-center rounded-lg"
+                    style={{ backgroundColor: `${subject.color}18`, color: subject.color }}
+                  >
+                    <Layers className="h-3.5 w-3.5" />
+                  </div>
+                  <div>
+                    <span className="text-base font-bold tabular-nums text-[hsl(var(--foreground))]">
+                      {stats.totalTopics}
+                    </span>
+                    <span className="ml-1.5 text-xs font-medium text-[hsl(var(--muted-foreground))]">
+                      {stats.totalTopics === 1 ? 'Topic' : 'Topics'}
+                    </span>
+                  </div>
+                </div>
+
+                <span
+                  className="rounded-md px-2 py-0.5 text-xs font-semibold tabular-nums"
+                  style={{ backgroundColor: `${subject.color}18`, color: subject.color }}
+                >
+                  {stats.percent}%
+                </span>
               </div>
-              <span className="min-w-9 text-right text-xs font-semibold tabular-nums" style={{ color: subject.color }}>{stats.percent}%</span>
+
+              {/* Progress bar */}
+              <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-[hsl(var(--muted))]/70">
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: subject.color }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${stats.percent}%` }}
+                  transition={{ duration: 0.6, delay: index * 0.04 }}
+                />
+              </div>
             </div>
-            <div className="mt-3 flex items-center justify-between text-[11px] text-[hsl(var(--muted-foreground))]">
-              <span>{stats.inProgress} in progress</span>
-              <span className="inline-flex items-center gap-1 text-indigo-400">Open subject <ChevronRight className="h-3.5 w-3.5" /></span>
+
+            {/* Footer */}
+            <div className="mt-3 flex items-center justify-end text-[11px] font-medium text-indigo-400 transition-colors group-hover:text-indigo-300">
+              <span className="inline-flex items-center gap-1">
+                Open subject <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              </span>
             </div>
           </Link>
         </div>

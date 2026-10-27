@@ -236,7 +236,7 @@ export default function DashboardPage() {
   if (!hydrated) return <PageLoader label="Loading your dashboard" />;
 
   return (
-    <main className="mx-auto w-full max-w-[1440px] space-y-6 pb-10 sm:space-y-8">
+    <div className="w-full space-y-6 pb-10 sm:space-y-8">
       <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-400"><CalendarDays className="h-3.5 w-3.5" />{dateLabel(today)}</p>
@@ -333,8 +333,8 @@ export default function DashboardPage() {
         </div> : <div className={`${surface} p-6 text-center`}><p className="text-sm font-medium">No subjects yet</p><Link href="/subjects" className={`${focusRing} mt-2 inline-flex items-center gap-1 text-xs text-indigo-400`}>Add subjects <ArrowRight className="h-3 w-3" /></Link></div>}
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className={`${surface} p-4 sm:p-5`}>
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
           <SectionHeading title="Needs Attention" subtitle="Overdue tasks and scheduled revisions, ordered by urgency" action={<Link href="/revisions" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>Revision queue <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {tasksLoading || subjectsLoading ? <SectionLoader rows={3} /> : attentionItems.length ? <ul className="space-y-2">{attentionItems.map((item) => <li key={item.key} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3">
             <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${item.urgent ? 'bg-rose-500/10 text-rose-400' : 'bg-purple-500/10 text-purple-300'}`}>{item.urgent ? <TriangleAlert className="h-4 w-4" /> : <RotateCcw className="h-4 w-4" />}</span>
@@ -343,7 +343,7 @@ export default function DashboardPage() {
             <Link href={item.href} aria-label={`Open ${item.title}`} className={`${focusRing} rounded-lg p-2 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]`}><ArrowRight className="h-4 w-4" /></Link>
           </li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckCircle2 className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">You&apos;re up to date</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">No overdue tasks or scheduled revisions need attention.</p></div>}
         </div>
-        <div className={`${surface} p-4 sm:p-5`}>
+        <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
           <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href="/planner?view=tasks" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {tasksLoading ? <SectionLoader rows={3} /> : upcomingTasks.length ? <ul className="space-y-2">{upcomingTasks.map((task) => {
             const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
@@ -353,15 +353,15 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-        <div className={`${surface} p-4 sm:p-5`}>
+      <section className="grid gap-4 lg:grid-cols-2">
+        <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
           <SectionHeading title="Weekly productivity" subtitle="Recorded study time · last 7 days" action={<Link href="/analytics" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>Analytics <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {logsLoading || blocksLoading ? <Skeleton className="h-52 rounded-xl" /> : !hasWeeklyHistory ? <div className="flex h-44 flex-col items-center justify-center rounded-xl border border-dashed border-[hsl(var(--border))] text-center"><Activity className="h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No study sessions recorded this week</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Start a focus session to see your weekly progress.</p></div> : <>
             <div className="mb-2 flex gap-5 text-xs"><span><strong className="text-sm tabular-nums">{formatDurationHuman(weeklyTotal)}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">total</span></span><span><strong className="text-sm tabular-nums">{activeDays}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">active days</span></span></div>
             <div className="h-44 w-full sm:h-52"><ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}><AreaChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}><defs><linearGradient id="dashboardStudyGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#818cf8" stopOpacity={0.28} /><stop offset="100%" stopColor="#818cf8" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} /><YAxis axisLine={false} tickLine={false} width={40} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={(value: number) => value >= 60 ? `${(value / 60).toFixed(value % 60 ? 1 : 0)}h` : `${value}m`} /><Tooltip content={<ChartTooltip />} /><Area type="monotone" dataKey="minutes" stroke="#818cf8" strokeWidth={2} fill="url(#dashboardStudyGradient)" activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div>
           </>}
         </div>
-        <div className={`${surface} p-4 sm:p-5`}>
+        <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
           <SectionHeading title="Recent activity" subtitle="Latest study milestones and updates" />
           {activitiesLoading ? <SectionLoader rows={4} /> : recentActivities.length ? <ul className="space-y-0.5">{recentActivities.map((activity, index) => <li key={activity.id} className="flex gap-3"><div className="flex flex-col items-center"><span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-[hsl(var(--card))]" style={{ backgroundColor: activity.color || '#818cf8' }} />{index < recentActivities.length - 1 && <span className="my-1 w-px flex-1 bg-[hsl(var(--border))]" />}</div><div className="min-w-0 pb-3"><p className="text-sm leading-snug">{activity.description}</p><p className="mt-1 text-[11px] text-[hsl(var(--muted-foreground))]">{activityDateLabel(activity.timestamp)}</p></div></li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-7 text-center"><Clock3 className="mx-auto h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No activity recorded yet</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Completed tasks and study milestones will show here.</p></div>}
         </div>
@@ -374,6 +374,6 @@ export default function DashboardPage() {
 
       <AddTaskModal open={showAddTask} initialDate={today} onClose={() => setShowAddTask(false)} onAddTask={addTask} />
       <EditTaskModal open={!!editingTask} task={editingTask} onClose={() => setEditingTask(null)} />
-    </main>
+    </div>
   );
 }
