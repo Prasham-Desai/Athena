@@ -50,12 +50,15 @@ export function useResolvedSubject(subjectId: string, hydrated: boolean) {
           return;
         }
 
+        if (cancelled || useAcademicYearStore.getState().isSwitching) return;
+
         if (targetYearId === activeYearId) {
           await fetchSubjects(targetYearId);
         } else {
           await setActiveYearId(targetYearId);
         }
 
+        if (cancelled || useAcademicYearStore.getState().isSwitching) return;
         const wasLoaded = useSubjectsStore.getState().subjects.some((candidate) => candidate.id === subjectId);
         if (!cancelled && !wasLoaded) setMissingSubjectId(subjectId);
       } catch (error) {

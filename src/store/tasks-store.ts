@@ -4,37 +4,74 @@ import { generateId } from '@/lib/utils';
 
 interface TasksState {
   tasks: Task[];
+  cacheByYear: Record<string, Task[]>;
   isLoading: boolean;
   addTask: (task: Omit<Task, 'id' | 'createdAt' | 'completedAt' | 'completed'>) => Promise<void>;
   updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   toggleTask: (id: string) => Promise<void>;
   setTasks: (tasks: Task[]) => void;
-  fetchTasks: (academicYearId?: string) => Promise<void>;
+  fetchTasks: (academicYearId?: string, force?: boolean) => Promise<void>;
 }
 
 let tasksFetchId = 0;
+const inFlightTasksMap = new Map<string, Promise<any>>();
 
 export const useTasksStore = create<TasksState>((set, get) => ({
   tasks: [],
+  cacheByYear: {},
   isLoading: false,
 
-  fetchTasks: async (academicYearId?: string) => {
-    const requestId = ++tasksFetchId;
-    set({ isLoading: true });
-    try {
-      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
-      const url = yearId ? `/api/tasks?academic_year_id=${yearId}` : '/api/tasks';
-      const response = await fetch(url);
-      if (response.ok) {
-        const { data } = (await response.json()) as any;
-        if (requestId === tasksFetchId) set({ tasks: data || [] });
+  fetchTasks: async (academicYearId?: string, force?: boolean) => {
+    const activeYearStore = (await import('./academic-year-store')).useAcademicYearStore;
+    const yearId = academicYearId || (typeof window !== 'undefined' ? activeYearStore.getState().activeYearId : 'year_3');
+
+    const cached = get().cacheByYear[yearId];
+    const isCurrentActive = typeof window !== 'undefined'
+      ? activeYearStore.getState().activeYearId === yearId
+      : true;
+
+    if (cached && !force) {
+      if (isCurrentActive) {
+        set({ tasks: cached, isLoading: false });
       }
-    } catch (error) {
-      console.error('Failed to fetch tasks', error);
-    } finally {
-      if (requestId === tasksFetchId) set({ isLoading: false });
+      return;
     }
+
+    if (inFlightTasksMap.has(yearId)) {
+      return inFlightTasksMap.get(yearId);
+    }
+
+    const requestId = ++tasksFetchId;
+    if (isCurrentActive && !cached) {
+      set({ isLoading: true });
+    }
+
+    const promise = (async () => {
+      try {
+        const url = yearId ? `/api/tasks?academic_year_id=${yearId}` : '/api/tasks';
+        const response = await fetch(url);
+        if (response.ok) {
+          const { data } = (await response.json()) as any;
+          const loaded = data || [];
+          set((state) => {
+            const currentYear = activeYearStore.getState().activeYearId;
+            return {
+              cacheByYear: { ...state.cacheByYear, [yearId]: loaded },
+              tasks: (currentYear === yearId || !currentYear) ? loaded : state.tasks,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch tasks', error);
+      } finally {
+        if (requestId === tasksFetchId) set({ isLoading: false });
+        inFlightTasksMap.delete(yearId);
+      }
+    })();
+
+    inFlightTasksMap.set(yearId, promise);
+    return promise;
   },
 
   addTask: async (task) => {
@@ -127,5 +164,11 @@ export const useTasksStore = create<TasksState>((set, get) => ({
     }
   },
 
-  setTasks: (tasks) => set({ tasks }),
+  setTasks: (tasks) => {
+    const yearId = tasks[0]?.academic_year_id || tasks[0]?.academicYearId;
+    set((state) => ({
+      tasks,
+      cacheByYear: yearId ? { ...state.cacheByYear, [yearId]: tasks } : state.cacheByYear,
+    }));
+  },
 }));

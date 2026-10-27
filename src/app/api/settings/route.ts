@@ -4,7 +4,10 @@ import { Database } from '@/db/client';
 
 export const dynamic = 'force-dynamic';
 
+let settingsTableEnsured = false;
+
 async function ensureSettingsTable(db: Database) {
+  if (settingsTableEnsured) return;
   await db.run(
     `CREATE TABLE IF NOT EXISTS user_settings (
       id TEXT PRIMARY KEY DEFAULT 'global',
@@ -17,6 +20,7 @@ async function ensureSettingsTable(db: Database) {
   );
 
   await db.run(`INSERT OR IGNORE INTO user_settings (id) VALUES ('global')`);
+  settingsTableEnsured = true;
 }
 
 function camelToSnake(obj: any) {

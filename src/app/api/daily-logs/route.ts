@@ -4,7 +4,10 @@ import { Database } from '@/db/client';
 
 export const dynamic = 'force-dynamic';
 
+let studyTrackingTablesEnsured = false;
+
 async function ensureStudyTrackingTables(db: Database) {
+  if (studyTrackingTablesEnsured) return;
   await db.run(
     `CREATE TABLE IF NOT EXISTS daily_progress (
       date TEXT NOT NULL,
@@ -35,6 +38,7 @@ async function ensureStudyTrackingTables(db: Database) {
   );
 
   await db.run('CREATE INDEX IF NOT EXISTS idx_study_sessions_date ON study_sessions(date)');
+  studyTrackingTablesEnsured = true;
 }
 
 export async function GET(request: NextRequest) {
@@ -46,55 +50,56 @@ export async function GET(request: NextRequest) {
     const rawYear = request.nextUrl.searchParams.get('academic_year_id');
     const academicYearId = (rawYear && rawYear !== 'all') ? rawYear : null;
 
-    // We get all dates that have ANY activity scoped to the academic year
-    const sessions = academicYearId
-      ? await db.query('SELECT * FROM study_sessions WHERE academic_year_id = ?', [academicYearId])
-      : await db.query('SELECT * FROM study_sessions');
-    
-    // Aggregate dynamically
-    const tasksAgg = academicYearId
-      ? await db.query(`
-          SELECT date(completed_at) as dt, COUNT(*) as cnt 
-          FROM tasks 
-          WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL AND academic_year_id = ?
-          GROUP BY dt
-        `, [academicYearId])
-      : await db.query(`
-          SELECT date(completed_at) as dt, COUNT(*) as cnt 
-          FROM tasks 
-          WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL 
-          GROUP BY dt
-        `);
-    
-    const topicsAgg = academicYearId
-      ? await db.query(`
-          SELECT date(topics.completed_at) as dt, COUNT(*) as cnt 
-          FROM topics 
-          JOIN chapters ON topics.chapter_id = chapters.id 
-          JOIN subjects ON chapters.subject_id = subjects.id 
-          WHERE topics.status IN ('completed', 'revised') AND topics.completed_at IS NOT NULL AND subjects.academic_year_id = ?
-          GROUP BY dt
-        `, [academicYearId])
-      : await db.query(`
-          SELECT date(completed_at) as dt, COUNT(*) as cnt 
-          FROM topics 
-          WHERE status IN ('completed', 'revised') AND completed_at IS NOT NULL 
-          GROUP BY dt
-        `);
-    
-    const revisionsAgg = academicYearId
-      ? await db.query(`
-          SELECT date(timestamp) as dt, COUNT(*) as cnt 
-          FROM activities 
-          WHERE type = 'topic-revised' AND academic_year_id = ?
-          GROUP BY dt
-        `, [academicYearId])
-      : await db.query(`
-          SELECT date(timestamp) as dt, COUNT(*) as cnt 
-          FROM activities 
-          WHERE type = 'topic-revised' 
-          GROUP BY dt
-        `);
+    // Fetch sessions, task counts, topic counts, revision counts, and progress dates concurrently
+    const [sessions, tasksAgg, topicsAgg, revisionsAgg, progressRecords] = await Promise.all([
+      academicYearId
+        ? db.query('SELECT * FROM study_sessions WHERE academic_year_id = ?', [academicYearId])
+        : db.query('SELECT * FROM study_sessions'),
+      academicYearId
+        ? db.query(`
+            SELECT date(completed_at) as dt, COUNT(*) as cnt 
+            FROM tasks 
+            WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL AND academic_year_id = ?
+            GROUP BY dt
+          `, [academicYearId])
+        : db.query(`
+            SELECT date(completed_at) as dt, COUNT(*) as cnt 
+            FROM tasks 
+            WHERE (completed = 1 OR completed = '1' OR completed = 'true') AND completed_at IS NOT NULL 
+            GROUP BY dt
+          `),
+      academicYearId
+        ? db.query(`
+            SELECT date(topics.completed_at) as dt, COUNT(*) as cnt 
+            FROM topics 
+            JOIN chapters ON topics.chapter_id = chapters.id 
+            JOIN subjects ON chapters.subject_id = subjects.id 
+            WHERE topics.status IN ('completed', 'revised') AND topics.completed_at IS NOT NULL AND subjects.academic_year_id = ?
+            GROUP BY dt
+          `, [academicYearId])
+        : db.query(`
+            SELECT date(completed_at) as dt, COUNT(*) as cnt 
+            FROM topics 
+            WHERE status IN ('completed', 'revised') AND completed_at IS NOT NULL 
+            GROUP BY dt
+          `),
+      academicYearId
+        ? db.query(`
+            SELECT date(timestamp) as dt, COUNT(*) as cnt 
+            FROM activities 
+            WHERE type = 'topic-revised' AND academic_year_id = ?
+            GROUP BY dt
+          `, [academicYearId])
+        : db.query(`
+            SELECT date(timestamp) as dt, COUNT(*) as cnt 
+            FROM activities 
+            WHERE type = 'topic-revised' 
+            GROUP BY dt
+          `),
+      academicYearId
+        ? db.query('SELECT date FROM daily_progress WHERE academic_year_id = ?', [academicYearId])
+        : db.query('SELECT date FROM daily_progress'),
+    ]);
 
     // We need to merge all dates that appear in any of the above
     const dateMap = new Map<string, any>();
@@ -158,9 +163,6 @@ export async function GET(request: NextRequest) {
     });
     
     // Also include any explicitly stored dates in daily_progress just in case they have 0 sessions but are tracked
-    const progressRecords = academicYearId
-      ? await db.query('SELECT date FROM daily_progress WHERE academic_year_id = ?', [academicYearId])
-      : await db.query('SELECT date FROM daily_progress');
     progressRecords.forEach((log: any) => {
       if (log.date) getOrInitDate(log.date);
     });

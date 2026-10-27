@@ -5,8 +5,9 @@ import { INITIAL_SUBJECTS } from '@/lib/curriculum-data';
 
 interface SubjectsState {
   subjects: Subject[];
+  cacheByYear: Record<string, Subject[]>;
   isLoading: boolean;
-  fetchSubjects: (academicYearId?: string) => Promise<void>;
+  fetchSubjects: (academicYearId?: string, force?: boolean) => Promise<void>;
   addSubject: (name: string, color: string, icon: string) => Promise<void>;
   updateSubject: (id: string, updates: Partial<Omit<Subject, 'id' | 'createdAt'>>) => Promise<void>;
   deleteSubject: (id: string) => Promise<void>;
@@ -30,27 +31,65 @@ interface SubjectsState {
 }
 
 let subjectsFetchId = 0;
+const inFlightSubjectsMap = new Map<string, Promise<any>>();
 
 export const useSubjectsStore = create<SubjectsState>((set, get) => ({
   subjects: [],
+  cacheByYear: {},
   isLoading: false,
 
-  fetchSubjects: async (academicYearId?: string) => {
-    const requestId = ++subjectsFetchId;
-    set({ isLoading: true });
-    try {
-      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
-      const url = yearId ? `/api/subjects?academic_year_id=${yearId}` : '/api/subjects';
-      const response = await fetch(url);
-      if (response.ok) {
-        const { data } = (await response.json()) as any;
-        if (requestId === subjectsFetchId) set({ subjects: data || [] });
+  fetchSubjects: async (academicYearId?: string, force?: boolean) => {
+    const activeYearStore = (await import('./academic-year-store')).useAcademicYearStore;
+    const yearId = academicYearId || (typeof window !== 'undefined' ? activeYearStore.getState().activeYearId : 'year_3');
+
+    // If cached and not forced, restore cached subjects immediately for instant navigation
+    const cached = get().cacheByYear[yearId];
+    const isCurrentActive = typeof window !== 'undefined'
+      ? activeYearStore.getState().activeYearId === yearId
+      : true;
+
+    if (cached && !force) {
+      if (isCurrentActive) {
+        set({ subjects: cached, isLoading: false });
       }
-    } catch (error) {
-      console.error('Failed to fetch subjects', error);
-    } finally {
-      if (requestId === subjectsFetchId) set({ isLoading: false });
+      return;
     }
+
+    // Reuse in-flight request to eliminate duplicate queries
+    if (inFlightSubjectsMap.has(yearId)) {
+      return inFlightSubjectsMap.get(yearId);
+    }
+
+    const requestId = ++subjectsFetchId;
+    if (isCurrentActive && !cached) {
+      set({ isLoading: true });
+    }
+
+    const fetchPromise = (async () => {
+      try {
+        const url = yearId ? `/api/subjects?academic_year_id=${yearId}` : '/api/subjects';
+        const response = await fetch(url);
+        if (response.ok) {
+          const { data } = (await response.json()) as any;
+          const loaded = data || [];
+          set((state) => {
+            const currentYear = activeYearStore.getState().activeYearId;
+            return {
+              cacheByYear: { ...state.cacheByYear, [yearId]: loaded },
+              subjects: (currentYear === yearId || !currentYear) ? loaded : state.subjects,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch subjects', error);
+      } finally {
+        if (requestId === subjectsFetchId) set({ isLoading: false });
+        inFlightSubjectsMap.delete(yearId);
+      }
+    })();
+
+    inFlightSubjectsMap.set(yearId, fetchPromise);
+    return fetchPromise;
   },
 
   addSubject: async (name, color, icon) => {
@@ -430,7 +469,13 @@ export const useSubjectsStore = create<SubjectsState>((set, get) => ({
     }
   },
 
-  setSubjects: (subjects) => set({ subjects }),
+  setSubjects: (subjects: Subject[]) => {
+    const yearId = subjects[0]?.academic_year_id || subjects[0]?.academicYearId;
+    set((state) => ({
+      subjects,
+      cacheByYear: yearId ? { ...state.cacheByYear, [yearId]: subjects } : state.cacheByYear,
+    }));
+  },
 
   setTopicRevisionCount: async (subjectId, chapterId, topicId, count) => {
     const subject = get().subjects.find((s) => s.id === subjectId);

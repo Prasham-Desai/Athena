@@ -63,10 +63,12 @@ export class SubjectService {
       : await this.db.query<any>('SELECT * FROM subjects ORDER BY created_at DESC');
     if (!subjects.length) return [];
 
-    // Fetch ALL chapters, topics, and subtopics directly to avoid SQLite's 100 variable limit in IN() clauses
-    const chapters = await this.db.query<any>('SELECT * FROM chapters ORDER BY order_index ASC');
-    const topics = await this.db.query<any>('SELECT * FROM topics ORDER BY order_index ASC');
-    const subtopics = await this.db.query<any>('SELECT * FROM subtopics ORDER BY order_index ASC');
+    // Fetch chapters, topics, and subtopics concurrently to eliminate sequential network roundtrips
+    const [chapters, topics, subtopics] = await Promise.all([
+      this.db.query<any>('SELECT * FROM chapters ORDER BY order_index ASC'),
+      this.db.query<any>('SELECT * FROM topics ORDER BY order_index ASC'),
+      this.db.query<any>('SELECT * FROM subtopics ORDER BY order_index ASC'),
+    ]);
 
     // Reconstruct the full hierarchy with proper camelCase mapping
     return subjects.map(subject => {

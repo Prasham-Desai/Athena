@@ -53,6 +53,8 @@ const _restoredYear =
   INITIAL_YEARS.find((y) => y.id === _restoredYearId) ??
   INITIAL_YEARS.find((y) => y.id === 'year_3')!;
 
+let inFlightYearsPromise: Promise<AcademicYear[]> | null = null;
+
 export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
   years: INITIAL_YEARS,
   activeYearId: _restoredYearId,
@@ -62,53 +64,63 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
   error: null,
 
   fetchAcademicYears: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await fetch('/api/academic-years');
-      if (!response.ok) throw new Error('Failed to load academic years');
-      
-      const payload: any = await response.json();
-      const apiYears: AcademicYear[] = payload.data || [];
-      // Keep locally known years available while older databases catch up with
-      // their migrations, while still accepting any additional server years.
-      const yearsById = new Map(INITIAL_YEARS.map((year) => [year.id, year]));
-      for (const year of apiYears) {
-        yearsById.set(year.id, { ...yearsById.get(year.id), ...year });
-      }
-      const list = [...yearsById.values()].sort((left, right) => left.order_index - right.order_index);
-      
-      if (list.length > 0) {
-        // Resolve Third Year dynamically (used as final fallback only)
-        const thirdYear = 
-          list.find((y) => y.code === 'third_year' || y.name.toLowerCase().includes('third')) ||
-          list.find((y) => y.order_index === 3) ||
-          list[list.length - 1];
-
-        // Honour the persisted / in-memory selection if it exists in the
-        // freshly-fetched list; fall back to Third Year only when the stored
-        // value is unknown (e.g. first-ever visit or stale id).
-        const currentActiveId = get().activeYearId;
-        const targetYear = (currentActiveId && list.some(y => y.id === currentActiveId))
-          ? list.find(y => y.id === currentActiveId)!
-          : thirdYear;
-
-        set({
-          years: list,
-          activeYearId: targetYear.id,
-          activeYear: targetYear,
-          isLoading: false,
-        });
-
-        return list;
-      }
-      
-      set({ isLoading: false });
-      return list;
-    } catch (err: any) {
-      console.error('Error fetching academic years:', err);
-      set({ isLoading: false, error: err.message });
-      return INITIAL_YEARS;
+    if (inFlightYearsPromise) {
+      return inFlightYearsPromise;
     }
+
+    set({ isLoading: true, error: null });
+    inFlightYearsPromise = (async () => {
+      try {
+        const response = await fetch('/api/academic-years');
+        if (!response.ok) throw new Error('Failed to load academic years');
+        
+        const payload: any = await response.json();
+        const apiYears: AcademicYear[] = payload.data || [];
+        // Keep locally known years available while older databases catch up with
+        // their migrations, while still accepting any additional server years.
+        const yearsById = new Map(INITIAL_YEARS.map((year) => [year.id, year]));
+        for (const year of apiYears) {
+          yearsById.set(year.id, { ...yearsById.get(year.id), ...year });
+        }
+        const list = [...yearsById.values()].sort((left, right) => left.order_index - right.order_index);
+        
+        if (list.length > 0) {
+          // Resolve Third Year dynamically (used as final fallback only)
+          const thirdYear = 
+            list.find((y) => y.code === 'third_year' || y.name.toLowerCase().includes('third')) ||
+            list.find((y) => y.order_index === 3) ||
+            list[list.length - 1];
+
+          // Honour the persisted / in-memory selection if it exists in the
+          // freshly-fetched list; fall back to Third Year only when the stored
+          // value is unknown (e.g. first-ever visit or stale id).
+          const currentActiveId = get().activeYearId;
+          const targetYear = (currentActiveId && list.some(y => y.id === currentActiveId))
+            ? list.find(y => y.id === currentActiveId)!
+            : thirdYear;
+
+          set({
+            years: list,
+            activeYearId: targetYear.id,
+            activeYear: targetYear,
+            isLoading: false,
+          });
+
+          return list;
+        }
+        
+        set({ isLoading: false });
+        return list;
+      } catch (err: any) {
+        console.error('Error fetching academic years:', err);
+        set({ isLoading: false, error: err.message });
+        return INITIAL_YEARS;
+      } finally {
+        inFlightYearsPromise = null;
+      }
+    })();
+
+    return inFlightYearsPromise;
   },
 
   setActiveYearId: async (yearId: string) => {
@@ -120,24 +132,54 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
     // Persist the manual selection so ordinary reloads restore it.
     persistYearId(yearId);
 
-    // Clear collections that belong exclusively to the previous year so
-    // destination pages cannot briefly render stale subjects or schedules.
-    useSubjectsStore.setState({ subjects: [], isLoading: true });
-    useTasksStore.setState({ tasks: [], isLoading: true });
-    usePlannerStore.setState({ studyBlocks: [], isLoading: true });
-    useActivityStore.setState({
-      activities: [],
-      dailyLogs: [],
-      isLoadingActivities: true,
-      isLoadingDailyLogs: true,
+    // Instant Cache Swapping:
+    // If the destination year has cached data in stores, display it immediately without blanking the screen!
+    const cachedSubjects = useSubjectsStore.getState().cacheByYear?.[yearId];
+    useSubjectsStore.setState({
+      subjects: cachedSubjects || [],
+      isLoading: !cachedSubjects,
     });
-    useExamsStore.setState({ exams: [], isLoading: true, error: null });
+
+    const cachedTasks = useTasksStore.getState().cacheByYear?.[yearId];
+    useTasksStore.setState({
+      tasks: cachedTasks || [],
+      isLoading: !cachedTasks,
+    });
+
+    const cachedBlocks = usePlannerStore.getState().cacheByYear?.[yearId];
+    usePlannerStore.setState({
+      studyBlocks: cachedBlocks || [],
+      isLoading: !cachedBlocks,
+    });
+
+    const cachedActivities = useActivityStore.getState().activitiesByYear?.[yearId];
+    const cachedLogs = useActivityStore.getState().dailyLogsByYear?.[yearId];
+    useActivityStore.setState({
+      activities: cachedActivities || [],
+      dailyLogs: cachedLogs || [],
+      isLoadingActivities: !cachedActivities,
+      isLoadingDailyLogs: !cachedLogs,
+    });
+
+    const cachedExams = useExamsStore.getState().cacheByYear?.[yearId];
+    useExamsStore.setState({
+      exams: cachedExams || [],
+      isLoading: !cachedExams,
+      error: null,
+    });
 
     try {
-      // Invalidate and reload all year-aware stores in parallel
       const { useNotesStore } = await import('./notes-store');
-      useNotesStore.setState({ notes: [], activeSubjectId: null, isLoading: true, error: null });
-      await Promise.all([
+      const cachedNotes = useNotesStore.getState().cacheByYear?.[yearId];
+      useNotesStore.setState({
+        notes: cachedNotes || [],
+        activeSubjectId: null,
+        isLoading: !cachedNotes,
+        error: null,
+      });
+
+      // Fetch or revalidate in background without blocking interaction
+      await Promise.allSettled([
         useSubjectsStore.getState().fetchSubjects(yearId),
         useTasksStore.getState().fetchTasks(yearId),
         usePlannerStore.getState().fetchStudyBlocks(yearId),

@@ -65,13 +65,15 @@ export default function AnalyticsPage() {
   const { settings, fetchSettings } = useSettingsStore();
   const activeYearId = useAcademicYearStore((s) => s.activeYearId);
 
-  // Initial data fetching
+  // Initial data fetching scoped to active academic year
   useEffect(() => {
-    fetchDailyLogs('all');
-    fetchSubjects('all');
-    fetchActivities('all');
-    fetchStudyBlocks('all');
-    fetchSettings();
+    if (activeYearId) {
+      fetchDailyLogs(activeYearId);
+      fetchSubjects(activeYearId);
+      fetchActivities(activeYearId);
+      fetchStudyBlocks(activeYearId);
+      fetchSettings();
+    }
   }, [activeYearId, fetchDailyLogs, fetchSubjects, fetchActivities, fetchStudyBlocks, fetchSettings]);
 
   // Date range filter

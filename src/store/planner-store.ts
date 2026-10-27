@@ -4,8 +4,9 @@ import { generateId } from '@/lib/utils';
 
 interface PlannerState {
   studyBlocks: StudyBlock[];
+  cacheByYear: Record<string, StudyBlock[]>;
   isLoading: boolean;
-  fetchStudyBlocks: (academicYearId?: string) => Promise<void>;
+  fetchStudyBlocks: (academicYearId?: string, force?: boolean) => Promise<void>;
   addStudyBlock: (block: Omit<StudyBlock, 'id'>) => Promise<void>;
   updateStudyBlock: (id: string, updates: Partial<StudyBlock>) => Promise<void>;
   deleteStudyBlock: (id: string) => Promise<void>;
@@ -31,29 +32,65 @@ async function saveStudyBlock(block: StudyBlock, method: 'POST' | 'PUT' = 'POST'
 }
 
 let studyBlocksFetchId = 0;
+const inFlightBlocksMap = new Map<string, Promise<any>>();
 
 export const usePlannerStore = create<PlannerState>()((set, get) => ({
   studyBlocks: [],
+  cacheByYear: {},
   isLoading: false,
 
-  fetchStudyBlocks: async (academicYearId?: string) => {
-    const requestId = ++studyBlocksFetchId;
-    set({ isLoading: true });
-    try {
-      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
-      const url = yearId ? `/api/study-blocks?academic_year_id=${yearId}` : '/api/study-blocks';
-      const response = await fetch(url);
-      if (!response.ok) return;
+  fetchStudyBlocks: async (academicYearId?: string, force?: boolean) => {
+    const activeYearStore = (await import('./academic-year-store')).useAcademicYearStore;
+    const yearId = academicYearId || (typeof window !== 'undefined' ? activeYearStore.getState().activeYearId : 'year_3');
 
-      const payload = (await response.json()) as { data?: StudyBlock[] };
-      if (payload?.data) {
-        if (requestId === studyBlocksFetchId) set({ studyBlocks: payload.data as StudyBlock[] });
+    const cached = get().cacheByYear[yearId];
+    const isCurrentActive = typeof window !== 'undefined'
+      ? activeYearStore.getState().activeYearId === yearId
+      : true;
+
+    if (cached && !force) {
+      if (isCurrentActive) {
+        set({ studyBlocks: cached, isLoading: false });
       }
-    } catch (error) {
-      console.error('Failed to fetch study blocks', error);
-    } finally {
-      if (requestId === studyBlocksFetchId) set({ isLoading: false });
+      return;
     }
+
+    if (inFlightBlocksMap.has(yearId)) {
+      return inFlightBlocksMap.get(yearId);
+    }
+
+    const requestId = ++studyBlocksFetchId;
+    if (isCurrentActive && !cached) {
+      set({ isLoading: true });
+    }
+
+    const promise = (async () => {
+      try {
+        const url = yearId ? `/api/study-blocks?academic_year_id=${yearId}` : '/api/study-blocks';
+        const response = await fetch(url);
+        if (!response.ok) return;
+
+        const payload = (await response.json()) as { data?: StudyBlock[] };
+        if (payload?.data) {
+          const loaded = payload.data as StudyBlock[];
+          set((state) => {
+            const currentYear = activeYearStore.getState().activeYearId;
+            return {
+              cacheByYear: { ...state.cacheByYear, [yearId]: loaded },
+              studyBlocks: (currentYear === yearId || !currentYear) ? loaded : state.studyBlocks,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch study blocks', error);
+      } finally {
+        if (requestId === studyBlocksFetchId) set({ isLoading: false });
+        inFlightBlocksMap.delete(yearId);
+      }
+    })();
+
+    inFlightBlocksMap.set(yearId, promise);
+    return promise;
   },
 
   addStudyBlock: async (block) => {
@@ -123,5 +160,11 @@ export const usePlannerStore = create<PlannerState>()((set, get) => ({
     }
   },
 
-  setStudyBlocks: (blocks) => set({ studyBlocks: blocks }),
+  setStudyBlocks: (blocks) => {
+    const yearId = blocks[0]?.academic_year_id || blocks[0]?.academicYearId;
+    set((state) => ({
+      studyBlocks: blocks,
+      cacheByYear: yearId ? { ...state.cacheByYear, [yearId]: blocks } : state.cacheByYear,
+    }));
+  },
 }));

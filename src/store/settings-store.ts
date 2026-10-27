@@ -32,28 +32,44 @@ async function saveSettings(updates: Partial<UserSettings>) {
   return payload.data as UserSettings;
 }
 
+let inFlightSettingsPromise: Promise<UserSettings | null> | null = null;
+let settingsLoaded = false;
+
 export const useSettingsStore = create<SettingsState>()((set, get) => ({
   settings: defaultSettings,
   isLoading: false,
 
   fetchSettings: async () => {
-    set({ isLoading: true });
-    try {
-      const response = await fetch('/api/settings');
-      if (!response.ok) return null;
-
-      const payload = (await response.json()) as { data?: UserSettings };
-      if (payload?.data) {
-        set({ settings: payload.data });
-        return payload.data as UserSettings;
-      }
-      return null;
-    } catch (error) {
-      console.error('Failed to fetch settings', error);
-      return null;
-    } finally {
-      set({ isLoading: false });
+    if (settingsLoaded && get().settings !== defaultSettings) {
+      return get().settings;
     }
+    if (inFlightSettingsPromise) {
+      return inFlightSettingsPromise;
+    }
+
+    set({ isLoading: true });
+    inFlightSettingsPromise = (async () => {
+      try {
+        const response = await fetch('/api/settings');
+        if (!response.ok) return null;
+
+        const payload = (await response.json()) as { data?: UserSettings };
+        if (payload?.data) {
+          settingsLoaded = true;
+          set({ settings: payload.data });
+          return payload.data as UserSettings;
+        }
+        return null;
+      } catch (error) {
+        console.error('Failed to fetch settings', error);
+        return null;
+      } finally {
+        set({ isLoading: false });
+        inFlightSettingsPromise = null;
+      }
+    })();
+
+    return inFlightSettingsPromise;
   },
 
   updateSettings: async (updates) => {

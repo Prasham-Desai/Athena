@@ -5,10 +5,12 @@ import { generateId, getToday } from '@/lib/utils';
 interface ActivityState {
   activities: ActivityEntry[];
   dailyLogs: DailyLog[];
+  activitiesByYear: Record<string, ActivityEntry[]>;
+  dailyLogsByYear: Record<string, DailyLog[]>;
   isLoadingActivities: boolean;
   isLoadingDailyLogs: boolean;
-  fetchActivities: (academicYearId?: string) => Promise<void>;
-  fetchDailyLogs: (academicYearId?: string) => Promise<void>;
+  fetchActivities: (academicYearId?: string, force?: boolean) => Promise<void>;
+  fetchDailyLogs: (academicYearId?: string, force?: boolean) => Promise<void>;
   addActivity: (activity: Omit<ActivityEntry, 'id' | 'timestamp'>) => Promise<void>;
   addDailyLog: (log: DailyLog) => Promise<void>;
   updateDailyLog: (date: string, updates: Partial<DailyLog>) => Promise<void>;
@@ -33,45 +35,117 @@ async function refreshDailyLogs(setDailyLogs: (logs: DailyLog[]) => void, academ
 
 let activitiesFetchId = 0;
 let dailyLogsFetchId = 0;
+const inFlightActivitiesMap = new Map<string, Promise<any>>();
+const inFlightDailyLogsMap = new Map<string, Promise<any>>();
 
 export const useActivityStore = create<ActivityState>()((set, get) => ({
   activities: [],
   dailyLogs: [],
+  activitiesByYear: {},
+  dailyLogsByYear: {},
   isLoadingActivities: false,
   isLoadingDailyLogs: false,
 
-  fetchActivities: async (academicYearId?: string) => {
-    const requestId = ++activitiesFetchId;
-    set({ isLoadingActivities: true });
-    try {
-      const yearId = academicYearId || (typeof window !== 'undefined' ? (await import('./academic-year-store')).useAcademicYearStore.getState().activeYearId : 'year_3');
-      const url = yearId ? `/api/activities?academic_year_id=${yearId}` : '/api/activities';
-      const response = await fetch(url);
-      if (!response.ok) return;
+  fetchActivities: async (academicYearId?: string, force?: boolean) => {
+    const activeYearStore = (await import('./academic-year-store')).useAcademicYearStore;
+    const yearId = academicYearId || (typeof window !== 'undefined' ? activeYearStore.getState().activeYearId : 'year_3');
 
-      const payload = (await response.json()) as { data?: ActivityEntry[] };
-      if (payload?.data) {
-        if (requestId === activitiesFetchId) set({ activities: payload.data as ActivityEntry[] });
+    const cached = get().activitiesByYear[yearId];
+    const isCurrentActive = typeof window !== 'undefined'
+      ? activeYearStore.getState().activeYearId === yearId
+      : true;
+
+    if (cached && !force) {
+      if (isCurrentActive) {
+        set({ activities: cached, isLoadingActivities: false });
       }
-    } catch (error) {
-      console.error('Failed to fetch activities', error);
-    } finally {
-      if (requestId === activitiesFetchId) set({ isLoadingActivities: false });
+      return;
     }
+
+    if (inFlightActivitiesMap.has(yearId)) {
+      return inFlightActivitiesMap.get(yearId);
+    }
+
+    const requestId = ++activitiesFetchId;
+    if (isCurrentActive && !cached) {
+      set({ isLoadingActivities: true });
+    }
+
+    const promise = (async () => {
+      try {
+        const url = yearId ? `/api/activities?academic_year_id=${yearId}` : '/api/activities';
+        const response = await fetch(url);
+        if (!response.ok) return;
+
+        const payload = (await response.json()) as { data?: ActivityEntry[] };
+        if (payload?.data) {
+          const loaded = payload.data as ActivityEntry[];
+          set((state) => {
+            const currentYear = activeYearStore.getState().activeYearId;
+            return {
+              activitiesByYear: { ...state.activitiesByYear, [yearId]: loaded },
+              activities: (currentYear === yearId || !currentYear) ? loaded : state.activities,
+            };
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch activities', error);
+      } finally {
+        if (requestId === activitiesFetchId) set({ isLoadingActivities: false });
+        inFlightActivitiesMap.delete(yearId);
+      }
+    })();
+
+    inFlightActivitiesMap.set(yearId, promise);
+    return promise;
   },
 
-  fetchDailyLogs: async (academicYearId?: string) => {
-    const requestId = ++dailyLogsFetchId;
-    set({ isLoadingDailyLogs: true });
-    try {
-      await refreshDailyLogs((logs) => {
-        if (requestId === dailyLogsFetchId) set({ dailyLogs: logs });
-      }, academicYearId);
-    } catch (error) {
-      console.error('Failed to fetch daily logs', error);
-    } finally {
-      if (requestId === dailyLogsFetchId) set({ isLoadingDailyLogs: false });
+  fetchDailyLogs: async (academicYearId?: string, force?: boolean) => {
+    const activeYearStore = (await import('./academic-year-store')).useAcademicYearStore;
+    const yearId = academicYearId || (typeof window !== 'undefined' ? activeYearStore.getState().activeYearId : 'year_3');
+
+    const cached = get().dailyLogsByYear[yearId];
+    const isCurrentActive = typeof window !== 'undefined'
+      ? activeYearStore.getState().activeYearId === yearId
+      : true;
+
+    if (cached && !force) {
+      if (isCurrentActive) {
+        set({ dailyLogs: cached, isLoadingDailyLogs: false });
+      }
+      return;
     }
+
+    if (inFlightDailyLogsMap.has(yearId)) {
+      return inFlightDailyLogsMap.get(yearId);
+    }
+
+    const requestId = ++dailyLogsFetchId;
+    if (isCurrentActive && !cached) {
+      set({ isLoadingDailyLogs: true });
+    }
+
+    const promise = (async () => {
+      try {
+        await refreshDailyLogs((logs) => {
+          set((state) => {
+            const currentYear = activeYearStore.getState().activeYearId;
+            return {
+              dailyLogsByYear: { ...state.dailyLogsByYear, [yearId]: logs },
+              dailyLogs: (currentYear === yearId || !currentYear) ? logs : state.dailyLogs,
+            };
+          });
+        }, academicYearId);
+      } catch (error) {
+        console.error('Failed to fetch daily logs', error);
+      } finally {
+        if (requestId === dailyLogsFetchId) set({ isLoadingDailyLogs: false });
+        inFlightDailyLogsMap.delete(yearId);
+      }
+    })();
+
+    inFlightDailyLogsMap.set(yearId, promise);
+    return promise;
   },
 
   addActivity: async (activity) => {
@@ -280,6 +354,18 @@ export const useActivityStore = create<ActivityState>()((set, get) => ({
 
   getDailyLog: (date) => get().dailyLogs.find((entry) => entry.date === date),
 
-  setActivities: (activities) => set({ activities }),
-  setDailyLogs: (logs) => set({ dailyLogs: logs }),
+  setActivities: (activities) => {
+    const yearId = activities[0]?.academic_year_id || activities[0]?.academicYearId;
+    set((state) => ({
+      activities,
+      activitiesByYear: yearId ? { ...state.activitiesByYear, [yearId]: activities } : state.activitiesByYear,
+    }));
+  },
+  setDailyLogs: (logs) => {
+    const yearId = logs[0]?.academic_year_id || logs[0]?.academicYearId;
+    set((state) => ({
+      dailyLogs: logs,
+      dailyLogsByYear: yearId ? { ...state.dailyLogsByYear, [yearId]: logs } : state.dailyLogsByYear,
+    }));
+  },
 }));

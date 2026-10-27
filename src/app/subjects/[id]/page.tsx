@@ -421,11 +421,17 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
     );
   };
 
+  useEffect(() => {
+    if (!hasAudio && showAudioList) {
+      setShowAudioList(false);
+    }
+  }, [hasAudio, showAudioList]);
+
   const parsedNotes = parseTopicNotes(topic.notes);
 
   return (
     <motion.div
-      layout
+      layout="position"
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10, height: 0, marginBottom: 0 }}
@@ -498,6 +504,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
           <AnimatePresence>
             {showAudioList && hasAudio && (
               <AudioNotesList
+                key={`audio-notes-tray-${topic.id}`}
                 topicId={topic.id}
                 topicName={topic.name}
                 onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
@@ -795,7 +802,7 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
 
   return (
     <motion.div
-      layout
+      layout="position"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10, height: 0 }}

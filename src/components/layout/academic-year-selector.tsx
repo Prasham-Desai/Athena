@@ -14,9 +14,12 @@ function useAcademicYearSwitch() {
   const setActiveYearId = useAcademicYearStore((state) => state.setActiveYearId);
 
   return async (yearId: string) => {
-    const leavingSubjectDetail = /^\/(?:subjects|revisions)\/[^/]+\/?$/.test(pathname) && yearId !== activeYearId;
+    if (yearId === activeYearId) return;
+    const leavingSubjectDetail = /^\/(?:subjects|revisions)\/[^/]+(?:\/.*)?$/.test(pathname);
+    if (leavingSubjectDetail) {
+      router.replace(subjectListHref());
+    }
     await setActiveYearId(yearId);
-    if (leavingSubjectDetail) router.replace(subjectListHref());
   };
 }
 

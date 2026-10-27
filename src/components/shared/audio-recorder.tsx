@@ -62,18 +62,26 @@ export function AudioNotesList({
   const notes = audioNotes[topicId] || [];
   const [confirmState, setConfirmState] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
 
-  const totalDuration = useMemo(() => {
-    return notes.reduce((acc, curr) => acc + (curr.duration_seconds || 0), 0);
-  }, [notes]);
+  // Preserve previous notes during exit animation so deleting a note shrinks smoothly
+  const prevNotesRef = useRef(notes);
+  if (notes.length > 0) {
+    prevNotesRef.current = notes;
+  }
+  const displayNotes = notes.length > 0 ? notes : prevNotesRef.current;
 
-  if (notes.length === 0) return null;
+  const totalDuration = useMemo(() => {
+    return displayNotes.reduce((acc, curr) => acc + (curr.duration_seconds || 0), 0);
+  }, [displayNotes]);
+
+  if (displayNotes.length === 0) return null;
 
   return (
     <motion.div
+      layout="position"
       initial={{ opacity: 0, height: 0, y: -4 }}
       animate={{ opacity: 1, height: 'auto', y: 0 }}
       exit={{ opacity: 0, height: 0, y: -4 }}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
       className="w-full mt-3 overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30 dark:bg-white/[0.02] p-3 sm:p-4 shadow-sm"
     >
       {/* ── Header ─────────────────────────────────────────── */}
@@ -84,7 +92,7 @@ export function AudioNotesList({
           </div>
           <span className="text-xs font-bold text-[hsl(var(--foreground))]">Audio Notes</span>
           <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">
-            {notes.length} {notes.length === 1 ? 'part' : 'parts'}
+            {displayNotes.length} {displayNotes.length === 1 ? 'part' : 'parts'}
           </span>
           {totalDuration > 0 && (
             <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-medium hidden sm:inline">
@@ -94,7 +102,7 @@ export function AudioNotesList({
         </div>
 
         <div className="flex items-center gap-2">
-          {onPlayGlobal && notes.length > 1 && (
+          {onPlayGlobal && displayNotes.length > 1 && (
             <button
               type="button"
               onClick={() => onPlayGlobal()}
@@ -121,13 +129,13 @@ export function AudioNotesList({
       </div>
 
       {/* ── Audio Notes: Single Note Layout ────────────────── */}
-      {notes.length === 1 ? (
+      {displayNotes.length === 1 ? (
         <div className="flex items-center justify-between p-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm hover:border-indigo-500/30 transition-all">
           <div className="flex items-center gap-3.5 min-w-0">
             {onPlayGlobal && (
               <button
                 type="button"
-                onClick={() => onPlayGlobal(notes[0].id)}
+                onClick={() => onPlayGlobal(displayNotes[0].id)}
                 className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md shadow-indigo-500/25 shrink-0 cursor-pointer"
                 title="Play audio note"
               >
@@ -139,7 +147,7 @@ export function AudioNotesList({
               <div className="flex items-center gap-2">
                 <span className="font-bold text-xs sm:text-sm text-[hsl(var(--foreground))]">Part 1</span>
                 <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))]/70 shadow-xs">
-                  {formatTime(notes[0].duration_seconds)}
+                  {formatTime(displayNotes[0].duration_seconds)}
                 </span>
               </div>
               <span className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5 mt-0.5">
@@ -153,10 +161,12 @@ export function AudioNotesList({
             <button
               type="button"
               onClick={() => {
+                const noteToDelete = displayNotes[0];
+                if (!noteToDelete) return;
                 setConfirmState({
                   title: 'Delete Audio Note',
                   message: 'Are you sure you want to delete this audio note?',
-                  onConfirm: () => deleteAudioNote(topicId, notes[0].id),
+                  onConfirm: () => deleteAudioNote(topicId, noteToDelete.id),
                 });
               }}
               className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
@@ -169,7 +179,7 @@ export function AudioNotesList({
       ) : (
         /* ── Audio Notes: Multiple Notes Layout ───────────── */
         <div className="space-y-2">
-          {notes.map((note, idx) => (
+          {displayNotes.map((note, idx) => (
             <div
               key={note.id}
               className="group/note flex items-center justify-between p-2.5 sm:p-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-indigo-500/30 transition-all shadow-xs"
