@@ -1,10 +1,10 @@
-"subject_code","sanskrit_subject_name","english_title","course_topic_count","topic_section_count","subtopic_count","must_know_count","desirable_to_know_count","nice_to_know_count"
-"AyUG-EM","Atyaikachikitsa","Emergency Medicine","15","18","21","21","0","0"
-"AyUG-KB","Kaumarabhritya","Pediatrics","22","22","210","169","33","8"
-"AyUG-KC","Kayachikitsa including Manasa Roga, Rasayana and Vajikarana","Internal Medicine including Psychiatry, Rejuvenative Medicine, Reproductive Medicine and Epigenetics","17","25","266","160","63","43"
-"AyUG-PK","Panchakarma & Upakarma","Therapeutic Procedural Management","8","10","203","183","17","3"
-"AyUG-PS","Prasuti Tantra evam Stree Roga","Gynecology and Obstetrics","30","28","236","205","26","5"
-"AyUG-RM","Research Methodology and Medical-statistics","Research Methodology and Medical-statistics","31","21","83","64","14","5"
-"AyUG-SA3","Samhita Adhyayan-3","Study of Ayurveda Classical Text","68","49","383","227","83","73"
-"AyUG-SL","Shalakya Tantra","Ophthalmology, Oto-Rhino-Laryngology & Oro-Dentistry","68","63","196","125","56","15"
-"AyUG-ST","Shalya Tantra","General Surgery","47","52","253","203","31","19"
+subject_code,sanskrit_subject_name,english_title,course_topic_count,topic_section_count,subtopic_count,must_know_count,desirable_to_know_count,nice_to_know_count
+AyUG-EM,Atyaikachikitsa,Emergency Medicine,15,18,21,21,0,0
+AyUG-KB,Kaumarabhritya,Pediatrics,22,22,210,169,33,8
+AyUG-KC,"Kayachikitsa including Manasa Roga, Rasayana and Vajikarana","Internal Medicine including Psychiatry, Rejuvenative Medicine, Reproductive Medicine and Epigenetics",17,25,266,160,63,43
+AyUG-PK,Panchakarma & Upakarma,Therapeutic Procedural Management,8,10,203,183,17,3
+AyUG-PS,Prasuti Tantra evam Stree Roga,Gynecology and Obstetrics,30,28,236,205,26,5
+AyUG-RM,Research Methodology and Medical-statistics,Research Methodology and Medical-statistics,31,21,83,64,14,5
+AyUG-SA3,Samhita Adhyayan-3,Study of Ayurveda Classical Text,68,49,383,227,83,73
+AyUG-SL,Shalakya Tantra,"Ophthalmology, Oto-Rhino-Laryngology & Oro-Dentistry",68,63,196,125,56,15
+AyUG-ST,Shalya Tantra,General Surgery,47,52,253,203,31,19

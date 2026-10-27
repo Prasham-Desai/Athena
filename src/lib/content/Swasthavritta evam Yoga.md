@@ -2,7 +2,7 @@
 
 ## Paper 1
 
-### Topic 1: Swastha and Swasthya
+### Chapter 1: Swastha and Swasthya
 
 1. Define Swasthavritta and describe its objective.
    **Importance:** Must Know
@@ -24,7 +24,7 @@
 
 ---
 
-### Topic 2: Healthy Life style -Dinacharya (Daily regimen)
+### Chapter 2: Healthy Life style -Dinacharya (Daily regimen)
 
 1. Explain the Primordial, Primary, Secondary, and Tertiary Preventive measures in the context of Ayurveda with examples
    **Importance:** Must Know
@@ -115,7 +115,7 @@
 
 ---
 
-### Topic 3: Ratricharya
+### Chapter 3: Ratricharya
 
 1. Describe ratri bhojanvidhi and its relation to health.
    **Importance:** Must Know
@@ -155,7 +155,7 @@
 
 ---
 
-### Topic 4: Ritucharya
+### Chapter 4: Ritucharya
 
 1. Explain classification of kaala , distinguish Adana kala and visarga kala , identification of seasons based on the ritu lakshanas in different geographical areas.
    **Importance:** Must Know
@@ -183,7 +183,7 @@
 
 ---
 
-### Topic 5: Roga nutpadaniya
+### Chapter 5: Roga nutpadaniya
 
 1. Explain vegadharana and vega-udirana in relation to health and morbidity.
    **Importance:** Must Know
@@ -199,7 +199,7 @@
 
 ---
 
-### Topic 6: Sadvritta
+### Chapter 6: Sadvritta
 
 1. Describe digital health
    **Importance:** Desirable to Know
@@ -230,7 +230,7 @@
 
 ---
 
-### Topic 7: Ahara
+### Chapter 7: Ahara
 
 1. Explain significance of Ahara for health and well-being according to Ayurveda & Contemporary science Explain significance of Ahara for health and well-being according to Ayurveda & Contemporary science
    **Importance:** Must Know
@@ -300,7 +300,7 @@
 
 ---
 
-### Topic 8: Rasayana for Swastha
+### Chapter 8: Rasayana for Swastha
 
 1. Explain the importance of lifestyle counselling with its methods
    **Importance:** Nice to Know
@@ -319,7 +319,7 @@
 
 ---
 
-### Topic 9: Yoga
+### Chapter 9: Yoga
 
 1. Describe adverse effects of improper Yoga practices
    **Importance:** Desirable to Know
@@ -445,7 +445,7 @@
 
 ---
 
-### Topic 10: Naturopathy
+### Chapter 10: Naturopathy
 
 1. Explain the basic principles of Naturopathy.
    **Importance:** Desirable to Know
@@ -472,7 +472,7 @@
 
 ## Paper 2
 
-### Topic 1: Janapadodhwamsa / Maraka Vyadhi
+### Chapter 1: Janapadodhwamsa / Maraka Vyadhi
 
 1. Understanding the Epidemic Diseases (Amendment) Ordinance Act,2020 ..
    **Importance:** Must Know
@@ -544,7 +544,7 @@
 
 ---
 
-### Topic 2: Environmental health
+### Chapter 2: Environmental health
 
 1. Understanding the Environment protection Act,1986
    **Importance:** Must Know
@@ -644,7 +644,7 @@
 
 ---
 
-### Topic 3: Disaster management
+### Chapter 3: Disaster management
 
 1. Define disaster and explain disaster management
    **Importance:** Desirable to Know
@@ -657,7 +657,7 @@
 
 ---
 
-### Topic 4: Occupational Health
+### Chapter 4: Occupational Health
 
 1. Understand the Merchant Shipping / Medical Examination Rules, 2000
    **Importance:** Desirable to Know
@@ -679,7 +679,7 @@
 
 ---
 
-### Topic 5: School health services
+### Chapter 5: School health services
 
 1. State the Health problems of school children.
    **Importance:** Must Know
@@ -695,7 +695,7 @@
 
 ---
 
-### Topic 6: Disinfection
+### Chapter 6: Disinfection
 
 1. Define the term disinfection
    **Importance:** Must Know
@@ -714,7 +714,7 @@
 
 ---
 
-### Topic 7: Primary health care
+### Chapter 7: Primary health care
 
 1. Define Primary Health Care.
    **Importance:** Must Know
@@ -733,7 +733,7 @@
 
 ---
 
-### Topic 8: Mother and Child health care
+### Chapter 8: Mother and Child health care
 
 1. Describe the objectives of Maternal and Child Care services.
    **Importance:** Must Know
@@ -743,7 +743,7 @@
 
 ---
 
-### Topic 9: Family welfare programme
+### Chapter 9: Family welfare programme
 
 1. Define demography and enlist the sources of demographic statistics in India.
    **Importance:** Must Know
@@ -762,7 +762,7 @@
 
 ---
 
-### Topic 10: Preventive Geriatrics
+### Chapter 10: Preventive Geriatrics
 
 1. Enlist the health problems of the aged and explain their prevention and control measures
    **Importance:** Must Know
@@ -775,7 +775,7 @@
 
 ---
 
-### Topic 11: World Health Organization and International health agencies
+### Chapter 11: World Health Organization and International health agencies
 
 1. Define and describe the structure, regions, and works of the World Health Organization
    **Importance:** Must Know
@@ -788,7 +788,7 @@
 
 ---
 
-### Topic 12: Vital Statistics
+### Chapter 12: Vital Statistics
 
 1. Understanding of Registration of Birth and Death Act, 1969
    **Importance:** Must Know
@@ -801,21 +801,21 @@
 
 ---
 
-### Topic 13: Health Administration
+### Chapter 13: Health Administration
 
 1. Describe the health administration including AYUSH at the Central, State, District, and Village levels
    **Importance:** Desirable to Know
 
 ---
 
-### Topic 14: National Health Programmes
+### Chapter 14: National Health Programmes
 
 1. State the vision/objective and outline the goals, strategies and plan of action of National Health Programs - Leprosy(NLEP), AIDS (NACP), Blindness (NPCB), Polio , National TB Elimination Program , Vector born disease control program, RCH program, ICDS program, Universal Immunization Program, National mental health program , National Program for Prevention and Control of Cancer, Diabetes, Cardiovascular Diseases & Stroke (NPCDCS) , Swachha Bharat mission, Ayushman Bharat Yojana, Ayushman Bharat Digital Mission, National health mission (NRHM&NUHM), National AYUSH Mission (NAM). National nutrition programs- National Iodine Deficiency Disorders Control program, National Iron Plus Initiative for Anemia Control, National Vitamin A prophylaxis program, Mid-Day Meal program & Balwadi nutrition program.
    **Importance:** Must Know
 
 ---
 
-### Topic 15: National Health Policy
+### Chapter 15: National Health Policy
 
 1. Describe the National Health Policy (NHP) and the scope of Ayurveda in NHP.
    **Importance:** Must Know

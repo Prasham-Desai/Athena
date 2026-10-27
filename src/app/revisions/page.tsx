@@ -14,7 +14,7 @@ import type { Subject } from '@/types';
 
 import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
 import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
-import { RevisionSubjectCard } from '@/components/revisions/revision-subject-card';
+import { SubjectCard } from '@/components/shared/subject-card';
 import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 
 export default function RevisionsPage() {
@@ -176,10 +176,11 @@ export default function RevisionsPage() {
             >
               <AnimatePresence mode="popLayout">
                 {filteredAndSortedSubjects.map((subject, idx) => (
-                  <RevisionSubjectCard
+                  <SubjectCard
                     key={subject.id}
                     subject={subject}
                     index={idx}
+                    variant="revisions"
                   />
                 ))}
               </AnimatePresence>

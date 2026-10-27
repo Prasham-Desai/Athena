@@ -86,10 +86,10 @@ for (const file of files) {
     else if (trimmed.startsWith('### ')) {
       flushTopic();
       let chapterName = trimmed.replace('### ', '').trim();
-      chapterName = chapterName.replace(/^[0-9]+\.\s*/, '').replace(/^Topic\s+[0-9]+:?\s*/i, '');
+      chapterName = chapterName.replace(/^[0-9]+\.\s*/, '').replace(/^(?:Topic|Chapter)\s+[0-9]+:?\s*/i, '');
       chapterId = generateId('chapter:' + subjectId + ':' + chapterName);
 
-      sql += `INSERT INTO chapters (id, subject_id, name, order_index, paper) VALUES ('${chapterId}', '${subjectId}', 'Topic ${chapterOrder + 1}: ${escapeSql(chapterName)}', ${chapterOrder}, '${escapeSql(currentPaper)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, paper=excluded.paper;\n`;
+      sql += `INSERT INTO chapters (id, subject_id, name, order_index, paper) VALUES ('${chapterId}', '${subjectId}', 'Chapter ${chapterOrder + 1}: ${escapeSql(chapterName)}', ${chapterOrder}, '${escapeSql(currentPaper)}') ON CONFLICT(id) DO UPDATE SET name=excluded.name, order_index=excluded.order_index, paper=excluded.paper;\n`;
       chapterOrder++;
       topicOrder = 0;
     }

@@ -13,6 +13,7 @@ function mapTopic(row: any, allSubtopics: any[] = []): any {
     content: s.content,
     status: s.status || 'not-started',
     order_index: s.order_index,
+    importance: s.importance || row.importance || 'Not Specified',
     created_at: s.created_at,
   }));
 

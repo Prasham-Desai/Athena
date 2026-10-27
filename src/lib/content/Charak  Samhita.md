@@ -2,7 +2,7 @@
 
 ## Paper 1
 
-### Topic 1: Cha.Su.1- Sneha Adhyaya
+### Chapter 1: Cha.Su.1- Sneha Adhyaya
 
 1. Justify the position of the chapter title Snehana and its importance
    **Importance:** Must Know
@@ -39,7 +39,7 @@
 
 ---
 
-### Topic 2: Cha.Su.14- Sweda Adhyaya
+### Chapter 2: Cha.Su.14- Sweda Adhyaya
 
 1. Justify the position of the chapter title Swedana and its importance
    **Importance:** Must Know
@@ -82,7 +82,7 @@
 
 ---
 
-### Topic 3: Cha.Su.15- Upakalpaniya Adhyaya
+### Chapter 3: Cha.Su.15- Upakalpaniya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -119,7 +119,7 @@
 
 ---
 
-### Topic 4: Cha.Su.16- Chikitsaprabhritiya Adhyaya
+### Chapter 4: Cha.Su.16- Chikitsaprabhritiya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -156,7 +156,7 @@
 
 ---
 
-### Topic 5: Cha.Su.17- Mahasneha Adhyaya
+### Chapter 5: Cha.Su.17- Mahasneha Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -196,7 +196,7 @@
 
 ---
 
-### Topic 6: Cha.Su.18- Trishothiya Adhyaya
+### Chapter 6: Cha.Su.18- Trishothiya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -221,7 +221,7 @@
 
 ---
 
-### Topic 7: Cha.Su.19- Ashtodariya Adhyaya
+### Chapter 7: Cha.Su.19- Ashtodariya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -255,7 +255,7 @@
 
 ---
 
-### Topic 8: Cha.Su.20- Maharoga Adhyaya
+### Chapter 8: Cha.Su.20- Maharoga Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -292,7 +292,7 @@
 
 ---
 
-### Topic 9: Cha.Su.21- Ashtau Ninditiya Adhyaya
+### Chapter 9: Cha.Su.21- Ashtau Ninditiya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -326,7 +326,7 @@
 
 ---
 
-### Topic 10: Cha.Su.22- Langhanabrimhaniya Adhyaya
+### Chapter 10: Cha.Su.22- Langhanabrimhaniya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -366,7 +366,7 @@
 
 ---
 
-### Topic 11: Cha.Su.23- Santarpaniya Adhyaya
+### Chapter 11: Cha.Su.23- Santarpaniya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -400,7 +400,7 @@
 
 ---
 
-### Topic 12: Cha.Su.24- Vidhishonitiya Adhyaya
+### Chapter 12: Cha.Su.24- Vidhishonitiya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -434,7 +434,7 @@
 
 ---
 
-### Topic 13: Cha.Su.25- Yajjah Purusheeya Adhyaya
+### Chapter 13: Cha.Su.25- Yajjah Purusheeya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -468,7 +468,7 @@
 
 ---
 
-### Topic 14: Cha.Su.26- Annapanavidhi Adhyaya
+### Chapter 14: Cha.Su.26- Annapanavidhi Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -502,7 +502,7 @@
 
 ---
 
-### Topic 15: Cha.Su.27- Annapana Vidhi Vishesha Ayatana Adhyaya
+### Chapter 15: Cha.Su.27- Annapana Vidhi Vishesha Ayatana Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -536,7 +536,7 @@
 
 ---
 
-### Topic 16: Cha.Su.28- Vividhashitapitiya Adhyaya
+### Chapter 16: Cha.Su.28- Vividhashitapitiya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -570,7 +570,7 @@
 
 ---
 
-### Topic 17: Cha.Su.29- Dashapranayataniya Adhyaya
+### Chapter 17: Cha.Su.29- Dashapranayataniya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -604,7 +604,7 @@
 
 ---
 
-### Topic 18: Ch.Su.30- Arthedashamahamuliya Adhyaya
+### Chapter 18: Ch.Su.30- Arthedashamahamuliya Adhyaya
 
 1. Justify the position of the chapter title and its importance
    **Importance:** Must Know
@@ -638,7 +638,7 @@
 
 ---
 
-### Topic 19: Cha.Ni.01-Jwara nidana Adhyaya
+### Chapter 19: Cha.Ni.01-Jwara nidana Adhyaya
 
 1. Describe the sthana adhikarana (objectives) of Nidanasthana Ch.Ni.1/15
    **Importance:** Must Know
@@ -693,7 +693,7 @@
 
 ---
 
-### Topic 20: Cha.Ni.02-Raktapitta nidana Adhyaya
+### Chapter 20: Cha.Ni.02-Raktapitta nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -730,7 +730,7 @@
 
 ---
 
-### Topic 21: Cha.Ni.03-Gulma nidana Adhyaya
+### Chapter 21: Cha.Ni.03-Gulma nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -761,7 +761,7 @@
 
 ---
 
-### Topic 22: Cha.Ni.04-Prameha nidana adhyaya
+### Chapter 22: Cha.Ni.04-Prameha nidana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -807,7 +807,7 @@
 
 ---
 
-### Topic 23: Cha.Ni.05-Kushta nidana Adhyaya
+### Chapter 23: Cha.Ni.05-Kushta nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -847,7 +847,7 @@
 
 ---
 
-### Topic 24: Cha.Ni.06-Shosha nidana Adhyaya
+### Chapter 24: Cha.Ni.06-Shosha nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -881,7 +881,7 @@
 
 ---
 
-### Topic 25: Cha.Ni.07-Unmada nidana Adhyaya
+### Chapter 25: Cha.Ni.07-Unmada nidana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance'
    **Importance:** Must Know
@@ -927,7 +927,7 @@
 
 ---
 
-### Topic 26: Cha.Ni.08-Apasmara nidana adhyaya
+### Chapter 26: Cha.Ni.08-Apasmara nidana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -976,7 +976,7 @@
 
 ---
 
-### Topic 27: Cha.Vi.01- Rasa vimana Adhyayam
+### Chapter 27: Cha.Vi.01- Rasa vimana Adhyayam
 
 1. Explain sthana adhikarana of (objectives) of Vimanasthana Ch Vi 1/3
    **Importance:** Must Know
@@ -1029,7 +1029,7 @@
 
 ---
 
-### Topic 28: Cha.Vi.02-Trividha kuksheeya Adhyayam
+### Chapter 28: Cha.Vi.02-Trividha kuksheeya Adhyayam
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1070,7 +1070,7 @@
 
 ---
 
-### Topic 29: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya
+### Chapter 29: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1125,7 +1125,7 @@
 
 ---
 
-### Topic 30: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya
+### Chapter 30: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1144,7 +1144,7 @@
 
 ---
 
-### Topic 31: Cha.Vi. 05- Sroto vimana Adhyaya
+### Chapter 31: Cha.Vi. 05- Sroto vimana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1172,7 +1172,7 @@
 
 ---
 
-### Topic 32: Cha.Vi. 06-Roganika vimana adhyaya
+### Chapter 32: Cha.Vi. 06-Roganika vimana adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1209,7 +1209,7 @@
 
 ---
 
-### Topic 33: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya
+### Chapter 33: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1237,7 +1237,7 @@
 
 ---
 
-### Topic 34: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam
+### Chapter 34: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1280,7 +1280,7 @@
 
 ---
 
-### Topic 35: Cha.Sha.01-Katithapurusheeya Adhyaya
+### Chapter 35: Cha.Sha.01-Katithapurusheeya Adhyaya
 
 1. Describe the sthana adhikarana (objectives) of sharirasthana Cha.Sha 8/69
    **Importance:** Must Know
@@ -1347,7 +1347,7 @@
 
 ---
 
-### Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya
+### Chapter 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -1387,7 +1387,7 @@
 
 ---
 
-### Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya
+### Chapter 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -1423,7 +1423,7 @@
 
 ---
 
-### Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya
+### Chapter 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya
 
 1. Justify the position of the chapter in the Shareerasthana and its importance
    **Importance:** Must Know
@@ -1466,7 +1466,7 @@
 
 ---
 
-### Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya
+### Chapter 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -1497,7 +1497,7 @@
 
 ---
 
-### Topic 40: Cha.Sha.06-Sareeravichaya adhyaya
+### Chapter 40: Cha.Sha.06-Sareeravichaya adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1540,7 +1540,7 @@
 
 ---
 
-### Topic 41: Cha.Sha.07- Sareerasankhya sareera Adhyaya
+### Chapter 41: Cha.Sha.07- Sareerasankhya sareera Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1564,7 +1564,7 @@
 
 ---
 
-### Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya
+### Chapter 42: Cha.Sha.08-Jathisutreeya Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1586,7 +1586,7 @@
 
 ---
 
-### Topic 43: Cha.In.1-Varnasvariyam Indriya Adhyaya
+### Chapter 43: Cha.In.1-Varnasvariyam Indriya Adhyaya
 
 1. Describe sthana adhikarana (objectives) of Indriyasthana
    **Importance:** Must Know
@@ -1627,7 +1627,7 @@
 
 ---
 
-### Topic 44: Cha.In.2-Pushpitakam Indriya Adhyaya
+### Chapter 44: Cha.In.2-Pushpitakam Indriya Adhyaya
 
 1. Justify the position of the chapter in the sequence
    **Importance:** Must Know
@@ -1646,7 +1646,7 @@
 
 ---
 
-### Topic 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya
+### Chapter 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1662,7 +1662,7 @@
 
 ---
 
-### Topic 46: Cha.In.4-Indriyaneekam Indriya adhyaya
+### Chapter 46: Cha.In.4-Indriyaneekam Indriya adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1675,7 +1675,7 @@
 
 ---
 
-### Topic 47: Cha.In.5-Purvarupeeyam Indriyam Adhyaya
+### Chapter 47: Cha.In.5-Purvarupeeyam Indriyam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and its importance
    **Importance:** Must Know
@@ -1697,7 +1697,7 @@
 
 ---
 
-### Topic 48: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya
+### Chapter 48: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya
 
 1. Justify the position of the chapter in the Samhita and explain basic meaning and importance of key terms in the chapter
    **Importance:** Must Know
@@ -1710,7 +1710,7 @@
 
 ---
 
-### Topic 49: Cha.In.7-Pannarupiyam Indriyam Adhyaya
+### Chapter 49: Cha.In.7-Pannarupiyam Indriyam Adhyaya
 
 1. Justify the position of the chapter in the Samhita
    **Importance:** Must Know
@@ -1738,7 +1738,7 @@
 
 ---
 
-### Topic 50: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya
+### Chapter 50: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya
 
 1. Justify position of the chapter in Samhita
    **Importance:** Must Know
@@ -1748,7 +1748,7 @@
 
 ---
 
-### Topic 51: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya
+### Chapter 51: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya
 
 1. Justify position of the chapter in Samhita
    **Importance:** Must Know
@@ -1764,7 +1764,7 @@
 
 ---
 
-### Topic 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya
+### Chapter 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya
 
 1. Justify poisition of the chapter and key terms in the chapter
    **Importance:** Must Know
@@ -1777,7 +1777,7 @@
 
 ---
 
-### Topic 53: Cha.In.11-Anujyotiyam Indriya Adhyaya
+### Chapter 53: Cha.In.11-Anujyotiyam Indriya Adhyaya
 
 1. Justify the position of the chpater and explain key terms such as arishta Ch In 11/29
    **Importance:** Must Know
@@ -1790,7 +1790,7 @@
 
 ---
 
-### Topic 54: Cha.In.12-Gomayachurniyam Indriya Adhyaya
+### Chapter 54: Cha.In.12-Gomayachurniyam Indriya Adhyaya
 
 1. Justify the position of the chapter and explain key terms such as mumurshu, prasasta duta and mangalika dravya
    **Importance:** Must Know

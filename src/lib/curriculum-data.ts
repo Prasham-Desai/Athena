@@ -22,7 +22,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "6019f0c0",
-        "name": "Topic 1: Concepts of Agada Tantra (Clinical Toxicoiogy) (Lecture :8 hours, Non lecture: 1 hours)",
+        "name": "Chapter 1: Concepts of Agada Tantra (Clinical Toxicoiogy) (Lecture :8 hours, Non lecture: 1 hours)",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -188,7 +188,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "289878cf",
-        "name": "Topic 2: Visha Chikitsa (Management of Poisoning) (Lecture :5 hours, Non lecture: 4 hours)",
+        "name": "Chapter 2: Visha Chikitsa (Management of Poisoning) (Lecture :5 hours, Non lecture: 4 hours)",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -246,7 +246,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c83bd312",
-        "name": "Topic 3: Vishakta aahara pariksha and Viruddha ahara (Lecture :3 hours, Non lecture: 2 hours)",
+        "name": "Chapter 3: Vishakta aahara pariksha and Viruddha ahara (Lecture :3 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -376,7 +376,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "181f3cae",
-        "name": "Topic 4: Garavisha and Dooshivisha (Lecture :7 hours, Non lecture: 2 hours)",
+        "name": "Chapter 4: Garavisha and Dooshivisha (Lecture :7 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -494,7 +494,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e605d645",
-        "name": "Topic 5: Visha Upadrava and diseases caused due to exposure to Visha/poisons (Lecture :4 hours, Non lecture: 2 hours)",
+        "name": "Chapter 5: Visha Upadrava and diseases caused due to exposure to Visha/poisons (Lecture :4 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -600,7 +600,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6414c1a7",
-        "name": "Topic 6: Environmental Toxicotogy (Lecture :2 hours, Non lecture: 5 hours)",
+        "name": "Chapter 6: Environmental Toxicotogy (Lecture :2 hours, Non lecture: 5 hours)",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -682,7 +682,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1228d540",
-        "name": "Topic 7: Dermatoiogical manifestations of visha/poisons. (Lecture :6 hours, Non lecture: 2 hours)",
+        "name": "Chapter 7: Dermatoiogical manifestations of visha/poisons. (Lecture :6 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -776,7 +776,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f167b406",
-        "name": "Topic 8: Therapeutic utility of Agada yoga (Lecture :1 hours, Non lecture: 0 hours)",
+        "name": "Chapter 8: Therapeutic utility of Agada yoga (Lecture :1 hours, Non lecture: 0 hours)",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -810,7 +810,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "14845ae1",
-        "name": "Topic 9: Sthavara visha — Poisons of Plant origin (Lecture :4 hours, Non lecture: 2 hours)",
+        "name": "Chapter 9: Sthavara visha — Poisons of Plant origin (Lecture :4 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -1096,7 +1096,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "19ab82aa",
-        "name": "Topic 10: Sthavara Visha — Poisons of Metallic origin (Lecture :4 hours, Non lecture: 2 hours)",
+        "name": "Chapter 10: Sthavara Visha — Poisons of Metallic origin (Lecture :4 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -1142,7 +1142,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f5e25cfe",
-        "name": "Topic 11: Jangama Visha (Lecture :10 hours, Non lecture: 6 hours)",
+        "name": "Chapter 11: Jangama Visha (Lecture :10 hours, Non lecture: 6 hours)",
         "paper": "Paper 1",
         "order": 10,
         "tag": null,
@@ -1284,7 +1284,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "16284002",
-        "name": "Topic 12: Kritrima visha (Lecture :2 hours, Non lecture: 0 hours)",
+        "name": "Chapter 12: Kritrima visha (Lecture :2 hours, Non lecture: 0 hours)",
         "paper": "Paper 1",
         "order": 11,
         "tag": null,
@@ -1330,7 +1330,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ccbc4d4c",
-        "name": "Topic 13: Substances of abuse (Lecture :4 hours, Non lecture: 3 hours)",
+        "name": "Chapter 13: Substances of abuse (Lecture :4 hours, Non lecture: 3 hours)",
         "paper": "Paper 1",
         "order": 12,
         "tag": null,
@@ -1448,7 +1448,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ca27abf8",
-        "name": "Topic 14: Agada Tantra perspectives on cancer (Lecture :2 hours, Non lecture: 4 hours)",
+        "name": "Chapter 14: Agada Tantra perspectives on cancer (Lecture :2 hours, Non lecture: 4 hours)",
         "paper": "Paper 1",
         "order": 13,
         "tag": null,
@@ -1518,7 +1518,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a3a1a325",
-        "name": "Topic 15: Forensic medicine (Vyavahara Ayurveda) and Medical jurisprudence (Vidhi vaidyaka): (Lecture :1 hours, Non lecture: 0 hours)",
+        "name": "Chapter 15: Forensic medicine (Vyavahara Ayurveda) and Medical jurisprudence (Vidhi vaidyaka): (Lecture :1 hours, Non lecture: 0 hours)",
         "paper": "Paper 1",
         "order": 14,
         "tag": null,
@@ -1540,7 +1540,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2f471696",
-        "name": "Topic 16: Vaidya sadvritta : Duties and Responsibilities of medical practitioner (Lecture :6 hours, Non lecture: 4 hours)",
+        "name": "Chapter 16: Vaidya sadvritta : Duties and Responsibilities of medical practitioner (Lecture :6 hours, Non lecture: 4 hours)",
         "paper": "Paper 1",
         "order": 15,
         "tag": null,
@@ -1646,7 +1646,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "89a956de",
-        "name": "Topic 17: Legal Procedures (Lecture :4 hours, Non lecture: 4 hours)",
+        "name": "Chapter 17: Legal Procedures (Lecture :4 hours, Non lecture: 4 hours)",
         "paper": "Paper 1",
         "order": 16,
         "tag": null,
@@ -1668,7 +1668,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "acd91c9e",
-        "name": "Topic 18: Personal identity (Lecture :2 hours, Non lecture: 2 hours)",
+        "name": "Chapter 18: Personal identity (Lecture :2 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 17,
         "tag": null,
@@ -1726,7 +1726,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "669dd6c5",
-        "name": "Topic 19: Thanatology (Lecture :6 hours, Non lecture: 2 hours)",
+        "name": "Chapter 19: Thanatology (Lecture :6 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 18,
         "tag": null,
@@ -1796,7 +1796,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6507ffad",
-        "name": "Topic 20: Asphyxial deaths (Lecture :4 hours, Non lecture: 2 hours)",
+        "name": "Chapter 20: Asphyxial deaths (Lecture :4 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 19,
         "tag": null,
@@ -1842,7 +1842,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "849cf34a",
-        "name": "Topic 21: Injury (Lecture :5 hours, Non lecture: 3 hours)",
+        "name": "Chapter 21: Injury (Lecture :5 hours, Non lecture: 3 hours)",
         "paper": "Paper 1",
         "order": 20,
         "tag": null,
@@ -1912,7 +1912,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "26ccd303",
-        "name": "Topic 22: Pregnancy, delivery and abortion (Lecture :2 hours, Non lecture: 3 hours)",
+        "name": "Chapter 22: Pregnancy, delivery and abortion (Lecture :2 hours, Non lecture: 3 hours)",
         "paper": "Paper 1",
         "order": 21,
         "tag": null,
@@ -1958,7 +1958,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7d2766b6",
-        "name": "Topic 23: Sexual offences (Lecture :2 hours, Non lecture: 1 hours)",
+        "name": "Chapter 23: Sexual offences (Lecture :2 hours, Non lecture: 1 hours)",
         "paper": "Paper 1",
         "order": 22,
         "tag": null,
@@ -2004,7 +2004,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bb5611fd",
-        "name": "Topic 24: Forensic psychiatry. (Lecture :2 hours, Non lecture: 2 hours)",
+        "name": "Chapter 24: Forensic psychiatry. (Lecture :2 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 23,
         "tag": null,
@@ -2050,7 +2050,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fe5f95f5",
-        "name": "Topic 25: Forensic science laboratory (Lecture :1 hours, Non lecture: 0 hours)",
+        "name": "Chapter 25: Forensic science laboratory (Lecture :1 hours, Non lecture: 0 hours)",
         "paper": "Paper 1",
         "order": 24,
         "tag": null,
@@ -2072,7 +2072,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a13ebffc",
-        "name": "Topic 26: Laws, Acts, Rules and Regulations (Lecture :3 hours, Non lecture: 2 hours)",
+        "name": "Chapter 26: Laws, Acts, Rules and Regulations (Lecture :3 hours, Non lecture: 2 hours)",
         "paper": "Paper 1",
         "order": 25,
         "tag": null,
@@ -2165,7 +2165,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "ed59358f",
-        "name": "Topic 1: Cha.Ni.01-Jwara nidana Adhyaya",
+        "name": "Chapter 1: Cha.Ni.01-Jwara nidana Adhyaya",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -2379,7 +2379,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1aa397ce",
-        "name": "Topic 2: Cha.Ni.02-Raktapitta nidana Adhyaya",
+        "name": "Chapter 2: Cha.Ni.02-Raktapitta nidana Adhyaya",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -2521,7 +2521,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b4dc0e1e",
-        "name": "Topic 3: Cha.Ni.03-Gulma nidana Adhyaya",
+        "name": "Chapter 3: Cha.Ni.03-Gulma nidana Adhyaya",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -2639,7 +2639,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "614e19f4",
-        "name": "Topic 4: Cha.Ni.04-Prameha nidana adhyaya",
+        "name": "Chapter 4: Cha.Ni.04-Prameha nidana adhyaya",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -2817,7 +2817,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7646c520",
-        "name": "Topic 5: Cha.Ni.05-Kushta nidana Adhyaya",
+        "name": "Chapter 5: Cha.Ni.05-Kushta nidana Adhyaya",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -2971,7 +2971,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0bf8d948",
-        "name": "Topic 6: Cha.Ni.06-Shosha nidana Adhyaya",
+        "name": "Chapter 6: Cha.Ni.06-Shosha nidana Adhyaya",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -3101,7 +3101,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bfdc725a",
-        "name": "Topic 7: Cha.Ni.07-Unmada nidana Adhyaya",
+        "name": "Chapter 7: Cha.Ni.07-Unmada nidana Adhyaya",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -3279,7 +3279,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0620c941",
-        "name": "Topic 8: Cha.Ni.08-Apasmara nidana adhyaya",
+        "name": "Chapter 8: Cha.Ni.08-Apasmara nidana adhyaya",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -3469,7 +3469,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ace60fa0",
-        "name": "Topic 9: Cha.Vi.01- Rasa vimana Adhyayam",
+        "name": "Chapter 9: Cha.Vi.01- Rasa vimana Adhyayam",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -3659,7 +3659,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "18261577",
-        "name": "Topic 10: Cha.Vi.02-Trividha kuksheeya Adhyayam",
+        "name": "Chapter 10: Cha.Vi.02-Trividha kuksheeya Adhyayam",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -3801,7 +3801,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "46602e6d",
-        "name": "Topic 11: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya",
+        "name": "Chapter 11: Cha.Vi.03-Janapadodhwansaneeya Vimanam Adhyaya",
         "paper": "Paper 1",
         "order": 10,
         "tag": null,
@@ -4015,7 +4015,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2b528d27",
-        "name": "Topic 12: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya",
+        "name": "Chapter 12: Cha.Vi.04-Trividha roga vishesha vijnyaneeya adhyaya",
         "paper": "Paper 1",
         "order": 11,
         "tag": null,
@@ -4085,7 +4085,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e2ebc5e6",
-        "name": "Topic 13: Cha.Vi. 05- Sroto vimana Adhyaya",
+        "name": "Chapter 13: Cha.Vi. 05- Sroto vimana Adhyaya",
         "paper": "Paper 1",
         "order": 12,
         "tag": null,
@@ -4191,7 +4191,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "35d7c4a2",
-        "name": "Topic 14: Cha.Vi. 06-Roganika vimana adhyaya",
+        "name": "Chapter 14: Cha.Vi. 06-Roganika vimana adhyaya",
         "paper": "Paper 1",
         "order": 13,
         "tag": null,
@@ -4333,7 +4333,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "11a49732",
-        "name": "Topic 15: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya",
+        "name": "Chapter 15: Cha.Vi. 07- Vyadhita rupeeya vimana Adhyaya",
         "paper": "Paper 1",
         "order": 14,
         "tag": null,
@@ -4439,7 +4439,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5fe50106",
-        "name": "Topic 16: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam",
+        "name": "Chapter 16: Cha.Vi. 08-Rogabhishagjiteeyam Adhyaayam",
         "paper": "Paper 1",
         "order": 15,
         "tag": null,
@@ -4605,7 +4605,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e5ffe0ba",
-        "name": "Topic 17: Cha.Sha.01-Katithapurusheeya Adhyaya",
+        "name": "Chapter 17: Cha.Sha.01-Katithapurusheeya Adhyaya",
         "paper": "Paper 1",
         "order": 16,
         "tag": null,
@@ -4867,7 +4867,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5ae08050",
-        "name": "Topic 18: Cha.Sha.02-Atulyagothreeyam Adhyaaya",
+        "name": "Chapter 18: Cha.Sha.02-Atulyagothreeyam Adhyaaya",
         "paper": "Paper 1",
         "order": 17,
         "tag": null,
@@ -5021,7 +5021,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7d46af5d",
-        "name": "Topic 19: Cha.Sha.03-Khuddika garbhavakranti Adhyaya",
+        "name": "Chapter 19: Cha.Sha.03-Khuddika garbhavakranti Adhyaya",
         "paper": "Paper 1",
         "order": 18,
         "tag": null,
@@ -5127,7 +5127,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "467eeefe",
-        "name": "Topic 20: Cha.Sha.04-Mahatee garbhavakranti Adhyaya",
+        "name": "Chapter 20: Cha.Sha.04-Mahatee garbhavakranti Adhyaya",
         "paper": "Paper 1",
         "order": 19,
         "tag": null,
@@ -5293,7 +5293,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "29ef304b",
-        "name": "Topic 21: Cha.Sha.05-Purushavichaya Shareera Adhyaya",
+        "name": "Chapter 21: Cha.Sha.05-Purushavichaya Shareera Adhyaya",
         "paper": "Paper 1",
         "order": 20,
         "tag": null,
@@ -5411,7 +5411,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e6aca65b",
-        "name": "Topic 22: Cha.Sha.06-Sareeravichaya adhyaya",
+        "name": "Chapter 22: Cha.Sha.06-Sareeravichaya adhyaya",
         "paper": "Paper 1",
         "order": 21,
         "tag": null,
@@ -5577,7 +5577,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "745c5160",
-        "name": "Topic 23: Cha.Sha.07- Sareerasankhya sareera Adhyaya",
+        "name": "Chapter 23: Cha.Sha.07- Sareerasankhya sareera Adhyaya",
         "paper": "Paper 1",
         "order": 22,
         "tag": null,
@@ -5647,7 +5647,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "990bf5da",
-        "name": "Topic 24: Cha.Sha.08-Jathisutreeya Adhyaya",
+        "name": "Chapter 24: Cha.Sha.08-Jathisutreeya Adhyaya",
         "paper": "Paper 1",
         "order": 23,
         "tag": null,
@@ -5729,7 +5729,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "339c7eef",
-        "name": "Topic 25: Cha.In.1-Varnasvariyam Indriya Adhyaya",
+        "name": "Chapter 25: Cha.In.1-Varnasvariyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 24,
         "tag": null,
@@ -5871,7 +5871,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3a1389ac",
-        "name": "Topic 26: Cha.In.2-Pushpitakam Indriya Adhyaya",
+        "name": "Chapter 26: Cha.In.2-Pushpitakam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 25,
         "tag": null,
@@ -5941,7 +5941,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7a93aa38",
-        "name": "Topic 27: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya",
+        "name": "Chapter 27: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 26,
         "tag": null,
@@ -5999,7 +5999,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "01ec9120",
-        "name": "Topic 28: Cha.In.4-Indriyaneekam Indriya adhyaya",
+        "name": "Chapter 28: Cha.In.4-Indriyaneekam Indriya adhyaya",
         "paper": "Paper 1",
         "order": 27,
         "tag": null,
@@ -6045,7 +6045,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a8137e52",
-        "name": "Topic 29: Cha.In.5-Purvarupeeyam Indriyam Adhyaya",
+        "name": "Chapter 29: Cha.In.5-Purvarupeeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 28,
         "tag": null,
@@ -6127,7 +6127,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a7b01fe4",
-        "name": "Topic 30: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya",
+        "name": "Chapter 30: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 29,
         "tag": null,
@@ -6173,7 +6173,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3fca0158",
-        "name": "Topic 31: Cha.In.7-Pannarupiyam Indriyam Adhyaya",
+        "name": "Chapter 31: Cha.In.7-Pannarupiyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 30,
         "tag": null,
@@ -6279,7 +6279,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "963d86af",
-        "name": "Topic 32: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya",
+        "name": "Chapter 32: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 31,
         "tag": null,
@@ -6313,7 +6313,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2adb7d0c",
-        "name": "Topic 33: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya",
+        "name": "Chapter 33: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 32,
         "tag": null,
@@ -6371,7 +6371,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "808ad9fd",
-        "name": "Topic 34: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya",
+        "name": "Chapter 34: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 33,
         "tag": null,
@@ -6417,7 +6417,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2dd3043d",
-        "name": "Topic 35: Cha.In.11-Anujyotiyam Indriya Adhyaya",
+        "name": "Chapter 35: Cha.In.11-Anujyotiyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 34,
         "tag": null,
@@ -6463,7 +6463,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0857b362",
-        "name": "Topic 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya",
+        "name": "Chapter 36: Cha.Sha.02-Atulyagothreeyam Adhyaaya",
         "paper": "Paper 1",
         "order": 35,
         "tag": null,
@@ -6617,7 +6617,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f9b4f476",
-        "name": "Topic 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya",
+        "name": "Chapter 37: Cha.Sha.03-Khuddika garbhavakranti Adhyaya",
         "paper": "Paper 1",
         "order": 36,
         "tag": null,
@@ -6723,7 +6723,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8a6ac8b2",
-        "name": "Topic 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya",
+        "name": "Chapter 38: Cha.Sha.04-Mahatee garbhavakranti Adhyaya",
         "paper": "Paper 1",
         "order": 37,
         "tag": null,
@@ -6889,7 +6889,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bf35504c",
-        "name": "Topic 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya",
+        "name": "Chapter 39: Cha.Sha.05-Purushavichaya Shareera Adhyaya",
         "paper": "Paper 1",
         "order": 38,
         "tag": null,
@@ -7007,7 +7007,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2b0f12aa",
-        "name": "Topic 40: Cha.Sha.06-Sareeravichaya adhyaya",
+        "name": "Chapter 40: Cha.Sha.06-Sareeravichaya adhyaya",
         "paper": "Paper 1",
         "order": 39,
         "tag": null,
@@ -7173,7 +7173,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d40e00d3",
-        "name": "Topic 41: Cha.Sha.07-Sareerasankhya sareera Adhyaya",
+        "name": "Chapter 41: Cha.Sha.07-Sareerasankhya sareera Adhyaya",
         "paper": "Paper 1",
         "order": 40,
         "tag": null,
@@ -7243,7 +7243,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "548e30ed",
-        "name": "Topic 42: Cha.Sha.08-Jathisutreeya Adhyaya",
+        "name": "Chapter 42: Cha.Sha.08-Jathisutreeya Adhyaya",
         "paper": "Paper 1",
         "order": 41,
         "tag": null,
@@ -7325,7 +7325,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "29d4d857",
-        "name": "Topic 43: Cha.In.1-Varnasvariyam Indriya Adhyaya",
+        "name": "Chapter 43: Cha.In.1-Varnasvariyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 42,
         "tag": null,
@@ -7467,7 +7467,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "9c546337",
-        "name": "Topic 44: Cha.In.2-Pushpitakam Indriya Adhyaya",
+        "name": "Chapter 44: Cha.In.2-Pushpitakam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 43,
         "tag": null,
@@ -7537,7 +7537,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2a2d55b6",
-        "name": "Topic 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya",
+        "name": "Chapter 45: Cha.In.3-Parimarshaneeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 44,
         "tag": null,
@@ -7595,7 +7595,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "62c746b9",
-        "name": "Topic 46: Cha.In.4-Indriyaneekam Indriya adhyaya",
+        "name": "Chapter 46: Cha.In.4-Indriyaneekam Indriya adhyaya",
         "paper": "Paper 1",
         "order": 45,
         "tag": null,
@@ -7641,7 +7641,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "4359b1b1",
-        "name": "Topic 47: Cha.In.5-Purvarupeeyam Indriyam Adhyaya",
+        "name": "Chapter 47: Cha.In.5-Purvarupeeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 46,
         "tag": null,
@@ -7723,7 +7723,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d241e2d0",
-        "name": "Topic 48: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya",
+        "name": "Chapter 48: Cha.In.6-Katamanisharireeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 47,
         "tag": null,
@@ -7769,7 +7769,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "656c9150",
-        "name": "Topic 49: Cha.In.7-Pannarupiyam Indriyam Adhyaya",
+        "name": "Chapter 49: Cha.In.7-Pannarupiyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 48,
         "tag": null,
@@ -7875,7 +7875,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1fe9223b",
-        "name": "Topic 50: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya",
+        "name": "Chapter 50: Cha.In.8-Avakshiraseeyam Indriyam Adhyaya",
         "paper": "Paper 1",
         "order": 49,
         "tag": null,
@@ -7909,7 +7909,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c7548655",
-        "name": "Topic 51: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya",
+        "name": "Chapter 51: Cha.In.9-Yasya shyavanimittiya Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 50,
         "tag": null,
@@ -7967,7 +7967,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2a26947a",
-        "name": "Topic 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya",
+        "name": "Chapter 52: Cha.In.10-Sadyomaraneeyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 51,
         "tag": null,
@@ -8013,7 +8013,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6feffbb1",
-        "name": "Topic 53: Cha.In.11-Anujyotiyam Indriya Adhyaya",
+        "name": "Chapter 53: Cha.In.11-Anujyotiyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 52,
         "tag": null,
@@ -8059,7 +8059,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "dd6f4e0a",
-        "name": "Topic 54: Cha.In.12-Gomayachurniyam Indriya Adhyaya",
+        "name": "Chapter 54: Cha.In.12-Gomayachurniyam Indriya Adhyaya",
         "paper": "Paper 1",
         "order": 53,
         "tag": null,
@@ -8153,7 +8153,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "8b5b1301",
-        "name": "Topic 1: Dravyaguna Vigyana",
+        "name": "Chapter 1: Dravyaguna Vigyana",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -8187,7 +8187,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "eecf1f53",
-        "name": "Topic 2: Dravya",
+        "name": "Chapter 2: Dravya",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -8233,7 +8233,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b35798d9",
-        "name": "Topic 3: Guna",
+        "name": "Chapter 3: Guna",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -8327,7 +8327,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ad5dbfec",
-        "name": "Topic 4: Rasa",
+        "name": "Chapter 4: Rasa",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -8493,7 +8493,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "42c90138",
-        "name": "Topic 5: Vipaka",
+        "name": "Chapter 5: Vipaka",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -8575,7 +8575,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e53f590c",
-        "name": "Topic 6: Virya",
+        "name": "Chapter 6: Virya",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -8657,7 +8657,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5f01d7b0",
-        "name": "Topic 7: Prabhava",
+        "name": "Chapter 7: Prabhava",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -8715,7 +8715,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "4120e3d9",
-        "name": "Topic 8: Interrelation of Rasa-Guna-Virya-Vipaka-Prabhava",
+        "name": "Chapter 8: Interrelation of Rasa-Guna-Virya-Vipaka-Prabhava",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -8737,7 +8737,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e8c3f2ee",
-        "name": "Topic 9: Karma",
+        "name": "Chapter 9: Karma",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -9179,7 +9179,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d6233f70",
-        "name": "Topic 10: Karmas of Dashemani Gana",
+        "name": "Chapter 10: Karmas of Dashemani Gana",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -9201,7 +9201,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e1047c17",
-        "name": "Topic 11: Principles of General Pharmacology",
+        "name": "Chapter 11: Principles of General Pharmacology",
         "paper": "Paper 1",
         "order": 10,
         "tag": null,
@@ -9403,7 +9403,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5e16e9e9",
-        "name": "Topic 12: Mishraka Gana",
+        "name": "Chapter 12: Mishraka Gana",
         "paper": "Paper 1",
         "order": 11,
         "tag": null,
@@ -9845,7 +9845,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "07bbe625",
-        "name": "Topic 13: Nomenclature of dravya as per Nighantu, Vedic taxonomy and Botany",
+        "name": "Chapter 13: Nomenclature of dravya as per Nighantu, Vedic taxonomy and Botany",
         "paper": "Paper 1",
         "order": 12,
         "tag": null,
@@ -9891,7 +9891,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "4600adfe",
-        "name": "Topic 14: Prashasta Bheshaja, Bheshaja Pariksha and drug evaluation method with correlation as per Pharmacognosy",
+        "name": "Chapter 14: Prashasta Bheshaja, Bheshaja Pariksha and drug evaluation method with correlation as per Pharmacognosy",
         "paper": "Paper 1",
         "order": 13,
         "tag": null,
@@ -9937,7 +9937,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "95610491",
-        "name": "Topic 15: Dravyasangrahana and Drug collection methods as per GFCP (Good Field collection practices)",
+        "name": "Chapter 15: Dravyasangrahana and Drug collection methods as per GFCP (Good Field collection practices)",
         "paper": "Paper 1",
         "order": 14,
         "tag": null,
@@ -9971,7 +9971,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ceb18ed8",
-        "name": "Topic 16: GCP (Good cultivation practices), seed bank, conservation of medicinal plants, knowledge about RET (Rear, Endangered & Threatened ) medicinal plants.",
+        "name": "Chapter 16: GCP (Good cultivation practices), seed bank, conservation of medicinal plants, knowledge about RET (Rear, Endangered & Threatened ) medicinal plants.",
         "paper": "Paper 1",
         "order": 15,
         "tag": null,
@@ -9993,7 +9993,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e30e9b27",
-        "name": "Topic 17: Abhava Pratinidhi Dravya (substitutes)",
+        "name": "Chapter 17: Abhava Pratinidhi Dravya (substitutes)",
         "paper": "Paper 1",
         "order": 16,
         "tag": null,
@@ -10015,7 +10015,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1d2140e1",
-        "name": "Topic 18: Classifications and techniques of aqueous and alcoholic extracts",
+        "name": "Chapter 18: Classifications and techniques of aqueous and alcoholic extracts",
         "paper": "Paper 1",
         "order": 17,
         "tag": null,
@@ -10037,7 +10037,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8160ac0a",
-        "name": "Topic 19: Adverse drug reaction and Pharmacovigilance with recent updates",
+        "name": "Chapter 19: Adverse drug reaction and Pharmacovigilance with recent updates",
         "paper": "Paper 1",
         "order": 18,
         "tag": null,
@@ -10059,7 +10059,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a84e5e2a",
-        "name": "Topic 20: NMPB (National Medicinal Plant Board), CCRAS (Central Council of Research in Ayurveda Sciences), API ( Ayurvedic Pharmacopeia of India), GCTM ( Global Centre for Traditional Medicine), PCIMH ( Pharmacopeia Commission of Indian Medicine and Homeopathy)",
+        "name": "Chapter 20: NMPB (National Medicinal Plant Board), CCRAS (Central Council of Research in Ayurveda Sciences), API ( Ayurvedic Pharmacopeia of India), GCTM ( Global Centre for Traditional Medicine), PCIMH ( Pharmacopeia Commission of Indian Medicine and Homeopathy)",
         "paper": "Paper 1",
         "order": 19,
         "tag": null,
@@ -10081,7 +10081,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a67255fb",
-        "name": "Topic 21: Vrikshayurveda and Ethno-medicine",
+        "name": "Chapter 21: Vrikshayurveda and Ethno-medicine",
         "paper": "Paper 1",
         "order": 20,
         "tag": null,
@@ -10103,7 +10103,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c085f801",
-        "name": "Topic 22: Network pharmacology and Bioinformatics",
+        "name": "Chapter 22: Network pharmacology and Bioinformatics",
         "paper": "Paper 1",
         "order": 21,
         "tag": null,
@@ -10125,7 +10125,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5db517d2",
-        "name": "Topic 23: Bheshajavacharaniya (Criteria's to be considered for selection of drugs in vyadhis)",
+        "name": "Chapter 23: Bheshajavacharaniya (Criteria's to be considered for selection of drugs in vyadhis)",
         "paper": "Paper 2",
         "order": 22,
         "tag": null,
@@ -10147,7 +10147,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3cdb4410",
-        "name": "Topic 24: Dravya (Drug) Nama-Guna-Karma Jnana",
+        "name": "Chapter 24: Dravya (Drug) Nama-Guna-Karma Jnana",
         "paper": "Paper 2",
         "order": 23,
         "tag": null,
@@ -10253,7 +10253,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b30cef09",
-        "name": "Topic 25: Dravya (Drugs) Nama-Guna-Karma-Jnana",
+        "name": "Chapter 25: Dravya (Drugs) Nama-Guna-Karma-Jnana",
         "paper": "Paper 2",
         "order": 24,
         "tag": null,
@@ -10381,7 +10381,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "efb47dac",
-        "name": "Topic 1: Chronological development of Ayurvediya Aushadhi Nirmana",
+        "name": "Chapter 1: Chronological development of Ayurvediya Aushadhi Nirmana",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -10475,7 +10475,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c05b8cd9",
-        "name": "Topic 2: Paribhasha ( Terminology)",
+        "name": "Chapter 2: Paribhasha ( Terminology)",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -10713,7 +10713,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e44e16ac",
-        "name": "Topic 3: Adharbhuta Siddhanta (Application of fundamental principles )",
+        "name": "Chapter 3: Adharbhuta Siddhanta (Application of fundamental principles )",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -10855,7 +10855,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e21285f6",
-        "name": "Topic 4: Yantropakaranani- I (Equipments and machineries)",
+        "name": "Chapter 4: Yantropakaranani- I (Equipments and machineries)",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -10937,7 +10937,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "451cf40a",
-        "name": "Topic 5: Yantropakaranani -II (Equipments, fuel and Heating Devices)",
+        "name": "Chapter 5: Yantropakaranani -II (Equipments, fuel and Heating Devices)",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -11199,7 +11199,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "4f66ea52",
-        "name": "Topic 6: Kalpana Nirmana I (Primary & Secondary dosage forms)",
+        "name": "Chapter 6: Kalpana Nirmana I (Primary & Secondary dosage forms)",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -11341,7 +11341,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "773164b8",
-        "name": "Topic 7: Kalpana Nirmana-II (Method of Preparation of different dosage forms & Dietary Supplements)",
+        "name": "Chapter 7: Kalpana Nirmana-II (Method of Preparation of different dosage forms & Dietary Supplements)",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -11399,7 +11399,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6be78d3b",
-        "name": "Topic 8: Rasa Dravya Parichaya- I",
+        "name": "Chapter 8: Rasa Dravya Parichaya- I",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -11517,7 +11517,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7056e550",
-        "name": "Topic 9: Rasa Dravya Parichaya II",
+        "name": "Chapter 9: Rasa Dravya Parichaya II",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -11611,7 +11611,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "696298fd",
-        "name": "Topic 10: Rasadravya Parichaya III",
+        "name": "Chapter 10: Rasadravya Parichaya III",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -11681,7 +11681,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b522a33e",
-        "name": "Topic 11: Kalpana Nirman -III (Method of Preparation of different dosage forms)",
+        "name": "Chapter 11: Kalpana Nirman -III (Method of Preparation of different dosage forms)",
         "paper": "Paper 1",
         "order": 10,
         "tag": null,
@@ -11763,7 +11763,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "140046e0",
-        "name": "Topic 12: Chaturvidha Rasayana",
+        "name": "Chapter 12: Chaturvidha Rasayana",
         "paper": "Paper 1",
         "order": 11,
         "tag": null,
@@ -11845,7 +11845,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c85be2e7",
-        "name": "Topic 13: Current and emerging trend in Ayurvedic pharmaceuticals",
+        "name": "Chapter 13: Current and emerging trend in Ayurvedic pharmaceuticals",
         "paper": "Paper 1",
         "order": 12,
         "tag": null,
@@ -11927,7 +11927,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "73a7dd9e",
-        "name": "Topic 14: GMP(Schedule T) & Regulatory aspects of Ayurvedic drugs",
+        "name": "Chapter 14: GMP(Schedule T) & Regulatory aspects of Ayurvedic drugs",
         "paper": "Paper 1",
         "order": 13,
         "tag": null,
@@ -12021,7 +12021,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "4b755507",
-        "name": "Topic 15: Aushadhi Prayoga Vigyana",
+        "name": "Chapter 15: Aushadhi Prayoga Vigyana",
         "paper": "Paper 2",
         "order": 14,
         "tag": null,
@@ -12043,7 +12043,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "43233c56",
-        "name": "Topic 16: Single drug (Herbal & Mineral)",
+        "name": "Chapter 16: Single drug (Herbal & Mineral)",
         "paper": "Paper 2",
         "order": 15,
         "tag": null,
@@ -12113,7 +12113,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d3de6256",
-        "name": "Topic 17: Single drug(Bhasma, Shuddha & Pishti)",
+        "name": "Chapter 17: Single drug(Bhasma, Shuddha & Pishti)",
         "paper": "Paper 2",
         "order": 16,
         "tag": null,
@@ -12183,7 +12183,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3b9cd1f3",
-        "name": "Topic 18: Aushadhi Kalpa -I (Compound formulations)",
+        "name": "Chapter 18: Aushadhi Kalpa -I (Compound formulations)",
         "paper": "Paper 2",
         "order": 17,
         "tag": null,
@@ -12253,7 +12253,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3141d7db",
-        "name": "Topic 19: Aushadhi Kalpa-II (Compound Drugs/Formulations)",
+        "name": "Chapter 19: Aushadhi Kalpa-II (Compound Drugs/Formulations)",
         "paper": "Paper 2",
         "order": 18,
         "tag": null,
@@ -12347,7 +12347,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "031a0f7c",
-        "name": "Topic 20: Dosage Forms & Cosmetic Products",
+        "name": "Chapter 20: Dosage Forms & Cosmetic Products",
         "paper": "Paper 2",
         "order": 19,
         "tag": null,
@@ -12501,7 +12501,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d40a4af4",
-        "name": "Topic 21: Nutraceuticals",
+        "name": "Chapter 21: Nutraceuticals",
         "paper": "Paper 2",
         "order": 20,
         "tag": null,
@@ -12619,7 +12619,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7cf88e92",
-        "name": "Topic 22: Anupana Prayoga for Aushadhi Kalpa",
+        "name": "Chapter 22: Anupana Prayoga for Aushadhi Kalpa",
         "paper": "Paper 2",
         "order": 21,
         "tag": null,
@@ -12677,7 +12677,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fbe42b36",
-        "name": "Topic 23: Aushadhi Prayoga Marga",
+        "name": "Chapter 23: Aushadhi Prayoga Marga",
         "paper": "Paper 2",
         "order": 22,
         "tag": null,
@@ -12747,7 +12747,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f708e517",
-        "name": "Topic 24: Rational prescription along with safe dispensing of Ayurvedic formulations.",
+        "name": "Chapter 24: Rational prescription along with safe dispensing of Ayurvedic formulations.",
         "paper": "Paper 2",
         "order": 23,
         "tag": null,
@@ -12829,7 +12829,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "659e0087",
-        "name": "Topic 25: Traditional & Local health Practices",
+        "name": "Chapter 25: Traditional & Local health Practices",
         "paper": "Paper 2",
         "order": 24,
         "tag": null,
@@ -12887,7 +12887,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "151ec1af",
-        "name": "Topic 26: Pharmacovigilance for Ayurveda drugs",
+        "name": "Chapter 26: Pharmacovigilance for Ayurveda drugs",
         "paper": "Paper 2",
         "order": 25,
         "tag": null,
@@ -12991,7 +12991,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "ec92a5b0",
-        "name": "Topic 1: Roga nidana — Pathophysiology and clinical diagnosis",
+        "name": "Chapter 1: Roga nidana — Pathophysiology and clinical diagnosis",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -13025,7 +13025,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fad4a8eb",
-        "name": "Topic 2: Pareeksha",
+        "name": "Chapter 2: Pareeksha",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -13143,7 +13143,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fbfd1cde",
-        "name": "Topic 3: Methods of Rogi pareeksha",
+        "name": "Chapter 3: Methods of Rogi pareeksha",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -13213,7 +13213,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b5921223",
-        "name": "Topic 4: Sapeksha nidana - Vyavacchedaka nidana",
+        "name": "Chapter 4: Sapeksha nidana - Vyavacchedaka nidana",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -13247,7 +13247,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8f73423c",
-        "name": "Topic 5: Upashaya/ Anupashaya",
+        "name": "Chapter 5: Upashaya/ Anupashaya",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -13293,7 +13293,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0ff3efc5",
-        "name": "Topic 6: Dosha Vikriti",
+        "name": "Chapter 6: Dosha Vikriti",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -13555,7 +13555,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f6a3993f",
-        "name": "Topic 7: Doshagati and Rogamarga",
+        "name": "Chapter 7: Doshagati and Rogamarga",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -13613,7 +13613,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "82ba57c1",
-        "name": "Topic 8: Srotodushti",
+        "name": "Chapter 8: Srotodushti",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -13659,7 +13659,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "2d326e48",
-        "name": "Topic 9: Concept of Ama",
+        "name": "Chapter 9: Concept of Ama",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -13729,7 +13729,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "09d4b92a",
-        "name": "Topic 10: Assessment of Ama",
+        "name": "Chapter 10: Assessment of Ama",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -13775,7 +13775,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "908b829b",
-        "name": "Topic 11: Sthana samshraya — Poorvaroopa",
+        "name": "Chapter 11: Sthana samshraya — Poorvaroopa",
         "paper": "Paper 1",
         "order": 10,
         "tag": null,
@@ -13833,7 +13833,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ffee464f",
-        "name": "Topic 12: Dushya dushti",
+        "name": "Chapter 12: Dushya dushti",
         "paper": "Paper 1",
         "order": 11,
         "tag": null,
@@ -14371,7 +14371,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f80cab65",
-        "name": "Topic 13: Samprapti",
+        "name": "Chapter 13: Samprapti",
         "paper": "Paper 1",
         "order": 12,
         "tag": null,
@@ -14417,7 +14417,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "70ca536c",
-        "name": "Topic 14: Rupa",
+        "name": "Chapter 14: Rupa",
         "paper": "Paper 1",
         "order": 13,
         "tag": null,
@@ -14475,7 +14475,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "acd21fb7",
-        "name": "Topic 15: Vyadhinamakarana",
+        "name": "Chapter 15: Vyadhinamakarana",
         "paper": "Paper 1",
         "order": 14,
         "tag": null,
@@ -14521,7 +14521,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e02f58fb",
-        "name": "Topic 16: Vyadhi",
+        "name": "Chapter 16: Vyadhi",
         "paper": "Paper 1",
         "order": 15,
         "tag": null,
@@ -14567,7 +14567,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "215d4ef3",
-        "name": "Topic 17: Ashtanindita (Endocrine disorders)",
+        "name": "Chapter 17: Ashtanindita (Endocrine disorders)",
         "paper": "Paper 1",
         "order": 16,
         "tag": null,
@@ -14613,7 +14613,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "76791ea4",
-        "name": "Topic 18: Janapadodhwamsa vikara (Pandemic disorders)",
+        "name": "Chapter 18: Janapadodhwamsa vikara (Pandemic disorders)",
         "paper": "Paper 1",
         "order": 17,
         "tag": null,
@@ -14635,7 +14635,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bfbb2613",
-        "name": "Topic 19: Nidanarthakara Vyadhi, Vyadhisankara",
+        "name": "Chapter 19: Nidanarthakara Vyadhi, Vyadhisankara",
         "paper": "Paper 1",
         "order": 18,
         "tag": null,
@@ -14669,7 +14669,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "000426b0",
-        "name": "Topic 20: Vyadhikshamatva",
+        "name": "Chapter 20: Vyadhikshamatva",
         "paper": "Paper 1",
         "order": 19,
         "tag": null,
@@ -14799,7 +14799,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "623bd532",
-        "name": "Topic 21: Rogi bala Pareeksha",
+        "name": "Chapter 21: Rogi bala Pareeksha",
         "paper": "Paper 1",
         "order": 20,
         "tag": null,
@@ -14833,7 +14833,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bf974dbd",
-        "name": "Topic 22: Dhatu Paka",
+        "name": "Chapter 22: Dhatu Paka",
         "paper": "Paper 1",
         "order": 21,
         "tag": null,
@@ -15071,7 +15071,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "522f7aef",
-        "name": "Topic 23: Infection and Nutritional disorders",
+        "name": "Chapter 23: Infection and Nutritional disorders",
         "paper": "Paper 1",
         "order": 22,
         "tag": null,
@@ -15129,7 +15129,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e28fb087",
-        "name": "Topic 24: Upadrava",
+        "name": "Chapter 24: Upadrava",
         "paper": "Paper 1",
         "order": 23,
         "tag": null,
@@ -15151,7 +15151,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "de4f2c4f",
-        "name": "Topic 25: Arishta",
+        "name": "Chapter 25: Arishta",
         "paper": "Paper 1",
         "order": 24,
         "tag": null,
@@ -15185,7 +15185,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c5075d90",
-        "name": "Topic 26: Vyadhi bala pareeksha",
+        "name": "Chapter 26: Vyadhi bala pareeksha",
         "paper": "Paper 1",
         "order": 25,
         "tag": null,
@@ -15219,7 +15219,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "24a02cca",
-        "name": "Topic 27: Sadhyasadhyatva — Prognosis",
+        "name": "Chapter 27: Sadhyasadhyatva — Prognosis",
         "paper": "Paper 1",
         "order": 26,
         "tag": null,
@@ -15253,7 +15253,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7483c6c5",
-        "name": "Topic 28: Digital health and Artificial intelligence in the context of Roganidana",
+        "name": "Chapter 28: Digital health and Artificial intelligence in the context of Roganidana",
         "paper": "Paper 1",
         "order": 27,
         "tag": null,
@@ -15299,7 +15299,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "95a64b9a",
-        "name": "Topic 29: Agnimandya — Ajeerna, Anaha, Adhmana, Atopa",
+        "name": "Chapter 29: Agnimandya — Ajeerna, Anaha, Adhmana, Atopa",
         "paper": "Paper 2",
         "order": 28,
         "tag": null,
@@ -15345,7 +15345,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "96874374",
-        "name": "Topic 30: Chhardi",
+        "name": "Chapter 30: Chhardi",
         "paper": "Paper 2",
         "order": 29,
         "tag": null,
@@ -15403,7 +15403,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8c01a2d4",
-        "name": "Topic 31: Amlapitta",
+        "name": "Chapter 31: Amlapitta",
         "paper": "Paper 2",
         "order": 30,
         "tag": null,
@@ -15461,7 +15461,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "63316ab1",
-        "name": "Topic 32: Shoola",
+        "name": "Chapter 32: Shoola",
         "paper": "Paper 2",
         "order": 31,
         "tag": null,
@@ -15507,7 +15507,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "80ad1687",
-        "name": "Topic 33: Atisara, and Pravahika",
+        "name": "Chapter 33: Atisara, and Pravahika",
         "paper": "Paper 2",
         "order": 32,
         "tag": null,
@@ -15673,7 +15673,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c74557d8",
-        "name": "Topic 34: Grahani",
+        "name": "Chapter 34: Grahani",
         "paper": "Paper 2",
         "order": 33,
         "tag": null,
@@ -15791,7 +15791,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "72b5d94e",
-        "name": "Topic 35: Visuchika, Alasaka, Vilambika",
+        "name": "Chapter 35: Visuchika, Alasaka, Vilambika",
         "paper": "Paper 2",
         "order": 34,
         "tag": null,
@@ -15825,7 +15825,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ab0ac4f7",
-        "name": "Topic 36: Common GIT diseases",
+        "name": "Chapter 36: Common GIT diseases",
         "paper": "Paper 2",
         "order": 35,
         "tag": null,
@@ -15871,7 +15871,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "59968fd0",
-        "name": "Topic 37: Mutrakrichhra",
+        "name": "Chapter 37: Mutrakrichhra",
         "paper": "Paper 2",
         "order": 36,
         "tag": null,
@@ -15929,7 +15929,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f6ad2eb8",
-        "name": "Topic 38: Mutraghata",
+        "name": "Chapter 38: Mutraghata",
         "paper": "Paper 2",
         "order": 37,
         "tag": null,
@@ -15987,7 +15987,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "389b8738",
-        "name": "Topic 39: Common Urinary diseases",
+        "name": "Chapter 39: Common Urinary diseases",
         "paper": "Paper 2",
         "order": 38,
         "tag": null,
@@ -16033,7 +16033,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1b025aff",
-        "name": "Topic 40: Hikka",
+        "name": "Chapter 40: Hikka",
         "paper": "Paper 2",
         "order": 39,
         "tag": null,
@@ -16067,7 +16067,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "172dbcda",
-        "name": "Topic 41: Shwasa",
+        "name": "Chapter 41: Shwasa",
         "paper": "Paper 2",
         "order": 40,
         "tag": null,
@@ -16173,7 +16173,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b919e617",
-        "name": "Topic 42: Kasa",
+        "name": "Chapter 42: Kasa",
         "paper": "Paper 2",
         "order": 41,
         "tag": null,
@@ -16279,7 +16279,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "791f3769",
-        "name": "Topic 43: Rajayakshma & Shosha",
+        "name": "Chapter 43: Rajayakshma & Shosha",
         "paper": "Paper 2",
         "order": 42,
         "tag": null,
@@ -16349,7 +16349,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ad8c9b3a",
-        "name": "Topic 44: Common lung disorders",
+        "name": "Chapter 44: Common lung disorders",
         "paper": "Paper 2",
         "order": 43,
         "tag": null,
@@ -16395,7 +16395,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d58ac5fa",
-        "name": "Topic 45: Jwara",
+        "name": "Chapter 45: Jwara",
         "paper": "Paper 2",
         "order": 44,
         "tag": null,
@@ -16513,7 +16513,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d4313052",
-        "name": "Topic 46: Masurika — Romantika",
+        "name": "Chapter 46: Masurika — Romantika",
         "paper": "Paper 2",
         "order": 45,
         "tag": null,
@@ -16583,7 +16583,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e0e06d8d",
-        "name": "Topic 47: Fever",
+        "name": "Chapter 47: Fever",
         "paper": "Paper 2",
         "order": 46,
         "tag": null,
@@ -16665,7 +16665,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "56ae2059",
-        "name": "Topic 48: Pandu",
+        "name": "Chapter 48: Pandu",
         "paper": "Paper 2",
         "order": 47,
         "tag": null,
@@ -16771,7 +16771,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bf453218",
-        "name": "Topic 49: Raktapitta",
+        "name": "Chapter 49: Raktapitta",
         "paper": "Paper 2",
         "order": 48,
         "tag": null,
@@ -16853,7 +16853,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "72ee4987",
-        "name": "Topic 50: Hematopoietic diseases",
+        "name": "Chapter 50: Hematopoietic diseases",
         "paper": "Paper 2",
         "order": 49,
         "tag": null,
@@ -16899,7 +16899,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "39f7bda7",
-        "name": "Topic 51: Hridroga",
+        "name": "Chapter 51: Hridroga",
         "paper": "Paper 2",
         "order": 50,
         "tag": null,
@@ -16969,7 +16969,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bb8e84c7",
-        "name": "Topic 52: Shotha",
+        "name": "Chapter 52: Shotha",
         "paper": "Paper 2",
         "order": 51,
         "tag": null,
@@ -17039,7 +17039,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "937f3889",
-        "name": "Topic 53: Cardiovascular disorders",
+        "name": "Chapter 53: Cardiovascular disorders",
         "paper": "Paper 2",
         "order": 52,
         "tag": null,
@@ -17085,7 +17085,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "01cc208e",
-        "name": "Topic 54: Kamala",
+        "name": "Chapter 54: Kamala",
         "paper": "Paper 2",
         "order": 53,
         "tag": null,
@@ -17179,7 +17179,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "89b0451c",
-        "name": "Topic 55: Udara Roga",
+        "name": "Chapter 55: Udara Roga",
         "paper": "Paper 2",
         "order": 54,
         "tag": null,
@@ -17273,7 +17273,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "329b678e",
-        "name": "Topic 56: Hepatobiliary diseases",
+        "name": "Chapter 56: Hepatobiliary diseases",
         "paper": "Paper 2",
         "order": 55,
         "tag": null,
@@ -17331,7 +17331,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d9d11fb0",
-        "name": "Topic 57: Kushtha - Maha Kushtha & Kshudra Kushtha (According to Charaka)",
+        "name": "Chapter 57: Kushtha - Maha Kushtha & Kshudra Kushtha (According to Charaka)",
         "paper": "Paper 2",
         "order": 56,
         "tag": null,
@@ -17437,7 +17437,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5812f099",
-        "name": "Topic 58: Sheetapitta",
+        "name": "Chapter 58: Sheetapitta",
         "paper": "Paper 2",
         "order": 57,
         "tag": null,
@@ -17495,7 +17495,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6c8bd902",
-        "name": "Topic 59: Shwitra",
+        "name": "Chapter 59: Shwitra",
         "paper": "Paper 2",
         "order": 58,
         "tag": null,
@@ -17529,7 +17529,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1fc4d892",
-        "name": "Topic 60: Visarpa",
+        "name": "Chapter 60: Visarpa",
         "paper": "Paper 2",
         "order": 59,
         "tag": null,
@@ -17611,7 +17611,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "849f51fc",
-        "name": "Topic 61: Skin diseases",
+        "name": "Chapter 61: Skin diseases",
         "paper": "Paper 2",
         "order": 60,
         "tag": null,
@@ -17657,7 +17657,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ff03735a",
-        "name": "Topic 62: Galaganda",
+        "name": "Chapter 62: Galaganda",
         "paper": "Paper 2",
         "order": 61,
         "tag": null,
@@ -17679,7 +17679,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0d4442f8",
-        "name": "Topic 63: Thyroid disorders",
+        "name": "Chapter 63: Thyroid disorders",
         "paper": "Paper 2",
         "order": 62,
         "tag": null,
@@ -17725,7 +17725,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "67e6fa95",
-        "name": "Topic 64: Sthoulya — Karshya",
+        "name": "Chapter 64: Sthoulya — Karshya",
         "paper": "Paper 2",
         "order": 63,
         "tag": null,
@@ -17807,7 +17807,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "0c0ce8e0",
-        "name": "Topic 65: Obesity",
+        "name": "Chapter 65: Obesity",
         "paper": "Paper 2",
         "order": 64,
         "tag": null,
@@ -17865,7 +17865,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "dc80fa54",
-        "name": "Topic 66: Prameha",
+        "name": "Chapter 66: Prameha",
         "paper": "Paper 2",
         "order": 65,
         "tag": null,
@@ -17923,7 +17923,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "e667dbb2",
-        "name": "Topic 67: Diabetes Mellitus and Pancreatitis",
+        "name": "Chapter 67: Diabetes Mellitus and Pancreatitis",
         "paper": "Paper 2",
         "order": 66,
         "tag": null,
@@ -17993,7 +17993,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6af25807",
-        "name": "Topic 68: Vatavyadhi",
+        "name": "Chapter 68: Vatavyadhi",
         "paper": "Paper 2",
         "order": 67,
         "tag": null,
@@ -18015,7 +18015,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "6d670d4c",
-        "name": "Topic 69: Snayugata vata",
+        "name": "Chapter 69: Snayugata vata",
         "paper": "Paper 2",
         "order": 68,
         "tag": null,
@@ -18253,7 +18253,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "16e735ac",
-        "name": "Topic 70: Common neurologic and spine disorders",
+        "name": "Chapter 70: Common neurologic and spine disorders",
         "paper": "Paper 2",
         "order": 69,
         "tag": null,
@@ -18299,7 +18299,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fe4ae194",
-        "name": "Topic 71: Sandhigatavata and Asthi majja gata vata",
+        "name": "Chapter 71: Sandhigatavata and Asthi majja gata vata",
         "paper": "Paper 2",
         "order": 70,
         "tag": null,
@@ -18381,7 +18381,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "383461dc",
-        "name": "Topic 72: Diseases of bone, joints, and muscles",
+        "name": "Chapter 72: Diseases of bone, joints, and muscles",
         "paper": "Paper 2",
         "order": 71,
         "tag": null,
@@ -18427,7 +18427,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f172a508",
-        "name": "Topic 73: Amavata",
+        "name": "Chapter 73: Amavata",
         "paper": "Paper 2",
         "order": 72,
         "tag": null,
@@ -18473,7 +18473,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "b15d519d",
-        "name": "Topic 74: Vatarakta",
+        "name": "Chapter 74: Vatarakta",
         "paper": "Paper 2",
         "order": 73,
         "tag": null,
@@ -18567,7 +18567,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "fea94abb",
-        "name": "Topic 75: Immunological & Metabolic disorders",
+        "name": "Chapter 75: Immunological & Metabolic disorders",
         "paper": "Paper 2",
         "order": 74,
         "tag": null,
@@ -18625,7 +18625,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "de378df9",
-        "name": "Topic 76: Klaibya & Vandhyatva",
+        "name": "Chapter 76: Klaibya & Vandhyatva",
         "paper": "Paper 2",
         "order": 75,
         "tag": null,
@@ -18659,7 +18659,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "91fd704d",
-        "name": "Topic 77: Sexual dysfunction and Infertility",
+        "name": "Chapter 77: Sexual dysfunction and Infertility",
         "paper": "Paper 2",
         "order": 76,
         "tag": null,
@@ -18693,7 +18693,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8fdb9d8b",
-        "name": "Topic 78: Unmada & Apasmara",
+        "name": "Chapter 78: Unmada & Apasmara",
         "paper": "Paper 2",
         "order": 77,
         "tag": null,
@@ -18763,7 +18763,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3ea4cb75",
-        "name": "Topic 79: Vishada",
+        "name": "Chapter 79: Vishada",
         "paper": "Paper 2",
         "order": 78,
         "tag": null,
@@ -18785,7 +18785,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ff674693",
-        "name": "Topic 80: Murchha, and Sanyasa",
+        "name": "Chapter 80: Murchha, and Sanyasa",
         "paper": "Paper 2",
         "order": 79,
         "tag": null,
@@ -18819,7 +18819,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ad1af5cb",
-        "name": "Topic 81: Common Psychiatric diseases",
+        "name": "Chapter 81: Common Psychiatric diseases",
         "paper": "Paper 2",
         "order": 80,
         "tag": null,
@@ -18865,7 +18865,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c6f0b789",
-        "name": "Topic 82: Phiranga and Upadamsha",
+        "name": "Chapter 82: Phiranga and Upadamsha",
         "paper": "Paper 2",
         "order": 81,
         "tag": null,
@@ -18911,7 +18911,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "08216207",
-        "name": "Topic 83: Syphilis & Gonorrhoea",
+        "name": "Chapter 83: Syphilis & Gonorrhoea",
         "paper": "Paper 2",
         "order": 82,
         "tag": null,
@@ -18957,7 +18957,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "8b25f9a0",
-        "name": "Topic 84: Krimiroga",
+        "name": "Chapter 84: Krimiroga",
         "paper": "Paper 2",
         "order": 83,
         "tag": null,
@@ -19003,7 +19003,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "02b403eb",
-        "name": "Topic 85: Clinical presentation of common parasitic disorders",
+        "name": "Chapter 85: Clinical presentation of common parasitic disorders",
         "paper": "Paper 2",
         "order": 84,
         "tag": null,
@@ -19049,7 +19049,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "1e45b50e",
-        "name": "Topic 86: Khalitya & Palitya",
+        "name": "Chapter 86: Khalitya & Palitya",
         "paper": "Paper 2",
         "order": 85,
         "tag": null,
@@ -19071,7 +19071,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "a8ca33b8",
-        "name": "Topic 87: Shleepada",
+        "name": "Chapter 87: Shleepada",
         "paper": "Paper 2",
         "order": 86,
         "tag": null,
@@ -19117,7 +19117,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "23dfce16",
-        "name": "Topic 88: Tuberculosis",
+        "name": "Chapter 88: Tuberculosis",
         "paper": "Paper 2",
         "order": 87,
         "tag": null,
@@ -19188,7 +19188,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
     "chapters": [
       {
         "id": "3dd40087",
-        "name": "Topic 1: Swastha and Swasthya",
+        "name": "Chapter 1: Swastha and Swasthya",
         "paper": "Paper 1",
         "order": 0,
         "tag": null,
@@ -19270,7 +19270,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "384978f4",
-        "name": "Topic 2: Healthy Life style -Dinacharya (Daily regimen)",
+        "name": "Chapter 2: Healthy Life style -Dinacharya (Daily regimen)",
         "paper": "Paper 1",
         "order": 1,
         "tag": null,
@@ -19628,7 +19628,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d0efa2de",
-        "name": "Topic 3: Ratricharya",
+        "name": "Chapter 3: Ratricharya",
         "paper": "Paper 1",
         "order": 2,
         "tag": null,
@@ -19782,7 +19782,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "756c302f",
-        "name": "Topic 4: Ritucharya",
+        "name": "Chapter 4: Ritucharya",
         "paper": "Paper 1",
         "order": 3,
         "tag": null,
@@ -19888,7 +19888,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "f29fe5c8",
-        "name": "Topic 5: Roga nutpadaniya",
+        "name": "Chapter 5: Roga nutpadaniya",
         "paper": "Paper 1",
         "order": 4,
         "tag": null,
@@ -19946,7 +19946,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "5a22df7b",
-        "name": "Topic 6: Sadvritta",
+        "name": "Chapter 6: Sadvritta",
         "paper": "Paper 1",
         "order": 5,
         "tag": null,
@@ -20064,7 +20064,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "63adccda",
-        "name": "Topic 7: Ahara",
+        "name": "Chapter 7: Ahara",
         "paper": "Paper 1",
         "order": 6,
         "tag": null,
@@ -20338,7 +20338,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "76f3c5b2",
-        "name": "Topic 8: Rasayana for Swastha",
+        "name": "Chapter 8: Rasayana for Swastha",
         "paper": "Paper 1",
         "order": 7,
         "tag": null,
@@ -20408,7 +20408,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c7a929ae",
-        "name": "Topic 9: Yoga",
+        "name": "Chapter 9: Yoga",
         "paper": "Paper 1",
         "order": 8,
         "tag": null,
@@ -20802,7 +20802,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3b4fc5b5",
-        "name": "Topic 10: Naturopathy",
+        "name": "Chapter 10: Naturopathy",
         "paper": "Paper 1",
         "order": 9,
         "tag": null,
@@ -20896,7 +20896,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "73b5427f",
-        "name": "Topic 11: Janapadodhwamsa / Maraka Vyadhi",
+        "name": "Chapter 11: Janapadodhwamsa / Maraka Vyadhi",
         "paper": "Paper 2",
         "order": 10,
         "tag": null,
@@ -21074,7 +21074,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ee56ce39",
-        "name": "Topic 12: Environmental health",
+        "name": "Chapter 12: Environmental health",
         "paper": "Paper 2",
         "order": 11,
         "tag": null,
@@ -21468,7 +21468,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "836902a5",
-        "name": "Topic 13: Disaster management",
+        "name": "Chapter 13: Disaster management",
         "paper": "Paper 2",
         "order": 12,
         "tag": null,
@@ -21514,7 +21514,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "ebc409b7",
-        "name": "Topic 14: Occupational Health",
+        "name": "Chapter 14: Occupational Health",
         "paper": "Paper 2",
         "order": 13,
         "tag": null,
@@ -21596,7 +21596,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "9acdcfd2",
-        "name": "Topic 15: School health services",
+        "name": "Chapter 15: School health services",
         "paper": "Paper 2",
         "order": 14,
         "tag": null,
@@ -21654,7 +21654,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "3edf84ea",
-        "name": "Topic 16: Disinfection",
+        "name": "Chapter 16: Disinfection",
         "paper": "Paper 2",
         "order": 15,
         "tag": null,
@@ -21724,7 +21724,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "c8b84297",
-        "name": "Topic 17: Primary health care",
+        "name": "Chapter 17: Primary health care",
         "paper": "Paper 2",
         "order": 16,
         "tag": null,
@@ -21794,7 +21794,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "271158f0",
-        "name": "Topic 18: Mother and Child health care",
+        "name": "Chapter 18: Mother and Child health care",
         "paper": "Paper 2",
         "order": 17,
         "tag": null,
@@ -21828,7 +21828,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "74b81fff",
-        "name": "Topic 19: Family welfare programme",
+        "name": "Chapter 19: Family welfare programme",
         "paper": "Paper 2",
         "order": 18,
         "tag": null,
@@ -21898,7 +21898,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "bb5bf414",
-        "name": "Topic 20: Preventive Geriatrics",
+        "name": "Chapter 20: Preventive Geriatrics",
         "paper": "Paper 2",
         "order": 19,
         "tag": null,
@@ -21944,7 +21944,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "aa30f8b8",
-        "name": "Topic 21: World Health Organization and International health agencies",
+        "name": "Chapter 21: World Health Organization and International health agencies",
         "paper": "Paper 2",
         "order": 20,
         "tag": null,
@@ -21990,7 +21990,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "efd7b4e3",
-        "name": "Topic 22: Vital Statistics",
+        "name": "Chapter 22: Vital Statistics",
         "paper": "Paper 2",
         "order": 21,
         "tag": null,
@@ -22036,7 +22036,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "d8b68343",
-        "name": "Topic 23: Health Administration",
+        "name": "Chapter 23: Health Administration",
         "paper": "Paper 2",
         "order": 22,
         "tag": null,
@@ -22058,7 +22058,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "384ed73f",
-        "name": "Topic 24: National Health Programmes",
+        "name": "Chapter 24: National Health Programmes",
         "paper": "Paper 2",
         "order": 23,
         "tag": null,
@@ -22080,7 +22080,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
       },
       {
         "id": "7476c31f",
-        "name": "Topic 25: National Health Policy",
+        "name": "Chapter 25: National Health Policy",
         "paper": "Paper 2",
         "order": 24,
         "tag": null,

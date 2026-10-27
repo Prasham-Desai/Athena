@@ -29,7 +29,7 @@ import {
   type NoteViewMode,
 } from '@/components/notes/notes-controls-bar';
 import { NoteCard } from '@/components/notes/note-card';
-import { SubjectNotesCard } from '@/components/notes/subject-notes-card';
+import { SubjectCard } from '@/components/shared/subject-card';
 import { EditNoteModal } from '@/components/notes/edit-note-modal';
 import { DeleteNoteModal } from '@/components/notes/delete-note-modal';
 import type { NoteDocument, Chapter, Topic } from '@/types';
@@ -287,7 +287,16 @@ export default function NotesPage() {
     return <PageLoader label="Loading notes workspace" variant="cards" />;
   }
 
-  const isOverview = !selectedSubjectId && !searchQuery.trim() && typeFilter === 'all';
+  const isOverview = !selectedSubjectId;
+
+  const filteredSubjects = useMemo(() => {
+    if (!searchQuery.trim() || selectedSubjectId) return subjects;
+    const q = searchQuery.toLowerCase();
+    return subjects.filter((s) => {
+      if (s.name.toLowerCase().includes(q)) return true;
+      return s.chapters?.some((c) => c.name.toLowerCase().includes(q));
+    });
+  }, [subjects, searchQuery, selectedSubjectId]);
 
   return (
     <div className="relative pb-24 space-y-6">
@@ -350,62 +359,8 @@ export default function NotesPage() {
         <CardGridLoader cards={6} />
       ) : (
         <div className="space-y-8">
-          {/* ── ACTIVE SUBJECT CONTEXT BANNER ───────────────────────────────── */}
-          {activeSubject && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-lg"
-              style={{
-                borderColor: `${activeSubject.color || '#6366f1'}35`,
-                background: `linear-gradient(135deg, ${activeSubject.color || '#6366f1'}15 0%, hsl(var(--card)) 100%)`,
-              }}
-            >
-              <div
-                className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
-                style={{ backgroundColor: activeSubject.color || '#6366f1' }}
-              />
-
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
-                <div className="flex items-center gap-3.5">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md shrink-0"
-                    style={{ backgroundColor: activeSubject.color || '#6366f1' }}
-                  >
-                    <BookOpen className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-[hsl(var(--foreground))]">
-                        {activeYear?.name || 'Academic Year'}
-                      </span>
-                      <span className="text-xs text-[hsl(var(--muted-foreground))]">
-                        {activeSubject.chapters?.length || 0} chapters
-                      </span>
-                    </div>
-                    <h2 className="text-lg sm:text-xl font-black text-[hsl(var(--foreground))]">
-                      {activeSubject.name} Notes
-                    </h2>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setIsUploadOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
-                  style={{
-                    backgroundColor: activeSubject.color || '#6366f1',
-                    boxShadow: `0 10px 25px -5px ${activeSubject.color || '#6366f1'}40`,
-                  }}
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Upload Note to {activeSubject.name}</span>
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── SECTION 1: SUBJECT NOTEBOOKS (Overview Mode Only) ─────────────── */}
-          {isOverview && (
+          {/* ── OVERVIEW MODE: SUBJECT NOTEBOOKS ONLY ────────────────────────── */}
+          {!selectedSubjectId ? (
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -414,31 +369,33 @@ export default function NotesPage() {
                     <span>Subject Notebooks</span>
                   </h2>
                   <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                    Select a subject to filter by chapter and topic, or upload curriculum materials.
+                    Select a subject to view and manage its study documents, notes, and diagrams.
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))]">
-                  {subjects.length} {subjects.length === 1 ? 'subject' : 'subjects'} total
+                  {filteredSubjects.length} {filteredSubjects.length === 1 ? 'subject' : 'subjects'} total
                 </span>
               </div>
 
-              {subjects.length === 0 ? (
-                <div className="p-8 rounded-2xl border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--card))] text-center space-y-3">
-                  <FolderOpen className="w-10 h-10 text-[hsl(var(--muted-foreground))] mx-auto opacity-60" />
-                  <h3 className="text-sm font-bold">No subjects found for {activeYear?.name}</h3>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))] max-w-md mx-auto">
-                    Create subjects in your curriculum to organize lecture notes and diagrams.
-                  </p>
-                </div>
+              {filteredSubjects.length === 0 ? (
+                <EmptyState
+                  icon={FolderOpen}
+                  title={searchQuery ? `No subjects match "${searchQuery}"` : `No subjects found for ${activeYear?.name}`}
+                  description={searchQuery ? 'Try adjusting your search terms.' : 'Create subjects in your curriculum to organize lecture notes and diagrams.'}
+                  actionLabel={searchQuery ? 'Clear Search' : undefined}
+                  onAction={searchQuery ? () => setSearchQuery('') : undefined}
+                />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {subjects.map((sub) => {
+                  {filteredSubjects.map((sub, idx) => {
                     const stats = noteStatsBySubject[sub.id] || { total: 0, pdfs: 0, images: 0 };
                     return (
-                      <SubjectNotesCard
+                      <SubjectCard
                         key={sub.id}
                         subject={sub}
-                        stats={stats}
+                        index={idx}
+                        variant="notes"
+                        noteStats={stats}
                         onSelect={handleSelectSubject}
                       />
                     );
@@ -446,105 +403,166 @@ export default function NotesPage() {
                 </div>
               )}
             </section>
-          )}
+          ) : (
+            /* ── ACTIVE SUBJECT WORKSPACE: ONLY THIS SUBJECT'S NOTES ────────── */
+            <div className="space-y-6">
+              {/* Active Subject Context Banner */}
+              {activeSubject && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-lg"
+                  style={{
+                    borderColor: `${activeSubject.color || '#6366f1'}35`,
+                    background: `linear-gradient(135deg, ${activeSubject.color || '#6366f1'}15 0%, hsl(var(--card)) 100%)`,
+                  }}
+                >
+                  <div
+                    className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
+                    style={{ backgroundColor: activeSubject.color || '#6366f1' }}
+                  />
 
-          {/* ── SECTION 2: DOCUMENTS GRID / LIST ──────────────────────────────── */}
-          <section className="space-y-4">
-            {isOverview && notes.length > 0 && (
-              <div className="flex items-center justify-between pt-4 border-t border-[hsl(var(--border))]">
-                <div>
-                  <h2 className="text-base font-bold text-[hsl(var(--foreground))] flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-indigo-500" />
-                    <span>All Study Documents & Annotated Notes</span>
-                  </h2>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                    Browse, search, and open your documents with full canvas annotation tools.
-                  </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+                    <div className="flex items-center gap-3.5">
+                      <div
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md shrink-0"
+                        style={{ backgroundColor: activeSubject.color || '#6366f1' }}
+                      >
+                        <BookOpen className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-[hsl(var(--foreground))]">
+                            {activeYear?.name || 'Academic Year'}
+                          </span>
+                          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+                            {activeSubject.chapters?.length || 0} chapters
+                          </span>
+                        </div>
+                        <h2 className="text-lg sm:text-xl font-black text-[hsl(var(--foreground))]">
+                          {activeSubject.name} Notes
+                        </h2>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        onClick={() => handleSelectSubject(null)}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-[hsl(var(--foreground))] border border-[hsl(var(--border))]/50 transition-colors"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                        <span>All Subjects</span>
+                      </button>
+                      <button
+                        onClick={() => setIsUploadOpen(true)}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm text-white shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
+                        style={{
+                          backgroundColor: activeSubject.color || '#6366f1',
+                          boxShadow: `0 10px 25px -5px ${activeSubject.color || '#6366f1'}40`,
+                        }}
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span>Upload Note</span>
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Subject Notes List/Grid */}
+              <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-bold text-[hsl(var(--foreground))]">
+                      {displayedNotes.length} {displayedNotes.length === 1 ? 'Document' : 'Documents'} in {activeSubject?.name}
+                    </h3>
+                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                      Open documents to study with full canvas annotation tools.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleSelectSubject(null)}
+                    className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Switch Subject</span>
+                  </button>
                 </div>
-                <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))]">
-                  {displayedNotes.length} {displayedNotes.length === 1 ? 'document' : 'documents'}
-                </span>
-              </div>
-            )}
 
-            {displayedNotes.length === 0 ? (
-              <EmptyState
-                icon={FileText}
-                title={
-                  searchQuery
-                    ? 'No matching notes found'
-                    : selectedChapterId !== 'all'
-                    ? 'No notes in this chapter yet'
-                    : selectedSubjectId
-                    ? `No notes in ${activeSubject?.name || 'this subject'} yet`
-                    : 'No study notes yet'
-                }
-                description={
-                  searchQuery
-                    ? 'Try adjusting your search terms or filters.'
-                    : selectedSubjectId
-                    ? `Upload lecture slides, textbook excerpts, or handwritten diagrams for ${activeSubject?.name || 'this subject'}.`
-                    : 'Start building your library by uploading PDF lecture slides or diagram images.'
-                }
-                actionLabel={
-                  searchQuery
-                    ? 'Clear Search & Filters'
-                    : selectedSubjectId
-                    ? `Upload Note to ${activeSubject?.name || 'Subject'}`
-                    : 'Upload Your First Note'
-                }
-                onAction={() => {
-                  if (searchQuery) {
-                    setSearchQuery('');
-                    setTypeFilter('all');
-                    setSelectedChapterId('all');
-                    setSelectedTopicId('all');
-                  } else {
-                    setIsUploadOpen(true);
-                  }
-                }}
-              />
-            ) : (
-              <motion.div
-                layout
-                className={cn(
-                  'grid gap-4',
-                  viewMode === 'grid'
-                    ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-                    : 'grid-cols-1'
+                {displayedNotes.length === 0 ? (
+                  <EmptyState
+                    icon={FileText}
+                    title={
+                      searchQuery
+                        ? 'No matching notes found'
+                        : selectedChapterId !== 'all'
+                        ? 'No notes in this chapter yet'
+                        : `No notes in ${activeSubject?.name || 'this subject'} yet`
+                    }
+                    description={
+                      searchQuery
+                        ? 'Try adjusting your search terms or filters.'
+                        : `Upload lecture slides, textbook excerpts, or handwritten diagrams for ${activeSubject?.name || 'this subject'}.`
+                    }
+                    actionLabel={
+                      searchQuery
+                        ? 'Clear Search & Filters'
+                        : `Upload Note to ${activeSubject?.name || 'Subject'}`
+                    }
+                    onAction={() => {
+                      if (searchQuery) {
+                        setSearchQuery('');
+                        setTypeFilter('all');
+                        setSelectedChapterId('all');
+                        setSelectedTopicId('all');
+                      } else {
+                        setIsUploadOpen(true);
+                      }
+                    }}
+                  />
+                ) : (
+                  <motion.div
+                    layout
+                    className={cn(
+                      'grid gap-4',
+                      viewMode === 'grid'
+                        ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                        : 'grid-cols-1'
+                    )}
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {displayedNotes.map((note) => {
+                        const sub = subjects.find((s) => s.id === note.subject_id);
+                        const chap = note.chapter_id ? chapterMap.get(note.chapter_id) : null;
+                        const top = note.topic_id ? topicMap.get(note.topic_id) : null;
+
+                        return (
+                          <NoteCard
+                            key={note.id}
+                            note={note}
+                            subject={sub}
+                            chapter={chap}
+                            topic={top}
+                            viewMode={viewMode}
+                            showSubjectPill={false}
+                            onOpen={(n) => setViewerNote(n)}
+                            onEdit={(n, e) => {
+                              e.stopPropagation();
+                              setEditTarget(n);
+                            }}
+                            onDelete={(n, e) => {
+                              e.stopPropagation();
+                              setDeleteTarget(n);
+                            }}
+                          />
+                        );
+                      })}
+                    </AnimatePresence>
+                  </motion.div>
                 )}
-              >
-                <AnimatePresence mode="popLayout">
-                  {displayedNotes.map((note) => {
-                    const sub = subjects.find((s) => s.id === note.subject_id);
-                    const chap = note.chapter_id ? chapterMap.get(note.chapter_id) : null;
-                    const top = note.topic_id ? topicMap.get(note.topic_id) : null;
-
-                    return (
-                      <NoteCard
-                        key={note.id}
-                        note={note}
-                        subject={sub}
-                        chapter={chap}
-                        topic={top}
-                        viewMode={viewMode}
-                        showSubjectPill={!selectedSubjectId}
-                        onOpen={(n) => setViewerNote(n)}
-                        onEdit={(n, e) => {
-                          e.stopPropagation();
-                          setEditTarget(n);
-                        }}
-                        onDelete={(n, e) => {
-                          e.stopPropagation();
-                          setDeleteTarget(n);
-                        }}
-                      />
-                    );
-                  })}
-                </AnimatePresence>
-              </motion.div>
-            )}
-          </section>
+              </section>
+            </div>
+          )}
         </div>
       )}
 

@@ -261,6 +261,7 @@ const IMPORTANCE_OPTIONS = [
   { value: 'Must Know', label: 'Must Know', bg: 'bg-red-500/10', text: 'text-red-500', color: 'rgb(239, 68, 68)' },
   { value: 'Required to Know', label: 'Required to Know', bg: 'bg-orange-500/10', text: 'text-orange-500', color: 'rgb(249, 115, 22)' },
   { value: 'Desirable to Know', label: 'Desirable to Know', bg: 'bg-amber-500/10', text: 'text-amber-500', color: 'rgb(245, 158, 11)' },
+  { value: 'Nice to Know', label: 'Nice to Know', bg: 'bg-violet-500/10', text: 'text-violet-500', color: 'rgb(139, 92, 246)' },
   { value: 'Not Specified', label: 'Not Specified', bg: 'bg-blue-500/10', text: 'text-blue-500', color: 'rgb(59, 130, 246)' },
 ];
 
@@ -268,7 +269,7 @@ function ImportanceSelect({ importance, onChange }: { importance?: string | null
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   
-  const current = IMPORTANCE_OPTIONS.find(o => o.value === importance) || IMPORTANCE_OPTIONS[3];
+  const current = IMPORTANCE_OPTIONS.find(o => o.value === importance) || IMPORTANCE_OPTIONS[4];
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -481,9 +482,12 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
           
           {/* Subtopics (Checkpoints) */}
           {topic.subtopics && topic.subtopics.length > 0 && (
-            <ul className="mt-3 space-y-2 pl-4 border-l-2 border-[hsl(var(--border))]/50 ml-2 pb-2">
+            <div className="mt-3 pl-4 ml-2 pb-2 border-l-2 border-[hsl(var(--border))]/50">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-[hsl(var(--muted-foreground))]">Topics</p>
+            <ul className="space-y-2">
               {topic.subtopics.map((sub: any) => {
                 const isSubCompleted = sub.status === 'completed';
+                const subImportance = IMPORTANCE_OPTIONS.find((option) => option.value === sub.importance) || IMPORTANCE_OPTIONS[4];
                 return (
                   <li key={sub.id} className="flex items-start gap-2.5 group/sub">
                     <button
@@ -511,10 +515,12 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                     )}>
                       {sub.name}
                     </span>
+                    <span className={cn('shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-semibold', subImportance.bg, subImportance.text)}>{subImportance.label}</span>
                   </li>
                 );
               })}
             </ul>
+            </div>
           )}
 
           {/* Sub-sub-topics from notes */}
@@ -1089,7 +1095,7 @@ export default function SubjectDetailPage() {
             <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder={`Search ${currentPaper} chapters and topics`} className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" />
           </label>
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Filter topic status</span><select aria-label="Filter topic status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as TopicStatus | 'all')} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All statuses</option>{(Object.keys(STATUS_CONFIG) as TopicStatus[]).map((status) => <option key={status} value={status}>{STATUS_CONFIG[status].label}</option>)}</select></label>
-          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" /><span className="sr-only">Filter topic importance</span><select aria-label="Filter topic importance" value={importanceFilter} onChange={(event) => setImportanceFilter(event.target.value)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All importance</option><option>Must Know</option><option>Required to Know</option><option>Desirable to Know</option><option value="not-specified">Not Specified</option></select></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" /><span className="sr-only">Filter topic importance</span><select aria-label="Filter topic importance" value={importanceFilter} onChange={(event) => setImportanceFilter(event.target.value)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All importance</option><option>Must Know</option><option>Required to Know</option><option>Desirable to Know</option><option>Nice to Know</option><option value="not-specified">Not Specified</option></select></label>
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><RotateCcw className="h-3.5 w-3.5 shrink-0 text-purple-300" /><span className="sr-only">Filter revision state</span><select aria-label="Filter revision state" value={revisionFilter} onChange={(event) => setRevisionFilter(event.target.value as RevisionFilter)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All revisions</option><option value="due">Due now</option><option value="scheduled">Scheduled</option><option value="not-scheduled">No schedule</option></select></label>
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort chapters</span><select aria-label="Sort chapters" value={chapterSort} onChange={(event) => setChapterSort(event.target.value as typeof chapterSort)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="custom">Original order</option><option value="name">Name A–Z</option><option value="progress">Completion</option></select></label>
         </div>

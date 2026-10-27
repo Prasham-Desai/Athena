@@ -116,7 +116,7 @@ export function NotesControlsBar({
               />
             )}
             <Layers className="w-3.5 h-3.5 relative z-10" />
-            <span className="relative z-10 whitespace-nowrap">All Notes</span>
+            <span className="relative z-10 whitespace-nowrap">All Subjects</span>
             <span
               className={cn(
                 'relative z-10 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold transition-colors',
@@ -125,7 +125,7 @@ export function NotesControlsBar({
                   : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
               )}
             >
-              {totalNotesCount}
+              {subjects.length}
             </span>
           </button>
 
@@ -182,7 +182,11 @@ export function NotesControlsBar({
         <input
           ref={searchInputRef}
           type="text"
-          placeholder="Search notes by title, subtitle, topic, chapter, or filename... (Press '/' to search)"
+          placeholder={
+            selectedSubjectId
+              ? "Search notes by title, subtitle, topic, chapter, or filename... (Press '/' to search)"
+              : "Search subjects by name or chapter... (Press '/' to search)"
+          }
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2.5 pl-10 pr-24 text-sm placeholder:text-[hsl(var(--muted-foreground))] text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition shadow-sm"
@@ -204,7 +208,8 @@ export function NotesControlsBar({
         </div>
       </div>
 
-      {/* ── Filters, Format Pills, Sort & View Mode Row ──────────────────── */}
+      {/* ── Filters, Format Pills, Sort & View Mode Row (Active Subject Mode) ──── */}
+      {selectedSubjectId && (
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 min-w-0">
         {/* Left side: Curriculum (Chapter & Topic) filters if subject is active */}
         <div className="flex flex-wrap items-center gap-2">
@@ -353,6 +358,7 @@ export function NotesControlsBar({
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
