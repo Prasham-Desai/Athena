@@ -33,6 +33,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn, isOverdue, isToday } from '@/lib/utils';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import type { Subject } from '@/types';
 
 // ---------------------------------------------------------------------------
@@ -101,6 +102,7 @@ export function SubjectCard({
 }: UniversalSubjectCardProps) {
   const Icon = getIcon(subject.icon);
   const color = subject.color || '#6366f1';
+  const displayName = getSubjectDisplayName(subject);
   const chaptersCount = subject.chapters?.length || 0;
 
   // ── Calculated Curriculum & Revision Statistics ──────────────────────────
@@ -228,8 +230,8 @@ export function SubjectCard({
                   {chaptersCount} {chaptersCount === 1 ? 'Chapter' : 'Chapters'}
                 </span>
               </div>
-              <h3 className="truncate text-base font-bold text-[hsl(var(--foreground))] transition-colors group-hover:text-indigo-400">
-                {subject.name}
+              <h3 className="break-words text-base font-bold leading-snug text-[hsl(var(--foreground))] transition-colors group-hover:text-indigo-400 [overflow-wrap:anywhere]">
+                {displayName}
               </h3>
             </div>
           </div>
@@ -246,7 +248,7 @@ export function SubjectCard({
                       e.stopPropagation();
                       onEdit(subject.id);
                     }}
-                    aria-label={`Edit ${subject.name}`}
+                    aria-label={`Edit ${displayName}`}
                     className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-indigo-500/15 hover:text-indigo-300"
                   >
                     <Pencil className="h-3.5 w-3.5" />
@@ -260,7 +262,7 @@ export function SubjectCard({
                       e.stopPropagation();
                       onDelete(subject.id);
                     }}
-                    aria-label={`Delete ${subject.name}`}
+                    aria-label={`Delete ${displayName}`}
                     className="rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] transition hover:bg-rose-500/15 hover:text-rose-400"
                   >
                     <Trash2 className="h-3.5 w-3.5" />

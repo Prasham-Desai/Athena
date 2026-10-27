@@ -21,6 +21,7 @@ import { format, parseISO, addDays, subDays, differenceInCalendarDays, startOfYe
 import type { DailyLog, Subject, StudyBlock, ActivityEntry, StudySession } from '@/types';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 
 interface DailyStudyDetailsModalProps {
   isOpen: boolean;
@@ -350,7 +351,7 @@ export function DailyStudyDetailsModal({
                                   borderColor: `${subject.color}40`,
                                 }}
                               >
-                                {subject.name}
+                                {getSubjectDisplayName(subject)}
                               </div>
                             )}
                           </div>

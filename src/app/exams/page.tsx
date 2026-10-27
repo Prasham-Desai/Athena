@@ -11,6 +11,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { getRelativeDate, cn } from '@/lib/utils';
 import type { ExamType, ExamSubject } from '@/types';
 import { SectionLoader } from '@/components/ui/loading';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 
 export default function ExamsPage() {
   const { exams, fetchExams, addExam, updateExam, deleteExam, isLoading } = useExamsStore();
@@ -186,7 +187,7 @@ export default function ExamsPage() {
                   <p className="text-sm italic text-[hsl(var(--muted-foreground))]">No subjects selected</p>
                 ) : (
                   <div className="overflow-x-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-                    <table className="w-full text-left text-sm">
+                    <table className="w-full min-w-[480px] text-left text-sm">
                       <thead className="bg-[hsl(var(--muted))]/30">
                         <tr>
                           <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-48">Subject</th>
@@ -369,7 +370,7 @@ export default function ExamsPage() {
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
                               <span className="text-sm font-semibold truncate" style={{ color: isSelected ? 'inherit' : 'var(--muted-foreground)' }}>
-                                {subject.name}
+                                {getSubjectDisplayName(subject)}
                               </span>
                             </div>
 

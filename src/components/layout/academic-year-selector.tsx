@@ -2,8 +2,22 @@
 
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { Scroll, Stethoscope, GraduationCap, Loader2, type LucideIcon } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAcademicYearStore } from '@/store/academic-year-store';
 import { cn } from '@/lib/utils';
+
+function useAcademicYearSwitch() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const activeYearId = useAcademicYearStore((state) => state.activeYearId);
+  const setActiveYearId = useAcademicYearStore((state) => state.setActiveYearId);
+
+  return async (yearId: string) => {
+    const leavingSubjectDetail = /^\/(?:subjects|revisions)\/[^/]+\/?$/.test(pathname) && yearId !== activeYearId;
+    await setActiveYearId(yearId);
+    if (leavingSubjectDetail) router.replace('/subjects');
+  };
+}
 
 interface YearTheme {
   icon: LucideIcon;
@@ -70,7 +84,8 @@ export function AcademicYearNavSection({
   collapsed: boolean;
   idPrefix?: string;
 }) {
-  const { years, activeYearId, setActiveYearId, isLoading, isSwitching } = useAcademicYearStore();
+  const { years, activeYearId, isLoading, isSwitching } = useAcademicYearStore();
+  const switchYear = useAcademicYearSwitch();
 
   return (
     <div className="space-y-1">
@@ -106,7 +121,7 @@ export function AcademicYearNavSection({
             <button
               key={year.id}
               type="button"
-              onClick={() => setActiveYearId(year.id)}
+              onClick={() => void switchYear(year.id)}
               disabled={isSwitching}
               title={year.name}
               className={cn(
@@ -179,10 +194,13 @@ export function AcademicYearNavSection({
  * Compact colorful pill for mobile header that lets the user toggle years with vibrant highlighting.
  */
 export function AcademicYearMobileBadge() {
-  const { years, activeYearId, setActiveYearId, isLoading, isSwitching } = useAcademicYearStore();
+  const { years, activeYearId, isLoading, isSwitching } = useAcademicYearStore();
+  const switchYear = useAcademicYearSwitch();
 
-  const nextYear = years.find((y) => y.id !== activeYearId) || years[0];
-  const activeYear = years.find((y) => y.id === activeYearId) || years[0];
+  const orderedYears = [...years].sort((left, right) => left.order_index - right.order_index);
+  const activeYearIndex = orderedYears.findIndex((year) => year.id === activeYearId);
+  const activeYear = orderedYears[activeYearIndex] || orderedYears[0];
+  const nextYear = orderedYears[(activeYearIndex + 1) % orderedYears.length] || orderedYears[0];
   const activeTheme = (activeYear && YEAR_THEMES[activeYear.id]) || DEFAULT_THEME;
   const ActiveIcon = activeTheme.icon;
 
@@ -191,7 +209,7 @@ export function AcademicYearMobileBadge() {
   return (
     <button
       type="button"
-      onClick={() => nextYear && setActiveYearId(nextYear.id)}
+      onClick={() => nextYear && void switchYear(nextYear.id)}
       disabled={isSwitching}
       title={`Current: ${activeYear.name}. Tap to switch to ${nextYear?.name || 'next year'}`}
       className={cn(

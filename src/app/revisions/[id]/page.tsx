@@ -30,6 +30,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useSubjectsStore } from '@/store/subjects-store';
+import { useResolvedSubject } from '@/hooks/use-resolved-subject';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { PageLoader } from '@/components/ui/loading';
@@ -337,9 +339,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
   const hydrated = useHydration();
   const router = useRouter();
   
-  const subjects = useSubjectsStore((s) => s.subjects);
-  const subjectsLoading = useSubjectsStore((s) => s.isLoading);
-  const subject = subjects.find((s) => s.id === id);
+  const { subject, isResolving: subjectResolving } = useResolvedSubject(id, hydrated);
 
   const HeaderIcon = getIcon(subject?.icon);
 
@@ -369,7 +369,7 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
     return <PageLoader label="Loading revision details" variant="detail" />;
   }
 
-  if (subjectsLoading) {
+  if (subjectResolving) {
     return <PageLoader label="Loading revision details" variant="detail" />;
   }
 
@@ -398,9 +398,9 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
             >
               <HeaderIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex min-w-0 flex-col break-words [overflow-wrap:anywhere]">
               <span className="text-[hsl(var(--muted-foreground))] text-xs sm:text-sm font-medium -mb-0.5">Revise</span>
-              <span style={{ color: subject.color }}>{subject.name}</span>
+              <span style={{ color: subject.color }}>{getSubjectDisplayName(subject)}</span>
             </div>
           </div>
         }

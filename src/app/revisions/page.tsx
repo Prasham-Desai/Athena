@@ -15,6 +15,7 @@ import type { Subject } from '@/types';
 import { RevisionStatsHeader } from '@/components/revisions/revision-stats-header';
 import { RevisionControlsBar, type RevisionFilter, type RevisionSort, type ViewMode } from '@/components/revisions/revision-controls-bar';
 import { SubjectCard } from '@/components/shared/subject-card';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { CardGridLoader, PageLoader } from '@/components/ui/loading';
 
 export default function RevisionsPage() {
@@ -60,7 +61,7 @@ export default function RevisionsPage() {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(s => {
-        if (s.name.toLowerCase().includes(q)) return true;
+        if (getSubjectDisplayName(s).toLowerCase().includes(q)) return true;
         return s.chapters.some(c => 
           c.name.toLowerCase().includes(q) ||
           c.topics.some(t => t.name.toLowerCase().includes(q))

@@ -39,6 +39,7 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { cn, SUBJECT_COLORS, SUBJECT_ICONS, getToday } from '@/lib/utils';
 import { useActivityStore } from '@/store/activity-store';
 import { SubjectCard } from '@/components/shared/subject-card';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 
 // ---------------------------------------------------------------------------
 // Icon map – keeps the dynamic look-up type-safe
@@ -322,7 +323,7 @@ export default function SubjectsPage() {
   }, [subjects]);
   const visibleSubjects = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return subjects.filter((subject) => !query || subject.name.toLowerCase().includes(query)).map((subject) => {
+    return subjects.filter((subject) => !query || subject.name.toLowerCase().includes(query) || getSubjectDisplayName(subject).toLowerCase().includes(query)).map((subject) => {
       const topics = subject.chapters.flatMap((chapter) => chapter.topics);
       const completed = topics.filter((topic) => topic.status === 'completed' || topic.status === 'revised').length;
       const dueRevisions = topics.filter((topic) => (topic.status === 'completed' || topic.status === 'revised') && topic.nextRevisionDue && topic.nextRevisionDue <= getToday()).length;
@@ -379,15 +380,15 @@ export default function SubjectsPage() {
         </button>
       </PageHeader>
 
-      <section className="mb-5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:flex sm:items-center sm:justify-between sm:gap-6" aria-label="Syllabus overview">
-        <div className="mb-4 flex items-center gap-4 sm:mb-0">
-          <div className="min-w-20"><p className="text-2xl font-semibold tabular-nums">{syllabusStats.percent}%</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">syllabus complete</p></div>
-          <div className="h-9 w-px bg-[hsl(var(--border))]" />
-          <p className="text-xs text-[hsl(var(--muted-foreground))]"><span className="font-medium text-[hsl(var(--foreground))]">{subjects.length} subjects</span><br />{syllabusStats.completed} of {syllabusStats.total} topics complete</p>
+      <section className="mb-5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4" aria-label="Syllabus overview">
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="min-w-20 shrink-0"><p className="text-2xl font-semibold tabular-nums">{syllabusStats.percent}%</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">syllabus complete</p></div>
+          <div className="h-9 w-px bg-[hsl(var(--border))] shrink-0" />
+          <p className="text-xs text-[hsl(var(--muted-foreground))] min-w-0"><span className="font-medium text-[hsl(var(--foreground))]">{subjects.length} subjects</span><br />{syllabusStats.completed} of {syllabusStats.total} topics complete</p>
         </div>
-        <div className="grid gap-2 sm:flex sm:flex-1 sm:justify-end">
-          <label className="relative block sm:w-60"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Search subjects</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search subjects" className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" /></label>
-          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-4 w-4 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="h-10 min-w-36 bg-transparent text-xs outline-none"><option value="attention">Needs attention</option><option value="progress">Progress</option><option value="remaining">Topics remaining</option><option value="activity">Recent activity</option></select></label>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:justify-end">
+          <label className="relative block flex-1 sm:flex-initial sm:w-60 min-w-[140px]"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Search subjects</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search subjects" className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" /></label>
+          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 h-10 shrink-0"><ArrowDownWideNarrow className="h-4 w-4 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="h-full bg-transparent text-xs outline-none cursor-pointer"><option value="attention">Needs attention</option><option value="progress">Progress</option><option value="remaining">Topics remaining</option><option value="activity">Recent activity</option></select></label>
         </div>
       </section>
 

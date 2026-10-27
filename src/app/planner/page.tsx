@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
 
 import { usePlannerStore } from '@/store/planner-store';
@@ -30,6 +31,11 @@ import type { Task, StudyBlock } from '@/types';
 function DayflowContent() {
   const hydrated = useHydration();
   const today = useToday();
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get('date');
+  const initialDateStr = dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) && !Number.isNaN(Date.parse(`${dateParam}T00:00:00`))
+    ? dateParam
+    : undefined;
 
   // Stores
   const { tasks, isLoading: tasksLoading, addTask, updateTask, deleteTask, toggleTask } = useTasksStore();
@@ -233,6 +239,7 @@ function DayflowContent() {
         dailyLogs={dailyLogs}
         isLoading={studyBlocksLoading || dailyLogsLoading || tasksLoading || subjectsLoading}
         todayStr={today}
+        initialDateStr={initialDateStr}
         onOpenLogModal={() => setShowLogModal(true)}
         onEditBlock={(block) => setEditingBlock(block)}
         onDeleteBlock={(id) => setConfirmDelete({ type: 'block', id })}

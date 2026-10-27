@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import type { DailyLog, Subject, StudyBlock } from '@/types';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import {
   generateHeatmapGrid,
   calculateStreaks,
@@ -213,15 +214,15 @@ export function ContributionHeatmap({
   return (
     <div
       ref={containerRef}
-      className="relative rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-6 shadow-sm"
+      className="relative max-w-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-6 shadow-sm"
     >
       {/* ------------------------------------------------------------------ */}
       {/* Header Controls */}
       {/* ------------------------------------------------------------------ */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-emerald-400" />
+          <div className="flex flex-wrap items-center gap-2">
+            <Calendar className="h-5 w-5 text-emerald-400 shrink-0" />
             <h3 className="text-base sm:text-lg font-semibold text-[hsl(var(--foreground))]">
               Study Contribution Heatmap
             </h3>
@@ -288,7 +289,7 @@ export function ContributionHeatmap({
               <option value="all">All Subjects</option>
               {subjects.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.name}
+                  {getSubjectDisplayName(s)}
                 </option>
               ))}
             </select>
@@ -410,7 +411,7 @@ export function ContributionHeatmap({
       {/* ------------------------------------------------------------------ */}
       <div className="mt-4 pt-4 border-t border-[hsl(var(--border))] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[hsl(var(--muted-foreground))]">
         {/* Metric info */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="font-medium text-[hsl(var(--foreground))]">
             {metric === 'hours' && 'Study Duration scale:'}
             {metric === 'topics' && 'Topics Completed scale:'}
@@ -424,7 +425,7 @@ export function ContributionHeatmap({
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-1.5 self-end sm:self-auto">
+        <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
           <span className="text-[11px] text-zinc-400 mr-1">Less</span>
           <div className="w-3 h-3 rounded-[2.5px] bg-[#161b22] border border-white/[0.04]" title="0" />
           <div className="w-3 h-3 rounded-[2.5px] bg-[#0e4429] border border-[#006d32]/30" title="Low" />

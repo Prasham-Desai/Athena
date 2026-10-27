@@ -4,11 +4,12 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, X, Clock } from 'lucide-react';
 import { calculateMinutesFromRange, formatDurationHuman } from '@/lib/study-analytics';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import type { Priority, StudyBlock, Task } from '@/types';
 
 interface EditStudyLogModalProps {
   block: StudyBlock | null;
-  subjects: { id: string; name: string; color: string }[];
+  subjects: { id: string; name: string; color: string; details?: Record<string, string> }[];
   tasks?: Task[];
   onClose: () => void;
   onSave: (id: string, updates: Partial<StudyBlock>) => Promise<void> | void;
@@ -138,7 +139,7 @@ export function EditStudyLogModal({
                 >
                   {subjects.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.name}
+                      {getSubjectDisplayName(s)}
                     </option>
                   ))}
                 </select>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import type { NoteDocument, Subject, Chapter, Topic } from '@/types';
 
 interface NoteCardProps {
@@ -97,7 +98,7 @@ export function NoteCard({
                   }}
                 >
                   <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: subjectColor }} />
-                  <span className="truncate max-w-[120px]">{subject.name}</span>
+                  <span className="truncate max-w-[120px]">{getSubjectDisplayName(subject)}</span>
                 </span>
               )}
             </div>
@@ -210,7 +211,7 @@ export function NoteCard({
                 }}
               >
                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: subjectColor }} />
-                <span className="truncate">{subject.name}</span>
+                <span className="truncate">{getSubjectDisplayName(subject)}</span>
               </span>
             )}
           </div>

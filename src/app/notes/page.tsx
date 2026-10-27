@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Upload,
@@ -34,10 +34,11 @@ import { EditNoteModal } from '@/components/notes/edit-note-modal';
 import { DeleteNoteModal } from '@/components/notes/delete-note-modal';
 import type { NoteDocument, Chapter, Topic } from '@/types';
 import { cn } from '@/lib/utils';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 
 export default function NotesPage() {
   const isHydrated = useHydration();
-  const { activeYearId, activeYear } = useAcademicYearStore();
+  const { activeYearId, activeYear, isSwitching, setActiveYearId } = useAcademicYearStore();
   const { subjects, fetchSubjects } = useSubjectsStore();
   const { notes, isLoading, fetchNotes, deleteNote, updateNote } = useNotesStore();
 
@@ -57,14 +58,34 @@ export default function NotesPage() {
   const [viewerNote, setViewerNote] = useState<NoteDocument | null>(null);
   const [editTarget, setEditTarget] = useState<NoteDocument | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<NoteDocument | null>(null);
+  const initializedYear = useRef(false);
+  const linkedYear = useRef<string | null>(null);
 
   // Load notes and subjects on mount & academic year switch
   useEffect(() => {
     if (activeYearId) {
+      const firstYearLoad = !initializedYear.current;
+      if (firstYearLoad) {
+        initializedYear.current = true;
+        const params = new URLSearchParams(window.location.search);
+        const requestedYear = params.get('yearId');
+        const requestedYearExists = requestedYear && useAcademicYearStore.getState().years.some((year) => year.id === requestedYear);
+        if (requestedYearExists && requestedYear !== activeYearId) {
+          linkedYear.current = requestedYear;
+          void setActiveYearId(requestedYear);
+          return;
+        }
+      } else if (linkedYear.current === activeYearId) {
+        linkedYear.current = null;
+        setSelectedChapterId('all');
+        setSelectedTopicId('all');
+        return;
+      }
+
       setSelectedSubjectId(null);
       setSelectedChapterId('all');
       setSelectedTopicId('all');
-      if (typeof window !== 'undefined') {
+      if (!firstYearLoad) {
         const url = new URL(window.location.href);
         url.searchParams.delete('subjectId');
         window.history.replaceState({}, '', url.toString());
@@ -72,7 +93,7 @@ export default function NotesPage() {
       fetchNotes(activeYearId);
       fetchSubjects(activeYearId);
     }
-  }, [activeYearId, fetchNotes, fetchSubjects]);
+  }, [activeYearId, fetchNotes, fetchSubjects, setActiveYearId]);
 
   // Read URL query params on mount to support direct linking (e.g. from subjects/[id])
   useEffect(() => {
@@ -89,12 +110,13 @@ export default function NotesPage() {
   useEffect(() => {
     if (
       selectedSubjectId &&
+      !isSwitching &&
       subjects.length > 0 &&
       !subjects.some((s) => s.id === selectedSubjectId)
     ) {
       setSelectedSubjectId(null);
     }
-  }, [selectedSubjectId, subjects]);
+  }, [selectedSubjectId, subjects, isSwitching]);
 
   // Sync browser URL when subject changes
   const handleSelectSubject = useCallback((subjectId: string | null) => {
@@ -288,7 +310,7 @@ export default function NotesPage() {
     if (!searchQuery.trim() || selectedSubjectId) return subjects;
     const q = searchQuery.toLowerCase();
     return subjects.filter((s) => {
-      if (s.name.toLowerCase().includes(q)) return true;
+      if (getSubjectDisplayName(s).toLowerCase().includes(q)) return true;
       return s.chapters?.some((c) => c.name.toLowerCase().includes(q));
     });
   }, [subjects, searchQuery, selectedSubjectId]);
@@ -441,7 +463,7 @@ export default function NotesPage() {
                           </span>
                         </div>
                         <h2 className="text-lg sm:text-xl font-black text-[hsl(var(--foreground))]">
-                          {activeSubject.name} Notes
+                          {getSubjectDisplayName(activeSubject)} Notes
                         </h2>
                       </div>
                     </div>

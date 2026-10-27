@@ -27,6 +27,7 @@ import { useActivityStore } from '@/store/activity-store';
 import { usePlannerStore } from '@/store/planner-store';
 import { useSettingsStore } from '@/store/settings-store';
 import { useAcademicYearStore } from '@/store/academic-year-store';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { useHydration } from '@/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 
@@ -254,7 +255,7 @@ export default function AnalyticsPage() {
               <option value="all">All Subjects</option>
               {subjects.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.name}
+                  {getSubjectDisplayName(s)}
                 </option>
               ))}
             </select>

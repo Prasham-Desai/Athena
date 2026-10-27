@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   BookOpen,
@@ -33,6 +33,7 @@ import {
 
 import { cn, formatDate, getRelativeDate, PRIORITY_CONFIG } from '@/lib/utils';
 import { formatDurationHuman, calculateMinutesFromRange } from '@/lib/study-analytics';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import type { StudyBlock, Task, DailyLog } from '@/types';
 import type { ActiveTimerTarget } from '@/store/timer-store';
 import { Skeleton } from '@/components/ui/loading';
@@ -44,6 +45,7 @@ interface StudyLogsSectionProps {
   dailyLogs?: DailyLog[];
   isLoading?: boolean;
   todayStr: string;
+  initialDateStr?: string;
   onOpenLogModal: () => void;
   onEditBlock: (block: StudyBlock) => void;
   onDeleteBlock: (id: string) => void;
@@ -58,6 +60,7 @@ export function StudyLogsSection({
   dailyLogs = [],
   isLoading = false,
   todayStr,
+  initialDateStr,
   onOpenLogModal,
   onEditBlock,
   onDeleteBlock,
@@ -67,12 +70,21 @@ export function StudyLogsSection({
   // Calendar and date selection state
   const initialDate = useMemo(() => {
     // If today has logs, default to today. Otherwise, if there are blocks, we can still default to today but calendar lets user click any dot!
-    return new Date(todayStr + 'T00:00:00');
-  }, [todayStr]);
+    return new Date((initialDateStr || todayStr) + 'T00:00:00');
+  }, [initialDateStr, todayStr]);
 
   const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
   const [viewMonth, setViewMonth] = useState<Date>(initialDate);
   const [viewMode, setViewMode] = useState<'selected' | 'all'>('selected');
+
+  useEffect(() => {
+    if (!initialDateStr) return;
+    const requestedDate = new Date(`${initialDateStr}T00:00:00`);
+    if (Number.isNaN(requestedDate.getTime())) return;
+    setSelectedDate(requestedDate);
+    setViewMonth(requestedDate);
+    setViewMode('selected');
+  }, [initialDateStr]);
 
   const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
 
@@ -480,7 +492,7 @@ export function StudyLogsSection({
                                   color: subject.color,
                                 }}
                               >
-                                {subject.name}
+                                {getSubjectDisplayName(subject)}
                               </span>
                             )}
 

@@ -14,6 +14,7 @@ import {
   endOfYear,
 } from 'date-fns';
 import type { DailyLog, StudySession, Subject, ActivityEntry, StudyBlock, Task } from '@/types';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 export type { DailyLog, StudySession, Subject, ActivityEntry, StudyBlock, Task };
 
 // ---------------------------------------------------------------------------
@@ -543,7 +544,7 @@ export function calculateSubjectSummaries(
 
     return {
       subjectId: subject.id,
-      name: subject.name,
+      name: getSubjectDisplayName(subject),
       color: subject.color || '#3b82f6',
       totalTopics,
       completedTopics,
@@ -570,7 +571,7 @@ export function exportStudyLogsToCSV(
   if (typeof window === 'undefined') return;
 
   const subjectMap = new Map<string, string>();
-  subjects.forEach((s) => subjectMap.set(s.id, s.name));
+  subjects.forEach((s) => subjectMap.set(s.id, getSubjectDisplayName(s)));
 
   const blocksByDate = new Map<string, StudyBlock[]>();
   studyBlocks.forEach((b) => {

@@ -16,6 +16,7 @@ import { ProgressRing } from '@/components/shared/progress-ring';
 import type { Subject } from '@/types';
 import { isOverdue, isToday, getToday } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/loading';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 
 interface RevisionStatsHeaderProps {
   subjects: Subject[];
@@ -63,7 +64,7 @@ export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionSta
       const total = allTopics.length;
       const revised = allTopics.filter((t) => t.revisionCount > 0).length;
       const revisionPercent = total > 0 ? Math.round((revised / total) * 100) : 0;
-      return { id: s.id, name: s.name, color: s.color, total, revised, revisionPercent };
+      return { id: s.id, name: getSubjectDisplayName(s), color: s.color, total, revised, revisionPercent };
     });
   }, [subjects]);
 

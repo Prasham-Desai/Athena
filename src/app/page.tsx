@@ -26,6 +26,7 @@ import { useHydration } from '@/hooks/use-hydration';
 import { useToday } from '@/hooks/use-today';
 import { calculateDayStudyMetrics, formatDurationHuman } from '@/lib/study-analytics';
 import { getRelativeDate, getStreakCount, PRIORITY_CONFIG } from '@/lib/utils';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { AddTaskModal } from '@/components/planner/modals/add-task-modal';
 import { EditTaskModal } from '@/components/planner/modals/edit-task-modal';
 import { PageLoader, SectionLoader, Skeleton } from '@/components/ui/loading';
@@ -194,7 +195,7 @@ export default function DashboardPage() {
   const hasWeeklyHistory = chartData.some((day) => day.minutes > 0);
 
   const attentionItems = useMemo(() => [
-    ...overdueTasks.map((task) => ({ key: `task-${task.id}`, title: task.title, detail: `Overdue · ${getRelativeDate(task.date)}`, href: '/planner?view=tasks', urgent: true, task })),
+    ...overdueTasks.map((task) => ({ key: `task-${task.id}`, title: task.title, detail: `Overdue · ${getRelativeDate(task.date)}`, href: '/planner#tasks', urgent: true, task })),
     ...revisionQueue.map(({ topic }) => ({ key: `revision-${topic.id}`, title: topic.name, detail: `${topic.subjectName} · ${topic.nextRevisionDue === today ? 'Revision due today' : `Overdue · ${getRelativeDate(topic.nextRevisionDue || today)}`}`, href: `/revisions/${topic.subjectId}`, urgent: topic.nextRevisionDue !== today, task: undefined })),
   ].slice(0, 5), [overdueTasks, revisionQueue, today]);
 
@@ -217,7 +218,7 @@ export default function DashboardPage() {
   const startTaskSession = (task: Task) => {
     const target = { type: 'task' as const, id: task.id, taskId: task.id, title: task.title, subjectId: subjectForTask(task)?.id };
     if (isMainRunning) {
-      window.location.assign('/planner?view=tasks');
+      window.location.assign('/planner#tasks');
       return;
     }
     if (activeTarget?.taskId === task.id && mainSeconds > 0) toggleMain();
@@ -237,30 +238,30 @@ export default function DashboardPage() {
 
   return (
     <div className="w-full space-y-6 pb-10 sm:space-y-8">
-      <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-400"><CalendarDays className="h-3.5 w-3.5" />{dateLabel(today)}</p>
+      <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 xl:flex-row xl:items-end xl:justify-between">
+        <div className="min-w-0 max-w-2xl">
+          <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-400"><CalendarDays className="h-3.5 w-3.5 shrink-0" />{dateLabel(today)}</p>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{greeting()}</h1>
           <p className="mt-1.5 text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let’s make the first one count.` : 'A clear plan makes it easier to begin. Choose a subject and start a focus session.'}</p>
         </div>
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[330px] sm:items-end">
-          <div className="flex items-center gap-3 self-stretch sm:self-auto">
-            <div className="min-w-0 flex-1 sm:w-48 sm:flex-none">
+        <div className="flex w-full flex-col gap-3 xl:w-auto xl:items-end">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full xl:w-auto">
+            <div className="min-w-[130px] flex-1 sm:w-44 xl:w-48 sm:flex-none">
               <label htmlFor="start-subject" className="sr-only">Choose a subject</label>
               <select id="start-subject" value={selectedSubject?.id || ''} onChange={(event) => { setSelectedSubjectId(event.target.value); setSelectedTopicId(''); }} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs ${focusRing}`}>
                 <option value="">Choose subject</option>
-                {subjects.map((subject) => <option key={subject.id} value={subject.id}>{subject.name}</option>)}
+                {subjects.map((subject) => <option key={subject.id} value={subject.id}>{getSubjectDisplayName(subject)}</option>)}
               </select>
             </div>
-            <div className="min-w-0 flex-1 sm:w-48 sm:flex-none">
+            <div className="min-w-[130px] flex-1 sm:w-44 xl:w-48 sm:flex-none">
               <label htmlFor="start-topic" className="sr-only">Choose a topic</label>
               <select id="start-topic" value={selectedTopic?.id || ''} onChange={(event) => setSelectedTopicId(event.target.value)} disabled={!selectableTopics.length} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs disabled:opacity-50 ${focusRing}`}>
                 <option value="">{selectableTopics.length ? 'Choose topic' : 'No topics'}</option>
                 {selectableTopics.map((topic) => <option key={topic.id} value={topic.id}>{topic.name}</option>)}
               </select>
             </div>
-            <button type="button" onClick={startStudying} disabled={!selectedSubject || isMainRunning} className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}>
-              <Play className="h-4 w-4" />{isMainRunning ? 'Session running' : activeTarget && mainSeconds > 0 ? 'Resume session' : 'Start studying'}
+            <button type="button" onClick={startStudying} disabled={!selectedSubject || isMainRunning} className={`inline-flex h-10 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}>
+              <Play className="h-4 w-4 shrink-0" />{isMainRunning ? 'Session running' : activeTarget && mainSeconds > 0 ? 'Resume session' : 'Start studying'}
             </button>
           </div>
           <Link href="/planner" className={`${focusRing} text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]`}>{isMainRunning ? `Manage ${activeTarget?.title || 'current session'} · ${formatDurationHuman(Math.floor(mainSeconds / 60))}` : 'Open study planner'} <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
@@ -284,7 +285,7 @@ export default function DashboardPage() {
                   <div className="min-w-0 flex-1">
                     <p className={`truncate text-sm font-medium ${task.completed ? 'text-[hsl(var(--muted-foreground))] line-through' : ''}`}>{task.title}</p>
                     <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[hsl(var(--muted-foreground))]">
-                      {subject && <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: subject.color }} />{subject.name}</span>}
+                      {subject && <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: subject.color }} />{getSubjectDisplayName(subject)}</span>}
                       {!subject && <span className="capitalize">{task.category.replace('-', ' ')}</span>}
                       {task.estimatedMinutes && <span>{task.estimatedMinutes} min</span>}
                       <span>{task.completed ? 'Completed' : isActive ? 'In progress' : 'Up next'}</span>
@@ -303,7 +304,7 @@ export default function DashboardPage() {
             </div>}
             <div className="mt-4 flex items-center justify-between border-t border-[hsl(var(--border))] pt-3 text-xs">
               <span className="text-[hsl(var(--muted-foreground))]">{finishedFocusTasks.length} of {finishedFocusTasks.length + focusTasks.length} scheduled tasks complete</span>
-              <Link href="/planner?view=tasks" className={`${focusRing} font-medium text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+              <Link href="/planner#tasks" className={`${focusRing} font-medium text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
             </div>
           </div>
           <div className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]/45 p-4 sm:p-6 lg:border-l lg:border-t-0">
@@ -326,7 +327,7 @@ export default function DashboardPage() {
         <SectionHeading title="Subject progress" subtitle={`${completedTopics} of ${totalTopics} topics complete · revision work is tracked separately`} action={<label className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><ArrowDownWideNarrow className="h-3.5 w-3.5" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={subjectSort} onChange={(event) => setSubjectSort(event.target.value as SubjectSort)} className={`rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-2.5 py-2 text-xs text-[hsl(var(--foreground))] ${focusRing}`}><option value="attention">Needs attention</option><option value="completion">Most complete</option><option value="remaining">Most topics left</option><option value="revisions">Revisions due</option><option value="activity">Recently studied</option></select></label>} />
         {subjectsLoading ? <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-32 rounded-xl" />)}</div> : subjectProgress.length ? <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {subjectProgress.map(({ subject, total, done, remaining, dueRevisions, percent }) => <Link key={subject.id} href={`/subjects/${subject.id}`} className={`${surface} ${focusRing} group block p-4 transition hover:border-indigo-400/40`}>
-            <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2.5"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="truncate text-sm font-semibold">{subject.name}</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-sm font-semibold tabular-nums" style={{ color: subject.color }}>{percent}%</span></div>
+            <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2.5"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="break-words text-sm font-semibold leading-snug [overflow-wrap:anywhere]">{getSubjectDisplayName(subject)}</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-sm font-semibold tabular-nums" style={{ color: subject.color }}>{percent}%</span></div>
             <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full transition-[width]" style={{ width: `${percent}%`, backgroundColor: subject.color }} /></div>
             <div className="mt-2.5 flex items-center justify-between gap-2 text-[11px] text-[hsl(var(--muted-foreground))]"><span>{remaining} remaining</span><span className={dueRevisions ? 'text-purple-300' : ''}>{dueRevisions ? `${dueRevisions} revision${dueRevisions === 1 ? '' : 's'} due` : 'No revisions due'}</span></div>
           </Link>)}
@@ -344,11 +345,11 @@ export default function DashboardPage() {
           </li>)}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckCircle2 className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">You&apos;re up to date</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">No overdue tasks or scheduled revisions need attention.</p></div>}
         </div>
         <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
-          <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href="/planner?view=tasks" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
+          <SectionHeading title="Upcoming tasks" subtitle="Next deadlines, with higher priority first" action={<Link href="/planner#tasks" className={`${focusRing} text-xs text-indigo-400 hover:text-indigo-300`}>All tasks <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {tasksLoading ? <SectionLoader rows={3} /> : upcomingTasks.length ? <ul className="space-y-2">{upcomingTasks.map((task) => {
             const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
             const subject = subjectForTask(task);
-            return <li key={task.id} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3"><button type="button" onClick={() => void toggleComplete(task)} aria-label={`Complete ${task.title}`} className={`${focusRing} h-5 w-5 shrink-0 rounded-full border border-[hsl(var(--border))] hover:border-emerald-400`} /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{task.title}</p><p className="mt-0.5 truncate text-[11px] text-[hsl(var(--muted-foreground))]">{subject?.name ? `${subject.name} · ` : ''}{getRelativeDate(task.date)}{task.estimatedMinutes ? ` · ${task.estimatedMinutes} min` : ''}</p></div><span className="rounded px-2 py-1 text-[10px] font-semibold uppercase" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span><button type="button" onClick={() => setEditingTask(task)} aria-label={`Edit ${task.title}`} className={`${focusRing} rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]`}><ArrowRight className="h-4 w-4" /></button></li>;
+            return <li key={task.id} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3"><button type="button" onClick={() => void toggleComplete(task)} aria-label={`Complete ${task.title}`} className={`${focusRing} h-5 w-5 shrink-0 rounded-full border border-[hsl(var(--border))] hover:border-emerald-400`} /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium">{task.title}</p><p className="mt-0.5 truncate text-[11px] text-[hsl(var(--muted-foreground))]">{subject ? `${getSubjectDisplayName(subject)} · ` : ''}{getRelativeDate(task.date)}{task.estimatedMinutes ? ` · ${task.estimatedMinutes} min` : ''}</p></div><span className="rounded px-2 py-1 text-[10px] font-semibold uppercase" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span><button type="button" onClick={() => setEditingTask(task)} aria-label={`Edit ${task.title}`} className={`${focusRing} rounded-lg p-1.5 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]`}><ArrowRight className="h-4 w-4" /></button></li>;
           })}</ul> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center"><CheckSquare className="mx-auto h-6 w-6 text-emerald-400" /><p className="mt-2 text-sm font-medium">No upcoming deadlines</p><button type="button" onClick={() => setShowAddTask(true)} className={`${focusRing} mt-2 text-xs text-indigo-400`}>Schedule a task</button></div>}
         </div>
       </section>

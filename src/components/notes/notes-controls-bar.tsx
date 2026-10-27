@@ -16,6 +16,7 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import type { Subject, Chapter, Topic } from '@/types';
 
 export type NoteSortOption = 'date-desc' | 'date-asc' | 'title-asc' | 'title-desc';
@@ -159,7 +160,7 @@ export function NotesControlsBar({
                     backgroundColor: isSelected ? '#ffffff' : sub.color || '#6366f1',
                   }}
                 />
-                <span className="relative z-10 whitespace-nowrap">{sub.name}</span>
+                <span className="relative z-10 whitespace-nowrap">{getSubjectDisplayName(sub)}</span>
                 <span
                   className={cn(
                     'relative z-10 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-bold transition-colors',

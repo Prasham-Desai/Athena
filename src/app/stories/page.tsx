@@ -82,7 +82,7 @@ export default function StoriesPage() {
       animate="show"
       className="space-y-6 sm:space-y-8 pb-32"
     >
-      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <motion.div variants={itemVariants}>
         <PageHeader
           title={activeTab === 'story' ? "Sleep Stories" : "Imaginations"}
           description={
@@ -90,15 +90,15 @@ export default function StoriesPage() {
               ? "Relax and drift off with audio stories tailored for winding down after studying."
               : "Let your mind wander with creative visualizations and guided imaginations."
           }
-        />
-        
-        <button
-          onClick={openNewModal}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all w-full sm:w-auto shrink-0"
         >
-          <Plus className="w-4 h-4" />
-          {activeTab === 'story' ? 'Add Story' : 'Add Imagination'}
-        </button>
+          <button
+            onClick={openNewModal}
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all w-full sm:w-auto shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            {activeTab === 'story' ? 'Add Story' : 'Add Imagination'}
+          </button>
+        </PageHeader>
       </motion.div>
 
       {/* Tabs */}

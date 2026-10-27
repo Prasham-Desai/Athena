@@ -18,6 +18,7 @@ import {
 import { useNotesStore } from '@/store/notes-store';
 import { useSubjectsStore } from '@/store/subjects-store';
 import { useAcademicYearStore } from '@/store/academic-year-store';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { cn } from '@/lib/utils';
 
 interface UploadNotesModalProps {
@@ -364,7 +365,7 @@ export function UploadNotesModal({
             >
               {subjects.map((sub) => (
                 <option key={sub.id} value={sub.id}>
-                  {sub.name}
+                  {getSubjectDisplayName(sub)}
                 </option>
               ))}
             </select>
