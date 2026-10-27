@@ -101,7 +101,7 @@ export function AcademicYearNavSection({
   const switchYear = useAcademicYearSwitch();
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" role="group" aria-label="Under Graduate (UG)">
       {/* Divider line */}
       <div className="pt-3 pb-2 px-1">
         <div className="border-t border-[hsl(var(--border))]" />
@@ -117,7 +117,7 @@ export function AcademicYearNavSection({
             className="px-3 pb-1 overflow-hidden"
           >
             <p className="text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
-              UG (Undergraduate)
+              Under Graduate (UG)
             </p>
           </motion.div>
         )}

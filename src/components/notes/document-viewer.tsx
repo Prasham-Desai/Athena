@@ -1280,7 +1280,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                       'relative z-10 flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-colors duration-150',
                       effectiveViewMode === 'double'
                         ? 'text-white font-semibold'
-                        : 'text-slate-400 hover:text-white'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                     )}
                   >
                     {effectiveViewMode === 'double' && (
@@ -1302,27 +1302,27 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         {/* Right: Zoom, Save Status, Download & Export */}
         <div className="flex items-center gap-2 shrink-0">
           {/* Zoom controls */}
-          <div className="hidden sm:flex items-center gap-1 bg-slate-800/70 p-1 rounded-xl border border-slate-700/50">
+          <div className="hidden sm:flex items-center gap-1 bg-[hsl(var(--muted))] p-1 rounded-xl border border-[hsl(var(--border))]">
             <button
               onClick={() => setZoomScale((s) => Math.max(0.5, +(s - 0.15).toFixed(2)))}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--card))] transition-colors"
               title="Zoom Out"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
-            <span className="text-xs font-mono font-medium text-slate-300 w-11 text-center select-none">
+            <span className="text-xs font-mono font-medium text-[hsl(var(--foreground))] w-11 text-center select-none">
               {Math.round(zoomScale * 100)}%
             </span>
             <button
               onClick={() => setZoomScale((s) => Math.min(2.5, +(s + 0.15).toFixed(2)))}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--card))] transition-colors"
               title="Zoom In"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={() => setZoomScale(1.0)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+              className="p-1.5 rounded-lg text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--card))] transition-colors"
               title="Reset Zoom"
             >
               <Maximize2 className="w-3.5 h-3.5" />
@@ -1330,27 +1330,27 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           </div>
 
           {/* Autosave Status Pill */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/60 border border-slate-700/50">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-[hsl(var(--muted))] border border-[hsl(var(--border))]">
             {saveStatus === 'saved' && (
               <>
-                <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-400 hidden md:inline">Saved</span>
+                <CheckCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-emerald-600 dark:text-emerald-400 hidden md:inline">Saved</span>
               </>
             )}
             {saveStatus === 'saving' && (
               <>
-                <Loader2 className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-                <span className="text-amber-400 hidden md:inline">Saving...</span>
+                <Loader2 className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-spin" />
+                <span className="text-amber-600 dark:text-amber-400 hidden md:inline">Saving...</span>
               </>
             )}
             {saveStatus === 'error' && (
               <>
-                <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+                <AlertCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                 <button
                   onClick={() =>
                     savePageAnnotations(currentPage, pageAnnotations[currentPage] || [])
                   }
-                  className="text-rose-400 hover:underline hidden md:inline"
+                  className="text-rose-600 dark:text-rose-400 hover:underline hidden md:inline"
                 >
                   Retry
                 </button>
@@ -1362,7 +1362,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           <a
             href={`/api/notes/${note.id}/file?download=true`}
             download={note.file_name}
-            className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700/60 transition-colors"
+            className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] border border-[hsl(var(--border))] transition-colors"
             title="Download Original File"
           >
             <Download className="w-4 h-4" />
@@ -1386,7 +1386,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       </header>
 
       {/* ================= SECONDARY ANNOTATION TOOLBAR ================= */}
-      <div className="px-3 bg-slate-900 border-b border-slate-800 flex items-center gap-2 overflow-x-auto select-none z-10 shrink-0 min-h-[52px] py-1.5">
+      <div className="px-3 bg-[hsl(var(--card))] border-b border-[hsl(var(--border))] flex items-center gap-2 overflow-x-auto select-none z-10 shrink-0 min-h-[52px] py-1.5">
 
         {/* GROUP A: Drawing tools */}
         <div className="flex items-center gap-1 shrink-0">
@@ -1395,8 +1395,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             className={cn(
               'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'pen'
-                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30'
+                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
             )}
             title="Pen"
           >
@@ -1409,8 +1409,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             className={cn(
               'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'highlighter'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-amber-500/15 text-amber-600 dark:text-amber-300 border border-amber-500/30'
+                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
             )}
             title="Highlighter"
           >
@@ -1423,8 +1423,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             className={cn(
               'p-2 rounded-xl flex items-center gap-1 text-xs font-medium transition-all',
               activeTool === 'eraser'
-                ? 'bg-slate-700 text-white border border-slate-500'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-[hsl(var(--accent))] text-[hsl(var(--foreground))] border border-[hsl(var(--ring))]'
+                : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
             )}
             title="Eraser"
           >
@@ -1434,7 +1434,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         </div>
 
         {/* Separator */}
-        <div className="h-6 w-px bg-slate-700/70 shrink-0" />
+        <div className="h-6 w-px bg-[hsl(var(--border))] shrink-0" />
 
         {/* GROUP B: Shapes & text */}
         <div className="flex items-center gap-1 shrink-0">
@@ -1451,8 +1451,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               className={cn(
                 'p-2 rounded-xl transition-all',
                 activeTool === tool
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30'
+                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
               )}
               title={label}
             >
@@ -1462,7 +1462,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
         </div>
 
         {/* Separator */}
-        <div className="h-6 w-px bg-slate-700/70 shrink-0" />
+        <div className="h-6 w-px bg-[hsl(var(--border))] shrink-0" />
 
         {/* GROUP C: Color palette + thickness — context-sensitive */}
         <div className="flex items-center gap-2 shrink-0">
@@ -1475,14 +1475,14 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   className={cn(
                     'w-5 h-5 rounded-full transition-transform',
                     highlighterColor === c.hex
-                      ? 'scale-125 ring-2 ring-white ring-offset-1 ring-offset-slate-900'
+                      ? 'scale-125 ring-2 ring-indigo-500 ring-offset-1 ring-offset-[hsl(var(--card))]'
                       : 'hover:scale-110 opacity-80'
                   )}
                   style={{ backgroundColor: c.hex }}
                   title={c.name}
                 />
               ))}
-              <div className="h-4 w-px bg-slate-700" />
+              <div className="h-4 w-px bg-[hsl(var(--border))]" />
               <div className="flex items-center gap-0.5">
                 {HIGHLIGHTER_WIDTHS.map((w) => (
                   <button
@@ -1491,8 +1491,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                     className={cn(
                       'px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors',
                       highlighterWidth === w
-                        ? 'bg-slate-700 text-white font-bold'
-                        : 'text-slate-500 hover:text-white'
+                        ? 'bg-indigo-600 text-white font-bold'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                     )}
                   >
                     {w}
@@ -1504,7 +1504,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
             <>
               {/* Current color swatch */}
               <div
-                className="w-5 h-5 rounded-full border-2 border-slate-600 shrink-0"
+                className="w-5 h-5 rounded-full border-2 border-[hsl(var(--border))] shrink-0"
                 style={{ backgroundColor: selectedColor }}
                 title={`Current color: ${selectedColor}`}
               />
@@ -1513,16 +1513,16 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                   key={c.name}
                   onClick={() => setSelectedColor(c.hex)}
                   className={cn(
-                    'w-4 h-4 rounded-full border border-slate-700 transition-transform',
+                    'w-4 h-4 rounded-full border border-[hsl(var(--border))] transition-transform',
                     selectedColor === c.hex
-                      ? 'scale-125 ring-2 ring-indigo-400 ring-offset-1 ring-offset-slate-900'
+                      ? 'scale-125 ring-2 ring-indigo-500 ring-offset-1 ring-offset-[hsl(var(--card))]'
                       : 'hover:scale-110 opacity-70 hover:opacity-100'
                   )}
                   style={{ backgroundColor: c.hex }}
                   title={c.name}
                 />
               ))}
-              <div className="h-4 w-px bg-slate-700" />
+              <div className="h-4 w-px bg-[hsl(var(--border))]" />
               <div className="flex items-center gap-0.5">
                 {PEN_WIDTHS.map((w) => (
                   <button
@@ -1531,8 +1531,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                     className={cn(
                       'px-1.5 py-0.5 rounded text-[10px] font-mono transition-colors',
                       penWidth === w
-                        ? 'bg-slate-700 text-white font-bold'
-                        : 'text-slate-500 hover:text-white'
+                        ? 'bg-indigo-600 text-white font-bold'
+                        : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                     )}
                   >
                     {w}
@@ -1541,7 +1541,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               </div>
             </>
           ) : (
-            <span className="text-[11px] text-slate-500 italic">Tap a stroke to erase</span>
+            <span className="text-[11px] text-[hsl(var(--muted-foreground))] italic">Tap a stroke to erase</span>
           )}
         </div>
 
@@ -1553,7 +1553,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           <button
             onClick={handleUndo}
             disabled={!canUndo}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 transition-colors"
+            className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-25 transition-colors"
             title="Undo"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -1561,17 +1561,17 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
           <button
             onClick={handleRedo}
             disabled={!canRedo}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-25 transition-colors"
+            className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] disabled:opacity-25 transition-colors"
             title="Redo"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
 
-          <div className="h-5 w-px bg-slate-700/70" />
+          <div className="h-5 w-px bg-[hsl(var(--border))] shrink-0" />
 
           <button
             onClick={handleClearPage}
-            className="p-2 rounded-xl text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
+            className="p-2 rounded-xl text-rose-500/80 hover:text-rose-600 hover:bg-rose-500/10 transition-colors"
             title="Clear Current Page"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -1583,8 +1583,8 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               className={cn(
                 'p-2 rounded-xl transition-colors',
                 isSidebarOpen
-                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  ? 'bg-indigo-600/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30'
+                  : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]'
               )}
               title="Page Thumbnails"
             >
@@ -1595,7 +1595,7 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
       </div>
 
       {/* ================= MAIN WORKSPACE & SIDE PANEL ================= */}
-      <div className="flex-1 relative flex overflow-hidden bg-slate-950">
+      <div className="flex-1 relative flex overflow-hidden bg-slate-200/70 dark:bg-slate-950">
         {/* Document Canvas Container */}
         <div
           ref={containerRef}
@@ -1672,15 +1672,15 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 280, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="w-72 bg-slate-900 border-l border-slate-800 p-4 flex flex-col gap-3 overflow-y-auto z-30 shrink-0"
+              className="w-72 bg-[hsl(var(--card))] border-l border-[hsl(var(--border))] p-4 flex flex-col gap-3 overflow-y-auto z-30 shrink-0"
             >
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <div className="flex items-center justify-between pb-2 border-b border-[hsl(var(--border))]">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
                   Pages ({numPages})
                 </span>
                 <button
                   onClick={() => setIsSidebarOpen(false)}
-                  className="p-1 rounded text-slate-400 hover:text-white"
+                  className="p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1704,19 +1704,19 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
                         currentPage === p ||
                           (effectiveViewMode === 'double' && currentPage + 1 === p)
                           ? 'border-indigo-500 bg-indigo-500/15 shadow-sm ring-1 ring-indigo-500/30'
-                          : 'border-slate-800 bg-slate-800/40 hover:border-slate-700'
+                          : 'border-[hsl(var(--border))] bg-[hsl(var(--muted))]/40 hover:border-[hsl(var(--ring))]'
                       )}
                     >
-                      <div className="w-full h-24 bg-slate-800 rounded-lg flex items-center justify-center text-slate-500 text-xs font-medium mb-1.5 relative overflow-hidden">
+                      <div className="w-full h-24 bg-[hsl(var(--muted))] rounded-lg flex items-center justify-center text-[hsl(var(--muted-foreground))] text-xs font-medium mb-1.5 relative overflow-hidden">
                         Page {p}
                         {hasAnnotations && (
-                          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-slate-900" />
+                          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[hsl(var(--card))]" />
                         )}
                       </div>
-                      <span className="text-xs font-medium text-slate-300">
+                      <span className="text-xs font-medium text-[hsl(var(--foreground))]">
                         p. {p}
                         {hasAnnotations && (
-                          <span className="text-[10px] text-emerald-400 ml-1">
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 ml-1">
                             ({pageAnnotations[p].length})
                           </span>
                         )}

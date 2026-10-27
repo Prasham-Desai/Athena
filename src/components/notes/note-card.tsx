@@ -84,7 +84,7 @@ export function NoteCard({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <h3 className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-indigo-400 transition-colors truncate">
+              <h3 className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
                 {note.title}
               </h3>
 
@@ -111,14 +111,14 @@ export function NoteCard({
 
             <div className="flex items-center gap-2 flex-wrap text-[10px] text-[hsl(var(--muted-foreground))]">
               {chapter && (
-                <span className="inline-flex items-center gap-1 font-semibold text-indigo-400">
+                <span className="inline-flex items-center gap-1 font-semibold text-indigo-600 dark:text-indigo-400">
                   <BookOpen className="w-2.5 h-2.5" />
                   <span className="truncate max-w-[160px]">{chapter.name}</span>
                 </span>
               )}
               {chapter && topic && <span>•</span>}
               {topic && (
-                <span className="inline-flex items-center gap-1 font-semibold text-violet-400">
+                <span className="inline-flex items-center gap-1 font-semibold text-violet-600 dark:text-violet-400">
                   <Tag className="w-2.5 h-2.5" />
                   <span className="truncate max-w-[140px]">{topic.name}</span>
                 </span>
@@ -141,7 +141,7 @@ export function NoteCard({
           <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => onOpen(note)}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-semibold border border-indigo-500/20 transition"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-semibold border border-indigo-500/20 transition"
               title="Open Document & Annotations"
             >
               <span>Open</span>
@@ -222,7 +222,7 @@ export function NoteCard({
         </div>
 
         {/* Title & Subtitle */}
-        <h3 className="text-base font-bold text-[hsl(var(--foreground))] group-hover:text-indigo-400 transition-colors line-clamp-1 mb-1">
+        <h3 className="text-base font-bold text-[hsl(var(--foreground))] group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-1 mb-1">
           {note.title}
         </h3>
         {note.subtitle && (
@@ -234,7 +234,7 @@ export function NoteCard({
         {/* Linked Chapter & Topic Badges */}
         <div className="flex flex-wrap items-center gap-1.5 mb-3">
           {chapter ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 max-w-[200px] truncate">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 max-w-[200px] truncate">
               <BookOpen className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">{chapter.name}</span>
             </span>
@@ -246,7 +246,7 @@ export function NoteCard({
           )}
 
           {topic && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-violet-500/10 text-violet-400 border border-violet-500/20 max-w-[160px] truncate">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-semibold bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 max-w-[160px] truncate">
               <Tag className="w-2.5 h-2.5 shrink-0" />
               <span className="truncate">{topic.name}</span>
             </span>
@@ -264,7 +264,7 @@ export function NoteCard({
         <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => onOpen(note)}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-[11px] font-semibold border border-indigo-500/20 transition"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-[11px] font-semibold border border-indigo-500/20 transition"
             title="Open Document & Annotations"
           >
             <span>Read</span>
