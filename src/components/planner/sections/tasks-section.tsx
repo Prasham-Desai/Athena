@@ -38,11 +38,11 @@ const CATEGORY_OPTIONS: { value: TaskCategory | 'all'; label: string }[] = [
 ];
 
 const CATEGORY_COLORS: Record<TaskCategory, string> = {
-  study: 'bg-blue-500/10 text-blue-400',
-  assignment: 'bg-purple-500/10 text-purple-400',
-  revision: 'bg-amber-500/10 text-amber-400',
-  'exam-prep': 'bg-rose-500/10 text-rose-400',
-  other: 'bg-gray-500/10 text-gray-400',
+  study: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+  assignment: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
+  revision: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+  'exam-prep': 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+  other: 'bg-gray-500/10 text-gray-600 dark:text-gray-400',
 };
 
 interface TasksSectionProps {

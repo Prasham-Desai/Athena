@@ -128,22 +128,22 @@ export const SUBJECT_ICONS = [
 ];
 
 export const PRIORITY_CONFIG = {
-  low: { label: 'Low', color: '#22c55e', bg: 'bg-emerald-500/10', text: 'text-emerald-500' },
-  medium: { label: 'Medium', color: '#eab308', bg: 'bg-yellow-500/10', text: 'text-yellow-500' },
-  high: { label: 'High', color: '#f97316', bg: 'bg-orange-500/10', text: 'text-orange-500' },
-  urgent: { label: 'Urgent', color: '#ef4444', bg: 'bg-red-500/10', text: 'text-red-500' },
+  low: { label: 'Low', color: '#22c55e', bg: 'bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
+  medium: { label: 'Medium', color: '#eab308', bg: 'bg-amber-500/10', text: 'text-amber-600 dark:text-amber-400' },
+  high: { label: 'High', color: '#f97316', bg: 'bg-orange-500/10', text: 'text-orange-600 dark:text-orange-400' },
+  urgent: { label: 'Urgent', color: '#ef4444', bg: 'bg-red-500/10', text: 'text-red-600 dark:text-red-400' },
 };
 
 export const STATUS_CONFIG = {
-  'not-started': { label: 'Not Started', color: '#6b7280', bg: 'bg-gray-500/10', text: 'text-gray-500' },
-  'in-progress': { label: 'In Progress', color: '#3b82f6', bg: 'bg-blue-500/10', text: 'text-blue-500' },
-  'completed': { label: 'Completed', color: '#22c55e', bg: 'bg-emerald-500/10', text: 'text-emerald-500' },
-  'revised': { label: 'Revised', color: '#8b5cf6', bg: 'bg-violet-500/10', text: 'text-violet-500' },
+  'not-started': { label: 'Not Started', color: '#6b7280', bg: 'bg-gray-500/10', text: 'text-gray-600 dark:text-gray-400' },
+  'in-progress': { label: 'In Progress', color: '#3b82f6', bg: 'bg-blue-500/10', text: 'text-blue-600 dark:text-blue-400' },
+  'completed': { label: 'Completed', color: '#22c55e', bg: 'bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400' },
+  'revised': { label: 'Revised', color: '#8b5cf6', bg: 'bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400' },
 };
 
 export const IMPORTANCE_TAG_CONFIG: Record<string, { label: string; description: string; bg: string; text: string; border: string }> = {
-  'low':         { label: 'Low',         description: 'Low weightage', bg: 'bg-emerald-500/10',    text: 'text-emerald-400',    border: 'border-emerald-500/30' },
-  'med':         { label: 'Medium',      description: 'Medium weightage', bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30' },
-  'high':        { label: 'High',        description: 'High weightage', bg: 'bg-orange-500/10',   text: 'text-orange-400',   border: 'border-orange-500/30' },
-  'very-high':   { label: 'Very High',   description: 'Must know topics', bg: 'bg-red-500/10',   text: 'text-red-400',   border: 'border-red-500/30' },
+  'low':         { label: 'Low',         description: 'Low weightage', bg: 'bg-emerald-500/10',    text: 'text-emerald-600 dark:text-emerald-400',    border: 'border-emerald-500/30' },
+  'med':         { label: 'Medium',      description: 'Medium weightage', bg: 'bg-blue-500/10', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-500/30' },
+  'high':        { label: 'High',        description: 'High weightage', bg: 'bg-orange-500/10',   text: 'text-orange-600 dark:text-orange-400',   border: 'border-orange-500/30' },
+  'very-high':   { label: 'Very High',   description: 'Must know topics', bg: 'bg-red-500/10',   text: 'text-red-600 dark:text-red-400',   border: 'border-red-500/30' },
 };

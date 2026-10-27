@@ -182,8 +182,8 @@ export default function SettingsPage() {
                 }}
                 className={cn(
                   'flex items-center gap-2.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all',
-                  theme === value
-                    ? 'border-indigo-500 bg-indigo-500/10 text-indigo-500'
+                  (theme === value || (!theme && settings.theme === value))
+                    ? 'border-indigo-500 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold'
                     : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))] text-[hsl(var(--muted-foreground))]',
                 )}
               >
@@ -209,7 +209,7 @@ export default function SettingsPage() {
                 className={cn(
                   'flex flex-col items-center gap-1.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all min-w-[80px] sm:min-w-[90px]',
                   settings.fontSize === value
-                    ? 'border-indigo-500 bg-indigo-500/10 text-indigo-500'
+                    ? 'border-indigo-500 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold'
                     : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))] text-[hsl(var(--muted-foreground))]',
                 )}
               >
