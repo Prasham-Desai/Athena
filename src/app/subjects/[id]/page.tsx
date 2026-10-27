@@ -46,7 +46,7 @@ import { useAudioStore } from '@/store/audio-store';
 import { useHydration } from '@/hooks/use-hydration';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import { PageLoader } from '@/components/ui/loading';
-import { AudioRecorder } from '@/components/shared/audio-recorder';
+import { AudioRecorder, AudioNotesList } from '@/components/shared/audio-recorder';
 import { AudioAutoplayBar } from '@/components/shared/audio-autoplay-bar';
 import { ConfirmModal } from '@/components/shared/confirm-modal';
 import { cn, STATUS_CONFIG, getToday } from '@/lib/utils';
@@ -352,6 +352,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
   const subjects = useSubjectsStore((s) => s.subjects);
   const audioNotes = useAudioStore((s) => s.audioNotes[topic.id]) || [];
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showAudioList, setShowAudioList] = useState(false);
 
   const hasAudio = audioNotes.length > 0;
 
@@ -470,7 +471,15 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                 inputClassName="w-full"
               />
               <div className="flex shrink-0 flex-wrap items-center gap-2">
-                <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined} />
+                <AudioRecorder
+                  topicId={topic.id}
+                  topicName={topic.name}
+                  compact={true}
+                  hideList={true}
+                  showList={showAudioList}
+                  onToggleList={(next) => setShowAudioList(typeof next === 'boolean' ? next : !showAudioList)}
+                  onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
+                />
                 {/* Importance */}
                 <ImportanceSelect
                   importance={topic.importance}
@@ -484,6 +493,18 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                 )}
               </div>
           </div>
+
+          {/* Audio Notes Tray (expanded full-width underneath topic header) */}
+          <AnimatePresence>
+            {showAudioList && hasAudio && (
+              <AudioNotesList
+                topicId={topic.id}
+                topicName={topic.name}
+                onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
+                onClose={() => setShowAudioList(false)}
+              />
+            )}
+          </AnimatePresence>
           
           {/* Subtopics (Checkpoints) */}
           {topic.subtopics && topic.subtopics.length > 0 && (
@@ -572,14 +593,22 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
             </button>
           )}
 
-          {/* Audio Indicator */}
+          {/* Audio Indicator / Toggle */}
           {hasAudio && (
-            <div
-              className="p-1.5 rounded-lg text-indigo-500 bg-indigo-500/10 shrink-0 flex items-center justify-center"
-              title="This topic has audio notes"
+            <button
+              type="button"
+              onClick={() => setShowAudioList(!showAudioList)}
+              className={cn(
+                "p-1.5 rounded-lg transition-colors shrink-0 flex items-center justify-center cursor-pointer",
+                showAudioList
+                  ? "text-indigo-600 bg-indigo-500/20 ring-1 ring-indigo-500/30"
+                  : "text-indigo-500 bg-indigo-500/10 hover:bg-indigo-500/20"
+              )}
+              title={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
+              aria-label={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
             >
               <Headphones className="w-3.5 h-3.5" />
-            </div>
+            </button>
           )}
 
           {/* Delete */}
