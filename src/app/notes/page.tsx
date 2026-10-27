@@ -283,12 +283,7 @@ export default function NotesPage() {
     }
   };
 
-  if (!isHydrated) {
-    return <PageLoader label="Loading notes workspace" variant="cards" />;
-  }
-
-  const isOverview = !selectedSubjectId;
-
+  // Filter subjects by search query (must be before early return to satisfy Rules of Hooks)
   const filteredSubjects = useMemo(() => {
     if (!searchQuery.trim() || selectedSubjectId) return subjects;
     const q = searchQuery.toLowerCase();
@@ -297,6 +292,12 @@ export default function NotesPage() {
       return s.chapters?.some((c) => c.name.toLowerCase().includes(q));
     });
   }, [subjects, searchQuery, selectedSubjectId]);
+
+  if (!isHydrated) {
+    return <PageLoader label="Loading notes workspace" variant="cards" />;
+  }
+
+  const isOverview = !selectedSubjectId;
 
   return (
     <div className="relative pb-24 space-y-6">

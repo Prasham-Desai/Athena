@@ -213,9 +213,9 @@ export function AudioRecorder({ topicId, topicName, compact = true, onPlayGlobal
   const progressPercent = (elapsed / MAX_DURATION) * 100;
 
   return (
-    <div className={`flex flex-col gap-2 ${compact ? 'mt-1' : 'mt-2'} w-full`}>
+    <div className={`flex flex-col gap-2 ${compact ? 'mt-0 w-fit max-w-full' : 'mt-2 w-full'}`}>
       {/* ── Action Bar ──────────────────────────────────────── */}
-      <div className="flex items-center gap-2 flex-wrap w-full">
+      <div className={`flex items-center gap-2 flex-wrap ${compact ? 'w-fit max-w-full' : 'w-full'}`}>
         <AnimatePresence mode="wait">
           {isLoading && (
             <motion.div

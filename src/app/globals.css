@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  color-scheme: light;
   --background: 0 0% 100%;
   --foreground: 224 71% 4%;
   --card: 0 0% 100%;
@@ -37,6 +38,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: 224 71% 4%;
   --foreground: 213 31% 91%;
   --card: 222 47% 8%;
@@ -68,6 +70,15 @@ body {
   color: hsl(var(--foreground));
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Native select menus use browser/OS colors unless their color scheme and
+   option colors are set explicitly. Keep every select popup on the app theme. */
+select,
+option,
+optgroup {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--popover));
 }
 
 /* Shared keyboard focus treatment for controls that do not define their own. */

@@ -457,27 +457,27 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 w-full">
               <InlineEdit
                 value={topic.name}
                 onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-                className={cn('text-sm font-medium w-full')}
+                className={cn('text-sm font-medium min-w-0 flex-1')}
                 inputClassName="w-full"
               />
-              <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined} />
-              <div className="flex items-center gap-2 flex-wrap">
-              {/* Importance */}
-              <ImportanceSelect
-                importance={topic.importance}
-                onChange={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
-              />
-              {/* Revision count */}
-              {topic.revisionCount > 0 && (
-                <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
-                  ×{topic.revisionCount}
-                </span>
-              )}
-            </div>
+              <div className="flex shrink-0 flex-wrap items-center gap-2">
+                <AudioRecorder topicId={topic.id} topicName={topic.name} compact={true} onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined} />
+                {/* Importance */}
+                <ImportanceSelect
+                  importance={topic.importance}
+                  onChange={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
+                />
+                {/* Revision count */}
+                {topic.revisionCount > 0 && (
+                  <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
+                    ×{topic.revisionCount}
+                  </span>
+                )}
+              </div>
           </div>
           
           {/* Subtopics (Checkpoints) */}
