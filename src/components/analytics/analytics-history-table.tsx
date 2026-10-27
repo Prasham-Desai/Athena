@@ -248,14 +248,14 @@ export function AnalyticsHistoryTable({
                   >
                     <td className="py-3 font-medium text-[hsl(var(--foreground))]">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-zinc-500 font-mono w-7 uppercase">
+                        <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-mono w-7 uppercase">
                           {weekday}
                         </span>
                         <span>{dayFormatted}</span>
                       </div>
                     </td>
 
-                    <td className="py-3 font-semibold text-emerald-400">
+                    <td className="py-3 font-semibold text-emerald-600 dark:text-emerald-400">
                       {log.studyMinutes > 0 ? formattedDuration : '0m'}
                     </td>
 
@@ -269,27 +269,27 @@ export function AnalyticsHistoryTable({
                           {distinctSubjectNames.slice(0, 2).map((name) => (
                             <span
                               key={name}
-                              className="rounded-md bg-zinc-800/80 px-2 py-0.5 text-[10px] text-zinc-300 font-medium"
+                              className="rounded-md bg-[hsl(var(--muted))] border border-[hsl(var(--border))]/60 px-2 py-0.5 text-[10px] text-[hsl(var(--foreground))] font-medium"
                             >
                               {name}
                             </span>
                           ))}
                           {distinctSubjectNames.length > 2 && (
-                            <span className="text-[10px] text-zinc-500 font-medium">
+                            <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-medium">
                               +{distinctSubjectNames.length - 2} more
                             </span>
                           )}
                         </div>
                       ) : (
-                        <span className="text-zinc-500 text-[11px]">—</span>
+                        <span className="text-[hsl(var(--muted-foreground))] text-[11px]">—</span>
                       )}
                     </td>
 
-                    <td className="py-3 text-right font-medium text-cyan-400">
+                    <td className="py-3 text-right font-medium text-cyan-600 dark:text-cyan-400">
                       {log.topicsCompleted || '—'}
                     </td>
 
-                    <td className="py-3 text-right font-medium text-purple-400">
+                    <td className="py-3 text-right font-medium text-purple-600 dark:text-purple-400">
                       {log.revisionsCompleted || '—'}
                     </td>
 
@@ -299,7 +299,7 @@ export function AnalyticsHistoryTable({
                           e.stopPropagation();
                           onSelectDate(log.date);
                         }}
-                        className="p-1 rounded-lg hover:bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-emerald-400 transition-colors"
+                        className="p-1 rounded-lg hover:bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                         title="View day details"
                         aria-label={`View details for ${log.date}`}
                       >

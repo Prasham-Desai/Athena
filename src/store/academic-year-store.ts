@@ -68,7 +68,14 @@ export const useAcademicYearStore = create<AcademicYearState>((set, get) => ({
       if (!response.ok) throw new Error('Failed to load academic years');
       
       const payload: any = await response.json();
-      const list: AcademicYear[] = payload.data || [];
+      const apiYears: AcademicYear[] = payload.data || [];
+      // Keep locally known years available while older databases catch up with
+      // their migrations, while still accepting any additional server years.
+      const yearsById = new Map(INITIAL_YEARS.map((year) => [year.id, year]));
+      for (const year of apiYears) {
+        yearsById.set(year.id, { ...yearsById.get(year.id), ...year });
+      }
+      const list = [...yearsById.values()].sort((left, right) => left.order_index - right.order_index);
       
       if (list.length > 0) {
         // Resolve Third Year dynamically (used as final fallback only)

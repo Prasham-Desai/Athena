@@ -145,7 +145,7 @@ export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionSta
           <div className="mb-5">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-medium">Overall Coverage</span>
-              <span className="text-xs font-bold text-indigo-400">{overallPercent}%</span>
+              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{overallPercent}%</span>
             </div>
             <div className="h-2 rounded-full bg-[hsl(var(--muted))] overflow-hidden">
               <motion.div

@@ -152,7 +152,7 @@ export default function ExamsPage() {
                   {!isPast && exam.date && (
                     <>
                       <span>•</span>
-                      <span className="text-indigo-500 font-medium">{getRelativeDate(exam.date)}</span>
+                      <span className="text-indigo-600 dark:text-indigo-400 font-medium">{getRelativeDate(exam.date)}</span>
                     </>
                   )}
                 </div>
@@ -369,7 +369,7 @@ export default function ExamsPage() {
                               )}>
                                 {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
-                              <span className="text-sm font-semibold truncate" style={{ color: isSelected ? 'inherit' : 'var(--muted-foreground)' }}>
+                              <span className={cn("text-sm font-semibold truncate", isSelected ? "text-[hsl(var(--foreground))]" : "text-[hsl(var(--muted-foreground))]")}>
                                 {getSubjectDisplayName(subject)}
                               </span>
                             </div>

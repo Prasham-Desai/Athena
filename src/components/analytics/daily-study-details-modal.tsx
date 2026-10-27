@@ -229,17 +229,17 @@ export function DailyStudyDetailsModal({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/40 p-3">
               <div className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-emerald-400" />
+                <Clock className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                 Study Time
               </div>
-              <div className="text-base sm:text-lg font-bold text-emerald-400 mt-1">
+              <div className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                 {totalMinutes > 0 ? formattedDuration : '0m'}
               </div>
             </div>
 
             <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/40 p-3">
               <div className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
-                <Target className="h-3.5 w-3.5 text-indigo-400" />
+                <Target className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
                 Goal Progress
               </div>
               <div className="text-base sm:text-lg font-bold text-[hsl(var(--foreground))] mt-1">
@@ -252,7 +252,7 @@ export function DailyStudyDetailsModal({
 
             <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/40 p-3">
               <div className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
-                <BookOpen className="h-3.5 w-3.5 text-cyan-400" />
+                <BookOpen className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
                 Topics Completed
               </div>
               <div className="text-base sm:text-lg font-bold text-[hsl(var(--foreground))] mt-1">
@@ -262,7 +262,7 @@ export function DailyStudyDetailsModal({
 
             <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/40 p-3">
               <div className="text-[11px] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
-                <RotateCcw className="h-3.5 w-3.5 text-purple-400" />
+                <RotateCcw className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                 Revisions Done
               </div>
               <div className="text-base sm:text-lg font-bold text-[hsl(var(--foreground))] mt-1">
@@ -276,7 +276,7 @@ export function DailyStudyDetailsModal({
             <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3">
               <div className="flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))] mb-1.5">
                 <span className="flex items-center gap-1.5">
-                  <Target className="h-3.5 w-3.5 text-emerald-400" />
+                  <Target className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                   Daily Study Goal Status
                 </span>
                 <span className="font-semibold text-[hsl(var(--foreground))]">
@@ -299,7 +299,7 @@ export function DailyStudyDetailsModal({
           <div>
             <div className="flex items-center justify-between mb-2.5">
               <h3 className="text-xs sm:text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
-                <Timer className="h-4 w-4 text-emerald-400" />
+                <Timer className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 Study Sessions Recorded ({sessions.length})
               </h3>
             </div>
@@ -333,7 +333,7 @@ export function DailyStudyDetailsModal({
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-start gap-2.5">
-                          <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 mt-0.5">
+                          <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mt-0.5">
                             <Clock className="h-3.5 w-3.5" />
                           </div>
                           <div>
@@ -359,7 +359,7 @@ export function DailyStudyDetailsModal({
                         </div>
 
                         <div className="text-right">
-                          <span className="font-semibold text-xs text-emerald-400">
+                          <span className="font-semibold text-xs text-emerald-600 dark:text-emerald-400">
                             {sess.durationMinutes} min
                           </span>
                           <div className="text-[10px] text-[hsl(var(--muted-foreground))] uppercase tracking-wider mt-0.5">
@@ -378,7 +378,7 @@ export function DailyStudyDetailsModal({
           {completedActivities.length > 0 && (
             <div>
               <h3 className="text-xs sm:text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5 mb-2.5">
-                <CheckCircle2 className="h-4 w-4 text-cyan-400" />
+                <CheckCircle2 className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
                 Topics Completed First Time ({completedActivities.length})
               </h3>
               <div className="space-y-1.5">
@@ -387,7 +387,7 @@ export function DailyStudyDetailsModal({
                     key={act.id || `comp-${idx}`}
                     className="flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 px-3 py-2 text-xs"
                   >
-                    <BookOpen className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                    <BookOpen className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
                     <span className="text-[hsl(var(--foreground))] truncate">{act.description}</span>
                   </div>
                 ))}
@@ -399,7 +399,7 @@ export function DailyStudyDetailsModal({
           {revisedActivities.length > 0 && (
             <div>
               <h3 className="text-xs sm:text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5 mb-2.5">
-                <RotateCcw className="h-4 w-4 text-purple-400" />
+                <RotateCcw className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                 Revision Events ({revisedActivities.length})
               </h3>
               <div className="space-y-1.5">
@@ -408,7 +408,7 @@ export function DailyStudyDetailsModal({
                     key={act.id || `rev-${idx}`}
                     className="flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 px-3 py-2 text-xs"
                   >
-                    <RotateCcw className="h-3.5 w-3.5 text-purple-400 shrink-0" />
+                    <RotateCcw className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                     <span className="text-[hsl(var(--foreground))] truncate">{act.description}</span>
                   </div>
                 ))}
@@ -422,7 +422,7 @@ export function DailyStudyDetailsModal({
           <Link
             href={plannerDateHref(dateStr)}
             onClick={onClose}
-            className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors"
           >
             <span>Open in Daily Planner</span>
             <ArrowRight className="h-3.5 w-3.5" />
