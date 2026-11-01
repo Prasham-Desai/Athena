@@ -172,7 +172,7 @@ export default function SettingsPage() {
       <div className="space-y-6">
         {/* ---- Appearance ---- */}
         <SettingsSection title="Appearance" description="Customize how the app looks" delay={0.05} isLoading={settingsLoading}>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {themeOptions.map(({ value, label, icon: Icon }) => (
               <button
                 key={value}
@@ -181,14 +181,14 @@ export default function SettingsPage() {
                   setTheme(value);
                 }}
                 className={cn(
-                  'flex items-center gap-2.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all',
+                  'flex items-center justify-center gap-2 rounded-xl border-2 px-3 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-medium transition-all',
                   (theme === value || (!theme && settings.theme === value))
                     ? 'border-indigo-500 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold'
                     : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))] text-[hsl(var(--muted-foreground))]',
                 )}
               >
-                <Icon className="h-4 w-4" />
-                {label}
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>{label}</span>
               </button>
             ))}
           </div>
@@ -196,7 +196,7 @@ export default function SettingsPage() {
 
         {/* ---- Font Size ---- */}
         <SettingsSection title="Font Size" description="Adjust text size across the app" delay={0.07} isLoading={settingsLoading}>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             {([
               { value: 'small' as const, label: 'Small', preview: 'Aa' },
               { value: 'medium' as const, label: 'Medium', preview: 'Aa' },
@@ -207,14 +207,14 @@ export default function SettingsPage() {
                 key={value}
                 onClick={() => updateSettings({ fontSize: value })}
                 className={cn(
-                  'flex flex-col items-center gap-1.5 rounded-xl border-2 px-5 py-3 text-sm font-medium transition-all min-w-[80px] sm:min-w-[90px]',
+                  'flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 px-3 py-2.5 sm:px-5 sm:py-3 text-sm font-medium transition-all',
                   settings.fontSize === value
                     ? 'border-indigo-500 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold'
                     : 'border-[hsl(var(--border))] hover:border-[hsl(var(--ring))] text-[hsl(var(--muted-foreground))]',
                 )}
               >
                 <span style={{ fontSize: value === 'small' ? 14 : value === 'medium' ? 16 : value === 'large' ? 20 : 24 }} className="font-bold leading-none">{preview}</span>
-                <span className="text-[10px]">{label}</span>
+                <span className="text-[10px] truncate max-w-full">{label}</span>
               </button>
             ))}
           </div>

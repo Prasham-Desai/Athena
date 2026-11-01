@@ -238,23 +238,23 @@ export default function DashboardPage() {
   if (!hydrated) return <PageLoader label="Loading your dashboard" />;
 
   return (
-    <div className="w-full space-y-6 pb-10 sm:space-y-8">
+    <div className="w-full space-y-5 pb-10 sm:space-y-6 lg:space-y-8">
       <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0 max-w-2xl">
-          <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-600 dark:text-indigo-400"><CalendarDays className="h-3.5 w-3.5 shrink-0" />{dateLabel(today)}</p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{greeting()}</h1>
-          <p className="mt-1.5 text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let’s make the first one count.` : 'A clear plan makes it easier to begin. Choose a subject and start a focus session.'}</p>
+          <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-600 dark:text-indigo-400"><CalendarDays className="h-3.5 w-3.5 shrink-0" /><span className="truncate">{dateLabel(today)}</span></p>
+          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl lg:text-3xl">{greeting()}</h1>
+          <p className="mt-1.5 text-xs sm:text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let's make the first one count.` : 'A clear plan makes it easier to begin. Choose a subject and start a focus session.'}</p>
         </div>
         <div className="flex w-full flex-col gap-3 xl:w-auto xl:items-end">
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full xl:w-auto">
-            <div className="min-w-[130px] flex-1 sm:w-44 xl:w-48 sm:flex-none">
+          <div className="grid grid-cols-1 gap-2.5 w-full sm:grid-cols-[1fr_1fr_auto] sm:gap-3 xl:w-auto">
+            <div className="min-w-0">
               <label htmlFor="start-subject" className="sr-only">Choose a subject</label>
               <select id="start-subject" value={selectedSubject?.id || ''} onChange={(event) => { setSelectedSubjectId(event.target.value); setSelectedTopicId(''); }} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs ${focusRing}`}>
                 <option value="">Choose subject</option>
                 {subjects.map((subject) => <option key={subject.id} value={subject.id}>{getSubjectDisplayName(subject)}</option>)}
               </select>
             </div>
-            <div className="min-w-[130px] flex-1 sm:w-44 xl:w-48 sm:flex-none">
+            <div className="min-w-0">
               <label htmlFor="start-topic" className="sr-only">Choose a topic</label>
               <select id="start-topic" value={selectedTopic?.id || ''} onChange={(event) => setSelectedTopicId(event.target.value)} disabled={!selectableTopics.length} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs disabled:opacity-50 ${focusRing}`}>
                 <option value="">{selectableTopics.length ? 'Choose topic' : 'No topics'}</option>
@@ -265,14 +265,14 @@ export default function DashboardPage() {
               <Play className="h-4 w-4 shrink-0" />{isMainRunning ? 'Session running' : activeTarget && mainSeconds > 0 ? 'Resume session' : 'Start studying'}
             </button>
           </div>
-          <Link href="/planner" className={`${focusRing} text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]`}>{isMainRunning ? `Manage ${activeTarget?.title || 'current session'} · ${formatDurationHuman(Math.floor(mainSeconds / 60))}` : 'Open study planner'} <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+          <Link href="/planner" className={`${focusRing} text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] truncate max-w-full`}>{isMainRunning ? `Manage ${activeTarget?.title || 'current session'} · ${formatDurationHuman(Math.floor(mainSeconds / 60))}` : 'Open study planner'} <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
         </div>
       </section>
 
       {nextExam && <Link href="/exams" className={`${surface} ${focusRing} flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition hover:border-indigo-400/50`}><span className="flex items-center gap-2 text-sm font-medium"><GraduationCap className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />Next exam: {nextExam.title}</span><span className="text-xs text-[hsl(var(--muted-foreground))]">{getRelativeDate(nextExam.date)} <ArrowRight className="ml-1 inline h-3 w-3" /></span></Link>}
 
       <section className={`${surface} overflow-hidden border-indigo-500/25`} aria-labelledby="focus-heading">
-        <div className="grid gap-0 lg:grid-cols-[minmax(0,1.55fr)_minmax(260px,0.75fr)]">
+        <div className="grid gap-0 lg:grid-cols-[minmax(0,1.55fr)_minmax(240px,0.75fr)]">
           <div className="p-4 sm:p-6">
             <SectionHeading title="Today's Focus" subtitle="Your planned work, ready when you are." action={<button type="button" onClick={() => setShowAddTask(true)} className={`${focusRing} inline-flex items-center gap-1.5 rounded-lg border border-[hsl(var(--border))] px-3 py-2 text-xs font-medium hover:bg-[hsl(var(--muted))]`}><ListTodo className="h-3.5 w-3.5" />Add task</button>} />
             <h2 id="focus-heading" className="sr-only">Today&apos;s Focus</h2>
@@ -281,8 +281,8 @@ export default function DashboardPage() {
                 const subject = subjectForTask(task);
                 const isActive = activeTarget?.taskId === task.id || (activeTarget?.type === 'task' && activeTarget.id === task.id);
                 const priority = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG];
-                return <div key={task.id} className={`flex items-center gap-3 rounded-xl border px-3 py-3 ${isActive ? 'border-indigo-500/35 bg-indigo-500/5' : 'border-[hsl(var(--border))] bg-[hsl(var(--background))]'}`}>
-                  <button type="button" onClick={() => void toggleComplete(task)} aria-label={task.completed ? `Reopen ${task.title}` : `Complete ${task.title}`} className={`${focusRing} flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${task.completed ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[hsl(var(--border))] text-transparent hover:border-emerald-500 hover:text-emerald-500'}`}><Check className="h-3.5 w-3.5" /></button>
+                return <div key={task.id} className={`flex items-center gap-2 sm:gap-3 rounded-xl border px-2.5 py-2.5 sm:px-3 sm:py-3 ${isActive ? 'border-indigo-500/35 bg-indigo-500/5' : 'border-[hsl(var(--border))] bg-[hsl(var(--background))]'}`}>
+                  <button type="button" onClick={() => void toggleComplete(task)} aria-label={task.completed ? `Reopen ${task.title}` : `Complete ${task.title}`} className={`${focusRing} touch-target-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${task.completed ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-[hsl(var(--border))] text-transparent hover:border-emerald-500 hover:text-emerald-500'}`}><Check className="h-3.5 w-3.5" /></button>
                   <div className="min-w-0 flex-1">
                     <p className={`truncate text-sm font-medium ${task.completed ? 'text-[hsl(var(--muted-foreground))] line-through' : ''}`}>{task.title}</p>
                     <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[hsl(var(--muted-foreground))]">
@@ -292,9 +292,9 @@ export default function DashboardPage() {
                       <span>{task.completed ? 'Completed' : isActive ? 'In progress' : 'Up next'}</span>
                     </p>
                   </div>
-                  {!task.completed && <span className="hidden rounded-md px-2 py-1 text-[10px] font-semibold uppercase sm:inline" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span>}
-                  {!task.completed && <button type="button" onClick={() => startTaskSession(task)} className={`${focusRing} rounded-lg bg-indigo-500/10 px-2.5 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500/20`}>{isActive ? 'Active' : activeTarget?.taskId === task.id && !isMainRunning ? 'Resume' : 'Start'}</button>}
-                  {!task.completed && <button type="button" onClick={() => setEditingTask(task)} className={`${focusRing} rounded-lg p-2 text-xs text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]`} aria-label={`Open ${task.title}`}>Open</button>}
+                  {!task.completed && <span className="hidden rounded-md px-2 py-1 text-[10px] font-semibold uppercase md:inline" style={{ color: priority?.color, backgroundColor: `${priority?.color || '#94a3b8'}18` }}>{priority?.label || task.priority}</span>}
+                  {!task.completed && <button type="button" onClick={() => startTaskSession(task)} className={`${focusRing} touch-target-auto rounded-lg bg-indigo-500/10 px-2.5 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500/20 shrink-0`}>{isActive ? 'Active' : activeTarget?.taskId === task.id && !isMainRunning ? 'Resume' : 'Start'}</button>}
+                  {!task.completed && <button type="button" onClick={() => setEditingTask(task)} className={`${focusRing} touch-target-auto hidden sm:inline-flex rounded-lg p-2 text-xs text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]`} aria-label={`Open ${task.title}`}>Open</button>}
                 </div>;
               })}
             </div> : <div className="rounded-xl border border-dashed border-[hsl(var(--border))] px-4 py-6 text-center">
@@ -326,16 +326,16 @@ export default function DashboardPage() {
 
       <section>
         <SectionHeading title="Subject progress" subtitle={`${completedTopics} of ${totalTopics} topics complete · revision work is tracked separately`} action={<label className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]"><ArrowDownWideNarrow className="h-3.5 w-3.5" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={subjectSort} onChange={(event) => setSubjectSort(event.target.value as SubjectSort)} className={`rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-2.5 py-2 text-xs text-[hsl(var(--foreground))] ${focusRing}`}><option value="attention">Needs attention</option><option value="completion">Most complete</option><option value="remaining">Most topics left</option><option value="revisions">Revisions due</option><option value="activity">Recently studied</option></select></label>} />
-        {subjectsLoading ? <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-32 rounded-xl" />)}</div> : subjectProgress.length ? <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {subjectsLoading ? <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <Skeleton key={index} className="h-32 rounded-xl" />)}</div> : subjectProgress.length ? <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {subjectProgress.map(({ subject, total, done, remaining, dueRevisions, percent }) => <Link key={subject.id} href={subjectDetailHref(subject.id)} className={`${surface} ${focusRing} group block p-4 transition hover:border-indigo-400/40`}>
-            <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2.5"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="break-words text-sm font-semibold leading-snug [overflow-wrap:anywhere]">{getSubjectDisplayName(subject)}</p><p className="text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-sm font-semibold tabular-nums" style={{ color: subject.color }}>{percent}%</span></div>
+            <div className="flex items-start justify-between gap-2 sm:gap-3"><div className="flex min-w-0 items-center gap-2"><span className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${subject.color}20` }}><IconForSubject name={subject.icon} color={subject.color} /></span><div className="min-w-0"><p className="break-words text-xs sm:text-sm font-semibold leading-snug [overflow-wrap:anywhere]">{getSubjectDisplayName(subject)}</p><p className="text-[10px] sm:text-[11px] text-[hsl(var(--muted-foreground))]">{done}/{total} topics</p></div></div><span className="text-xs sm:text-sm font-semibold tabular-nums shrink-0" style={{ color: subject.color }}>{percent}%</span></div>
             <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[hsl(var(--muted))]"><div className="h-full rounded-full transition-[width]" style={{ width: `${percent}%`, backgroundColor: subject.color }} /></div>
             <div className="mt-2.5 flex items-center justify-between gap-2 text-[11px] text-[hsl(var(--muted-foreground))]"><span>{remaining} remaining</span><span className={dueRevisions ? 'text-purple-600 dark:text-purple-300' : ''}>{dueRevisions ? `${dueRevisions} revision${dueRevisions === 1 ? '' : 's'} due` : 'No revisions due'}</span></div>
           </Link>)}
         </div> : <div className={`${surface} p-6 text-center`}><p className="text-sm font-medium">No subjects yet</p><Link href="/subjects" className={`${focusRing} mt-2 inline-flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400`}>Add subjects <ArrowRight className="h-3 w-3" /></Link></div>}
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
+      <section className="grid gap-3 sm:gap-4 grid-cols-1 lg:grid-cols-2">
         <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
           <SectionHeading title="Needs Attention" subtitle="Overdue tasks and scheduled revisions, ordered by urgency" action={<Link href="/revisions" className={`${focusRing} text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300`}>Revision queue <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {tasksLoading || subjectsLoading ? <SectionLoader rows={3} /> : attentionItems.length ? <ul className="space-y-2">{attentionItems.map((item) => <li key={item.key} className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3">
@@ -360,7 +360,7 @@ export default function DashboardPage() {
           <SectionHeading title="Weekly productivity" subtitle="Recorded study time · last 7 days" action={<Link href="/analytics" className={`${focusRing} text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300`}>Analytics <ArrowRight className="ml-1 inline h-3 w-3" /></Link>} />
           {logsLoading || blocksLoading ? <Skeleton className="h-52 rounded-xl" /> : !hasWeeklyHistory ? <div className="flex h-44 flex-col items-center justify-center rounded-xl border border-dashed border-[hsl(var(--border))] text-center"><Activity className="h-6 w-6 text-[hsl(var(--muted-foreground))]" /><p className="mt-2 text-sm font-medium">No study sessions recorded this week</p><p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">Start a focus session to see your weekly progress.</p></div> : <>
             <div className="mb-2 flex gap-5 text-xs"><span><strong className="text-sm tabular-nums">{formatDurationHuman(weeklyTotal)}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">total</span></span><span><strong className="text-sm tabular-nums">{activeDays}</strong><span className="ml-1 text-[hsl(var(--muted-foreground))]">active days</span></span></div>
-            <div className="h-44 w-full sm:h-52"><ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}><AreaChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}><defs><linearGradient id="dashboardStudyGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#818cf8" stopOpacity={0.28} /><stop offset="100%" stopColor="#818cf8" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} /><YAxis axisLine={false} tickLine={false} width={40} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={(value: number) => value >= 60 ? `${(value / 60).toFixed(value % 60 ? 1 : 0)}h` : `${value}m`} /><Tooltip content={<ChartTooltip />} /><Area type="monotone" dataKey="minutes" stroke="#818cf8" strokeWidth={2} fill="url(#dashboardStudyGradient)" activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div>
+            <div className="h-40 w-full sm:h-52"><ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}><AreaChart data={chartData} margin={{ top: 8, right: 4, left: -20, bottom: 0 }}><defs><linearGradient id="dashboardStudyGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#818cf8" stopOpacity={0.28} /><stop offset="100%" stopColor="#818cf8" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} /><YAxis axisLine={false} tickLine={false} width={40} tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={(value: number) => value >= 60 ? `${(value / 60).toFixed(value % 60 ? 1 : 0)}h` : `${value}m`} /><Tooltip content={<ChartTooltip />} /><Area type="monotone" dataKey="minutes" stroke="#818cf8" strokeWidth={2} fill="url(#dashboardStudyGradient)" activeDot={{ r: 4 }} /></AreaChart></ResponsiveContainer></div>
           </>}
         </div>
         <div className={`${surface} p-4 sm:p-5 flex flex-col justify-between`}>
@@ -369,9 +369,9 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[hsl(var(--border))] px-4 py-3 text-xs text-[hsl(var(--muted-foreground))]">
-        <span><Target className="mr-1.5 inline h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />Syllabus completion: <strong className="text-[hsl(var(--foreground))]">{completionPercent}%</strong> · revisions are scheduled independently from topic completion.</span>
-        <Link href="/subjects" className={`${focusRing} font-medium text-indigo-600 dark:text-indigo-400`}>View syllabus <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+      <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-2 sm:gap-3 rounded-xl border border-[hsl(var(--border))] px-3 py-3 sm:px-4 text-xs text-[hsl(var(--muted-foreground))]">
+        <span className="min-w-0"><Target className="mr-1.5 inline h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />Syllabus completion: <strong className="text-[hsl(var(--foreground))]">{completionPercent}%</strong> <span className="hidden sm:inline">· revisions are scheduled independently from topic completion.</span></span>
+        <Link href="/subjects" className={`${focusRing} font-medium text-indigo-600 dark:text-indigo-400 shrink-0`}>View syllabus <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
       </div>
 
       <AddTaskModal open={showAddTask} initialDate={today} onClose={() => setShowAddTask(false)} onAddTask={addTask} />

@@ -1102,32 +1102,34 @@ export default function SubjectDetailPage() {
       {/* Paper Tabs */}
       {availablePapers.length > 1 && (
         <LayoutGroup id="subject-paper-tabs">
-          <div role="group" aria-label="Subject papers" className="inline-flex max-w-full items-center gap-1 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-1">
-            {availablePapers.map((paper) => (
-              <button
-                key={paper}
-                onClick={() => setActivePaper(paper)}
-                type="button"
-                aria-pressed={currentPaper === paper}
-                className={cn(
-                  'relative rounded-lg px-4 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]',
-                  currentPaper === paper
-                    ? 'text-white'
-                    : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
-                )}
-              >
-                {currentPaper === paper && (
-                  <motion.div
-                    layoutId="paperTab"
-                    className="absolute inset-0 rounded-xl"
-                    style={{ backgroundColor: subject.color }}
-                    initial={false}
-                    transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
-                  />
-                )}
-                <span className="relative z-10">{paper}</span>
-              </button>
-            ))}
+          <div className="w-full overflow-x-auto pb-1">
+            <div role="group" aria-label="Subject papers" className="inline-flex max-w-full items-center gap-1 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-1 shrink-0">
+              {availablePapers.map((paper) => (
+                <button
+                  key={paper}
+                  onClick={() => setActivePaper(paper)}
+                  type="button"
+                  aria-pressed={currentPaper === paper}
+                  className={cn(
+                    'relative whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] shrink-0',
+                    currentPaper === paper
+                      ? 'text-white'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
+                  )}
+                >
+                  {currentPaper === paper && (
+                    <motion.div
+                      layoutId="paperTab"
+                      className="absolute inset-0 rounded-xl"
+                      style={{ backgroundColor: subject.color }}
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                    />
+                  )}
+                  <span className="relative z-10">{paper}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </LayoutGroup>
       )}
@@ -1144,7 +1146,7 @@ export default function SubjectDetailPage() {
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><RotateCcw className="h-3.5 w-3.5 shrink-0 text-purple-300" /><span className="sr-only">Filter revision state</span><select aria-label="Filter revision state" value={revisionFilter} onChange={(event) => setRevisionFilter(event.target.value as RevisionFilter)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="all">All revisions</option><option value="due">Due now</option><option value="scheduled">Scheduled</option><option value="not-scheduled">No schedule</option></select></label>
           <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3"><ArrowDownWideNarrow className="h-3.5 w-3.5 shrink-0 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort chapters</span><select aria-label="Sort chapters" value={chapterSort} onChange={(event) => setChapterSort(event.target.value as typeof chapterSort)} className="h-10 min-w-0 flex-1 bg-transparent text-xs outline-none"><option value="custom">Original order</option><option value="name">Name A–Z</option><option value="progress">Completion</option></select></label>
         </div>
-        <div className="mt-3 flex items-center justify-between border-t border-[hsl(var(--border))] pt-3 text-xs text-[hsl(var(--muted-foreground))]">
+        <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-t border-[hsl(var(--border))] pt-3 text-xs text-[hsl(var(--muted-foreground))]">
           <span>{filteredChapters.length} chapters in {currentPaper}</span>
           <span>{stats.done}/{stats.total} topics complete in {currentPaper} ({stats.percent}%)</span>
         </div>

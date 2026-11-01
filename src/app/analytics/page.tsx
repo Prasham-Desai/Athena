@@ -244,15 +244,15 @@ export default function AnalyticsPage() {
         title="Analytics"
         description="Your progress is inspiring — look how far you've come! 📈"
       >
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           {/* Subject Filter */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-initial min-w-[130px]">
             <Filter className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[hsl(var(--muted-foreground))] pointer-events-none" />
             <select
               aria-label="Filter entire analytics by subject"
               value={selectedSubjectId}
               onChange={(e) => setSelectedSubjectId(e.target.value)}
-              className="h-9 pl-8 pr-3 text-xs rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+              className="w-full h-9 pl-8 pr-3 text-xs rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
             >
               <option value="all">All Subjects</option>
               {subjects.map((s) => (
@@ -264,7 +264,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Date Range Selector */}
-          <div className="flex items-center rounded-xl bg-[hsl(var(--muted))] p-1 text-xs">
+          <div className="flex items-center rounded-xl bg-[hsl(var(--muted))] p-1 text-xs max-w-full overflow-x-auto">
             {(
               [
                 { id: 'this-week', label: 'Week' },

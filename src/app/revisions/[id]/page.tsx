@@ -175,7 +175,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, subjectIcon }: To
       {/* Main Topic Row */}
       <div
         className={cn(
-          'flex items-center gap-3 p-2 rounded-xl transition-all',
+          'flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 p-2.5 sm:p-2 rounded-xl transition-all',
           'hover:bg-[hsl(var(--muted))]/50 group'
         )}
         onMouseEnter={() => setHoverTopic(true)}
@@ -184,7 +184,7 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, subjectIcon }: To
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span 
-              className="text-sm font-medium truncate transition-colors"
+              className="text-sm font-medium transition-colors break-words"
               style={{ color: hoverTopic ? subjectColor : 'inherit' }}
             >
               {topic.name}
@@ -197,31 +197,33 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, subjectIcon }: To
           </div>
         </div>
 
-        {/* Importance Tag */}
-        {topic.importance && IMPORTANCE_TAG_CONFIG[topic.importance] && (
-          <div
-            className={cn(
-              'shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold border',
-              IMPORTANCE_TAG_CONFIG[topic.importance].bg,
-              IMPORTANCE_TAG_CONFIG[topic.importance].text,
-              IMPORTANCE_TAG_CONFIG[topic.importance].border
-            )}
-          >
-            <Tag className="w-3 h-3" />
-            <span className="hidden sm:inline">{IMPORTANCE_TAG_CONFIG[topic.importance].label}</span>
-          </div>
-        )}
+        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
+          {/* Importance Tag */}
+          {topic.importance && IMPORTANCE_TAG_CONFIG[topic.importance] && (
+            <div
+              className={cn(
+                'shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold border',
+                IMPORTANCE_TAG_CONFIG[topic.importance].bg,
+                IMPORTANCE_TAG_CONFIG[topic.importance].text,
+                IMPORTANCE_TAG_CONFIG[topic.importance].border
+              )}
+            >
+              <Tag className="w-3 h-3" />
+              <span className="hidden sm:inline">{IMPORTANCE_TAG_CONFIG[topic.importance].label}</span>
+            </div>
+          )}
 
-        <RevisionIconGroup
-          revisionCount={topic.revisionCount}
-          onRevisionChange={(count) => {
-            if (isRevisable || count === 0) {
-              setTopicRevisionCount(subjectId, chapterId, topic.id, count);
-            }
-          }}
-          subjectColor={subjectColor}
-          subjectIcon={subjectIcon}
-        />
+          <RevisionIconGroup
+            revisionCount={topic.revisionCount}
+            onRevisionChange={(count) => {
+              if (isRevisable || count === 0) {
+                setTopicRevisionCount(subjectId, chapterId, topic.id, count);
+              }
+            }}
+            subjectColor={subjectColor}
+            subjectIcon={subjectIcon}
+          />
+        </div>
       </div>
 
       {/* Subtopics */}
@@ -265,7 +267,7 @@ interface ChapterAccordionProps {
   subjectIcon: string;
 }
 
-  function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColor, subjectIcon }: ChapterAccordionProps) {
+function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColor, subjectIcon }: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const setChapterRevisionCount = useSubjectsStore((s) => s.setChapterRevisionCount);
 
@@ -276,18 +278,18 @@ interface ChapterAccordionProps {
 
   return (
     <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden">
-      <div className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted))]/30 transition-colors">
+      <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 hover:bg-[hsl(var(--muted))]/30 transition-colors">
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex-1 flex flex-col items-start text-left"
         >
-          <h3 className="font-semibold text-sm sm:text-base">{chapter.name}</h3>
+          <h3 className="font-semibold text-sm sm:text-base break-words">{chapter.name}</h3>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
             {chapter.topics.length} topics
           </p>
         </button>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 shrink-0">
           <RevisionIconGroup
             revisionCount={chapterRevisionCount}
             onRevisionChange={(count) => {
@@ -296,7 +298,11 @@ interface ChapterAccordionProps {
             subjectColor={subjectColor}
             subjectIcon={subjectIcon}
           />
-          <button onClick={() => setIsOpen((prev) => !prev)}>
+          <button
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="p-1 rounded-lg hover:bg-[hsl(var(--muted))] transition text-[hsl(var(--muted-foreground))]"
+            aria-label={isOpen ? "Collapse chapter" : "Expand chapter"}
+          >
             <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}>
               <ChevronDown className="w-5 h-5 text-[hsl(var(--muted-foreground))]" />
             </motion.div>

@@ -77,7 +77,7 @@ export function EditNoteModal({
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="w-full max-w-lg bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden"
+          className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-3xl p-4 sm:p-7 shadow-2xl relative"
         >
           {/* Close button */}
           <button

@@ -186,69 +186,103 @@ export default function ExamsPage() {
                 {(!exam.subjects || exam.subjects.length === 0) ? (
                   <p className="text-sm italic text-[hsl(var(--muted-foreground))]">No subjects selected</p>
                 ) : (
-                  <div className="overflow-x-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-                    <table className="w-full min-w-[480px] text-left text-sm">
-                      <thead className="bg-[hsl(var(--muted))]/30">
-                        <tr>
-                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-48">Subject</th>
-                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-32">Date</th>
-                          <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))]">Description</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[hsl(var(--border))]/50">
-                        {exam.subjects.map(s => {
-                          const subjectData = subjects.find(sub => sub.id === s.id);
-                          if (!subjectData) return null;
-                          return (
-                            <tr key={s.id} className="hover:bg-[hsl(var(--muted))]/10 transition-colors">
-                              <td className="px-4 py-3 align-top">
-                                <div 
-                                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold"
-                                  style={{ 
-                                    backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
-                                    borderColor: `${subjectData.color}30`,
-                                    color: subjectData.details?.textAccent || subjectData.color,
-                                  }}
-                                >
-                                  <span>{subjectData.name}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 align-top font-medium text-[hsl(var(--foreground))]">
-                                {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))] italic">Tentative</span>}
-                              </td>
-                              <td className="px-4 py-3 align-top text-[hsl(var(--foreground))] whitespace-pre-wrap">
-                                {s.description || <span className="italic opacity-50 text-[hsl(var(--muted-foreground))]">No description provided</span>}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
+                  <>
+                    {/* Mobile Cards for small screens */}
+                    <div className="sm:hidden space-y-2.5">
+                      {exam.subjects.map(s => {
+                        const subjectData = subjects.find(sub => sub.id === s.id);
+                        if (!subjectData) return null;
+                        return (
+                          <div key={s.id} className="p-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] space-y-2">
+                            <div className="flex items-center justify-between gap-2">
+                              <span 
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold"
+                                style={{ 
+                                  backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
+                                  borderColor: `${subjectData.color}30`,
+                                  color: subjectData.details?.textAccent || subjectData.color,
+                                }}
+                              >
+                                {getSubjectDisplayName(subjectData)}
+                              </span>
+                              <span className="text-xs font-medium text-[hsl(var(--foreground))]">
+                                {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))] italic text-[11px]">Tentative</span>}
+                              </span>
+                            </div>
+                            {s.description && (
+                              <p className="text-xs text-[hsl(var(--muted-foreground))] whitespace-pre-wrap pl-1">
+                                {s.description}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Tablet and Desktop Table */}
+                    <div className="hidden sm:block overflow-x-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+                      <table className="w-full min-w-[480px] text-left text-sm">
+                        <thead className="bg-[hsl(var(--muted))]/30">
+                          <tr>
+                            <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-48">Subject</th>
+                            <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))] w-32">Date</th>
+                            <th className="px-4 py-3 font-semibold text-[hsl(var(--muted-foreground))]">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[hsl(var(--border))]/50">
+                          {exam.subjects.map(s => {
+                            const subjectData = subjects.find(sub => sub.id === s.id);
+                            if (!subjectData) return null;
+                            return (
+                              <tr key={s.id} className="hover:bg-[hsl(var(--muted))]/10 transition-colors">
+                                <td className="px-4 py-3 align-top">
+                                  <div 
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold"
+                                    style={{ 
+                                      backgroundColor: subjectData.details?.secondaryGlow || `${subjectData.color}15`, 
+                                      borderColor: `${subjectData.color}30`,
+                                      color: subjectData.details?.textAccent || subjectData.color,
+                                    }}
+                                  >
+                                    <span>{getSubjectDisplayName(subjectData)}</span>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3 align-top font-medium text-[hsl(var(--foreground))]">
+                                  {s.date ? format(new Date(s.date), 'MMM d, yyyy') : <span className="text-[hsl(var(--muted-foreground))] italic">Tentative</span>}
+                                </td>
+                                <td className="px-4 py-3 align-top text-[hsl(var(--foreground))] whitespace-pre-wrap">
+                                  {s.description || <span className="italic opacity-50 text-[hsl(var(--muted-foreground))]">No description provided</span>}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
-              </div>
             </div>
           </div>
-        ))
-      )}
-    </div>
-  );
+        </div>
+      ))
+    )}
+  </div>
+);
 
   return (
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <PageHeader 
-          title="Exams & Tests" 
-          description="Manage your upcoming university exams and unit tests" 
-        />
+      <PageHeader 
+        title="Exams & Tests" 
+        description="Manage your upcoming university exams and unit tests" 
+      >
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-indigo-500/25 active:scale-95 shrink-0"
+          className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-all shadow-sm hover:shadow-indigo-500/25 active:scale-95 shrink-0"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-4 h-4" />
           Add Exam
         </button>
-      </div>
+      </PageHeader>
 
       {isLoading && exams.length === 0 ? (
         <SectionLoader rows={4} />

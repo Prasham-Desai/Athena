@@ -181,16 +181,16 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, st
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-          className="fixed bottom-0 left-0 right-0 z-50 px-3 pb-3 sm:px-6 sm:pb-4"
+          className="fixed bottom-0 left-0 right-0 z-50 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:px-6 sm:pb-4"
         >
           <div
             className="mx-auto max-w-2xl rounded-2xl shadow-2xl
                        bg-[hsl(var(--card)/0.85)] backdrop-blur-xl
                        border border-indigo-500/30
-                       px-4 py-3 sm:px-5 sm:py-3.5"
+                       px-3.5 py-2.5 sm:px-5 sm:py-3.5"
           >
             <div
-              className="relative w-full h-1.5 rounded-full bg-[hsl(var(--border))] mb-4
+              className="relative w-full h-1.5 rounded-full bg-[hsl(var(--border))] mb-3 sm:mb-4
                          cursor-pointer overflow-hidden"
               onClick={handleProgressClick}
             >
@@ -202,7 +202,7 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, st
               />
             </div>
 
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               {/* Track info */}
               <div className="flex-1 min-w-0">
                 <AnimatePresence mode="wait">
@@ -213,14 +213,14 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, st
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <p className="text-sm sm:text-base font-semibold text-[hsl(var(--foreground))] truncate">
-                      {currentStory.title} <span className="text-xs font-normal text-[hsl(var(--muted-foreground))]">(Part {currentAudioIndex + 1})</span>
+                    <p className="text-xs sm:text-base font-semibold text-[hsl(var(--foreground))] truncate">
+                      {currentStory.title} <span className="text-[11px] sm:text-xs font-normal text-[hsl(var(--muted-foreground))]">(Part {currentAudioIndex + 1})</span>
                     </p>
-                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
+                    <p className="text-[10px] sm:text-xs text-[hsl(var(--muted-foreground))] mt-0.5 sm:mt-1">
                       <span className="tabular-nums">
                         {formatTime(currentTime)} / {formatTime(duration)}
                       </span>
-                      <span className="mx-2">·</span>
+                      <span className="mx-1.5 sm:mx-2">·</span>
                       <span className="tabular-nums">
                         Story {currentStoryIndex + 1} / {playlist.length}
                       </span>
@@ -230,31 +230,31 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, st
               </div>
 
               {/* Controls */}
-              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <div className="flex items-center gap-1 sm:gap-3 shrink-0">
                 {/* Previous */}
                 <button
                   onClick={handlePrev}
                   disabled={currentStoryIndex === 0 && currentAudioIndex === 0}
-                  className="flex items-center justify-center w-10 h-10 rounded-xl
+                  className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed
                              transition-colors"
                 >
-                  <SkipBack className="w-5 h-5" />
+                  <SkipBack className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
                 {/* Play / Pause */}
                 <button
                   onClick={togglePlay}
-                  className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14
-                             rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white
+                  className="flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14
+                             rounded-xl sm:rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white
                              hover:opacity-90 active:scale-95 transition-all shadow-lg
                              shadow-indigo-500/30"
                 >
                   {isPlaying ? (
-                    <Pause className="w-6 h-6" fill="currentColor" />
+                    <Pause className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" />
                   ) : (
-                    <Play className="w-6 h-6 ml-1" fill="currentColor" />
+                    <Play className="w-5 h-5 sm:w-6 sm:h-6 ml-0.5" fill="currentColor" />
                   )}
                 </button>
 
@@ -262,22 +262,22 @@ export function StoryPlayerBar({ playlist, isActive, onClose, startIndex = 0, st
                 <button
                   onClick={handleNext}
                   disabled={currentStoryIndex >= playlist.length - 1 && currentAudioIndex >= ((currentStory.audios?.length || 1) - 1)}
-                  className="flex items-center justify-center w-10 h-10 rounded-xl
+                  className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl
                              text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]
                              disabled:opacity-30 disabled:cursor-not-allowed
                              transition-colors"
                 >
-                  <SkipForward className="w-5 h-5" />
+                  <SkipForward className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
                 {/* Close */}
                 <button
                   onClick={handleClose}
-                  className="flex items-center justify-center w-8 h-8 rounded-xl ml-2
+                  className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-xl ml-1 sm:ml-2
                              text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]
                              hover:bg-[hsl(var(--muted))] transition-colors"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>

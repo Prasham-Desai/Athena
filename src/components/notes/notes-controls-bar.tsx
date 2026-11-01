@@ -217,7 +217,7 @@ export function NotesControlsBar({
           {selectedSubjectId && chaptersForActiveSubject.length > 0 && (
             <>
               {/* Chapter Dropdown */}
-              <div className="relative flex items-center">
+              <div className="relative flex items-center min-w-0">
                 <BookOpen className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] absolute left-3 pointer-events-none" />
                 <select
                   value={selectedChapterId}
@@ -225,7 +225,7 @@ export function NotesControlsBar({
                     onSelectChapter(e.target.value);
                     onSelectTopic('all');
                   }}
-                  className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-8 pr-7 py-2 text-xs font-medium text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm cursor-pointer"
+                  className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-8 pr-7 py-2 text-xs font-medium text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm cursor-pointer max-w-[180px] sm:max-w-[220px] truncate"
                 >
                   <option value="all">All Chapters</option>
                   {chaptersForActiveSubject.map((ch) => {
@@ -241,12 +241,12 @@ export function NotesControlsBar({
 
               {/* Topic Dropdown */}
               {selectedChapterId !== 'all' && topicsForActiveChapter.length > 0 && (
-                <div className="relative flex items-center">
+                <div className="relative flex items-center min-w-0">
                   <Tag className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))] absolute left-3 pointer-events-none" />
                   <select
                     value={selectedTopicId}
                     onChange={(e) => onSelectTopic(e.target.value)}
-                    className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-8 pr-7 py-2 text-xs font-medium text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm cursor-pointer"
+                    className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] pl-8 pr-7 py-2 text-xs font-medium text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm cursor-pointer max-w-[180px] sm:max-w-[220px] truncate"
                   >
                     <option value="all">All Topics</option>
                     {topicsForActiveChapter.map((top) => (

@@ -213,7 +213,7 @@ export function UploadNotesModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 12 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 sm:p-7 shadow-2xl my-8 relative overflow-hidden"
+        className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-7 shadow-2xl my-4 sm:my-8 relative"
       >
         {/* Glow accent */}
         <div

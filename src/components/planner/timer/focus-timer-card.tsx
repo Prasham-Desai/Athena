@@ -105,7 +105,7 @@ export function FocusTimerCard({
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-[hsl(var(--card))] to-purple-500/10 p-5 sm:p-6 shadow-sm">
+    <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-[hsl(var(--card))] to-purple-500/10 p-4 sm:p-6 shadow-sm">
       {/* Decorative ambient glows */}
       <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
       <div className="absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
@@ -147,12 +147,12 @@ export function FocusTimerCard({
           </div>
 
           {/* Time digits */}
-          <div className="font-mono text-5xl sm:text-6xl md:text-7xl font-black tracking-tight tabular-nums text-[hsl(var(--foreground))]">
+          <div className="font-mono text-4xl sm:text-6xl md:text-7xl font-black tracking-tight tabular-nums text-[hsl(var(--foreground))]">
             {formatSecs(mainSeconds)}
           </div>
 
           {/* Action buttons */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3">
             <button
               onClick={handleToggle}
               className={cn(

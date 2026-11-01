@@ -122,7 +122,7 @@ function SubjectDialog({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4"
           onClick={onClose}
         >
           <motion.div
@@ -132,10 +132,10 @@ function SubjectDialog({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', duration: 0.35 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-2xl"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-6 shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h2 className="text-lg font-semibold">{isEdit ? 'Edit Subject' : 'Add Subject'}</h2>
               <button
                 onClick={onClose}
@@ -386,9 +386,24 @@ export default function SubjectsPage() {
           <div className="h-9 w-px bg-[hsl(var(--border))] shrink-0" />
           <p className="text-xs text-[hsl(var(--muted-foreground))] min-w-0"><span className="font-medium text-[hsl(var(--foreground))]">{subjects.length} subjects</span><br />{syllabusStats.completed} of {syllabusStats.total} topics complete</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:justify-end">
-          <label className="relative block flex-1 sm:flex-initial sm:w-60 min-w-[140px]"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Search subjects</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search subjects" className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" /></label>
-          <label className="flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 h-10 shrink-0"><ArrowDownWideNarrow className="h-4 w-4 text-[hsl(var(--muted-foreground))]" /><span className="sr-only">Sort subjects</span><select aria-label="Sort subjects" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="h-full bg-transparent text-xs outline-none cursor-pointer"><option value="attention">Needs attention</option><option value="progress">Progress</option><option value="remaining">Topics remaining</option><option value="activity">Recent activity</option></select></label>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full lg:w-auto lg:justify-end">
+          <label className="relative block w-full sm:w-60 min-w-0">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" />
+            <span className="sr-only">Search subjects</span>
+            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search subjects" className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-9 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]" />
+          </label>
+          <label className="flex items-center justify-between sm:justify-start gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 h-10 shrink-0 w-full sm:w-auto">
+            <div className="flex items-center gap-2 min-w-0">
+              <ArrowDownWideNarrow className="h-4 w-4 text-[hsl(var(--muted-foreground))] shrink-0" />
+              <span className="sr-only">Sort subjects</span>
+            </div>
+            <select aria-label="Sort subjects" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="h-full w-full sm:w-auto bg-transparent text-xs outline-none cursor-pointer">
+              <option value="attention">Needs attention</option>
+              <option value="progress">Progress</option>
+              <option value="remaining">Topics remaining</option>
+              <option value="activity">Recent activity</option>
+            </select>
+          </label>
         </div>
       </section>
 

@@ -72,7 +72,70 @@ body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 100%;
   overflow-x: clip;
+  /* Safe area insets for notched/dynamic-island devices */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
+
+/* ================================================================
+   Responsive Utilities
+   ================================================================ */
+
+/* Prevent any child from causing horizontal overflow */
+.overflow-safe {
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Responsive table wrapper — enables horizontal scroll INSIDE the container
+   rather than letting tables break the entire page layout */
+.responsive-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+}
+
+/* Mobile-friendly data card — used to replace tables on small screens */
+.data-card-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+}
+
+/* Ensure primary interactive controls meet accessible touch target guidelines */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Give standalone interactive buttons comfortable touch heights on mobile without breaking inline links */
+  .btn-touch {
+    min-height: 44px;
+  }
+}
+
+/* Mobile-specific bottom safe area for fixed bottom bars */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hide on mobile, show on desktop */
+.hide-mobile { display: none; }
+@media (min-width: 640px) { .hide-mobile { display: revert; } }
+
+/* Hide on desktop, show on mobile */
+.show-mobile-only { display: revert; }
+@media (min-width: 640px) { .show-mobile-only { display: none; } }
 
 /* Native select menus use browser/OS colors unless their color scheme and
    option colors are set explicitly. Keep every select popup on the app theme. */

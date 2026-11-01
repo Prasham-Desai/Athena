@@ -19,6 +19,7 @@ import {
 import { format, parseISO } from 'date-fns';
 import type { DailyLog, Subject, StudyBlock } from '@/types';
 import { exportStudyLogsToCSV } from '@/lib/analytics-calculations';
+import { getSubjectDisplayName } from '@/lib/subject-display';
 import { cn } from '@/lib/utils';
 
 interface AnalyticsHistoryTableProps {
@@ -170,8 +171,86 @@ export function AnalyticsHistoryTable({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
+      {/* Mobile Card Layout (< sm) */}
+      <div className="sm:hidden space-y-3">
+        {currentPageLogs.length === 0 ? (
+          <div className="py-8 text-center text-xs text-[hsl(var(--muted-foreground))]">
+            No study logs found matching your query.
+          </div>
+        ) : (
+          currentPageLogs.map((log) => {
+            const dateObj = parseISO(log.date);
+            const dayFormatted = format(dateObj, 'MMM d, yyyy');
+            const weekday = format(dateObj, 'EEE');
+
+            const h = Math.floor(log.studyMinutes / 60);
+            const m = log.studyMinutes % 60;
+            const formattedDuration = `${h}h ${m}m`;
+
+            const dayBlocks = blocksByDate.get(log.date) || [];
+            const distinctSubjects = Array.from(
+              new Set(dayBlocks.map((b) => subjectMap.get(b.subjectId)).filter(Boolean))
+            ) as Subject[];
+
+            const sessionCount = log.sessions?.length || (log.studyMinutes > 0 ? 1 : 0);
+
+            return (
+              <div
+                key={log.date}
+                onClick={() => onSelectDate(log.date)}
+                className="p-3.5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-emerald-500/40 transition-all cursor-pointer space-y-2.5"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-mono uppercase bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">
+                      {weekday}
+                    </span>
+                    <span className="text-xs font-semibold text-[hsl(var(--foreground))]">{dayFormatted}</span>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    {log.studyMinutes > 0 ? formattedDuration : '0m'}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 text-[11px] text-[hsl(var(--muted-foreground))]">
+                  <span>{sessionCount} {sessionCount === 1 ? 'session' : 'sessions'}</span>
+                  {log.topicsCompleted > 0 && (
+                    <span className="text-cyan-600 dark:text-cyan-400 font-medium">
+                      {log.topicsCompleted} {log.topicsCompleted === 1 ? 'topic' : 'topics'}
+                    </span>
+                  )}
+                  {log.revisionsCompleted > 0 && (
+                    <span className="text-purple-600 dark:text-purple-400 font-medium">
+                      {log.revisionsCompleted} {log.revisionsCompleted === 1 ? 'revision' : 'revisions'}
+                    </span>
+                  )}
+                </div>
+
+                {distinctSubjects.length > 0 && (
+                  <div className="flex flex-wrap gap-1 pt-1 border-t border-[hsl(var(--border))]/50">
+                    {distinctSubjects.map((sub) => (
+                      <span
+                        key={sub.id}
+                        className="rounded-md border border-[hsl(var(--border))]/60 px-2 py-0.5 text-[10px] font-medium"
+                        style={{
+                          backgroundColor: `${sub.color}15`,
+                          color: sub.color,
+                          borderColor: `${sub.color}30`,
+                        }}
+                      >
+                        {getSubjectDisplayName(sub)}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Table (hidden on mobile, shown on >= sm) */}
+      <div className="hidden sm:block overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="border-b border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]">
@@ -234,9 +313,9 @@ export function AnalyticsHistoryTable({
                 const formattedDuration = `${h}h ${m}m`;
 
                 const dayBlocks = blocksByDate.get(log.date) || [];
-                const distinctSubjectNames = Array.from(
-                  new Set(dayBlocks.map((b) => subjectMap.get(b.subjectId)?.name).filter(Boolean))
-                );
+                const distinctSubjects = Array.from(
+                  new Set(dayBlocks.map((b) => subjectMap.get(b.subjectId)).filter(Boolean))
+                ) as Subject[];
 
                 const sessionCount = log.sessions?.length || (log.studyMinutes > 0 ? 1 : 0);
 
@@ -264,19 +343,24 @@ export function AnalyticsHistoryTable({
                     </td>
 
                     <td className="py-3">
-                      {distinctSubjectNames.length > 0 ? (
+                      {distinctSubjects.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
-                          {distinctSubjectNames.slice(0, 2).map((name) => (
+                          {distinctSubjects.slice(0, 2).map((sub) => (
                             <span
-                              key={name}
-                              className="rounded-md bg-[hsl(var(--muted))] border border-[hsl(var(--border))]/60 px-2 py-0.5 text-[10px] text-[hsl(var(--foreground))] font-medium"
+                              key={sub.id}
+                              className="rounded-md border border-[hsl(var(--border))]/60 px-2 py-0.5 text-[10px] font-medium"
+                              style={{
+                                backgroundColor: `${sub.color}15`,
+                                color: sub.color,
+                                borderColor: `${sub.color}30`,
+                              }}
                             >
-                              {name}
+                              {getSubjectDisplayName(sub)}
                             </span>
                           ))}
-                          {distinctSubjectNames.length > 2 && (
+                          {distinctSubjects.length > 2 && (
                             <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-medium">
-                              +{distinctSubjectNames.length - 2} more
+                              +{distinctSubjects.length - 2} more
                             </span>
                           )}
                         </div>
