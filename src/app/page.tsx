@@ -7,7 +7,7 @@ import {
   Activity, ArrowDownWideNarrow, ArrowRight, Atom, BookOpen, Calculator,
   CalendarDays, Check, CheckCircle2, CheckSquare, Clock3, Code, Compass,
   Flame, FlaskConical, Globe, GraduationCap, Languages, Lightbulb, ListTodo,
-  Microscope, Music, Palette, PenTool, Play, RotateCcw, Scale, Settings2,
+  Microscope, Music, Palette, PenTool, RotateCcw, Scale, Settings2,
   Target, TriangleAlert, Brain,
   type LucideIcon,
 } from 'lucide-react';
@@ -104,8 +104,6 @@ export default function DashboardPage() {
   const { settings } = useSettingsStore();
   const { isMainRunning, mainSeconds, activeTarget, startTargetSession, toggleMain } = useTimerStore();
   const [subjectSort, setSubjectSort] = useState<SubjectSort>('attention');
-  const [selectedSubjectId, setSelectedSubjectId] = useState('');
-  const [selectedTopicId, setSelectedTopicId] = useState('');
   const [showAddTask, setShowAddTask] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
@@ -200,21 +198,7 @@ export default function DashboardPage() {
     ...revisionQueue.map(({ topic }) => ({ key: `revision-${topic.id}`, title: topic.name, detail: `${topic.subjectName} · ${topic.nextRevisionDue === today ? 'Revision due today' : `Overdue · ${getRelativeDate(topic.nextRevisionDue || today)}`}`, href: `/revisions/${topic.subjectId}`, urgent: topic.nextRevisionDue !== today, task: undefined })),
   ].slice(0, 5), [overdueTasks, revisionQueue, today]);
 
-  const selectedSubject = subjects.find((subject) => subject.id === selectedSubjectId) || subjects[0];
-  const selectableTopics = selectedSubject?.chapters.flatMap((chapter) => chapter.topics) || [];
-  const selectedTopic: Topic | undefined = selectableTopics.find((topic) => topic.id === selectedTopicId) || selectableTopics.find((topic) => topic.status !== 'completed' && topic.status !== 'revised') || selectableTopics[0];
   const nextExam = [...exams].filter((exam) => !exam.completed && exam.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
-
-  const startStudying = () => {
-    if (!selectedSubject) return;
-    if (isMainRunning) return;
-    if (activeTarget && activeTarget.title && mainSeconds > 0) {
-      toggleMain();
-      return;
-    }
-    const title = selectedTopic ? `${selectedSubject.name} · ${selectedTopic.name}` : selectedSubject.name;
-    startTargetSession({ type: 'general', id: selectedTopic?.id || selectedSubject.id, title, subjectId: selectedSubject.id });
-  };
 
   const startTaskSession = (task: Task) => {
     const target = { type: 'task' as const, id: task.id, taskId: task.id, title: task.title, subjectId: subjectForTask(task)?.id };
@@ -239,33 +223,27 @@ export default function DashboardPage() {
 
   return (
     <div className="w-full space-y-5 pb-10 sm:space-y-6 lg:space-y-8">
-      <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 xl:flex-row xl:items-end xl:justify-between">
+      <section className="flex flex-col gap-4 border-b border-[hsl(var(--border))] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0 max-w-2xl">
           <p className="mb-1 flex items-center gap-2 text-xs font-medium text-indigo-600 dark:text-indigo-400"><CalendarDays className="h-3.5 w-3.5 shrink-0" /><span className="truncate">{dateLabel(today)}</span></p>
           <h1 className="text-xl font-semibold tracking-tight sm:text-2xl lg:text-3xl">{greeting()}</h1>
-          <p className="mt-1.5 text-xs sm:text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let's make the first one count.` : 'A clear plan makes it easier to begin. Choose a subject and start a focus session.'}</p>
+          <p className="mt-1.5 text-xs sm:text-sm text-[hsl(var(--muted-foreground))]">{focusTasks.length ? `${focusTasks.length} task${focusTasks.length === 1 ? '' : 's'} planned today. Let's make the first one count.` : 'A clear plan makes it easier to begin. Review your scheduled tasks or organize your study plan.'}</p>
         </div>
-        <div className="flex w-full flex-col gap-3 xl:w-auto xl:items-end">
-          <div className="grid grid-cols-1 gap-2.5 w-full sm:grid-cols-[1fr_1fr_auto] sm:gap-3 xl:w-auto">
-            <div className="min-w-0">
-              <label htmlFor="start-subject" className="sr-only">Choose a subject</label>
-              <select id="start-subject" value={selectedSubject?.id || ''} onChange={(event) => { setSelectedSubjectId(event.target.value); setSelectedTopicId(''); }} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs ${focusRing}`}>
-                <option value="">Choose subject</option>
-                {subjects.map((subject) => <option key={subject.id} value={subject.id}>{getSubjectDisplayName(subject)}</option>)}
-              </select>
-            </div>
-            <div className="min-w-0">
-              <label htmlFor="start-topic" className="sr-only">Choose a topic</label>
-              <select id="start-topic" value={selectedTopic?.id || ''} onChange={(event) => setSelectedTopicId(event.target.value)} disabled={!selectableTopics.length} className={`h-10 w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-xs disabled:opacity-50 ${focusRing}`}>
-                <option value="">{selectableTopics.length ? 'Choose topic' : 'No topics'}</option>
-                {selectableTopics.map((topic) => <option key={topic.id} value={topic.id}>{topic.name}</option>)}
-              </select>
-            </div>
-            <button type="button" onClick={startStudying} disabled={!selectedSubject || isMainRunning} className={`inline-flex h-10 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60 ${focusRing}`}>
-              <Play className="h-4 w-4 shrink-0" />{isMainRunning ? 'Session running' : activeTarget && mainSeconds > 0 ? 'Resume session' : 'Start studying'}
-            </button>
-          </div>
-          <Link href="/planner" className={`${focusRing} text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] truncate max-w-full`}>{isMainRunning ? `Manage ${activeTarget?.title || 'current session'} · ${formatDurationHuman(Math.floor(mainSeconds / 60))}` : 'Open study planner'} <ArrowRight className="ml-1 inline h-3 w-3" /></Link>
+        <div className="flex shrink-0 items-center gap-3">
+          <Link href="/planner" className={`${focusRing} inline-flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3.5 py-2 text-xs font-medium text-[hsl(var(--foreground))] transition hover:bg-[hsl(var(--muted))] shadow-sm`}>
+            {isMainRunning ? (
+              <span className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500" />
+                </span>
+                <span>Manage {activeTarget?.title || 'session'} · {formatDurationHuman(Math.floor(mainSeconds / 60))}</span>
+              </span>
+            ) : (
+              <span>Open study planner</span>
+            )}
+            <ArrowRight className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+          </Link>
         </div>
       </section>
 

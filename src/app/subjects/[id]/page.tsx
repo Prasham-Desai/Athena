@@ -225,7 +225,7 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
             exit={{ opacity: 0, y: -4 }}
             role="menu"
             aria-label="Topic status"
-            className="absolute right-0 top-full mt-1 z-20 min-w-[140px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl overflow-hidden"
+            className="absolute left-0 top-full mt-1 z-20 min-w-[140px] rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl overflow-hidden"
           >
             {(Object.keys(STATUS_CONFIG) as TopicStatus[]).map((s) => {
               const c = STATUS_CONFIG[s];
@@ -443,66 +443,118 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
           : 'bg-[hsl(var(--background))] border-[hsl(var(--border))]'
       )}
     >
-      <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
-        <div className="flex items-start gap-3 flex-1 min-w-0 w-full">
+      <div className="flex flex-col gap-2.5">
+        {/* Row 1: Checkbox + Topic Name (Full Width) */}
+        <div className="flex items-start gap-3 w-full min-w-0">
           {/* Completion checkbox */}
-        <button
-          type="button"
-          onClick={handleToggleComplete}
-          className="shrink-0 transition-transform hover:scale-110 mt-0.5"
-          aria-label={isCompleted ? `Unmark ${topic.name} as complete` : `Mark ${topic.name} as complete`}
-          aria-pressed={isCompleted}
-          title={isCompleted ? 'Unmark completed' : 'Mark as completed'}
-        >
-          {isCompleted ? (
-            <motion.div
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 15 }}
-            >
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-            </motion.div>
-          ) : (
-            <Circle className="w-5 h-5 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
-          )}
-        </button>
+          <button
+            type="button"
+            onClick={handleToggleComplete}
+            className="shrink-0 transition-transform hover:scale-110 mt-0.5"
+            aria-label={isCompleted ? `Unmark ${topic.name} as complete` : `Mark ${topic.name} as complete`}
+            aria-pressed={isCompleted}
+            title={isCompleted ? 'Unmark completed' : 'Mark as completed'}
+          >
+            {isCompleted ? (
+              <motion.div
+                initial={{ scale: 0.5 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 15 }}
+              >
+                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              </motion.div>
+            ) : (
+              <Circle className="w-5 h-5 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
+            )}
+          </button>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 w-full">
-              <InlineEdit
-                value={topic.name}
-                onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
-                className={cn('text-sm font-medium min-w-0 flex-1')}
-                inputClassName="w-full"
-              />
-              <div className="flex shrink-0 flex-wrap items-center gap-2">
-                <AudioRecorder
-                  topicId={topic.id}
-                  topicName={topic.name}
-                  compact={true}
-                  hideList={true}
-                  showList={showAudioList}
-                  onToggleList={(next) => setShowAudioList(typeof next === 'boolean' ? next : !showAudioList)}
-                  onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
-                />
-                {/* Importance */}
-                <ImportanceSelect
-                  importance={topic.importance}
-                  onChange={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
-                />
-                {/* Revision count */}
-                {topic.revisionCount > 0 && (
-                  <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
-                    ×{topic.revisionCount}
-                  </span>
+          {/* Name taking up full available space */}
+          <div className="flex-1 min-w-0">
+            <InlineEdit
+              value={topic.name}
+              onSave={(v) => updateTopic(subjectId, chapterId, topic.id, { name: v })}
+              className={cn('text-sm font-medium w-full break-words leading-snug', isCompleted && 'text-[hsl(var(--muted-foreground))]')}
+              inputClassName="w-full text-sm font-medium"
+            />
+          </div>
+        </div>
+
+        {/* Row 2: Action Buttons Row with paddings in between lines and buttons, delete button on the rightmost */}
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-2.5 pt-1.5 sm:pt-2 sm:pl-8">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <AudioRecorder
+              topicId={topic.id}
+              topicName={topic.name}
+              compact={true}
+              hideList={true}
+              showList={showAudioList}
+              onToggleList={(next) => setShowAudioList(typeof next === 'boolean' ? next : !showAudioList)}
+              onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
+            />
+            {/* Importance */}
+            <ImportanceSelect
+              importance={topic.importance}
+              onChange={(v) => updateTopic(subjectId, chapterId, topic.id, { importance: v })}
+            />
+            {/* Revision count */}
+            {topic.revisionCount > 0 && (
+              <span className="text-[11px] font-medium text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-full shrink-0">
+                ×{topic.revisionCount}
+              </span>
+            )}
+            {/* Status selector */}
+            <StatusSelect status={topic.status} onChange={handleStatusChange} />
+
+            {/* Revise button */}
+            {isCompleted && (
+              <button
+                type="button"
+                onClick={handleRevise}
+                aria-label={`Record a revision for ${topic.name}`}
+                className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-500/10 transition-colors shrink-0"
+                title="Mark as revised"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {/* Audio Indicator / Toggle */}
+            {hasAudio && (
+              <button
+                type="button"
+                onClick={() => setShowAudioList(!showAudioList)}
+                className={cn(
+                  "p-1.5 rounded-lg transition-colors shrink-0 flex items-center justify-center cursor-pointer",
+                  showAudioList
+                    ? "text-indigo-600 bg-indigo-500/20 ring-1 ring-indigo-500/30"
+                    : "text-indigo-500 bg-indigo-500/10 hover:bg-indigo-500/20"
                 )}
-              </div>
+                title={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
+                aria-label={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
+              >
+                <Headphones className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
-          {/* Audio Notes Tray (expanded full-width underneath topic header) */}
-          <AnimatePresence>
-            {showAudioList && hasAudio && (
+          {/* Delete button (rightmost) */}
+          <div className="flex items-center gap-1 shrink-0 ml-auto">
+            <button
+              type="button"
+              onClick={handleDelete}
+              aria-label={`Delete topic ${topic.name}`}
+              className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all shrink-0"
+              title="Delete topic"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Audio Notes Tray (expanded full-width underneath topic header) */}
+        <AnimatePresence>
+          {showAudioList && hasAudio && (
+            <div className="sm:pl-8">
               <AudioNotesList
                 key={`audio-notes-tray-${topic.id}`}
                 topicId={topic.id}
@@ -510,54 +562,58 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                 onPlayGlobal={onPlayGlobal ? (audioId?: string) => onPlayGlobal(topic.id, audioId) : undefined}
                 onClose={() => setShowAudioList(false)}
               />
-            )}
-          </AnimatePresence>
-          
-          {/* Subtopics (Checkpoints) */}
-          {topic.subtopics && topic.subtopics.length > 0 && (
-            <div className="mt-3 pl-4 ml-2 pb-2 border-l-2 border-[hsl(var(--border))]/50">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-[hsl(var(--muted-foreground))]">Topics</p>
-            <ul className="space-y-2">
-              {topic.subtopics.map((sub: any) => {
-                const isSubCompleted = sub.status === 'completed';
-                const subImportance = IMPORTANCE_OPTIONS.find((option) => option.value === sub.importance) || IMPORTANCE_OPTIONS[4];
-                return (
-                  <li key={sub.id} className="flex items-start gap-2.5 group/sub">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        useSubjectsStore.getState().setSubtopicStatus(
-                          subjectId,
-                          chapterId,
-                          topic.id,
-                          sub.id,
-                          isSubCompleted ? 'not-started' : 'completed'
-                        );
-                      }}
-                      className="shrink-0 mt-0.5 transition-transform hover:scale-110"
-                    >
-                      {isSubCompleted ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      ) : (
-                        <Circle className="w-4 h-4 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
-                      )}
-                    </button>
-                    <span className={cn(
-                      "text-sm break-words leading-snug flex-1 min-w-0 mt-0.5",
-                      isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
-                    )}>
-                      {sub.name}
-                    </span>
-                    <span className={cn('shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-semibold', subImportance.bg, subImportance.text)}>{subImportance.label}</span>
-                  </li>
-                );
-              })}
-            </ul>
             </div>
           )}
+        </AnimatePresence>
 
-          {/* Sub-sub-topics from notes */}
-          {parsedNotes.subSubTopics.length > 0 && (
+        {/* Subtopics (Checkpoints) */}
+        {topic.subtopics && topic.subtopics.length > 0 && (
+          <div className="sm:pl-8">
+            <div className="mt-1 pl-4 ml-2 pb-2 border-l-2 border-[hsl(var(--border))]/50">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-[hsl(var(--muted-foreground))]">Topics</p>
+              <ul className="space-y-2">
+                {topic.subtopics.map((sub: any) => {
+                  const isSubCompleted = sub.status === 'completed';
+                  const subImportance = IMPORTANCE_OPTIONS.find((option) => option.value === sub.importance) || IMPORTANCE_OPTIONS[4];
+                  return (
+                    <li key={sub.id} className="flex items-start gap-2.5 group/sub">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          useSubjectsStore.getState().setSubtopicStatus(
+                            subjectId,
+                            chapterId,
+                            topic.id,
+                            sub.id,
+                            isSubCompleted ? 'not-started' : 'completed'
+                          );
+                        }}
+                        className="shrink-0 mt-0.5 transition-transform hover:scale-110"
+                      >
+                        {isSubCompleted ? (
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        ) : (
+                          <Circle className="w-4 h-4 text-[hsl(var(--muted-foreground))] hover:text-emerald-500 transition-colors" />
+                        )}
+                      </button>
+                      <span className={cn(
+                        "text-sm break-words leading-snug flex-1 min-w-0 mt-0.5",
+                        isSubCompleted ? "text-[hsl(var(--muted-foreground))] line-through" : "text-[hsl(var(--foreground))]"
+                      )}>
+                        {sub.name}
+                      </span>
+                      <span className={cn('shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-semibold', subImportance.bg, subImportance.text)}>{subImportance.label}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* Sub-sub-topics from notes */}
+        {parsedNotes.subSubTopics.length > 0 && (
+          <div className="sm:pl-8">
             <div className="sub-subtopic-section">
               {parsedNotes.subSubTopics.map((item, idx) => (
                 <div key={idx} className="sub-subtopic-item">
@@ -566,10 +622,12 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                 </div>
               ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Metadata from notes (Expected Marks, Weightage, etc.) */}
-          {parsedNotes.metadata.length > 0 && (
+        {/* Metadata from notes (Expected Marks, Weightage, etc.) */}
+        {parsedNotes.metadata.length > 0 && (
+          <div className="sm:pl-8">
             <div className="topic-metadata">
               {parsedNotes.metadata.map((meta, idx) => (
                 <span key={idx} className="topic-meta-tag">
@@ -578,57 +636,8 @@ function TopicRow({ topic, subjectId, chapterId, subjectColor, isVisible = true,
                 </span>
               ))}
             </div>
-          )}
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto w-full sm:w-auto justify-end border-t sm:border-0 pt-3 sm:pt-0 mt-1 sm:mt-0 border-[hsl(var(--border))]/50">
-        {/* Status selector */}
-          <StatusSelect status={topic.status} onChange={handleStatusChange} />
-
-          {/* Revise button */}
-          {isCompleted && (
-            <button
-              type="button"
-              onClick={handleRevise}
-              aria-label={`Record a revision for ${topic.name}`}
-              className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-500/10 transition-colors shrink-0"
-              title="Mark as revised"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {/* Audio Indicator / Toggle */}
-          {hasAudio && (
-            <button
-              type="button"
-              onClick={() => setShowAudioList(!showAudioList)}
-              className={cn(
-                "p-1.5 rounded-lg transition-colors shrink-0 flex items-center justify-center cursor-pointer",
-                showAudioList
-                  ? "text-indigo-600 bg-indigo-500/20 ring-1 ring-indigo-500/30"
-                  : "text-indigo-500 bg-indigo-500/10 hover:bg-indigo-500/20"
-              )}
-              title={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
-              aria-label={showAudioList ? "Hide audio notes" : `View audio notes (${audioNotes.length})`}
-            >
-              <Headphones className="w-3.5 h-3.5" />
-            </button>
-          )}
-
-          {/* Delete */}
-          <button
-            type="button"
-            onClick={handleDelete}
-            aria-label={`Delete topic ${topic.name}`}
-            className="p-1.5 rounded-lg hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-all shrink-0"
-            title="Delete topic"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
-        </div>
+          </div>
+        )}
       </div>
 
       <ConfirmModal
