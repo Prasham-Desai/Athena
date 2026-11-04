@@ -108,7 +108,7 @@ export default function StoriesPage() {
             <button
               type="button"
               onClick={() => setActiveTab('story')}
-              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-all duration-150 active:scale-95 cursor-pointer ${
                 activeTab === 'story'
                   ? 'text-[hsl(var(--foreground))]'
                   : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
@@ -117,7 +117,8 @@ export default function StoriesPage() {
               {activeTab === 'story' && (
                 <motion.div
                   layoutId="stories-active-tab-pill"
-                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm"
+                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm gpu-smooth"
+                  style={{ willChange: 'transform' }}
                   transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
                 />
               )}
@@ -126,7 +127,7 @@ export default function StoriesPage() {
             <button
               type="button"
               onClick={() => setActiveTab('imagination')}
-              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+              className={`relative z-10 px-6 py-2 rounded-lg text-sm font-medium transition-all duration-150 active:scale-95 cursor-pointer ${
                 activeTab === 'imagination'
                   ? 'text-[hsl(var(--foreground))]'
                   : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
@@ -135,7 +136,8 @@ export default function StoriesPage() {
               {activeTab === 'imagination' && (
                 <motion.div
                   layoutId="stories-active-tab-pill"
-                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm"
+                  className="absolute inset-0 bg-[hsl(var(--background))] rounded-lg shadow-sm gpu-smooth"
+                  style={{ willChange: 'transform' }}
                   transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
                 />
               )}

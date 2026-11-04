@@ -174,7 +174,7 @@ export function Sidebar() {
       <div className="lg:hidden fixed top-3 left-3 right-3 z-40 flex items-center justify-between pointer-events-none">
         <button
           onClick={() => setMobileOpen(true)}
-          className="pointer-events-auto p-2.5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg"
+          className="pointer-events-auto p-2.5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg active:scale-95 transition-all duration-150 cursor-pointer"
           aria-label="Open menu"
         >
           <Menu className="w-5 h-5" />

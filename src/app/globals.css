@@ -149,7 +149,6 @@ body {
   button, a, input, select, textarea, [role="button"], [role="tab"], summary {
     touch-action: manipulation;
   }
-  }
 }
 
 /* Mobile-specific bottom safe area for fixed bottom bars */

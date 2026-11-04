@@ -418,7 +418,7 @@ export default function SubjectsPage() {
           onAction={() => setShowAddDialog(true)}
         />
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 gpu-smooth">
           <AnimatePresence mode="popLayout">
             {visibleSubjects.map((subject, idx) => (
               <SubjectCard

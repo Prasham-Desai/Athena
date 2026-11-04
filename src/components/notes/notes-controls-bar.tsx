@@ -103,7 +103,7 @@ export function NotesControlsBar({
           <button
             onClick={() => onSelectSubject(null)}
             className={cn(
-              'relative flex-shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150',
+              'relative flex-shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 active:scale-95 cursor-pointer',
               !selectedSubjectId
                 ? 'text-white'
                 : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]/60'
@@ -112,8 +112,9 @@ export function NotesControlsBar({
             {!selectedSubjectId && (
               <motion.div
                 layoutId="notes-subject-active-pill"
-                className="absolute inset-0 bg-indigo-600 rounded-xl shadow-md"
-                transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                className="absolute inset-0 bg-indigo-600 rounded-xl shadow-md gpu-smooth"
+                style={{ willChange: 'transform' }}
+                transition={{ type: 'spring', stiffness: 450, damping: 35 }}
               />
             )}
             <Layers className="w-3.5 h-3.5 relative z-10" />
@@ -140,7 +141,7 @@ export function NotesControlsBar({
                 key={sub.id}
                 onClick={() => onSelectSubject(sub.id)}
                 className={cn(
-                  'relative flex-shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150',
+                  'relative flex-shrink-0 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 active:scale-95 cursor-pointer',
                   isSelected
                     ? 'text-white'
                     : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]/60'
@@ -149,9 +150,9 @@ export function NotesControlsBar({
                 {isSelected && (
                   <motion.div
                     layoutId="notes-subject-active-pill"
-                    className="absolute inset-0 rounded-xl shadow-md"
-                    style={{ backgroundColor: sub.color || '#6366f1' }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                    className="absolute inset-0 rounded-xl shadow-md gpu-smooth"
+                    style={{ backgroundColor: sub.color || '#6366f1', willChange: 'transform' }}
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                   />
                 )}
                 <span

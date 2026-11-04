@@ -175,8 +175,8 @@ export function SubjectCard({
         'group relative flex flex-col justify-between h-full rounded-2xl',
         'border border-[hsl(var(--border))]/80 bg-gradient-to-b from-[hsl(var(--card))] to-[hsl(var(--card))]/90',
         'dark:from-[#0d1222]/95 dark:to-[#090d18]/95',
-        'shadow-sm hover:shadow-xl transition-all duration-300',
-        'hover:-translate-y-1 overflow-hidden select-none cursor-pointer',
+        'shadow-sm hover:shadow-xl transition-all duration-200 active:scale-[0.98] active:brightness-95',
+        'hover:-translate-y-1 overflow-hidden select-none cursor-pointer gpu-smooth',
         className
       )}
       style={{

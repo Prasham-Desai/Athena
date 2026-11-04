@@ -104,11 +104,12 @@ export default function AnatomyPage() {
                     <motion.div
                       layoutId="anatomy-gender-active"
                       className={cn(
-                        'absolute inset-0 rounded-lg',
+                        'absolute inset-0 rounded-lg gpu-smooth',
                         config.activeGradient,
                         config.activeShadow
                       )}
-                      transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      style={{ willChange: 'transform' }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
                   <span className="relative z-20 flex items-center gap-1.5 whitespace-nowrap">
@@ -146,7 +147,7 @@ export default function AnatomyPage() {
                       type="button"
                       onClick={() => setActiveSystemId(sys.id)}
                       className={cn(
-                        'relative px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-150 shrink-0',
+                        'relative px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 active:scale-95 cursor-pointer shrink-0',
                         isCurrent
                           ? 'text-[hsl(var(--background))] font-semibold'
                           : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
@@ -155,8 +156,9 @@ export default function AnatomyPage() {
                       {isCurrent && (
                         <motion.div
                           layoutId="anatomy-system-active"
-                          className="absolute inset-0 bg-[hsl(var(--foreground))] rounded-lg shadow-sm"
-                          transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                          className="absolute inset-0 bg-[hsl(var(--foreground))] rounded-lg shadow-sm gpu-smooth"
+                          style={{ willChange: 'transform' }}
+                          transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                         />
                       )}
                       <span className="relative z-10">{sys.name}</span>

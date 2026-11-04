@@ -12,3 +12,4 @@ WHERE id = '11dca16728ae' OR (academic_year_id = 'year_2' AND (name = 'Charak Sa
 UPDATE subjects
 SET name = 'Charak Samhita - 3', updated_at = CURRENT_TIMESTAMP
 WHERE id = '57ab02508d0f' OR (academic_year_id = 'year_3' AND (name LIKE '%Samhita Adhyayan%' OR name LIKE '%Samhita%'));
+

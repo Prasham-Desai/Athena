@@ -550,7 +550,7 @@ export default function NotesPage() {
                   <motion.div
                     layout
                     className={cn(
-                      'grid gap-4',
+                      'grid gap-4 gpu-smooth',
                       viewMode === 'grid'
                         ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                         : 'grid-cols-1'
