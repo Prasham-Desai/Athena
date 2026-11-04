@@ -141,7 +141,7 @@ export function AcademicYearNavSection({
               disabled={isSwitching}
               title={year.name}
               className={cn(
-                'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 relative w-full text-left select-none',
+                'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 active:scale-95 relative w-full text-left select-none cursor-pointer',
                 isActive
                   ? 'text-white'
                   : cn(
@@ -154,7 +154,8 @@ export function AcademicYearNavSection({
               {isActive && (
                 <motion.div
                   layoutId={`${idPrefix}-year-active-pill`}
-                  className={cn('absolute inset-0 rounded-xl ring-1 ring-white/15', theme.activeBg, theme.activeShadow)}
+                  className={cn('absolute inset-0 rounded-xl ring-1 ring-white/15 gpu-smooth', theme.activeBg, theme.activeShadow)}
+                  style={{ willChange: 'transform' }}
                   transition={{
                     type: 'spring',
                     stiffness: 400,

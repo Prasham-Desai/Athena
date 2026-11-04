@@ -198,8 +198,8 @@ function StatusSelect({ status, onChange }: StatusSelectProps) {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('pointerdown', handler);
+    return () => document.removeEventListener('pointerdown', handler);
   }, []);
 
   return (
@@ -278,8 +278,8 @@ function ImportanceSelect({ importance, onChange }: { importance?: string | null
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('pointerdown', handler);
+    return () => document.removeEventListener('pointerdown', handler);
   }, []);
 
   return (
@@ -744,8 +744,8 @@ function ChapterAccordion({ chapter, subjectId, subjectColor, defaultOpen = fals
       if (tagRef.current && !tagRef.current.contains(e.target as Node)) setShowTagPicker(false);
       if (marksRef.current && !marksRef.current.contains(e.target as Node)) setShowMarksPicker(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('pointerdown', handler);
+    return () => document.removeEventListener('pointerdown', handler);
   }, []);
 
   const chapterStats = useMemo(() => {
@@ -1065,10 +1065,11 @@ export default function SubjectDetailPage() {
         </p>
         <Link
           href="/subjects"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 transition-all shadow-sm group"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Subjects
+          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+          <span>Back to Subjects</span>
+
         </Link>
       </div>
     );
@@ -1082,8 +1083,13 @@ export default function SubjectDetailPage() {
       <section className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-            <Link href="/subjects" aria-label="Back to subjects" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] transition hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]">
-              <ArrowLeft className="h-4 w-4" />
+            <Link
+              href="/subjects"
+              aria-label="Back to subjects"
+              className="inline-flex h-9 items-center gap-1.5 px-3 rounded-xl bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 font-semibold text-xs sm:text-sm transition-all shadow-sm hover:shadow-indigo-500/10 shrink-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              <span>Back</span>
             </Link>
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${subject.color}20`, color: subject.color }}><Icon className="h-5 w-5" /></div>
             <div className="min-w-0">
@@ -1120,7 +1126,7 @@ export default function SubjectDetailPage() {
                   type="button"
                   aria-pressed={currentPaper === paper}
                   className={cn(
-                    'relative whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] shrink-0',
+                    'relative whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] shrink-0 cursor-pointer',
                     currentPaper === paper
                       ? 'text-white'
                       : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
@@ -1129,10 +1135,10 @@ export default function SubjectDetailPage() {
                   {currentPaper === paper && (
                     <motion.div
                       layoutId="paperTab"
-                      className="absolute inset-0 rounded-xl"
-                      style={{ backgroundColor: subject.color }}
+                      className="absolute inset-0 rounded-xl gpu-smooth"
+                      style={{ backgroundColor: subject.color, willChange: "transform" }}
                       initial={false}
-                      transition={{ type: 'spring', stiffness: 400, damping: 32, mass: 0.8 }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                     />
                   )}
                   <span className="relative z-10">{paper}</span>
@@ -1163,7 +1169,15 @@ export default function SubjectDetailPage() {
 
       {/* Chapters list */}
       <div className="space-y-2">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPaper}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+            className="space-y-2 gpu-smooth"
+          >
           {filteredChapters.length === 0 || (hasActiveFilters && matchingChapterIds.size === 0) ? (
             <motion.div
               key="empty"
@@ -1197,6 +1211,7 @@ export default function SubjectDetailPage() {
               />
             ))
           )}
+          </motion.div>
         </AnimatePresence>
       </div>
 

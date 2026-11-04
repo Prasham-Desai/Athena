@@ -335,9 +335,9 @@ export default function NotesPage() {
           {activeSubject && (
             <button
               onClick={() => handleSelectSubject(null)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--card))] border border-[hsl(var(--border))] transition"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 transition-all shadow-sm group"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
               <span>All Subjects</span>
             </button>
           )}
@@ -474,9 +474,9 @@ export default function NotesPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => handleSelectSubject(null)}
-                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-[hsl(var(--foreground))] border border-[hsl(var(--border))]/50 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 transition-all shadow-sm group"
                       >
-                        <ArrowLeft className="w-3.5 h-3.5" />
+                        <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
                         <span>All Subjects</span>
                       </button>
                       <button

@@ -2146,7 +2146,7 @@ export const INITIAL_SUBJECTS: Subject[] = [
   },
   {
     "id": "4622f185",
-    "name": "Charak Samhita",
+    "name": "Charak Samhita - 2",
     "color": "#10B981",
     "icon": "BookOpen",
     "details": {

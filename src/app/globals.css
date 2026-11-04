@@ -62,6 +62,7 @@
 
 * {
   border-color: hsl(var(--border));
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -121,6 +122,33 @@ body {
   /* Give standalone interactive buttons comfortable touch heights on mobile without breaking inline links */
   .btn-touch {
     min-height: 44px;
+  }
+
+  /* Tactile touch press feedback for mobile and non-PC devices */
+  button:active:not(:disabled),
+  a:active,
+  [role="button"]:active,
+  [role="tab"]:active,
+  .touch-press:active {
+    transform: scale(0.96) translateZ(0);
+    opacity: 0.82;
+    transition: transform 0.08s ease, opacity 0.08s ease;
+  }
+
+  /* Exclusions where active scale causes layout issues */
+  input:active,
+  textarea:active,
+  select:active,
+  [role="dialog"]:active,
+  .no-touch-scale,
+  .no-touch-scale:active {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  button, a, input, select, textarea, [role="button"], [role="tab"], summary {
+    touch-action: manipulation;
+  }
   }
 }
 
@@ -201,6 +229,12 @@ html.font-extra-large { font-size: 18px; }
 }
 
 /* Animated gradient background */
+.gpu-smooth {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
 .gradient-bg {
   background: linear-gradient(
     135deg,

@@ -196,7 +196,7 @@ export function TasksSection({
                     setDisplayLimit(15);
                   }}
                   className={cn(
-                    'relative px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 flex items-center gap-1.5 z-10',
+                    'relative px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 active:scale-95 cursor-pointer flex items-center gap-1.5 z-10',
                     isSelected
                       ? 'text-[hsl(var(--foreground))] font-bold'
                       : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
@@ -205,12 +205,12 @@ export function TasksSection({
                   {isSelected && (
                     <motion.div
                       layoutId="tasks-status-active-pill"
-                      className="absolute inset-0 bg-[hsl(var(--card))] rounded-lg shadow-sm border border-[hsl(var(--border))]/60"
+                      className="absolute inset-0 bg-[hsl(var(--card))] rounded-lg shadow-sm border border-[hsl(var(--border))]/60 gpu-smooth"
+                      style={{ willChange: 'transform' }}
                       transition={{
                         type: 'spring',
-                        stiffness: 400,
-                        damping: 32,
-                        mass: 0.8,
+                        stiffness: 450,
+                        damping: 35,
                       }}
                     />
                   )}

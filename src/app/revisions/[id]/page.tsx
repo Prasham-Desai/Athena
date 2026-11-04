@@ -1,15 +1,13 @@
 'use client';
 
-import { useState, useMemo, useCallback, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useMemo, use } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import {
   ArrowLeft,
   ChevronDown,
-  Minus,
-  Plus,
   Search,
+  X,
   BookOpen,
   Tag,
   Calculator,
@@ -35,8 +33,8 @@ import { getSubjectDisplayName, getSubjectEnglishTitle } from '@/lib/subject-dis
 import { useHydration } from '@/hooks/use-hydration';
 import { PageHeader } from '@/components/shared/page-header';
 import { PageLoader } from '@/components/ui/loading';
-import { cn, IMPORTANCE_TAG_CONFIG } from '@/lib/utils';
-import type { Topic, Chapter, Subtopic } from '@/types';
+import { cn, IMPORTANCE_TAG_CONFIG, isOverdue, isToday } from '@/lib/utils';
+import type { Topic, Chapter } from '@/types';
 
 // ---------------------------------------------------------------------------
 // Icon map
@@ -64,6 +62,22 @@ function getIcon(name: string | undefined): LucideIcon {
   if (!name) return BookOpen;
   return ICON_MAP[name] ?? BookOpen;
 }
+
+// ---------------------------------------------------------------------------
+// Topic filter pill config
+// ---------------------------------------------------------------------------
+type TopicFilter = 'all' | 'due' | 'revised' | 'not-revised';
+
+const TOPIC_FILTER_OPTIONS: {
+  value: TopicFilter;
+  label: string;
+  countKey: 'all' | 'due' | 'revised' | 'notRevised';
+}[] = [
+  { value: 'all', label: 'All', countKey: 'all' },
+  { value: 'due', label: 'Due for Revision', countKey: 'due' },
+  { value: 'revised', label: 'Revised', countKey: 'revised' },
+  { value: 'not-revised', label: 'Not Revised', countKey: 'notRevised' },
+];
 
 // ---------------------------------------------------------------------------
 // Revision Icon Group
@@ -285,7 +299,7 @@ function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColo
         >
           <h3 className="font-semibold text-sm sm:text-base break-words">{chapter.name}</h3>
           <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">
-            {chapter.topics.length} topics
+            {chapter.topics.length} topic{chapter.topics.length === 1 ? '' : 's'}
           </p>
         </button>
 
@@ -322,7 +336,7 @@ function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColo
             <div className="p-3 sm:p-4 space-y-2">
               {chapter.topics.length === 0 ? (
                 <div className="text-center py-4 text-xs text-[hsl(var(--muted-foreground))]">
-                  No topics in this chapter yet.
+                  No topics matching the current filter.
                 </div>
               ) : (
                 chapter.topics.map((topic) => (
@@ -343,39 +357,108 @@ function ChapterAccordion({ chapter, subjectId, defaultOpen = false, subjectColo
 export default function RevisionSubjectPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const hydrated = useHydration();
-  const router = useRouter();
   
   const { subject, isResolving: subjectResolving } = useResolvedSubject(id, hydrated);
 
   const HeaderIcon = getIcon(subject?.icon);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [topicFilter, setTopicFilter] = useState<TopicFilter>('all');
 
-  const filteredChapters = useMemo(() => {
+  // Paper bifurcation (matching /subjects/[id])
+  const availablePapers = useMemo(() => {
+    if (!subject) return ['Paper 1'];
+    const papers = new Set(subject.chapters.map((c) => c.paper || 'Paper 1'));
+    return Array.from(papers).sort();
+  }, [subject]);
+
+  const [activePaper, setActivePaper] = useState<string>('Paper 1');
+  const currentPaper = availablePapers.includes(activePaper) ? activePaper : (availablePapers[0] || 'Paper 1');
+
+  // Chapters belonging to the selected paper
+  const paperChapters = useMemo(() => {
     if (!subject) return [];
-    if (!searchQuery.trim()) return subject.chapters;
+    return subject.chapters.filter((c) => (c.paper || 'Paper 1') === currentPaper);
+  }, [subject, currentPaper]);
 
-    const query = searchQuery.toLowerCase();
-    return subject.chapters.map((ch) => {
-      const filteredTopics = ch.topics.filter(
-        (t) =>
-          t.name.toLowerCase().includes(query) ||
-          t.subtopics?.some((sub) => sub.name.toLowerCase().includes(query))
-      );
-      
-      // Include chapter if its name matches or it has matching topics
-      if (ch.name.toLowerCase().includes(query) || filteredTopics.length > 0) {
-        return { ...ch, topics: filteredTopics.length > 0 ? filteredTopics : ch.topics };
+  // Topic filter counts for the current paper
+  const filterCounts = useMemo(() => {
+    let all = 0, due = 0, revised = 0, notRevised = 0;
+    paperChapters.forEach((ch) => {
+      ch.topics.forEach((t) => {
+        all++;
+        const isRevisable = t.status === 'completed' || t.status === 'revised';
+        if (isRevisable) {
+          const hasRevisions = (t.revisionCount || 0) > 0;
+          const isTopicDue = t.nextRevisionDue && (isOverdue(t.nextRevisionDue) || isToday(t.nextRevisionDue));
+          if (isTopicDue) due++;
+          if (hasRevisions) revised++;
+          if (!hasRevisions) notRevised++;
+        } else {
+          notRevised++;
+        }
+      });
+    });
+    return { all, due, revised, notRevised };
+  }, [paperChapters]);
+
+  // Filtered chapters & topics based on paper, search, and topic filter
+  const filteredChapters = useMemo(() => {
+    if (!paperChapters.length) return [];
+    const query = searchQuery.trim().toLowerCase();
+
+    return paperChapters.map((ch) => {
+      const filteredTopics = ch.topics.filter((t) => {
+        // Topic status filter
+        if (topicFilter === 'due') {
+          const isRevisable = t.status === 'completed' || t.status === 'revised';
+          if (!isRevisable || !t.nextRevisionDue || (!isOverdue(t.nextRevisionDue) && !isToday(t.nextRevisionDue))) {
+            return false;
+          }
+        } else if (topicFilter === 'revised') {
+          if (!t.revisionCount || t.revisionCount === 0) return false;
+        } else if (topicFilter === 'not-revised') {
+          if (t.revisionCount && t.revisionCount > 0) return false;
+        }
+
+        // Search query check
+        if (query) {
+          const matchesName = t.name.toLowerCase().includes(query);
+          const matchesSub = t.subtopics?.some((sub) => sub.name.toLowerCase().includes(query));
+          return matchesName || matchesSub;
+        }
+
+        return true;
+      });
+
+      // If search matches chapter name, include all topics that match the status filter
+      if (query && ch.name.toLowerCase().includes(query)) {
+        const topicsMatchingFilter = ch.topics.filter((t) => {
+          if (topicFilter === 'due') {
+            const isRevisable = t.status === 'completed' || t.status === 'revised';
+            return isRevisable && t.nextRevisionDue && (isOverdue(t.nextRevisionDue) || isToday(t.nextRevisionDue));
+          } else if (topicFilter === 'revised') {
+            return (t.revisionCount || 0) > 0;
+          } else if (topicFilter === 'not-revised') {
+            return !t.revisionCount || t.revisionCount === 0;
+          }
+          return true;
+        });
+
+        if (topicsMatchingFilter.length > 0) {
+          return { ...ch, topics: topicsMatchingFilter };
+        }
       }
+
+      if (filteredTopics.length > 0) {
+        return { ...ch, topics: filteredTopics };
+      }
+
       return null;
     }).filter(Boolean) as Chapter[];
-  }, [subject, searchQuery]);
+  }, [paperChapters, searchQuery, topicFilter]);
 
-  if (!hydrated) {
-    return <PageLoader label="Loading revision details" variant="detail" />;
-  }
-
-  if (subjectResolving) {
+  if (!hydrated || subjectResolving) {
     return <PageLoader label="Loading revision details" variant="detail" />;
   }
 
@@ -386,7 +469,11 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
           <BookOpen className="w-8 h-8 text-[hsl(var(--muted-foreground))]" />
         </div>
         <h2 className="text-xl font-bold">Subject not found</h2>
-        <Link href="/revisions" className="text-[hsl(var(--primary))] hover:underline">
+        <Link
+          href="/revisions"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 transition-all shadow-sm"
+        >
+          <ArrowLeft className="w-4 h-4" />
           Return to Revisions
         </Link>
       </div>
@@ -413,50 +500,172 @@ export default function RevisionSubjectPage({ params }: { params: Promise<{ id: 
         }
         description="Track your multiple revisions for each topic and subtopic."
       >
+        {/* Prominent, visually highlighted Back button */}
         <Link
           href="/revisions"
-          className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-xl bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-colors"
+          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 transition-all shadow-sm hover:shadow-indigo-500/10 group shrink-0"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Back</span>
+          <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+          <span>Back to Revisions</span>
         </Link>
       </PageHeader>
 
-      <div className="mb-6 relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--muted-foreground))]" />
-        <input
-          type="text"
-          placeholder="Search topics or subtopics..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2.5 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]/50 transition"
-        />
+      {/* Paper Tabs — Paper-wise bifurcation following subjects page convention */}
+      {availablePapers.length > 1 && (
+        <LayoutGroup id="revision-paper-tabs">
+          <div className="w-full overflow-x-auto pb-1 mb-4">
+            <div role="group" aria-label="Subject papers" className="inline-flex max-w-full items-center gap-1 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-1 shrink-0">
+              {availablePapers.map((paper) => (
+                <button
+                  key={paper}
+                  onClick={() => setActivePaper(paper)}
+                  type="button"
+                  aria-pressed={currentPaper === paper}
+                  className={cn(
+                    'relative whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] shrink-0 cursor-pointer',
+                    currentPaper === paper
+                      ? 'text-white'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-foreground hover:bg-[hsl(var(--accent))]'
+                  )}
+                >
+                  {currentPaper === paper && (
+                    <motion.div
+                      layoutId="revisionPaperTab"
+                      className="absolute inset-0 rounded-xl gpu-smooth"
+                      style={{ backgroundColor: subject.color, willChange: 'transform' }}
+                      initial={false}
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">{paper}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </LayoutGroup>
+      )}
+
+      {/* Search & Topic Status Filter Bar */}
+      <div className="mb-6 space-y-3">
+        {/* Search topics */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--muted-foreground))]" />
+          <input
+            type="text"
+            placeholder={`Search ${availablePapers.length > 1 ? `${currentPaper} ` : ''}topics or subtopics...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2.5 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--ring))]/50 transition"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-md text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Topic Filter Pills — Moved here from the subject selection page */}
+        <LayoutGroup id="revision-topic-filter-tabs">
+          <div
+            className={cn(
+              'flex gap-1.5 sm:flex-wrap w-full sm:w-auto relative items-center p-1 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]',
+              'flex-nowrap overflow-x-auto pb-1 sm:pb-1 sm:overflow-x-visible',
+              '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
+            )}
+          >
+            {TOPIC_FILTER_OPTIONS.map((opt) => {
+              const isActive = topicFilter === opt.value;
+              const count = filterCounts[opt.countKey];
+
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => setTopicFilter(opt.value)}
+                  className={cn(
+                    'relative flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 active:scale-95 cursor-pointer whitespace-nowrap',
+                    isActive
+                      ? 'text-white'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                  )}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="revision-topic-filter-active-pill"
+                      className="absolute inset-0 rounded-lg shadow-sm gpu-smooth"
+                      style={{ backgroundColor: subject.color || 'hsl(var(--primary))', willChange: 'transform' }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">{opt.label}</span>
+                  <span
+                    className={cn(
+                      'relative z-10 ml-1.5 inline-flex items-center justify-center min-w-[1.25rem] h-[1.125rem] px-1 rounded-full text-[0.625rem] font-semibold transition-colors duration-150',
+                      isActive
+                        ? 'bg-white/25 text-white'
+                        : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
+                    )}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
       </div>
 
-      <div className="space-y-4">
-        {filteredChapters.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-14 h-14 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mx-auto mb-3">
-              <Search className="w-7 h-7 text-[hsl(var(--muted-foreground))]" />
+      {/* Chapters & Topics List */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${currentPaper}-${topicFilter}`}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+          className="space-y-4 gpu-smooth"
+        >
+          {filteredChapters.length === 0 ? (
+            <div className="text-center py-12 rounded-2xl border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--card))]/50">
+              <div className="w-14 h-14 rounded-2xl bg-[hsl(var(--muted))] flex items-center justify-center mx-auto mb-3">
+                <Search className="w-7 h-7 text-[hsl(var(--muted-foreground))]" />
+              </div>
+              <h3 className="font-semibold mb-1">No topics found</h3>
+              <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
+                {searchQuery || topicFilter !== 'all'
+                  ? 'Try adjusting your search query or topic filter.'
+                  : `No chapters or topics found in ${currentPaper}.`}
+              </p>
+              {(searchQuery || topicFilter !== 'all') && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setTopicFilter('all');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition"
+                >
+                  Reset filters
+                </button>
+              )}
             </div>
-            <h3 className="font-semibold mb-1">No topics found</h3>
-            <p className="text-sm text-[hsl(var(--muted-foreground))]">
-              Try adjusting your search query.
-            </p>
-          </div>
-        ) : (
-          filteredChapters.map((chapter) => (
-            <ChapterAccordion
-              key={chapter.id}
-              chapter={chapter}
-              subjectId={subject.id}
-              subjectColor={subject.color}
-              subjectIcon={subject.icon}
-              defaultOpen={filteredChapters.length === 1 || searchQuery.length > 0}
-            />
-          ))
-        )}
-      </div>
+          ) : (
+            filteredChapters.map((chapter) => (
+              <ChapterAccordion
+                key={chapter.id}
+                chapter={chapter}
+                subjectId={subject.id}
+                subjectColor={subject.color}
+                subjectIcon={subject.icon}
+                defaultOpen={filteredChapters.length === 1 || searchQuery.length > 0 || topicFilter !== 'all'}
+              />
+            ))
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

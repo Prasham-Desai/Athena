@@ -7,6 +7,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { FontSizeManager } from "@/components/font-size-manager";
 import { TutorialOverlay } from "@/components/tutorial-overlay";
 import { TimerProvider } from "@/components/providers/timer-provider";
+import { TouchProvider } from "@/components/providers/touch-provider";
+import { NavigationProgressBar } from "@/components/shared/navigation-progress-bar";
 import { AuthGuard } from "@/components/auth-guard";
 
 export const viewport: Viewport = {
@@ -46,7 +48,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen gradient-bg">
-        <Providers>
+        <TouchProvider>
+          <NavigationProgressBar />
+          <Providers>
           <AuthGuard
             shell={
               <>
@@ -68,7 +72,8 @@ export default function RootLayout({
             {children}
           </AuthGuard>
           <Toaster />
-        </Providers>
+          </Providers>
+        </TouchProvider>
       </body>
     </html>
   );

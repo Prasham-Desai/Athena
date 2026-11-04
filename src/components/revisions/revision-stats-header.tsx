@@ -4,19 +4,15 @@ import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   BookOpen,
-  RotateCcw,
-  TrendingUp,
-  Target,
-  Flame,
   Calendar,
+  Flame,
 } from 'lucide-react';
 
 import { StatCard } from '@/components/shared/stat-card';
 import { ProgressRing } from '@/components/shared/progress-ring';
 import type { Subject } from '@/types';
-import { isOverdue, isToday, getToday } from '@/lib/utils';
+import { isOverdue, isToday } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/loading';
-import { getSubjectDisplayName } from '@/lib/subject-display';
 
 interface RevisionStatsHeaderProps {
   subjects: Subject[];
@@ -57,25 +53,26 @@ export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionSta
     return { totalTopics, completedTopics, revisedAtLeastOnce, totalRevisionCount, dueForRevision, revisedToday, coveragePercent };
   }, [subjects]);
 
-  // Per-subject revision analysis
-  const subjectAnalysis = useMemo(() => {
-    return subjects.map((s) => {
-      const allTopics = s.chapters.flatMap((c) => c.topics);
-      const total = allTopics.length;
-      const revised = allTopics.filter((t) => t.revisionCount > 0).length;
-      const revisionPercent = total > 0 ? Math.round((revised / total) * 100) : 0;
-      return { id: s.id, name: getSubjectDisplayName(s), color: s.color, total, revised, revisionPercent };
+  // Overall totals across all subjects
+  const { overallTotal, overallRevised, overallPercent } = useMemo(() => {
+    let total = 0;
+    let revised = 0;
+    subjects.forEach((s) => {
+      s.chapters.forEach((c) => {
+        c.topics.forEach((t) => {
+          total++;
+          if (t.revisionCount > 0) revised++;
+        });
+      });
     });
+    const percent = total > 0 ? Math.round((revised / total) * 100) : 0;
+    return { overallTotal: total, overallRevised: revised, overallPercent: percent };
   }, [subjects]);
 
-  const overallRevised = subjectAnalysis.reduce((s, a) => s + a.revised, 0);
-  const overallTotal = subjectAnalysis.reduce((s, a) => s + a.total, 0);
-  const overallPercent = overallTotal > 0 ? Math.round((overallRevised / overallTotal) * 100) : 0;
-
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+    <div className="space-y-4 sm:space-y-5">
+      {/* Stat cards — 3 clean cards without duplicate coverage percentage */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <StatCard
           title="Total Topics"
           value={stats.totalTopics}
@@ -100,34 +97,44 @@ export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionSta
           subtitle={stats.dueForRevision > 0 ? 'Topics need attention' : 'All caught up!'}
           isLoading={isLoading}
         />
-        <StatCard
-          title="Coverage"
-          value={`${stats.coveragePercent}%`}
-          icon={Target}
-          color="#8b5cf6"
-          subtitle={`${stats.revisedAtLeastOnce} of ${stats.totalTopics} revised`}
-          isLoading={isLoading}
-        />
       </div>
 
-      {/* Revision Completion Analysis Card */}
+      {/* Redesigned Revision Coverage Card — Sleek macro overview without redundant per-subject list */}
       {isLoading ? (
         <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 space-y-4" role="status" aria-busy="true">
           <Skeleton className="h-5 w-44" />
           <Skeleton className="h-3 w-full" />
-          <Skeleton className="h-3 w-5/6" />
           <span className="sr-only">Loading revision coverage</span>
         </div>
       ) : subjects.length > 0 && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-3.5 sm:p-5"
+          transition={{ delay: 0.1 }}
+          className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 sm:p-5"
         >
-          <div className="flex items-center justify-between mb-1">
-            <h3 className="text-base font-semibold">Revision Coverage</h3>
-            <div className="hidden sm:block">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <h3 className="text-base font-semibold">Revision Coverage</h3>
+                <span className="text-xs font-bold text-indigo-500 bg-indigo-500/10 px-2.5 py-0.5 rounded-full">
+                  {overallPercent}%
+                </span>
+              </div>
+              <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3.5">
+                Overall progress across all subjects in your curriculum · {overallRevised} of {overallTotal} topics revised at least once
+              </p>
+              <div className="h-2 rounded-full bg-[hsl(var(--muted))] overflow-hidden max-w-2xl">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${overallPercent}%` }}
+                  transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                />
+              </div>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-3 shrink-0 pl-5 border-l border-[hsl(var(--border))]/50">
               <ProgressRing
                 value={overallPercent}
                 size={56}
@@ -136,53 +143,6 @@ export function RevisionStatsHeader({ subjects, isLoading = false }: RevisionSta
                 sublabel="overall"
               />
             </div>
-          </div>
-          <p className="text-xs text-[hsl(var(--muted-foreground))] mb-5">
-            How much of each subject has been revised at least once
-          </p>
-
-          {/* Overall bar */}
-          <div className="mb-5">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs font-medium">Overall Coverage</span>
-              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{overallPercent}%</span>
-            </div>
-            <div className="h-2 rounded-full bg-[hsl(var(--muted))] overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
-                initial={{ width: 0 }}
-                animate={{ width: `${overallPercent}%` }}
-                transition={{ duration: 1, ease: [0.4, 0, 0.2, 1] }}
-              />
-            </div>
-            <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1">
-              {overallRevised} of {overallTotal} topics revised at least once
-            </p>
-          </div>
-
-          {/* Per-subject breakdown */}
-          <div className="space-y-3">
-            {subjectAnalysis.map((item) => (
-              <div key={item.id} className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
-                <span className="text-xs font-medium flex-1 min-w-0 truncate">{item.name}</span>
-                <span className="text-[10px] text-[hsl(var(--muted-foreground))] shrink-0 font-medium tabular-nums">
-                  {item.revised}/{item.total}
-                </span>
-                <div className="w-16 sm:w-24 h-1.5 rounded-full bg-[hsl(var(--muted))] overflow-hidden shrink-0">
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: item.color }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${item.revisionPercent}%` }}
-                    transition={{ duration: 0.8, delay: 0.1 }}
-                  />
-                </div>
-                <span className="text-[11px] font-bold w-9 text-right shrink-0 tabular-nums" style={{ color: item.color }}>
-                  {item.revisionPercent}%
-                </span>
-              </div>
-            ))}
           </div>
         </motion.div>
       )}

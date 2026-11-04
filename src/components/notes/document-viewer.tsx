@@ -1176,10 +1176,10 @@ export function DocumentViewer({ note, onClose, onUpdate }: DocumentViewerProps)
               }
               onClose();
             }}
-            className="p-2 rounded-xl text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition-colors shrink-0"
+            className="p-2 rounded-xl bg-indigo-500/15 border border-indigo-500/35 text-indigo-400 hover:bg-indigo-500/25 hover:border-indigo-400 hover:text-indigo-300 transition-all shadow-sm shrink-0 group"
             title="Back to Notes"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
           </button>
 
           <div className="flex flex-col min-w-0">

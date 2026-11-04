@@ -93,7 +93,7 @@ export function Sidebar() {
                   setMobileOpen(false);
                 }}
                 className={cn(
-                  'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 relative select-none',
+                  'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 active:scale-95 cursor-pointer relative select-none',
                   active
                     ? 'text-white'
                     : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))]'
@@ -102,7 +102,8 @@ export function Sidebar() {
                 {active && (
                   <motion.div
                     layoutId={`${idPrefix}-sidebar-active`}
-                    className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/25 ring-1 ring-white/15"
+                    className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-indigo-600 to-purple-600 rounded-xl shadow-lg shadow-indigo-500/25 ring-1 ring-white/15 gpu-smooth"
+                    style={{ willChange: 'transform' }}
                     transition={{
                       type: 'spring',
                       stiffness: 400,
